@@ -45,7 +45,7 @@ export default function LoginPage() {
       <p style={{ marginTop: '16px' }}>
         <a href="/reset-password">Forgot password?</a>
       </p>
-      <p>Don't have an account? <a href="/signup">Sign up</a></p>
+      <p>Don&apos;t have an account? <a href="/signup">Sign up</a></p>
     </main>
   )
 }
