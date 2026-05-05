@@ -22,7 +22,6 @@ setLoading(false)
 return
 }
 
-// Check if user has a verified phone for 2FA
 const { data: security } = await supabase
 .from('user_security_settings')
 .select('phone_verified, hashed_phone')
@@ -30,17 +29,15 @@ const { data: security } = await supabase
 .single()
 
 if (security?.phone_verified && security?.hashed_phone) {
-// Get the real phone number to send SMS
-const { data: profile } = await supabase
-.from('user_security_settings')
-.select('phone_verified')
-.eq('user_id', data.user.id)
-.single()
-
-// Send 2FA code - we store phone in session for the verify page
-// For now redirect to 2FA page - phone stored server side via Twilio
 sessionStorage.setItem('2fa_user_id', data.user.id)
-sessionStorage.setItem('2fa_phone', 'verified')
+sessionStorage.setItem('2fa_last4', security.hashed_phone.slice(-4))
+
+await fetch('/api/phone/send-code', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ phone: security.hashed_phone, userId: data.user.id }),
+})
+
 router.push('/login/verify-2fa')
 } else {
 router.push('/dashboard')
@@ -118,4 +115,3 @@ Don't have an account? <a href="/signup" style={{color:'#ff4500',textDecoration:
 </div>
 )
 }
-
