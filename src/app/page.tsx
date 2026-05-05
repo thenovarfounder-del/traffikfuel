@@ -1,101 +1,102 @@
-import Image from "next/image";
-
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+return (
+<main style={{ fontFamily: 'sans-serif', color: '#111' }}>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+{/* Hero Section */}
+<section style={{ maxWidth: '800px', margin: '0 auto', padding: '80px 24px', textAlign: 'center' }}>
+<h1 style={{ fontSize: '48px', fontWeight: '800', marginBottom: '24px', lineHeight: '1.2' }}>
+One Button. Every Platform. Automated Income.
+</h1>
+<p style={{ fontSize: '20px', color: '#444', marginBottom: '40px', lineHeight: '1.6' }}>
+TraffikFuel publishes your content to every social platform, every search engine, and every AI answer engine — while automatically earning you money through 6 income streams.
+</p>
+<div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+<a href="/signup" style={{ padding: '16px 32px', background: '#0070f3', color: 'white', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', fontSize: '18px' }}>
+Start Free Trial
+</a>
+<a href="/login" style={{ padding: '16px 32px', background: 'white', color: '#0070f3', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', fontSize: '18px', border: '2px solid #0070f3' }}>
+Log In
+</a>
+</div>
+</section>
+
+{/* Features Section */}
+<section style={{ background: '#f9f9f9', padding: '80px 24px' }}>
+<div style={{ maxWidth: '900px', margin: '0 auto' }}>
+<h2 style={{ fontSize: '36px', fontWeight: '700', textAlign: 'center', marginBottom: '48px' }}>
+Everything You Need to Grow
+</h2>
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px' }}>
+<div style={{ background: 'white', padding: '32px', borderRadius: '12px', border: '1px solid #eee' }}>
+<h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '12px' }}>📢 One-Click Publishing</h3>
+<p style={{ color: '#555', lineHeight: '1.6' }}>Publish to TikTok, Instagram, YouTube, Facebook, LinkedIn, Pinterest, Twitter/X, and Google — all at once.</p>
+</div>
+<div style={{ background: 'white', padding: '32px', borderRadius: '12px', border: '1px solid #eee' }}>
+<h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '12px' }}>🤖 AI Content Engine</h3>
+<p style={{ color: '#555', lineHeight: '1.6' }}>8 AI engines create SEO-optimized content, videos, and social posts for your brand automatically.</p>
+</div>
+<div style={{ background: 'white', padding: '32px', borderRadius: '12px', border: '1px solid #eee' }}>
+<h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '12px' }}>💰 6 Income Streams</h3>
+<p style={{ color: '#555', lineHeight: '1.6' }}>Earn through Traffic Ads, Affiliate Marketing, Sponsored Content, Digital Products, Lead Generation, and Platform Amplifiers.</p>
+</div>
+<div style={{ background: 'white', padding: '32px', borderRadius: '12px', border: '1px solid #eee' }}>
+<h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '12px' }}>📊 Rankings & Analytics</h3>
+<p style={{ color: '#555', lineHeight: '1.6' }}>Track your search rankings, backlinks, traffic, and revenue across every platform in one dashboard.</p>
+</div>
+<div style={{ background: 'white', padding: '32px', borderRadius: '12px', border: '1px solid #eee' }}>
+<h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '12px' }}>🔒 Enterprise Security</h3>
+<p style={{ color: '#555', lineHeight: '1.6' }}>AES-256 encryption, two-factor authentication, email verification, and full security audit logs.</p>
+</div>
+<div style={{ background: 'white', padding: '32px', borderRadius: '12px', border: '1px solid #eee' }}>
+<h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '12px' }}>⚡ Cruise Control Mode</h3>
+<p style={{ color: '#555', lineHeight: '1.6' }}>Set it and forget it. TraffikFuel publishes weekly content automatically while you focus on your business.</p>
+</div>
+</div>
+</div>
+</section>
+
+{/* Pricing Section */}
+<section style={{ padding: '80px 24px' }}>
+<div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
+<h2 style={{ fontSize: '36px', fontWeight: '700', marginBottom: '16px' }}>Simple, Transparent Pricing</h2>
+<p style={{ fontSize: '18px', color: '#555', marginBottom: '48px' }}>7-day free trial on all plans. Card required. $0 charged today.</p>
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
+<div style={{ padding: '32px', borderRadius: '12px', border: '1px solid #eee' }}>
+<h3 style={{ fontWeight: '700', marginBottom: '8px' }}>Starter</h3>
+<p style={{ fontSize: '32px', fontWeight: '800', color: '#0070f3', marginBottom: '16px' }}>$97<span style={{ fontSize: '16px', color: '#888' }}>/mo</span></p>
+<a href="/signup" style={{ display: 'block', padding: '12px', background: '#0070f3', color: 'white', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>Start Free Trial</a>
+</div>
+<div style={{ padding: '32px', borderRadius: '12px', border: '2px solid #0070f3', position: 'relative' }}>
+<div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', background: '#0070f3', color: 'white', padding: '4px 16px', borderRadius: '20px', fontSize: '12px', fontWeight: '700' }}>MOST POPULAR</div>
+<h3 style={{ fontWeight: '700', marginBottom: '8px' }}>Pro</h3>
+<p style={{ fontSize: '32px', fontWeight: '800', color: '#0070f3', marginBottom: '16px' }}>$197<span style={{ fontSize: '16px', color: '#888' }}>/mo</span></p>
+<a href="/signup" style={{ display: 'block', padding: '12px', background: '#0070f3', color: 'white', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>Start Free Trial</a>
+</div>
+<div style={{ padding: '32px', borderRadius: '12px', border: '1px solid #eee' }}>
+<h3 style={{ fontWeight: '700', marginBottom: '8px' }}>Agency</h3>
+<p style={{ fontSize: '32px', fontWeight: '800', color: '#0070f3', marginBottom: '16px' }}>$797<span style={{ fontSize: '16px', color: '#888' }}>/mo</span></p>
+<a href="/signup" style={{ display: 'block', padding: '12px', background: '#0070f3', color: 'white', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>Start Free Trial</a>
+</div>
+<div style={{ padding: '32px', borderRadius: '12px', border: '1px solid #eee' }}>
+<h3 style={{ fontWeight: '700', marginBottom: '8px' }}>Enterprise</h3>
+<p style={{ fontSize: '32px', fontWeight: '800', color: '#0070f3', marginBottom: '16px' }}>$1,497<span style={{ fontSize: '16px', color: '#888' }}>/mo</span></p>
+<a href="/signup" style={{ display: 'block', padding: '12px', background: '#0070f3', color: 'white', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>Start Free Trial</a>
+</div>
+</div>
+</div>
+</section>
+
+{/* Footer */}
+<footer style={{ background: '#111', color: '#aaa', padding: '40px 24px', textAlign: 'center' }}>
+<p style={{ marginBottom: '16px', fontSize: '14px' }}>
+<a href="/terms" style={{ color: '#aaa', marginRight: '24px', textDecoration: 'none' }}>Terms of Service</a>
+<a href="/privacy" style={{ color: '#aaa', marginRight: '24px', textDecoration: 'none' }}>Privacy Policy</a>
+<a href="/login" style={{ color: '#aaa', marginRight: '24px', textDecoration: 'none' }}>Log In</a>
+<a href="/signup" style={{ color: '#aaa', textDecoration: 'none' }}>Sign Up</a>
+</p>
+<p style={{ fontSize: '13px' }}>© 2025 TraffikFuel. All rights reserved.</p>
+</footer>
+
+</main>
+)
 }
