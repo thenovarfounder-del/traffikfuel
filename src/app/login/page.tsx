@@ -24,18 +24,18 @@ return
 
 const { data: security } = await supabase
 .from('user_security_settings')
-.select('phone_verified, hashed_phone')
+.select('phone_verified, hashed_phone, phone')
 .eq('user_id', data.user.id)
 .single()
 
-if (security?.phone_verified && security?.hashed_phone) {
+if (security?.phone_verified && (security?.phone || security?.hashed_phone)) {
 sessionStorage.setItem('2fa_user_id', data.user.id)
-sessionStorage.setItem('2fa_last4', security.hashed_phone.slice(-4))
+sessionStorage.setItem('2fa_last4', (security.phone || security.hashed_phone).slice(-4))
 
 await fetch('/api/phone/send-code', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ phone: security.hashed_phone, userId: data.user.id }),
+body: JSON.stringify({ phone: security.phone || security.hashed_phone, userId: data.user.id }),
 })
 
 router.push('/login/verify-2fa')
@@ -93,25 +93,5 @@ style={{width:'100%',padding:'12px',background:'#1a1a1a',border:'1px solid #333'
 <button
 onClick={handleLogin}
 disabled={loading}
-style={{width:'100%',padding:'14px',background:'#ff4500',color:'white',border:'none',borderRadius:'8px',fontSize:'16px',fontWeight:'600',cursor:'pointer',marginBottom:'12px'}}
->
-{loading ? 'Signing in...' : 'Sign In'}
-</button>
+style={{width:'100%',padding:'14px',background:'#ff4500',color:'white',border:'none',borderRadius:'8px',fontSize:'16px',fontWeight:'600​​​​​​​​​​​​​​​​
 
-<button
-onClick={handleTikTokLogin}
-style={{width:'100%',padding:'14px',background:'#1a1a1a',color:'white',border:'1px solid #333',borderRadius:'8px',fontSize:'14px',cursor:'pointer',marginBottom:'24px'}}
->
-Continue with TikTok
-</button>
-
-<div style={{textAlign:'center',fontSize:'13px',color:'#555'}}>
-Don't have an account? <a href="/signup" style={{color:'#ff4500',textDecoration:'none'}}>Sign up</a>
-</div>
-<div style={{textAlign:'center',fontSize:'13px',color:'#555',marginTop:'8px'}}>
-<a href="/reset-password" style={{color:'#555',textDecoration:'none'}}>Forgot password?</a>
-</div>
-</div>
-</div>
-)
-}
