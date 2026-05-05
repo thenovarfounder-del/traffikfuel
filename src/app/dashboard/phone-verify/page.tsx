@@ -1,13 +1,11 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { createClient } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 
 export default function PhoneVerifyPage() {
-const supabase = createClient()
-
 const [phone, setPhone] = useState<string>('')
 const [codeSent, setCodeSent] = useState(false)
 const [otp, setOtp] = useState(['', '', '', '', '', ''])
