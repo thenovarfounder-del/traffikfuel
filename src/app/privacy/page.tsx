@@ -1,4 +1,3 @@
-export default function PrivacyPage() { return (<main style={{padding:'40px',maxWidth:'800px',margin:'0 auto'}}><h1>Privacy Policy</h1><p>Last updated: May 2026</p><h2>Information We Collect</h2><p>We collect email, usage data, and TikTok profile info when you connect your account.</p><h2>How We Use It</h2><p>We use your data to provide TraffikFuel services and improve your experience.</p><h2>Data Security</h2><p>All data is encrypted and stored securely.</p><h2>Contact</h2><p>Email us at support@traffikfuel.com</p></main>) }
 import Image from 'next/image'
 
 export default function PrivacyPolicy() {
