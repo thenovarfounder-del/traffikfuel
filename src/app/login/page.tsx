@@ -38,11 +38,15 @@ const { data: security } = await supabase
 if (security?.phone_verified && (security?.phone || security?.hashed_phone)) {
 sessionStorage.setItem('2fa_user_id', data.user.id)
 sessionStorage.setItem('2fa_last4', (security.phone || security.hashed_phone).slice(-4))
+try {
 await fetch('/api/phone/send-code', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify({ phone: security.phone || security.hashed_phone })
 })
+} catch (e) {
+console.log('send-code error:', e)
+}
 router.push('/login/verify-2fa')
 } else {
 router.push('/dashboard')
