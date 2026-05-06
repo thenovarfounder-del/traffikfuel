@@ -13,15 +13,13 @@ export async function POST(req: Request) {
 
     const { data: security } = await supabaseAdmin
       .from('user_security_settings')
-      .select('phone, hashed_phone')
+      .select('phone')
       .eq('user_id', user_id)
       .single()
 
-    if (!security) {
-      return NextResponse.json({ success: false, error: 'User not found' })
+    if (!security?.phone) {
+      return NextResponse.json({ success: false, error: 'Phone not found' })
     }
-
-    const phone = security.phone || security.hashed_phone
 
     const client = twilio(
       process.env.TWILIO_ACCOUNT_SID,
@@ -30,7 +28,7 @@ export async function POST(req: Request) {
 
     const verification = await client.verify.v2
       .services(process.env.TWILIO_VERIFY_SERVICE_SID!)
-      .verificationChecks.create({ to: phone, code: code })
+      .verificationChecks.create({ to: security.phone, code: code })
 
     if (verification.status === 'approved') {
       return NextResponse.json({ success: true })
