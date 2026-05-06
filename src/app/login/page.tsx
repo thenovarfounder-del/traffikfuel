@@ -29,24 +29,18 @@ setLoading(false)
 return
 }
 
-const { data: security } = await supabase
-.from('user_security_settings')
-.select('phone_verified, hashed_phone, phone')
-.eq('user_id', data.user.id)
-.single()
-
-if (security?.phone_verified && (security?.phone || security?.hashed_phone)) {
-sessionStorage.setItem('2fa_user_id', data.user.id)
-sessionStorage.setItem('2fa_last4', (security.phone || security.hashed_phone).slice(-4))
-try {
-await fetch('/api/phone/send-code', {
+// Call our API route to check 2FA instead of querying Supabase directly
+const res = await fetch('/api/auth/check-2fa', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ phone: security.phone || security.hashed_phone })
+body: JSON.stringify({ user_id: data.user.id })
 })
-} catch (e) {
-console.log('send-code error:', e)
-}
+
+const result = await res.json()
+
+if (result.requires2fa) {
+sessionStorage.setItem('2fa_user_id', data.user.id)
+sessionStorage.setItem('2fa_last4', result.last4)
 router.push('/login/verify-2fa')
 } else {
 router.push('/dashboard')
