@@ -14,10 +14,13 @@ if (!phone || !code) {
 return NextResponse.json({ success: false, error: 'Phone and code required' }, { status: 400 })
 }
 
+// Ensure + prefix
+const formattedPhone = phone.startsWith('+') ? phone : '+' + phone
+
 const verification = await client.verify.v2
 .services(process.env.TWILIO_VERIFY_SERVICE_SID!)
 .verificationChecks
-.create({ to: phone, code })
+.create({ to: formattedPhone, code })
 
 if (verification.status === 'approved') {
 return NextResponse.json({ success: true })
