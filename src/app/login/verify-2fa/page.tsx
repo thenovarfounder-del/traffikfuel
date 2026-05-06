@@ -1,47 +1,70 @@
-import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-import twilio from 'twilio'
+'use client'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 
-const supabaseAdmin = createClient(
-process.env.NEXT_PUBLIC_SUPABASE_URL!,
-process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+export default function Verify2FA() {
+const [code, setCode] = useState('')
+const [error, setError] = useState('')
+const [loading, setLoading] = useState(false)
+const router = useRouter()
+const searchParams = useSearchParams()
 
-export async function POST(req: Request) {
+const uid = searchParams.get('uid')
+const last4 = searchParams.get('last4')
+const phone = searchParams.get('phone')
+
+const handleVerify = async () => {
+setLoading(true)
+setError('')
+
 try {
-const { user_id, code } = await req.json()
+const res = await fetch('/api/phone/verify-code', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ phone, code })
+})
 
-// Get the phone number for this user
-const { data: security } = await supabaseAdmin
-.from('user_security_settings')
-.select('phone, hashed_phone')
-.eq('user_id', user_id)
-.single()
+const data = await res.json()
 
-if (!security) {
-return NextResponse.json({ success: false, error: 'User not found' })
-}
-
-const phone = security.phone || security.hashed_phone
-
-// Check the code with Twilio
-const client = twilio(
-process.env.TWILIO_ACCOUNT_SID,
-process.env.TWILIO_AUTH_TOKEN
-)
-
-const verification = await client.verify.v2
-.services(process.env.TWILIO_VERIFY_SERVICE_SID!)
-.verificationChecks.create({ to: phone, code: code })
-
-if (verification.status === 'approved') {
-return NextResponse.json({ success: true })
+if (data.success) {
+router.push('/dashboard')
 } else {
-return NextResponse.json({ success: false, error: 'Invalid code' })
+setError(data.error || 'Invalid code. Try again.')
+}
+} catch (err) {
+setError('Something went wrong. Try again.')
+} finally {
+setLoading(false)
+}
 }
 
-} catch (error: any) {
-return NextResponse.json({ success: false, error: error.message }, { status: 500 })
-}
-}
+return (
+<div className="min-h-screen bg-black flex items-center justify-center px-4">
+<div className="w-full max-w-md bg-zinc-900 rounded-2xl p-8 border border-zinc-800">
+<h1 className="text-2xl font-bold text-white mb-2">Two-Factor Authentication</h1>
+<p className="text-zinc-400 mb-6">
+Enter the 6-digit code sent to your phone ending in ***{last4}
+</p>
 
+<input
+type="text"
+maxLength={6}
+placeholder="Enter 6-digit code"
+value={code}
+onChange={(e) => setCode(e.target.value)}
+className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-4 py-3 text-center text-2xl tracking-widest mb-4 focus:outline-none focus:border-orange-500"
+/>
+
+{error && <p className="text-red-400 text-sm mb-4">{error}</p>}
+
+<button
+onClick={handleVerify}
+disabled={loading || code.length !== 6}
+className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white font-semibold py-3 rounded-lg transition"
+>
+{loading ? 'Verifying...' : 'Verify Code'}
+</button>
+</div>
+</div>
+)
+}
