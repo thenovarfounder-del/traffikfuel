@@ -1,140 +1,47 @@
-'use client'
+import { NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+import twilio from 'twilio'
 
-import { useState, useEffect, useRef, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+const supabaseAdmin = createClient(
+process.env.NEXT_PUBLIC_SUPABASE_URL!,
+process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
 
-function Verify2FAContent() {
-const [code, setCode] = useState(['', '', '', '', '', ''])
-const [error, setError] = useState('')
-const [loading, setLoading] = useState(false)
-const [success, setSuccess] = useState(false)
-const inputRefs = useRef<(HTMLInputElement | null)[]>([])
-const searchParams = useSearchParams()
+export async function POST(req: Request) {
+try {
+const { user_id, code } = await req.json()
 
-const uid = searchParams.get('uid')
-const last4 = searchParams.get('last4')
+// Get the phone number for this user
+const { data: security } = await supabaseAdmin
+.from('user_security_settings')
+.select('phone, hashed_phone')
+.eq('user_id', user_id)
+.single()
 
-useEffect(() => {
-inputRefs.current[0]?.focus()
-}, [])
-
-const handleChange = (index: number, value: string) => {
-if (!/^\d*$/.test(value)) return
-const newCode = [...code]
-newCode[index] = value.slice(-1)
-setCode(newCode)
-if (value && index < 5) {
-inputRefs.current[index + 1]?.focus()
-}
+if (!security) {
+return NextResponse.json({ success: false, error: 'User not found' })
 }
 
-const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
-if (e.key === 'Backspace' && !code[index] && index > 0) {
-inputRefs.current[index - 1]?.focus()
-}
-if (e.key === 'Enter') handleVerify()
-}
+const phone = security.phone || security.hashed_phone
 
-const handleVerify = async () => {
-const fullCode = code.join('')
-if (fullCode.length !== 6) {
-setError('Please enter the full 6-digit code')
-return
-}
+// Check the code with Twilio
+const client = twilio(
+process.env.TWILIO_ACCOUNT_SID,
+process.env.TWILIO_AUTH_TOKEN
+)
 
-if (!uid) {
-setError('Session expired. Please login again.')
-return
-}
+const verification = await client.verify.v2
+.services(process.env.TWILIO_VERIFY_SERVICE_SID!)
+.verificationChecks.create({ to: phone, code: code })
 
-setLoading(true)
-setError('')
-
-const res = await fetch('/api/phone/verify-code', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ user_id: uid, code: fullCode })
-})
-
-const result = await res.json()
-
-if (result.success) {
-setSuccess(true)
-window.location.href = '/dashboard'
+if (verification.status === 'approved') {
+return NextResponse.json({ success: true })
 } else {
-setError('Invalid code. Please try again.')
-setLoading(false)
+return NextResponse.json({ success: false, error: 'Invalid code' })
+}
+
+} catch (error: any) {
+return NextResponse.json({ success: false, error: error.message }, { status: 500 })
 }
 }
 
-return (
-<div style={{ minHeight: '100vh', background: '#0a0a0a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'sans-serif' }}>
-<div style={{ width: '100%', maxWidth: '420px', padding: '40px', background: '#111', borderRadius: '12px', border: '1px solid #222', textAlign: 'center' }}>
-<div style={{ fontSize: '48px', marginBottom: '16px' }}>📱</div>
-<h1 style={{ color: 'white', fontSize: '24px', fontWeight: 'bold', marginBottom: '8px' }}>Check your phone</h1>
-<p style={{ color: '#aaa', fontSize: '14px', marginBottom: '32px' }}>
-We sent a 6-digit code to your phone ending in <strong style={{ color: 'white' }}>***{last4 || '????'}</strong>
-</p>
-
-<div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginBottom: '24px' }}>
-{code.map((digit, index) => (
-<input
-key={index}
-ref={(el) => { inputRefs.current[index] = el }}
-type="text"
-inputMode="numeric"
-maxLength={1}
-value={digit}
-onChange={(e) => handleChange(index, e.target.value)}
-onKeyDown={(e) => handleKeyDown(index, e)}
-style={{
-width: '48px',
-height: '56px',
-textAlign: 'center',
-fontSize: '24px',
-fontWeight: 'bold',
-background: '#1a1a1a',
-border: '1px solid #333',
-borderRadius: '8px',
-color: 'white',
-outline: 'none'
-}}
-/>
-))}
-</div>
-
-{error && (
-<div style={{ background: '#2d0000', border: '1px solid #ff4500', borderRadius: '8px', padding: '10px', marginBottom: '16px', color: '#ff6b6b', fontSize: '14px' }}>
-{error}
-</div>
-)}
-
-{success && (
-<div style={{ background: '#002d00', border: '1px solid #00c853', borderRadius: '8px', padding: '10px', marginBottom: '16px', color: '#69f0ae', fontSize: '14px' }}>
-✅ Verified! Redirecting...
-</div>
-)}
-
-<button
-onClick={handleVerify}
-disabled={loading || success}
-style={{ width: '100%', padding: '14px', background: '#ff4500', color: 'white', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: '600', cursor: 'pointer', opacity: loading ? 0.7 : 1 }}
->
-{loading ? 'Verifying...' : 'Verify Code'}
-</button>
-
-<p style={{ color: '#aaa', fontSize: '14px', marginTop: '24px' }}>
-<a href="/login" style={{ color: '#ff4500' }}>Back to login</a>
-</p>
-</div>
-</div>
-)
-}
-
-export default function Verify2FAPage() {
-return (
-<Suspense fallback={<div style={{ minHeight: '100vh', background: '#0a0a0a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>Loading...</div>}>
-<Verify2FAContent />
-</Suspense>
-)
-}
