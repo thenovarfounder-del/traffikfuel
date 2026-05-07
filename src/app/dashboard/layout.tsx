@@ -1,5 +1,4 @@
-﻿const fs = require('fs');
-const content = `'use client'
+'use client'
 
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
@@ -51,7 +50,7 @@ const navItems = [
 return (
 <div className="min-h-screen bg-gray-950 flex">
 {/* Sidebar */}
-<aside className={\`fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 border-r border-gray-800 transform transition-transform duration-200 \${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:flex lg:flex-col\`}>
+<aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 border-r border-gray-800 transform transition-transform duration-200 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:flex lg:flex-col`}>
 <div className="p-6 border-b border-gray-800">
 <span className="text-white font-bold text-xl">TraffikFuel</span>
 </div>
@@ -61,7 +60,7 @@ return (
 key={item.href + item.label}
 href={item.href}
 onClick={() => setSidebarOpen(false)}
-className={\`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition \${pathname === item.href ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800'}\`}
+className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition ${pathname === item.href ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}
 >
 <span>{item.icon}</span>
 {item.label}
@@ -143,6 +142,3 @@ className="w-full flex items-center gap-3 px-4 py-3 text-sm text-white hover:bg-
 </div>
 )
 }
-`;
-fs.writeFileSync('src/app/dashboard/layout.tsx', content);
-console.log('done');
