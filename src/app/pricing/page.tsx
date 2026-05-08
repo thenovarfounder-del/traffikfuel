@@ -13,8 +13,8 @@ const tiers = [
 
 export default function PricingPage() {
   const router = useRouter();
-  const [loadingTier, setLoadingTier] = useState(null);
-  const [error, setError] = useState(null);
+  const [loadingTier, setLoadingTier] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleStartTrial(tierName: string, priceId: string | undefined) {
     if (!priceId) { setError('Price configuration error.'); return; }
@@ -31,8 +31,8 @@ export default function PricingPage() {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Failed to create checkout');
       window.location.href = data.url;
-    } catch (err) {
-      setError(err.message || 'Something went wrong.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Something went wrong.');
       setLoadingTier(null);
     }
   }
