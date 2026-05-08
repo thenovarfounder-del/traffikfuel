@@ -16,7 +16,7 @@ export default function PricingPage() {
   const [loadingTier, setLoadingTier] = useState(null);
   const [error, setError] = useState(null);
 
-  async function handleStartTrial(tierName, priceId) {
+  async function handleStartTrial(tierName: string, priceId: string | undefined) {
     if (!priceId) { setError('Price configuration error.'); return; }
     setLoadingTier(tierName);
     setError(null);
