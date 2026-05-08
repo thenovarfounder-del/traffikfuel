@@ -1,23 +1,9 @@
 ﻿const fs = require('fs');
-const content = `import type { Metadata } from 'next'
-import './globals.css'
-import CrispChat from '@/components/CrispChat'
+const content = `import Stripe from 'stripe';
 
-export const metadata: Metadata = {
-title: 'TraffikFuel',
-description: 'Your marketing machine',
-}
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-return (
-<html lang="en">
-<body className="antialiased">
-{children}
-<CrispChat />
-</body>
-</html>
-)
-}
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+apiVersion: '2024-06-20',
+});
 `;
-fs.writeFileSync('src/app/layout.tsx', content);
+fs.writeFileSync('src/lib/stripe.ts', content);
 console.log('done');
