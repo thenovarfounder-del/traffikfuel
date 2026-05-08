@@ -1,6 +1,4 @@
-﻿const fs = require('fs');
-fs.mkdirSync('src/app/pricing', { recursive: true });
-fs.writeFileSync('src/app/pricing/page.tsx', `'use client';
+'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -49,13 +47,13 @@ export default function PricingPage() {
         {error && <div className="max-w-md mx-auto mb-8 bg-red-900/30 border border-red-500 text-red-300 rounded-lg p-4 text-center">{error}</div>}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
           {tiers.map((tier) => (
-            <div key={tier.name} className={\`relative rounded-2xl p-6 flex flex-col \${tier.highlight ? 'bg-orange-500/10 border-2 border-orange-500' : 'bg-gray-900 border border-gray-700'}\`}>
+            <div key={tier.name} className={`relative rounded-2xl p-6 flex flex-col ${tier.highlight ? 'bg-orange-500/10 border-2 border-orange-500' : 'bg-gray-900 border border-gray-700'}`}>
               {tier.highlight && <div className="absolute -top-3 left-1/2 -translate-x-1/2"><span className="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase">Most Popular</span></div>}
               <div className="mb-6">
                 <h2 className="text-xl font-bold mb-1">{tier.name}</h2>
                 <p className="text-gray-400 text-sm mb-4">{tier.description}</p>
                 <div className="flex items-end gap-1">
-                  <span className="text-4xl font-bold">\${tier.price}</span>
+                  <span className="text-4xl font-bold">${tier.price}</span>
                   <span className="text-gray-400 mb-1">/mo</span>
                 </div>
                 <p className="text-orange-400 text-sm mt-1 font-medium">7-day free trial</p>
@@ -68,7 +66,7 @@ export default function PricingPage() {
                   </li>
                 ))}
               </ul>
-              <button onClick={() => handleStartTrial(tier.name, tier.priceId)} disabled={loadingTier !== null} className={\`w-full py-3 rounded-xl font-semibold text-sm transition-all \${tier.highlight ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'bg-gray-800 hover:bg-gray-700 text-white border border-gray-600'} disabled:opacity-50\`}>
+              <button onClick={() => handleStartTrial(tier.name, tier.priceId)} disabled={loadingTier !== null} className={`w-full py-3 rounded-xl font-semibold text-sm transition-all ${tier.highlight ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'bg-gray-800 hover:bg-gray-700 text-white border border-gray-600'} disabled:opacity-50`}>
                 {loadingTier === tier.name ? 'Loading...' : 'Start Free Trial'}
               </button>
             </div>
@@ -79,5 +77,3 @@ export default function PricingPage() {
     </div>
   );
 }
-`);
-console.log('done');
