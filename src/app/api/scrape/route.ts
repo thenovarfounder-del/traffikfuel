@@ -8,7 +8,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Missing url or businessId' }, { status: 400 })
   }
 
-  // Fetch the website HTML
   let html = ''
   try {
     const res = await fetch(url, {
@@ -19,16 +18,15 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Could not fetch website' }, { status: 400 })
   }
 
-  // Strip HTML tags to get plain text
   const text = html
     .replace(/<script[\s\S]*?<\/script>/gi, '')
     .replace(/<style[\s\S]*?<\/style>/gi, '')
     .replace(/<[^>]+>/g, ' ')
     .replace(/\s+/g, ' ')
+    .replace(/[^\x00-\x7F]/g, '')
     .trim()
     .slice(0, 8000)
 
-  // Send to Claude for analysis
   const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -42,17 +40,7 @@ export async function POST(req: Request) {
       messages: [
         {
           role: 'user',
-          content: `Analyze this website content and extract business information. Return ONLY a JSON object with these fields:
-- business_name: string
-- description: string (2-3 sentences about what they do)
-- services: string (comma separated list of main services)
-- location: string (city, state if found)
-- target_audience: string (who they serve)
-- tone: string (professional, friendly, casual, luxury, etc)
-- keywords: string (comma separated SEO keywords)
-
-Website content:
-${text}`,
+          content: `Analyze this website content and extract business information. Return ONLY a JSON object with these fields: business_name, description, services, location, target_audience, tone, keywords. Website content: ${text}`,
         },
       ],
     }),
@@ -69,7 +57,6 @@ ${text}`,
     return NextResponse.json({ error: 'Could not parse business brain' }, { status: 500 })
   }
 
-  // Save to Supabase business_profiles
   const { error } = await supabase
     .from('business_profiles')
     .update({
