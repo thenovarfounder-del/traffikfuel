@@ -34,7 +34,8 @@ export default function ScrapePage() {
 
     try {
       setStatus('Fetching website...');
-      const fetchRes = await fetch(`/api/scrape/fetch?url=${encodeURIComponent(url)}`);
+      const cleanUrl = url.replace(/[^\x20-\x7E]/g, '').trim();
+      const fetchRes = await fetch(`/api/scrape/fetch?url=${encodeURIComponent(cleanUrl)}`);
       const fetchData = await fetchRes.json();
       if (!fetchData.html) throw new Error('Could not fetch website');
 
@@ -64,7 +65,7 @@ export default function ScrapePage() {
 
       <div className="flex gap-3 mb-4">
         <input
-          type="url"
+          type="text"
           placeholder="https://yourbusiness.com"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
