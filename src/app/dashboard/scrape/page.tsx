@@ -8,6 +8,7 @@ const [url, setUrl] = useState('')
 const [loading, setLoading] = useState(false)
 const [result, setResult] = useState<Record<string, string> | null>(null)
 const [error, setError] = useState('')
+const [status, setStatus] = useState('')
 
 async function handleScrape() {
 if (!url) return
@@ -26,18 +27,69 @@ const { data: profile } = await supabase
 
 if (!profile) { setError('No business profile found. Create one first.'); setLoading(false); return }
 
-const res = await fetch('/api/scrape', {
+setStatus('Fetching your website...')
+
+let html = ''
+try {
+const proxyRes = await fetch(url)
+html = await proxyRes.text()
+} catch {
+setError('Could not fetch website. Try a different URL.')
+setLoading(false)
+return
+}
+
+setStatus('Claude is analyzing your business...')
+
+const text = html
+.replace(/<script[\s\S]*?<\/script>/gi, '')
+.replace(/<style[\s\S]*?<\/style>/gi, '')
+.replace(/<[^>]+>/g, ' ')
+.replace(/\s+/g, ' ')
+.replace(/[^\x00-\x7F]/g, '')
+.trim()
+.slice(0, 6000)
+
+const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
 method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ url, businessId: profile.id }),
+headers: {
+'Content-Type': 'application/json',
+'x-api-key': process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY!,
+'anthropic-version': '2023-06-01',
+},
+body: JSON.stringify({
+model: 'claude-haiku-4-5-20251001',
+max_tokens: 1024,
+messages: [{
+role: 'user',
+content: `Analyze this website and return ONLY a JSON object with these exact fields: business_name, description, services, location, target_audience, tone, keywords. Website content: ${text}`,
+}],
+}),
 })
 
-const data = await res.json()
-if (data.success) {
-setResult(data.brain)
-} else {
-setError(data.error || 'Something went wrong')
+const claudeData = await claudeRes.json()
+const rawText = claudeData.content?.[0]?.text || ''
+
+let brain: Record<string, string> = {}
+try {
+const match = rawText.match(/\{[\s\S]*\}/)
+if (match) brain = JSON.parse(match[0])
+} catch {
+setError('Could not parse response. Try again.')
+setLoading(false)
+return
 }
+
+setStatus('Saving your business brain...')
+
+await fetch('/api/scrape', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ businessId: profile.id, brain }),
+})
+
+setResult(brain)
+setStatus('')
 setLoading(false)
 }
 
@@ -57,15 +109,13 @@ placeholder="https://yourbusiness.com"
 className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500"
 />
 </div>
-
 <button
 onClick={handleScrape}
 disabled={loading || !url}
 className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white font-semibold py-3 rounded-lg"
 >
-{loading ? 'Analyzing your website...' : 'Build My Business Brain'}
+{loading ? status || 'Working...' : 'Build My Business Brain'}
 </button>
-
 {error && <p className="text-red-400 text-sm">{error}</p>}
 </div>
 
@@ -78,11 +128,10 @@ className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-whi
 <p className="text-gray-300">{value}</p>
 </div>
 ))}
-<div className="pt-4 border-t border-gray-800">
-<p className="text-green-400 text-sm">Business brain saved to your profile successfully!</p>
-</div>
+<p className="text-green-400 text-sm pt-4 border-t border-gray-800">Business brain saved successfully!</p>
 </div>
 )}
 </div>
 )
 }
+
