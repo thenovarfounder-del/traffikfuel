@@ -31,21 +31,42 @@ const handleScrape = async () => {
 if (!url || !businessId) return;
 setLoading(true);
 setBrain(null);
+setStatus('Fetching your website...');
 
 const cleanBusinessId = businessId.replace(/[^\x20-\x7E]/g, '').trim();
 const cleanUrl = url.replace(/[^\x20-\x7E]/g, '').trim();
 
-console.log('businessId chars:', Array.from(cleanBusinessId).map(c => c.charCodeAt(0)));
-console.log('url chars:', Array.from(cleanUrl).map(c => c.charCodeAt(0)));
-
 try {
+// Step 1: Fetch website HTML in the browser
+const proxyRes = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(cleanUrl)}`);
+const proxyData = await proxyRes.json();
+const raw = proxyData.contents || '';
+
+// Step 2: Clean the HTML in the browser
+const text = raw
+.replace(/<script[\s\S]*?<\/script>/gi, '')
+.replace(/<style[\s\S]*?<\/style>/gi, '')
+.replace(/<[^>]+>/g, ' ')
+.replace(/[\u0080-\uFFFF]/g, '')
+.replace(/\s+/g, ' ')
+.trim()
+.slice(0, 5000);
+
+if (!text) {
+setStatus('Could not read website. Check the URL and try again.');
+setLoading(false);
+return;
+}
+
 setStatus('Analyzing with AI...');
+
+// Step 3: Send clean text to API
 const res = await fetch('/api/scrape', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify({
 businessId: cleanBusinessId,
-url: cleanUrl,
+text: text,
 }),
 });
 
@@ -53,6 +74,7 @@ const data = await res.json();
 if (data.error) throw new Error(data.error);
 setBrain(data.brain);
 setStatus('Done! Business brain saved. 🧠');
+
 } catch (err: unknown) {
 const msg = err instanceof Error ? err.message : 'Unknown error';
 setStatus(`Error: ${msg}`);
