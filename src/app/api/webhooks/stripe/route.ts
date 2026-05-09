@@ -1,5 +1,4 @@
-﻿const fs = require('fs');
-const code = `import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import { supabase } from '@/lib/supabase';
 import Stripe from 'stripe';
@@ -21,7 +20,7 @@ try {
 event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
 } catch (err: any) {
 console.error('Webhook signature verification failed:', err.message);
-return NextResponse.json({ error: \`Webhook Error: \${err.message}\` }, { status: 400 });
+return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
 }
 
 try {
@@ -101,8 +100,3 @@ const map: Record<string, string> = {
 };
 return map[priceId] || 'unknown';
 }
-`;
-
-fs.writeFileSync('src/app/api/webhooks/stripe/route.ts', code);
-console.log('done');
-
