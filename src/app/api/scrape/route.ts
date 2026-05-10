@@ -28,8 +28,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Could not fetch website: ' + String(e) }, { status: 400 });
     }
 
-    if (!rawText || rawText.length < 50) {
-      return NextResponse.json({ error: 'Not enough content found on that page.' }, { status: 400 });
+    if (!rawText || rawText.length < 10) {
+      return NextResponse.json({ error: 'No content found on that page.' }, { status: 400 });
     }
 
     const anthropicKey = process.env.ANTHROPIC_API_KEY!;
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
     });
 
     const claudeData = await claudeRes.json();
-    const rawContent = claudeData?.content?.[0]?.text ?? '';
+    const rawContent = claudeData?.content?.[0]?.text ?? JSON.stringify(claudeData);
 
     let brain;
     try {
