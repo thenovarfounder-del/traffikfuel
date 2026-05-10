@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -12,58 +12,72 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
         router.push('/login')
       } else {
-        setEmail(user.email || '')
+        setEmail(session.user.email ?? '')
       }
-    }
-    checkAuth()
+    })
   }, [router])
 
-  const navItems = [
-    { label: 'Dashboard', href: '/dashboard', icon: '🏠' },
-    { label: 'Business Profile', href: '/dashboard/business', icon: '🏢' },
-    { label: 'Onboarding', href: '/dashboard/onboarding', icon: '🚀' },
-    { label: 'Settings', href: '/dashboard/settings', icon: '⚙️' },
-    { label: 'Security', href: '/dashboard/security', icon: '🔒' },
-    { label: 'Download My Data', href: '/dashboard/data', icon: '📥' },
-    { label: 'Delete Account', href: '/dashboard/delete-account', icon: '🗑️' },
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
+
+  const navLinks = [
+    { href: '/dashboard', label: '🏠 Home' },
+    { href: '/dashboard/business', label: '🏢 Business Profile' },
+    { href: '/dashboard/scrape', label: '🧠 Business Brain' },
+    { href: '/dashboard/billing', label: '💳 Billing' },
+    { href: '/dashboard/account', label: '👤 Account' },
+    { href: '/dashboard/settings', label: '⚙️ Settings' },
+    { href: '/dashboard/onboarding', label: '✅ Onboarding' },
+    { href: '/dashboard/data', label: '📦 My Data' },
   ]
 
   return (
-    <div style={{display: 'flex', height: '100vh', background: '#0d0d0d', color: 'white', fontFamily: 'sans-serif'}}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#0a0a0a', color: '#fff', fontFamily: 'sans-serif' }}>
       {/* Sidebar */}
-      <div style={{width: '220px', background: '#111', borderRight: '1px solid #222', display: 'flex', flexDirection: 'column', padding: '24px 0'}}>
-        <div style={{fontSize: '20px', fontWeight: '700', color: '#ff4400', padding: '0 20px 24px'}}>TraffikFuel</div>
-        {navItems.map((item) => (
-          <Link key={item.href} href={item.href} style={{
-            display: 'flex', alignItems: 'center', gap: '10px',
-            padding: '10px 20px', textDecoration: 'none',
-            color: pathname === item.href ? 'white' : '#888',
-            background: pathname === item.href ? '#1a1a1a' : 'transparent',
-            borderLeft: pathname === item.href ? '3px solid #ff4400' : '3px solid transparent',
-            fontSize: '14px'
-          }}>
-            <span>{item.icon}</span>
-            <span>{item.label}</span>
-          </Link>
-        ))}
+      <div style={{ width: '220px', background: '#111', display: 'flex', flexDirection: 'column', padding: '24px 0', borderRight: '1px solid #222' }}>
+        <div style={{ padding: '0 24px 24px', fontSize: '20px', fontWeight: 'bold', color: '#f97316' }}>
+          TraffikFuel
+        </div>
+        <nav style={{ flex: 1 }}>
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              style={{
+                display: 'block',
+                padding: '10px 24px',
+                color: pathname === link.href ? '#f97316' : '#ccc',
+                background: pathname === link.href ? '#1a1a1a' : 'transparent',
+                textDecoration: 'none',
+                fontSize: '14px',
+                borderLeft: pathname === link.href ? '3px solid #f97316' : '3px solid transparent',
+              }}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+        <div style={{ padding: '24px', borderTop: '1px solid #222' }}>
+          <div style={{ fontSize: '12px', color: '#888', marginBottom: '8px' }}>{email}</div>
+          <button
+            onClick={handleSignOut}
+            style={{ background: '#f97316', color: '#fff', border: 'none', borderRadius: '6px', padding: '8px 16px', cursor: 'pointer', fontSize: '13px', width: '100%' }}
+          >
+            Sign Out
+          </button>
+        </div>
       </div>
 
-      {/* Main content */}
-      <div style={{flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden'}}>
-        {/* Top bar */}
-        <div style={{height: '56px', borderBottom: '1px solid #222', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: '0 24px', background: '#111'}}>
-          <span style={{fontSize: '13px', color: '#888'}}>{email}</span>
-        </div>
-        {/* Page content */}
-        <main style={{flex: 1, overflowY: 'auto'}}>
-          {children}
-        </main>
-      </div>
+      {/* Page content */}
+      <main style={{ flex: 1, overflowY: 'auto' }}>
+        {children}
+      </main>
     </div>
   )
 }
