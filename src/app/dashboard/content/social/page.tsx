@@ -122,5 +122,5 @@ return (
 <span className="text-sm text-gray-400">
 {!bizReady ? 'Loading...' : hasBrain
 ? <><span className="text-white font-semibold">{business!.name}</span> — Brain loaded</>
-: <span className="text-yellow-400">Brain not loaded — <a href="/dashboard/scr​​​​​​​​​​​​​​​​
+: <span className="text-yellow-400">Brain not loaded — <a href="/dashboard/scr
 
