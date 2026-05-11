@@ -7,40 +7,33 @@ export default function SocialGenerator() {
 const [topic, setTopic] = useState('')
 const [loading, setLoading] = useState(false)
 const [auto, setAuto] = useState(false)
-const [posts, setPosts] = useState<{instagram: string, facebook: string, linkedin: string} | null>(null)
-const [edited, setEdited] = useState<{instagram: string, facebook: string, linkedin: string} | null>(null)
-const [submitted, setSubmitted] = useState<{instagram: boolean, facebook: boolean, linkedin: boolean}>({ instagram: false, facebook: false, linkedin: false })
-const [image, setImage] = useState<string | null>(null)
+const [edited, setEdited] = useState<any>(null)
+const [approved, setApproved] = useState({ instagram: false, facebook: false, linkedin: false })
+const [images, setImages] = useState<any>({ instagram: null, facebook: null, linkedin: null })
 const [brain, setBrain] = useState<any>(null)
-const fileRef = useRef<HTMLInputElement>(null)
+const igRef = useRef<HTMLInputElement>(null)
+const fbRef = useRef<HTMLInputElement>(null)
+const liRef = useRef<HTMLInputElement>(null)
+const refs: any = { instagram: igRef, facebook: fbRef, linkedin: liRef }
 
 useEffect(() => {
-const loadBrain = async () => {
-const { data: { session } } = await supabase.auth.getSession()
+supabase.auth.getSession().then(({ data: { session } }) => {
 if (!session) return
-const { data } = await supabase
-.from('business_profiles')
-.select('brain')
-.eq('user_id', session.user.id)
-.single()
+supabase.from('business_profiles').select('brain').eq('user_id', session.user.id).single().then(({ data }) => {
 if (data?.brain) setBrain(data.brain)
-}
-loadBrain()
+})
+})
 }, [])
 
-const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+const handleImage = (platform: string, e: React.ChangeEvent<HTMLInputElement>) => {
 const file = e.target.files?.[0]
 if (!file) return
 const reader = new FileReader()
-reader.onload = () => setImage(reader.result as string)
+reader.onload = () => setImages((prev: any) => ({ ...prev, [platform]: reader.result }))
 reader.readAsDataURL(file)
 }
 
-const copyToClipboard = async (text: string) => {
-try {
-await navigator.clipboard.writeText(text)
-alert('Copied!')
-} catch {
+const copy = (text: string) => {
 const el = document.createElement('textarea')
 el.value = text
 document.body.appendChild(el)
@@ -49,37 +42,23 @@ document.execCommand('copy')
 document.body.removeChild(el)
 alert('Copied!')
 }
-}
 
 const generate = async () => {
 if (!topic.trim()) return
 setLoading(true)
-setPosts(null)
 setEdited(null)
-setSubmitted({ instagram: false, facebook: false, linkedin: false })
+setApproved({ instagram: false, facebook: false, linkedin: false })
 try {
-const [igRes, fbRes, liRes] = await Promise.all([
-fetch('/api/content/social', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic, platform: 'instagram', brain }) }),
-fetch('/api/content/social', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic, platform: 'facebook', brain }) }),
-fetch('/api/content/social', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic, platform: 'linkedin', brain }) }),
+const [ig, fb, li] = await Promise.all([
+fetch('/api/content/social', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic, platform: 'instagram', brain }) }).then(r => r.json()),
+fetch('/api/content/social', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic, platform: 'facebook', brain }) }).then(r => r.json()),
+fetch('/api/content/social', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic, platform: 'linkedin', brain }) }).then(r => r.json()),
 ])
-const [ig, fb, li] = await Promise.all([igRes.json(), fbRes.json(), liRes.json()])
 const result = { instagram: ig.content, facebook: fb.content, linkedin: li.content }
-setPosts(result)
 setEdited(result)
-if (auto) setSubmitted({ instagram: true, facebook: true, linkedin: true })
-} catch (err) {
-console.error(err)
-}
+if (auto) setApproved({ instagram: true, facebook: true, linkedin: true })
+} catch (e) { console.error(e) }
 setLoading(false)
-}
-
-const handleSubmit = (platform: string) => {
-setSubmitted(prev => ({ ...prev, [platform]: true }))
-}
-
-const handleSubmitAll = () => {
-setSubmitted({ instagram: true, facebook: true, linkedin: true })
 }
 
 const platforms = [
@@ -90,121 +69,62 @@ const platforms = [
 
 return (
 <div style={{ padding: '40px', maxWidth: '900px' }}>
-<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
 <div>
 <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: '#fff', margin: 0 }}>Social Media Generator</h1>
 <p style={{ color: '#888', marginTop: '8px' }}>One topic — generates Instagram, Facebook, and LinkedIn posts at once</p>
 </div>
 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#1a1a1a', border: '1px solid #333', borderRadius: '8px', padding: '10px 16px' }}>
 <span style={{ color: auto ? '#555' : '#f97316', fontSize: '13px', fontWeight: 'bold' }}>Manual</span>
-<div
-onClick={() => setAuto(!auto)}
-style={{ width: '44px', height: '24px', borderRadius: '12px', cursor: 'pointer', background: auto ? '#f97316' : '#333', position: 'relative', transition: 'background 0.2s' }}
->
+<div onClick={() => setAuto(!auto)} style={{ width: '44px', height: '24px', borderRadius: '12px', cursor: 'pointer', background: auto ? '#f97316' : '#333', position: 'relative' }}>
 <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: '#fff', position: 'absolute', top: '3px', left: auto ? '23px' : '3px', transition: 'left 0.2s' }} />
 </div>
 <span style={{ color: auto ? '#f97316' : '#555', fontSize: '13px', fontWeight: 'bold' }}>Auto</span>
 </div>
 </div>
 
-{brain && (
-<div style={{ background: '#1a1a1a', border: '1px solid #222', borderRadius: '8px', padding: '12px 16px', marginBottom: '16px', fontSize: '13px', color: '#aaa' }}>
-Business Brain loaded: <span style={{ color: '#f97316' }}>{brain.businessName}</span>
-</div>
-)}
-
-{auto && (
-<div style={{ background: '#1a1a0a', border: '1px solid #f97316', borderRadius: '8px', padding: '12px 16px', marginBottom: '16px', fontSize: '13px', color: '#f97316' }}>
-Auto mode ON — posts will be approved automatically when generated
-</div>
-)}
-
-<div style={{ marginBottom: '16px' }}>
-<label style={{ display: 'block', color: '#ccc', marginBottom: '8px', fontSize: '14px' }}>Topic or Promotion</label>
-<input
-value={topic}
-onChange={(e) => setTopic(e.target.value)}
-placeholder="e.g. Caribbean citizenship by investment programs"
-style={{ width: '100%', padding: '12px', background: '#1a1a1a', border: '1px solid #333', borderRadius: '8px', color: '#fff', fontSize: '14px' }}
-/>
-</div>
+{brain && <div style={{ background: '#1a1a1a', border: '1px solid #222', borderRadius: '8px', padding: '12px 16px', marginBottom: '16px', fontSize: '13px', color: '#aaa' }}>Brain loaded: <span style={{ color: '#f97316' }}>{brain.businessName}</span></div>}
+{auto && <div style={{ background: '#1a1a0a', border: '1px solid #f97316', borderRadius: '8px', padding: '12px 16px', marginBottom: '16px', fontSize: '13px', color: '#f97316' }}>Auto mode ON — posts approved automatically</div>}
 
 <div style={{ marginBottom: '24px' }}>
-<label style={{ display: 'block', color: '#ccc', marginBottom: '8px', fontSize: '14px' }}>Attach Photo (optional)</label>
-<input ref={fileRef} type="file" accept="image/*" onChange={handleImage} style={{ display: 'none' }} />
-<div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-<button
-onClick={() => fileRef.current?.click()}
-style={{ background: '#1a1a1a', color: '#ccc', border: '1px solid #333', borderRadius: '8px', padding: '10px 20px', cursor: 'pointer', fontSize: '13px' }}
->
-Choose Image
-</button>
-{image && <img src={image} alt="preview" style={{ height: '48px', width: '48px', objectFit: 'cover', borderRadius: '6px', border: '1px solid #333' }} />}
-{image && <button onClick={() => setImage(null)} style={{ background: 'transparent', color: '#888', border: 'none', cursor: 'pointer', fontSize: '12px' }}>Remove</button>}
-{!image && <span style={{ color: '#555', fontSize: '13px' }}>No image selected</span>}
-</div>
+<label style={{ display: 'block', color: '#ccc', marginBottom: '8px', fontSize: '14px' }}>Topic or Promotion</label>
+<input value={topic} onChange={e => setTopic(e.target.value)} placeholder="e.g. Caribbean citizenship by investment" style={{ width: '100%', padding: '12px', background: '#1a1a1a', border: '1px solid #333', borderRadius: '8px', color: '#fff', fontSize: '14px' }} />
 </div>
 
-<button
-onClick={generate}
-disabled={loading || !topic.trim()}
-style={{ background: loading ? '#555' : '#f97316', color: '#fff', border: 'none', borderRadius: '8px', padding: '12px 32px', fontSize: '15px', cursor: loading ? 'not-allowed' : 'pointer', marginBottom: '32px' }}
->
+<button onClick={generate} disabled={loading || !topic.trim()} style={{ background: loading ? '#555' : '#f97316', color: '#fff', border: 'none', borderRadius: '8px', padding: '12px 32px', fontSize: '15px', cursor: 'pointer', marginBottom: '32px' }}>
 {loading ? 'Generating all 3 posts...' : 'Generate All 3 Posts'}
 </button>
 
 {edited && (
-<>
 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
 {platforms.map(({ key, label, color }) => (
-<div key={key} style={{ background: '#1a1a1a', border: submitted[key as keyof typeof submitted] ? '1px solid #22c55e' : '1px solid #333', borderRadius: '8px', padding: '24px' }}>
-<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+<div key={key} style={{ background: '#1a1a1a', border: approved[key as keyof typeof approved] ? '2px solid #22c55e' : '1px solid #333', borderRadius: '8px', padding: '24px' }}>
+<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
 <span style={{ color, fontWeight: 'bold', fontSize: '15px' }}>{label}</span>
-<div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-{submitted[key as keyof typeof submitted] ? (
-<span style={{ color: '#22c55e', fontSize: '13px', fontWeight: 'bold' }}>Approved</span>
-) : (
-<button
-onClick={() => handleSubmit(key)}
-style={{ background: color, color: '#fff', border: 'none', borderRadius: '6px', padding: '6px 14px', cursor: 'pointer', fontSize: '12px' }}
->
-Approve & Post
+<div style={{ display: 'flex', gap: '8px' }}>
+<button onClick={() => setApproved(prev => ({ ...prev, [key]: !prev[key as keyof typeof prev] }))}
+style={{ background: approved[key as keyof typeof approved] ? '#22c55e' : color, color: '#fff', border: 'none', borderRadius: '6px', padding: '6px 14px', cursor: 'pointer', fontSize: '12px' }}>
+{approved[key as keyof typeof approved] ? 'Approved — click to undo' : 'Approve & Post'}
 </button>
-)}
-<button
-onClick={() => copyToClipboard(edited[key as keyof typeof edited])}
-style={{ background: '#333', color: '#fff', border: 'none', borderRadius: '6px', padding: '6px 12px', cursor: 'pointer', fontSize: '12px' }}
->
-Copy
-</button>
+<button onClick={() => copy(edited[key])} style={{ background: '#333', color: '#fff', border: 'none', borderRadius: '6px', padding: '6px 12px', cursor: 'pointer', fontSize: '12px' }}>Copy</button>
 </div>
 </div>
-{image && (
-<img src={image} alt="post" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '6px', marginBottom: '12px' }} />
-)}
-<textarea
-value={edited[key as keyof typeof edited]}
-onChange={(e) => setEdited(prev => ({ ...prev!, [key]: e.target.value }))}
-rows={10}
-style={{ width: '100%', background: '#111', border: '1px solid #222', borderRadius: '6px', color: '#ddd', fontSize: '14px', lineHeight: '1.7', padding: '12px', resize: 'vertical', fontFamily: 'inherit' }}
-/>
+<div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+<input ref={refs[key]} type="file" accept="image/*" onChange={e => handleImage(key, e)} style={{ display: 'none' }} />
+<button onClick={() => refs[key].current?.click()} style={{ background: '#222', color: '#aaa', border: '1px solid #333', borderRadius: '6px', padding: '6px 12px', cursor: 'pointer', fontSize: '12px' }}>Attach Photo</button>
+{images[key] && <img src={images[key]} alt="" style={{ height: '40px', width: '40px', objectFit: 'cover', borderRadius: '4px' }} />}
+{images[key] && <button onClick={() => setImages((p: any) => ({ ...p, [key]: null }))} style={{ background: 'transparent', color: '#888', border: 'none', cursor: 'pointer', fontSize: '12px' }}>Remove</button>}
+</div>
+{images[key] && <img src={images[key]} alt="" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '6px', marginBottom: '12px' }} />}
+<textarea value={edited[key]} onChange={e => setEdited((p: any) => ({ ...p, [key]: e.target.value }))} rows={10}
+style={{ width: '100%', background: '#111', border: '1px solid #222', borderRadius: '6px', color: '#ddd', fontSize: '14px', lineHeight: '1.7', padding: '12px', resize: 'vertical', fontFamily: 'inherit' }} />
 </div>
 ))}
-</div>
-
-{!submitted.instagram || !submitted.facebook || !submitted.linkedin ? (
-<button
-onClick={handleSubmitAll}
-style={{ marginTop: '24px', background: '#f97316', color: '#fff', border: 'none', borderRadius: '8px', padding: '14px 32px', fontSize: '15px', cursor: 'pointer', width: '100%' }}
->
+<button onClick={() => setApproved({ instagram: true, facebook: true, linkedin: true })}
+style={{ background: '#f97316', color: '#fff', border: 'none', borderRadius: '8px', padding: '14px 32px', fontSize: '15px', cursor: 'pointer', width: '100%' }}>
 Approve & Post All 3
 </button>
-) : (
-<div style={{ marginTop: '24px', background: '#0a1a0a', border: '1px solid #22c55e', borderRadius: '8px', padding: '16px', textAlign: 'center', color: '#22c55e', fontSize: '15px' }}>
-All 3 posts approved! Auto-posting will go live when social accounts are connected.
 </div>
-)}
-</>
 )}
 </div>
 )
