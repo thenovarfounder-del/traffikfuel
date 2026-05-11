@@ -1,90 +1,245 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-type Platform = 'instagram' | 'facebook' | 'linkedin';
-interface Post { post: string; cta: string; hashtags: string; }
-interface Business { id: string; name: string; brain?: Record<string, unknown>; }
-const PLATFORMS: Platform[] = ['instagram', 'facebook', 'linkedin'];
-const CFG = {
-instagram: { label: 'Instagram', gradient: 'from-purple-600 to-pink-500' },
-facebook: { label: 'Facebook', gradient: 'from-blue-700 to-blue-500' },
-linkedin: { label: 'LinkedIn', gradient: 'from-sky-700 to-cyan-500' },
-};
+
+interface BusinessProfile {
+id: string;
+name: string;
+brain: string | null;
+}
+
+interface GeneratedPost {
+platform: string;
+post: string;
+cta: string;
+hashtags: string[];
+strategy: string;
+}
+
 export default function SocialMediaPage() {
-const [isAuto, setIsAuto] = useState(true);
+const [business, setBusiness] = useState<BusinessProfile | null>(null);
+const [loading, setLoading] = useState(true);
+const [generating, setGenerating] = useState(false);
 const [topic, setTopic] = useState('');
-const [loading, setLoading] = useState(false);
-const [step, setStep] = useState('');
+const [mode, setMode] = useState<'auto' | 'manual'>('auto');
+const [platforms, setPlatforms] = useState<string[]>(['instagram', 'facebook', 'linkedin']);
+const [results, setResults] = useState<GeneratedPost[]>([]);
 const [error, setError] = useState('');
-const [business, setBusiness] = useState<Business | null>(null);
-const [ready, setReady] = useState(false);
-const [posts, setPosts] = useState<Record<Platform, Post | null>>({ instagram: null, facebook: null, linkedin: null });
-const [approved, setApproved] = useState<Record<Platform, boolean>>({ instagram: false, facebook: false, linkedin: false });
-const [copied, setCopied] = useState<Record<Platform, boolean>>({ instagram: false, facebook: false, linkedin: false });
+const [copied, setCopied] = useState<string | null>(null);
+
 useEffect(() => {
-supabase.auth.getUser().then(({ data: { user } }) => {
-if (!user) { setReady(true); return; }
-supabase.from('business_profiles').select('id, name, brain').eq('user_id', user.id).single().then(({ data }) => {
-if (data) setBusiness(data);
-setReady(true);
-});
-});
+loadBusiness();
 }, []);
-async function generate() {
-if (!business) { setError('No business found.'); return; }
-if (!isAuto && !topic.trim()) { setError('Enter a topic.'); return; }
-setError(''); setLoading(true);
-setPosts({ instagram: null, facebook: null, linkedin: null });
-setStep('Analyzing Business Brain...');
+
+async function loadBusiness() {
+setLoading(true);
 try {
-const results = await Promise.all(
-PLATFORMS.map(p =>
-fetch('/api/content/social', {
+const { data: sessionData } = await supabase.auth.getSession();
+const session = sessionData?.session;
+
+if (!session?.user?.id) {
+setLoading(false);
+return;
+}
+
+const { data, error: dbError } = await supabase
+.from('business_profiles')
+.select('id, name, brain')
+.eq('user_id', session.user.id)
+.order('created_at', { ascending: true })
+.limit(1);
+
+if (dbError) {
+console.error('DB error:', dbError);
+} else if (data && data.length > 0) {
+setBusiness(data[0]);
+}
+} catch (err) {
+console.error('Load error:', err);
+} finally {
+setLoading(false);
+}
+}
+
+function togglePlatform(p: string) {
+setPlatforms(prev =>
+prev.includes(p) ? prev.filter(x => x !== p) : [...prev, p]
+);
+}
+
+async function generate() {
+if (!business) return;
+setGenerating(true);
+setError('');
+setResults([]);
+
+try {
+const res = await fetch('/api/content/social', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ businessId: business.id, platform: p, mode: isAuto ? 'auto' : 'manual', ...(isAuto ? {} : { customPrompt: topic }) }),
-}).then(r => r.json()).then(d => ({ p, d })).catch(e => ({ p, d: { error: e.message } }))
-)
-);
-const np = { instagram: null, facebook: null, linkedin: null } as Record<Platform, Post | null>;
-for (const { p, d } of results) {
-if (d.error) setError(d.error);
-else np[p] = { post: d.post || '', cta: d.cta || '', hashtags: d.hashtags || '' };
+body: JSON.stringify({
+businessId: business.id,
+brain: business.brain || '',
+platforms,
+mode,
+topic: mode === 'manual' ? topic : undefined,
+}),
+});
+
+const json = await res.json();
+if (!res.ok) throw new Error(json.error || 'Generation failed');
+setResults(json.posts || []);
+} catch (err: unknown) {
+setError(err instanceof Error ? err.message : 'Something went wrong');
+} finally {
+setGenerating(false);
 }
-setPosts(np);
-} catch (e) { setError('Something went wrong.'); console.error(e); }
-finally { setLoading(false); setStep(''); }
 }
-function copy(platform: Platform) {
-const p = posts[platform];
-if (!p) return;
-const t = [p.post, p.cta, p.hashtags].filter(Boolean).join('\n\n');
-try { navigator.clipboard.writeText(t); } catch {
-const ta = document.createElement('textarea');
-ta.value = t; document.body.appendChild(ta); ta.select();
-document.execCommand('copy'); document.body.removeChild(ta);
+
+async function copyPost(text: string, id: string) {
+await navigator.clipboard.writeText(text);
+setCopied(id);
+setTimeout(() => setCopied(null), 2000);
 }
-setCopied(prev => ({ ...prev, [platform]: true }));
-setTimeout(() => setCopied(prev => ({ ...prev, [platform]: false })), 2000);
-}
+
+const platformLabels: Record<string, string> = {
+instagram: '📸 Instagram',
+facebook: '👥 Facebook',
+linkedin: '💼 LinkedIn',
+tiktok: '🎵 TikTok',
+twitter: '🐦 Twitter/X',
+};
+
+if (loading) {
 return (
-<div className="max-w-4xl mx-auto px-4 py-8">
-<h1 className="text-3xl font-bold text-white mb-2">Social Media Generator</h1>
-<div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 mb-6 space-y-4">
-<div className="flex items-center gap-2">
-<div className={`w-2.5 h-2.5 rounded-full ${business ? 'bg-green-400' : ready ? 'bg-red-400' : 'bg-yellow-400'}`} />
-<span className="text-sm text-gray-400">
-{!ready ? 'Loading...' : business ? <><span className="text-white font-semibold">{business.name}</span> - Ready to generate</> : 'No business profile found'}
-</span>
+<div className="flex items-center justify-center min-h-96">
+<div className="text-gray-400 text-lg">Loading your business profile...</div>
 </div>
-<div className="flex items-center justify-between bg-gray-800 rounded-xl p-4">
+);
+}
+
+if (!business) {
+return (
+<div className="flex items-center justify-center min-h-96">
+<div className="text-center">
+<p className="text-gray-400 text-lg mb-4">No business profile found.</p>
+<a href="/dashboard/business" className="text-orange-500 underline">
+Create your business profile first →
+</a>
+</div>
+</div>
+);
+}
+
+return (
+<div className="max-w-4xl mx-auto p-6 space-y-8">
 <div>
-<p className="text-white font-bold text-sm">{isAuto ? 'Auto Mode - AI handles everything' : 'Manual Mode - you set the direction'}</p>
-<p className="text-gray-500 text-xs">{isAuto ? 'No input needed. Just click Generate.' : 'Type your topic below.'}</p>
+<h1 className="text-3xl font-bold text-white">Social Media Generator</h1>
+<p className="text-gray-400 mt-1">
+AI-powered posts for <span className="text-orange-500 font-semibold">{business.name}</span>
+</p>
 </div>
-<div className="flex items-center gap-2">
-<span className={`text-xs font-semibold ${!isAuto ? 'text-white' : 'text-gray-600'}`}>Manual</span>
-<button onClick={() => { setIsAuto(!isAuto); setTopic(''); setError(''); }} className={`relative inline-flex h-7 w-14 rounded-full ${isAuto ? 'bg-orange-500' : 'bg-gray-600'}`}>
-<span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all duration-200 ${isAuto ? 'left-8' : 'left-1'}`} />
+
+{!business.brain && (
+<div className="bg-yellow-900/30 border border-yellow-700 rounded-lg p-4 text-yellow-400">
+Your Business Brain is empty.{' '}
+<a href="/dashboard/scrape" className="underline font-semibold">
+Set it up here
+</a>{' '}
+for best results. You can still generate posts below.
+</div>
+)}
+
+<div className="flex gap-3">
+<button
+onClick={() => setMode('auto')}
+className={`px-5 py-2 rounded-lg font-medium transition-all ${
+mode === 'auto' ? 'bg-orange-500 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+}`}
+>
+Auto Mode
 </button>
-<span className={`text-xs font-semibold ${isAuto​​​​​​​​​​​​​​​​
+<button
+onClick={() => setMode('manual')}
+className={`px-5 py-2 rounded-lg font-medium transition-all ${
+mode === 'manual' ? 'bg-orange-500 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+}`}
+>
+Manual Mode
+</button>
+</div>
+
+{mode === 'manual' && (
+<div>
+<label className="block text-gray-300 text-sm font-medium mb-2">
+What do you want to post about?
+</label>
+<input
+type="text"
+value={topic}
+onChange={e => setTopic(e.target.value)}
+placeholder="e.g. second citizenship benefits..."
+className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-orange-500"
+/>
+</div>
+)}
+
+<div>
+<label className="block text-gray-300 text-sm font-medium mb-3">Select Platforms</label>
+<div className="flex flex-wrap gap-3">
+{Object.entries(platformLabels).map(([key, label]) => (
+<button
+key={key}
+onClick={() => togglePlatform(key)}
+className={`px-4 py-2 rounded-lg font-medium transition-all ${
+platforms.includes(key) ? 'bg-orange-500 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+}`}
+>
+{label}
+</button>
+))}
+</div>
+</div>
+
+<button
+onClick={generate}
+disabled={generating || platforms.length === 0}
+className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${
+generating || platforms.length === 0
+? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+: 'bg-orange-500 hover:bg-orange-600 text-white'
+}`}
+>
+{generating ? 'Generating...' : 'Generate Posts'}
+</button>
+
+{error && (
+<div className="bg-red-900/30 border border-red-700 rounded-lg p-4 text-red-400">{error}</div>
+)}
+
+{results.length > 0 && (
+<div className="space-y-6">
+<h2 className="text-xl font-bold text-white">Generated Posts</h2>
+{results.map((post, i) => (
+<div key={i} className="bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-4">
+<div className="flex items-center justify-between">
+<span className="text-orange-500 font-semibold text-lg">
+{platformLabels[post.platform] || post.platform}
+</span>
+<span className="text-gray-500 text-sm italic">{post.strategy}</span>
+</div>
+<p className="text-gray-200 leading-relaxed whitespace-pre-wrap">{post.post}</p>
+{post.cta && <p className="text-orange-400 font-medium">{post.cta}</p>}
+{post.hashtags?.length > 0 && (
+<div className="flex flex-wrap gap-2">
+{post.hashtags.map((tag, j) => (
+<span key={j} className="text-blue-400 text-sm">#{tag.replace(/^#/, '')}</span>
+))}
+</div>
+)}
+<button
+onClick={() => copyPost(`${post.post}\n\n${post.cta}\n\n${post.hashtags.map(t => '#' + t.replace(/^#/, '')).join(' ')}`, `${i}`)}
+className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm"
+>
+{copied === `${i}` ? 'Copied!' :
