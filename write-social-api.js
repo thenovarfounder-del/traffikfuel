@@ -9,13 +9,34 @@ export async function POST(req: NextRequest) {
     const { topic, platform, brain } = await req.json()
 
     const businessContext = brain
-      ? \`Business: \${brain.businessName}. Description: \${brain.description}. Services: \${Array.isArray(brain.services) ? brain.services.join(', ') : brain.services}. Target Audience: \${brain.targetAudience}. Tone: \${brain.tone}. Location: \${brain.location}.\`
+      ? \`Business: \${brain.businessName}. Services: \${Array.isArray(brain.services) ? brain.services.join(', ') : brain.services}. Target Audience: \${brain.targetAudience}. Tone: \${brain.tone}.\`
       : 'No business context available.'
 
     const prompts: Record<string, string> = {
-      instagram: \`Write an Instagram post about "\${topic}" for this business: \${businessContext}. Start with a bold hook, use 5-8 emojis, keep under 150 words, end with a call to action. REQUIRED: End with 10-15 hashtags on their own line.\`,
-      facebook: \`Write a Facebook post about "\${topic}" for this business: \${businessContext}. Start with a bold question, write 2-3 conversational paragraphs, end with a question to drive comments. REQUIRED: End with 5-8 hashtags on their own line. Do not skip the hashtags.\`,
-      linkedin: \`Write a LinkedIn post about "\${topic}" for this business: \${businessContext}. Start with a bold insight, write 3-4 professional paragraphs, end with a thought-provoking question. REQUIRED: End with 5 professional hashtags on their own line. Do not skip the hashtags.\`,
+      instagram: \`Write an Instagram post about "\${topic}" for: \${businessContext}
+
+Write the post, then on a NEW LINE write exactly this:
+HASHTAGS: #[hashtag1] #[hashtag2] #[hashtag3] #[hashtag4] #[hashtag5] #[hashtag6] #[hashtag7] #[hashtag8] #[hashtag9] #[hashtag10]
+
+Use emojis, keep under 150 words, end with a call to action before the hashtags.\`,
+
+      facebook: \`Write a Facebook post about "\${topic}" for: \${businessContext}
+
+Write 2-3 conversational paragraphs, end with a question to drive comments.
+
+Then on a NEW LINE write exactly this:
+HASHTAGS: #[hashtag1] #[hashtag2] #[hashtag3] #[hashtag4] #[hashtag5]
+
+Do not skip the HASHTAGS line. It is required.\`,
+
+      linkedin: \`Write a LinkedIn post about "\${topic}" for: \${businessContext}
+
+Write 3-4 professional paragraphs, end with a thought-provoking question.
+
+Then on a NEW LINE write exactly this:
+HASHTAGS: #[hashtag1] #[hashtag2] #[hashtag3] #[hashtag4] #[hashtag5]
+
+Do not skip the HASHTAGS line. It is required.\`,
     }
 
     const message = await client.messages.create({
