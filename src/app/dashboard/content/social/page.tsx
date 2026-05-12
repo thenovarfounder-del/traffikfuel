@@ -69,7 +69,7 @@ return (
 {['instagram', 'facebook', 'linkedin'].map(p => (
 <div key={p} className="bg-[#0f1225] rounded-lg p-4">
 <h3 className="text-orange-400 font-bold capitalize mb-2">{p}</h3>
-<p className="text-white text-sm whitespace-pre-wrap">{posts[p]}</p>
+<p className="text-white text-sm whitespace-pre-wrap">{(posts as any)[p]}</p>
 </div>
 ))}
 </div>
