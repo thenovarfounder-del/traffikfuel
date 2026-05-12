@@ -30,7 +30,7 @@ const { data } = await supabase.from('business_profiles').select('id, name, brai
 if (data) setBusiness(data);
 } catch (e) { console.error(e); } finally { setBizReady(true); }
 }
-const hasBrain = !!(business?.brain && Object.keys(business.brain).length > 0);
+const hasBrain = !!(business?.brain);
 async function generate() {
 if (!business?.id) { setError('No business profile found.'); return; }
 if (!isAuto && !topic.trim()) { setError('Please enter a topic for Manual mode.'); return; }
@@ -47,7 +47,7 @@ fetch('/api/content/social', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify({
-businessId: business.id,
+brain: typeof business.brain === "string" ? JSON.parse(business.brain) : business.brain,
 platform,
 mode: isAuto ? 'auto' : 'manual',
 ...(isAuto ? {} : { customPrompt: topic.trim() }),
@@ -165,3 +165,5 @@ return (
 </div>
 );
 }
+
+
