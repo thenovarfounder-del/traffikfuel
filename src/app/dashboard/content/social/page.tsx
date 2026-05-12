@@ -24,9 +24,7 @@ const [copied, setCopied] = useState<Record<Platform, boolean>>({ instagram: fal
 useEffect(() => { loadBusiness(); }, []);
 async function loadBusiness() {
 try {
-const { data: { user } } = await supabase.auth.getUser();
-if (!user) return;
-const { data } = await supabase.from('business_profiles').select('id, name, brain').eq('user_id', user.id).single();
+const { data } = await supabase.from('business_profiles').select('id, name, brain').eq('user_id', 'a809d033-5ae8-4da7-912a-281c5d39f033').single();
 if (data) setBusiness(data);
 } catch (e) { console.error(e); } finally { setBizReady(true); }
 }
@@ -165,5 +163,6 @@ return (
 </div>
 );
 }
+
 
 
