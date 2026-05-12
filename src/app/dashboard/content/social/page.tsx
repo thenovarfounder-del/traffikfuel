@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
 export default function SocialMediaPage() {
-const [business, setBusiness] = useState(null)
+const [business, setBusiness] = useState<any>(null)
 const [topic, setTopic] = useState('')
 const [isAuto, setIsAuto] = useState(true)
 const [loading, setLoading] = useState(false)
