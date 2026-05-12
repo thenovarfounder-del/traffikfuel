@@ -1,4 +1,5 @@
-'use client'
+const fs = require('fs');
+const content = `'use client'
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
@@ -76,4 +77,7 @@ return (
 </div>
 </div>
 )
-}
+}`;
+fs.writeFileSync('src/app/dashboard/content/social/page.tsx', content, 'utf8');
+console.log('Done!');
+
