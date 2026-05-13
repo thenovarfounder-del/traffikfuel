@@ -4,5 +4,8 @@ export async function POST(req) {
     const prompt = " Write a +platform+ post for: +JSON.stringify(brain)+ +(topic||auto)
     const d = await r.json()
     return NextResponse.json({post:d.content[0].text})
-  } catch(e){return NextResponse.json({error:" Failed},{status:500})}
+  } catch(e) {
+    return NextResponse.json({error:" Failed},{status:500})
+    return NextResponse.json({error:" Failed},{status:500})
+  }
 }
