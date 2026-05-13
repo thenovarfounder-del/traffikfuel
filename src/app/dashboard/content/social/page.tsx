@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { supabase } from '@/lib/supabase'
 
 const PLATFORMS = ['instagram', 'facebook', 'linkedin'] as const
 type Platform = typeof PLATFORMS[number]
@@ -54,6 +55,7 @@ export default function SocialMediaPage() {
   const [posts, setPosts] = useState<Record<Platform, string | null>>({ instagram: null, facebook: null, linkedin: null })
   const [approved, setApproved] = useState<Record<Platform, boolean>>({ instagram: false, facebook: false, linkedin: false })
   const [copied, setCopied] = useState<Record<Platform, boolean>>({ instagram: false, facebook: false, linkedin: false })
+  const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => { loadBusiness() }, [])
@@ -64,10 +66,21 @@ export default function SocialMediaPage() {
     if (data && !data.error) setBusiness(data)
   }
 
+  async function saveToQueue(platform: Platform, content: string) {
+    const { data: { user } } = await supabase.auth.getUser()
+    await supabase.from('social_posts').insert({
+      user_id: user?.id,
+      platform,
+      content,
+      status: 'pending',
+    })
+  }
+
   async function generate() {
     if (!business) { setError('No business profile found.'); return }
     if (!isAuto && !topic.trim()) { setError('Please enter a topic.'); return }
     setError('')
+    setSaved(false)
     setLoading(true)
     setApproved({ instagram: false, facebook: false, linkedin: false })
     try {
@@ -81,11 +94,16 @@ export default function SocialMediaPage() {
           }).then(r => r.json())
         )
       )
-      setPosts({
+      const newPosts = {
         instagram: results[0].post || results[0].error || 'Error',
         facebook: results[1].post || results[1].error || 'Error',
         linkedin: results[2].post || results[2].error || 'Error',
-      })
+      }
+      setPosts(newPosts)
+      await Promise.all(
+        PLATFORMS.map(platform => saveToQueue(platform, newPosts[platform] || ''))
+      )
+      setSaved(true)
     } catch (e) {
       setError('Generation failed.')
     } finally {
@@ -115,58 +133,3 @@ export default function SocialMediaPage() {
             <span className="text-green-400 font-bold text-lg">✅</span>
             <span className="text-green-400 font-semibold">Brain loaded — {business.business_name}</span>
           </>
-        ) : (
-          <>
-            <span className="text-yellow-400 font-bold text-lg">⏳</span>
-            <span className="text-yellow-400">Loading business brain...</span>
-          </>
-        )}
-      </div>
-
-      <div className="bg-[#0f1225] rounded-lg p-6 mb-6">
-        <div className="flex items-center gap-4 mb-4">
-          <span className="text-white font-semibold">Mode:</span>
-          <button onClick={() => setIsAuto(true)} className={`px-4 py-2 rounded-lg font-semibold transition-all ${isAuto ? 'bg-orange-500 text-white' : 'bg-[#1a1f3a] text-gray-400 hover:text-white'}`}>Auto</button>
-          <button onClick={() => setIsAuto(false)} className={`px-4 py-2 rounded-lg font-semibold transition-all ${!isAuto ? 'bg-orange-500 text-white' : 'bg-[#1a1f3a] text-gray-400 hover:text-white'}`}>Manual</button>
-        </div>
-        {!isAuto && (
-          <input type="text" value={topic} onChange={e => setTopic(e.target.value)} placeholder="Enter a topic for your posts..." className="w-full bg-[#1a1f3a] text-white rounded-lg px-4 py-3 mb-4 border border-gray-700 focus:border-orange-500 outline-none"/>
-        )}
-        {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
-        <button onClick={generate} disabled={loading || !business} className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg transition-all">
-          {loading ? 'Generating...' : isAuto ? 'Generate All 3 Posts Automatically' : 'Generate All 3 Posts'}
-        </button>
-      </div>
-
-      {posts.instagram && (
-        <div className="space-y-4">
-          {PLATFORMS.map(platform => {
-            const config = PLATFORM_CONFIG[platform]
-            const post = posts[platform]
-            const isApproved = approved[platform]
-            const isCopied = copied[platform]
-            return (
-              <div key={platform} className="rounded-xl p-5 transition-all" style={{ backgroundColor: config.bg, border: `1px solid ${isApproved ? config.color : config.border}`, boxShadow: isApproved ? `0 0 12px ${config.color}40` : 'none' }}>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    {config.icon}
-                    <span className="font-bold text-white text-base">{config.label}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button onClick={() => copyPost(platform)} className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all" style={{ backgroundColor: isCopied ? '#16a34a' : '#1a1f3a', color: isCopied ? '#fff' : '#9ca3af', border: `1px solid ${isCopied ? '#16a34a' : '#374151'}` }}>
-                      {isCopied ? '✓ Copied!' : '📋 Copy'}
-                    </button>
-                    <button onClick={() => toggleApprove(platform)} className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all" style={{ backgroundColor: isApproved ? config.color : '#1a1f3a', color: isApproved ? '#fff' : '#9ca3af', border: `1px solid ${isApproved ? config.color : '#374151'}` }}>
-                      {isApproved ? '✓ Approved' : 'Approve'}
-                    </button>
-                  </div>
-                </div>
-                <p className="text-gray-200 text-sm whitespace-pre-wrap leading-relaxed">{post}</p>
-              </div>
-            )
-          })}
-        </div>
-      )}
-    </div>
-  )
-}
