@@ -7,7 +7,7 @@ const [business, setBusiness] = useState<any>(null)
 const [topic, setTopic] = useState('')
 const [isAuto, setIsAuto] = useState(true)
 const [loading, setLoading] = useState(false)
-const [posts, setPosts] = useState({ instagram: null, facebook: null, linkedin: null })
+const [posts, setPosts] = useState<any>({ instagram: null, facebook: null, linkedin: null })
 const [error, setError] = useState('')
 
 useEffect(() => { loadBusiness() }, [])
