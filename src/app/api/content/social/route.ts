@@ -8,7 +8,7 @@ const apiKey = process.env.ANTHROPIC_API_KEY || ''
 const r = await fetch('https://api.anthropic.com/v1/messages', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1024, messages: [{ role: 'user', content: prompt }] })
+body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1024, messages: [{ role: 'user', content: prompt }] })
 })
 const d = await r.json()
 if (d.error) return NextResponse.json({ error: d.error.message }, { status: 500 })
