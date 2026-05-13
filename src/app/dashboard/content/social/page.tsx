@@ -119,7 +119,7 @@ export default function SocialMediaPage() {
   }
 
   function toggleApprove(platform: Platform) {
-    setApproved(a => ({ ...a, [platform]: !a[platform] }))
+    setApproved((a: any) => ({ ...a, [platform]: !a[platform] }))
   }
 
   return (
