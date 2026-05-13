@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
 export default function SocialMediaPage() {
-const [business, setBusiness] = useState<any>(null)
+const [business, setBusiness] = useState(null)
 const [topic, setTopic] = useState('')
 const [isAuto, setIsAuto] = useState(true)
 const [loading, setLoading] = useState(false)
@@ -13,12 +13,10 @@ const [error, setError] = useState('')
 useEffect(() => { loadBusiness() }, [])
 
 async function loadBusiness() {
-const { data } = await supabase
-.from('business_profiles')
-.select('id, name, brain')
-.eq('user_id', 'a809d033-5ae8-4da7-912a-281c5d39f033')
-.single()
-// @ts-ignore
+const res = await fetch('/api/business/profile')
+const data = await res.json()
+if (data && !data.error) setBusiness(data)
+
  if (data) setBusiness(data)
 }
 
@@ -69,7 +67,7 @@ return (
 {['instagram', 'facebook', 'linkedin'].map(p => (
 <div key={p} className="bg-[#0f1225] rounded-lg p-4">
 <h3 className="text-orange-400 font-bold capitalize mb-2">{p}</h3>
-<p className="text-white text-sm whitespace-pre-wrap">{(posts as any)[p]}</p>
+<p className="text-white text-sm whitespace-pre-wrap">{posts[p]}</p>
 </div>
 ))}
 </div>
