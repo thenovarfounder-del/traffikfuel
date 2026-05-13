@@ -17,7 +17,7 @@ const { data } = await supabase
 .from('business_profiles')
 .select('id, name, brain')
 .eq('user_id', 'a809d033-5ae8-4da7-912a-281c5d39f033')
-.limit(1).then(r => ({ data: r.data?.[0] }))
+.single()
 // @ts-ignore
  if (data) setBusiness(data)
 }
