@@ -36,7 +36,7 @@ body: JSON.stringify({ platform, brain, topic: isAuto ? '' : topic })
 }).then(r => r.json())
 )
 )
-setPosts({ instagram: results[0].content, facebook: results[1].content, linkedin: results[2].content })
+setPosts({ instagram: results[0].post, facebook: results[1].post, linkedin: results[2].post })
 } catch (e) {
 setError('Generation failed.')
 } finally {
