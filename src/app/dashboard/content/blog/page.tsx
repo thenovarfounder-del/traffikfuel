@@ -1,110 +1,66 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
-
-interface BlogPost {
-  id: string;
-  topic: string;
-  title: string;
-  content: string;
-  word_count: number;
-  status: string;
-  created_at: string;
-}
-
-interface BusinessProfile {
-  id: string;
-  business_name: string;
-}
+import { useState, useEffect } from 'react'
+import { supabase } from '@/lib/supabase'
 
 export default function BlogGeneratorPage() {
-  const [topic, setTopic] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [article, setArticle] = useState<BlogPost | null>(null);
-  const [error, setError] = useState('');
-  const [copied, setCopied] = useState(false);
-  const [userId, setUserId] = useState('');
-  const [businessId, setBusinessId] = useState('');
-  const [businesses, setBusinesses] = useState<BusinessProfile[]>([]);
+  const [topic, setTopic] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [article, setArticle] = useState<any>(null)
+  const [error, setError] = useState('')
+  const [copied, setCopied] = useState(false)
+  const [userId, setUserId] = useState('')
+  const [businessId, setBusinessId] = useState('')
 
   useEffect(() => {
     async function loadUser() {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        setUserId(user.id);
+        setUserId(user.id)
         const { data: profiles } = await supabase
           .from('business_profiles')
           .select('id, business_name')
-          .eq('user_id', user.id);
+          .eq('user_id', user.id)
         if (profiles && profiles.length > 0) {
-          setBusinesses(profiles);
-          setBusinessId(profiles[0].id);
+          setBusinessId(profiles[0].id)
         }
       }
     }
-    loadUser();
-  }, []);
+    loadUser()
+  }, [])
 
   async function generateArticle() {
     if (!topic.trim()) {
-      setError('Please enter a topic.');
-      return;
+      setError('Please enter a topic.')
+      return
     }
-    setLoading(true);
-    setError('');
-    setArticle(null);
+    setLoading(true)
+    setError('')
+    setArticle(null)
     try {
       const res = await fetch('/api/content/blog', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic: topic.trim(), businessId, userId }),
-      });
-      const data = await res.json();
+      })
+      const data = await res.json()
       if (!res.ok || data.error) {
-        setError(data.error || 'Something went wrong.');
-        return;
+        setError(data.error || 'Something went wrong.')
+        return
       }
-      setArticle(data.article);
+      setArticle(data.article)
     } catch {
-      setError('Failed to generate article. Please try again.');
+      setError('Failed to generate article. Please try again.')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
   function copyArticle() {
-    if (!article) return;
-    navigator.clipboard.writeText(article.title + '\n\n' + article.content);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }
-
-  function renderContent(content: string) {
-    return content.split('\n').map((line, i) => {
-      if (line.startsWith('## ')) {
-        return (
-          <h2 key={i} className="text-xl font-bold text-white mt-6 mb-2">
-            {line.replace('## ', '')}
-          </h2>
-        );
-      }
-      if (line.startsWith('# ')) {
-        return (
-          <h1 key={i} className="text-2xl font-bold text-white mt-6 mb-2">
-            {line.replace('# ', '')}
-          </h1>
-        );
-      }
-      if (line.trim() === '') {
-        return <br key={i} />;
-      }
-      return (
-        <p key={i} className="text-gray-300 leading-relaxed mb-2">
-          {line}
-        </p>
-      );
-    });
+    if (!article) return
+    navigator.clipboard.writeText(article.title + '\n\n' + article.content)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   return (
@@ -112,23 +68,9 @@ export default function BlogGeneratorPage() {
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Blog / Article Generator</h1>
-          <p className="text-gray-400">Generate a full 800-1200 word SEO-optimized article using your Business Brain.</p>
+          <p className="text-gray-400">Generate a full SEO-optimized article using your Business Brain.</p>
         </div>
         <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 mb-6">
-          {businesses.length > 1 && (
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-400 mb-1">Business Profile</label>
-              <select
-                value={businessId}
-                onChange={(e) => setBusinessId(e.target.value)}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white"
-              >
-                {businesses.map((b) => (
-                  <option key={b.id} value={b.id}>{b.business_name}</option>
-                ))}
-              </select>
-            </div>
-          )}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-400 mb-1">Article Topic</label>
             <input
@@ -167,12 +109,12 @@ export default function BlogGeneratorPage() {
                 {copied ? 'Copied!' : 'Copy'}
               </button>
             </div>
-            <div className="border-t border-gray-800 pt-6">
-              {renderContent(article.content)}
+            <div className="border-t border-gray-800 pt-6 text-gray-300 whitespace-pre-wrap">
+              {article.content}
             </div>
             <div className="border-t border-gray-800 pt-4 mt-6 flex gap-3">
               <button
-                onClick={() => { setArticle(null); setTopic(''); }}
+                onClick={() => { setArticle(null); setTopic('') }}
                 className="bg-gray-800 hover:bg-gray-700 text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
               >
                 Generate Another
@@ -188,5 +130,5 @@ export default function BlogGeneratorPage() {
         )}
       </div>
     </div>
-  );
+  )
 }
