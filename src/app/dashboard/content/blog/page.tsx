@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
@@ -8,7 +8,6 @@ export default function BlogGeneratorPage() {
   const [loading, setLoading] = useState(false)
   const [article, setArticle] = useState(null as any)
   const [error, setError] = useState('')
-  const [copied, setCopied] = useState(false)
   const [userId, setUserId] = useState('')
   const [businessId, setBusinessId] = useState('')
 
@@ -32,10 +31,7 @@ export default function BlogGeneratorPage() {
   }, [])
 
   async function generateArticle() {
-    if (!topic.trim()) {
-      setError('Please enter a topic.')
-      return
-    }
+    if (!topic.trim()) { setError('Please enter a topic.'); return }
     setLoading(true)
     setError('')
     setArticle(null)
@@ -46,58 +42,42 @@ export default function BlogGeneratorPage() {
         body: JSON.stringify({ topic: topic.trim(), businessId, userId }),
       })
       const data = await res.json()
-      if (!res.ok || data.error) {
-        setError(data.error || 'Something went wrong.')
-        return
-      }
+      if (!res.ok || data.error) { setError(data.error || 'Something went wrong.'); return }
       setArticle(data.article)
-    } catch {
-      setError('Failed to generate article.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  function copyArticle() {
-    if (!article) return
-    navigator.clipboard.writeText(article.title + '\n\n' + article.content)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    } catch { setError('Failed to generate article.') }
+    finally { setLoading(false) }
   }
 
   return (
     <div className="min-h-screen bg-gray-950 text-white p-6">
       <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Blog Article Generator</h1>
-          <p className="text-gray-400">Generate a full SEO-optimized article using your Business Brain.</p>
-        </div>
+        <h1 className="text-3xl font-bold mb-8">Blog Article Generator</h1>
         <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 mb-6">
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-400 mb-1">Article Topic</label>
-            <input
-              type="text"
-              value={topic}
-              onChange={(e) => setTopic(e.target.value)}
-              placeholder="e.g. How to get a second passport in 2025"
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none text-base"
-            />
-          </div>
-          {error && (
-            <div className="mb-4 bg-red-900/30 border border-red-700 rounded-lg px-4 py-3 text-red-400 text-sm">
-              {error}
-            </div>
-          )}
+          <input
+            type="text"
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+            placeholder="Enter article topic..."
+            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white mb-4"
+          />
+          {error && <p className="text-red-400 mb-4">{error}</p>}
           <button
             onClick={generateArticle}
             disabled={loading || !topic.trim()}
-            className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-700 disabled:text-gray-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+            className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-700 text-white font-semibold py-3 rounded-lg"
           >
-            {loading ? 'Generating article...' : 'Generate Article'}
+            {loading ? 'Generating...' : 'Generate Article'}
           </button>
         </div>
         {article && (
           <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6">
-            <div className="flex items-start justify-between mb-6">
-              <div>
-                <span className="text-xs text-orange-400 font-medium uppercase tracking-wide">Generated Article</span>
+            <h2 className="text-2xl font-bold mb-2">{article.title}</h2>
+            <p className="text-gray-500 text-sm mb-4">{article.word_count} words</p>
+            <div className="text-gray-300 whitespace-pre-wrap">{article.content}</div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
