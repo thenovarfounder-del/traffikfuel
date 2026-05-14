@@ -111,36 +111,26 @@ export default function BlogGeneratorPage() {
     <div className="min-h-screen bg-gray-950 text-white p-6">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">
-            Blog / Article Generator
-          </h1>
-          <p className="text-gray-400">
-            Generate a full 800-1200 word SEO-optimized article using your Business Brain.
-          </p>
+          <h1 className="text-3xl font-bold text-white mb-2">Blog / Article Generator</h1>
+          <p className="text-gray-400">Generate a full 800-1200 word SEO-optimized article using your Business Brain.</p>
         </div>
         <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 mb-6">
           {businesses.length > 1 && (
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-400 mb-1">
-                Business Profile
-              </label>
+              <label className="block text-sm font-medium text-gray-400 mb-1">Business Profile</label>
               <select
                 value={businessId}
                 onChange={(e) => setBusinessId(e.target.value)}
                 className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white"
               >
                 {businesses.map((b) => (
-                  <option key={b.id} value={b.id}>
-                    {b.business_name}
-                  </option>
+                  <option key={b.id} value={b.id}>{b.business_name}</option>
                 ))}
               </select>
             </div>
           )}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-400 mb-1">
-              Article Topic
-            </label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Article Topic</label>
             <input
               type="text"
               value={topic}
@@ -166,15 +156,9 @@ export default function BlogGeneratorPage() {
           <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6">
             <div className="flex items-start justify-between mb-6">
               <div>
-                <span className="text-xs text-orange-400 font-medium uppercase tracking-wide">
-                  Generated Article
-                </span>
-                <h2 className="text-2xl font-bold text-white mt-1">
-                  {article.title}
-                </h2>
-                <p className="text-gray-500 text-sm mt-1">
-                  {article.word_count} words - Saved as draft
-                </p>
+                <span className="text-xs text-orange-400 font-medium uppercase tracking-wide">Generated Article</span>
+                <h2 className="text-2xl font-bold text-white mt-1">{article.title}</h2>
+                <p className="text-gray-500 text-sm mt-1">{article.word_count} words - Saved as draft</p>
               </div>
               <button
                 onClick={copyArticle}
