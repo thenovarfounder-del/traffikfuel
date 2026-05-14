@@ -52,13 +52,13 @@ export default function SocialPage() {
           }).then(r => r.json())
         )
       )
-      const newPosts = {
+      const newPosts: any = {
         instagram: results[0].post || results[0].error || 'Error',
         facebook: results[1].post || results[1].error || 'Error',
         linkedin: results[2].post || results[2].error || 'Error',
       }
       setPosts(newPosts)
-      await Promise.all(platforms.map(p => saveToQueue(p, newPosts[p] || '')))
+      await Promise.all(platforms.map((p: any) => saveToQueue(p, newPosts[p] || '')))
       setSaved(true)
     } catch (e) {
       setError('Generation failed.')
@@ -103,24 +103,9 @@ export default function SocialPage() {
       </div>
       {posts.instagram && (
         <div className="space-y-4">
-          {platforms.map(platform => (
+          {platforms.map((platform: any) => (
             <div key={platform} className="rounded-xl p-5" style={{ backgroundColor: cfg[platform].bg, border: '1px solid ' + (approved[platform] ? cfg[platform].color : cfg[platform].border) }}>
               <div className="flex items-center justify-between mb-3">
                 <span className="font-bold text-white">{cfg[platform].label}</span>
                 <div className="flex gap-2">
-                  <button onClick={() => copyPost(platform)} style={{ backgroundColor: copied[platform] ? '#16a34a' : '#1a1f3a', color: copied[platform] ? '#fff' : '#9ca3af', border: '1px solid #374151', padding: '6px 12px', borderRadius: '8px', fontSize: '14px', fontWeight: 600 }}>
-                    {copied[platform] ? 'Copied!' : 'Copy'}
-                  </button>
-                  <button onClick={() => toggleApprove(platform)} style={{ backgroundColor: approved[platform] ? cfg[platform].color : '#1a1f3a', color: approved[platform] ? '#fff' : '#9ca3af', border: '1px solid #374151', padding: '6px 12px', borderRadius: '8px', fontSize: '14px', fontWeight: 600 }}>
-                    {approved[platform] ? 'Approved' : 'Approve'}
-                  </button>
-                </div>
-              </div>
-              <p className="text-gray-200 text-sm whitespace-pre-wrap leading-relaxed">{posts[platform]}</p>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
+                  <button onClick={() => copyPost(platform)} style={{ backgroundColor: copied[platform] ? '#16a34a' : '#1a1f3a', color: copied[platform] ? '#fff' : '#9ca3af', border: '1px solid #374151', padding: '6px 12px', borderRadi
