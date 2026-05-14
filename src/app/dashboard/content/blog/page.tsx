@@ -1,83 +1,99 @@
-﻿'use client'
+﻿'use client';
 
-import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+
+const BLOG_TYPES = ['How-To Guide','Listicle','Opinion Piece','Case Study','Industry News','Product Review','Thought Leadership','SEO Article'];
 
 export default function BlogGeneratorPage() {
-  const [topic, setTopic] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [article, setArticle] = useState(null as any)
-  const [error, setError] = useState('')
-  const [userId, setUserId] = useState('')
-  const [businessId, setBusinessId] = useState('')
+  const [blogType, setBlogType] = useState('How-To Guide');
+  const [topic, setTopic] = useState('');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [saved, setSaved] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [businessId, setBusinessId] = useState('');
 
   useEffect(() => {
-    async function loadUser() {
-      const result = await supabase.auth.getUser()
-      const user = result.data.user
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        setUserId(user.id)
-        const profileResult = await supabase
+        setUserId(user.id);
+        const { data: profile } = await supabase
           .from('business_profiles')
-          .select('id, business_name')
+          .select('id')
           .eq('user_id', user.id)
-        const profiles = profileResult.data
-        if (profiles && profiles.length > 0) {
-          setBusinessId(profiles[0].id)
-        }
+          .single();
+        if (profile) setBusinessId(profile.id);
       }
-    }
-    loadUser()
-  }, [])
+    };
+    getUser();
+  }, []);
 
-  async function generateArticle() {
-    if (!topic.trim()) { setError('Please enter a topic.'); return }
-    setLoading(true)
-    setError('')
-    setArticle(null)
+  const handleGenerate = async () => {
+    if (!topic.trim()) { setError('Please enter a topic.'); return; }
+    setLoading(true);
+    setError('');
+    setSaved(false);
+    setTitle('');
+    setContent('');
     try {
       const res = await fetch('/api/content/blog', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic: topic.trim(), businessId, userId }),
-      })
-      const data = await res.json()
-      if (!res.ok || data.error) { setError(data.error || 'Something went wrong.'); return }
-      setArticle(data.article)
-    } catch { setError('Failed to generate article.') }
-    finally { setLoading(false) }
-  }
+        body: JSON.stringify({ blogType, topic, userId, businessId }),
+      });
+      const data = await res.json();
+      if (data.error) { setError(data.error); } else {
+        setTitle(data.title);
+        setContent(data.content);
+        setSaved(true);
+      }
+    } catch {
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-6">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Blog Article Generator</h1>
-        <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 mb-6">
-          <input
-            type="text"
-            value={topic}
-            onChange={(e) => setTopic(e.target.value)}
-            placeholder="Enter article topic..."
-            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white mb-4"
-          />
-          {error && <p className="text-red-400 mb-4">{error}</p>}
-          <button
-            onClick={generateArticle}
-            disabled={loading || !topic.trim()}
-            className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-700 text-white font-semibold py-3 rounded-lg"
-          >
-            {loading ? 'Generating...' : 'Generate Article'}
+    <div className="max-w-3xl mx-auto p-6">
+      <h1 className="text-2xl font-bold text-white mb-1">Blog Generator</h1>
+      <p className="text-gray-400 mb-6">Generate professional blog articles for your business.</p>
+      <div className="bg-gray-900 rounded-xl p-6 mb-6 space-y-4">
+        <div>
+          <label className="block text-sm text-gray-400 mb-1">Blog Type</label>
+          <select value={blogType} onChange={e => setBlogType(e.target.value)} className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 border border-gray-700 focus:outline-none focus:border-orange-500">
+            {BLOG_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm text-gray-400 mb-1">Topic / Goal</label>
+          <input type="text" value={topic} onChange={e => setTopic(e.target.value)} placeholder="e.g. How to get a second passport, top 5 tax havens" className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 border border-gray-700 focus:outline-none focus:border-orange-500" />
+        </div>
+        {error && <p className="text-red-400 text-sm">{error}</p>}
+        <button onClick={handleGenerate} disabled={loading} className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white font-semibold py-3 rounded-lg transition">
+          {loading ? 'Generating...' : 'Generate Article'}
+        </button>
+      </div>
+      {title && (
+        <div className="bg-gray-900 rounded-xl p-6 space-y-4">
+          {saved && <p className="text-green-400 text-sm">Saved to your content queue</p>}
+          <div>
+            <label className="block text-sm text-gray-400 mb-1">Title</label>
+            <div className="bg-gray-800 text-white rounded-lg px-4 py-3 border border-gray-700 font-medium">{title}</div>
+          </div>
+          <div>
+            <label className="block text-sm text-gray-400 mb-1">Article</label>
+            <textarea value={content} onChange={e => setContent(e.target.value)} rows={20} className="w-full bg-gray-800 text-white rounded-lg px-4 py-3 border border-gray-700 focus:outline-none focus:border-orange-500 resize-none text-sm" />
+          </div>
+          <button onClick={() => navigator.clipboard.writeText(title + '\n\n' + content)} className="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 rounded-lg transition">
+            Copy to Clipboard
           </button>
         </div>
-        {article && (
-          <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6">
-            <h2 className="text-2xl font-bold mb-2">{article.title}</h2>
-            <p className="text-gray-500 text-sm mb-4">{article.word_count} words</p>
-            <div className="text-gray-300 whitespace-pre-wrap">{article.content}</div>
-          </div>
-        )}
-      </div>
+      )}
     </div>
-  )
+  );
 }
-
