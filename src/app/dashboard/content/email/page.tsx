@@ -13,6 +13,7 @@ export default function EmailGeneratorPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [saved, setSaved] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [userId, setUserId] = useState('');
   const [businessId, setBusinessId] = useState('');
 
@@ -37,6 +38,7 @@ export default function EmailGeneratorPage() {
     setLoading(true);
     setError('');
     setSaved(false);
+    setCopied(false);
     setSubject('');
     setBody('');
     try {
@@ -55,6 +57,24 @@ export default function EmailGeneratorPage() {
       setError('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCopy = async () => {
+    const text = 'Subject: ' + subject + '\n\n' + body;
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      const el = document.createElement('textarea');
+      el.value = text;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -89,8 +109,8 @@ export default function EmailGeneratorPage() {
             <label className="block text-sm text-gray-400 mb-1">Email Body</label>
             <textarea value={body} onChange={e => setBody(e.target.value)} rows={16} className="w-full bg-gray-800 text-white rounded-lg px-4 py-3 border border-gray-700 focus:outline-none focus:border-orange-500 resize-none text-sm" />
           </div>
-          <button onClick={() => navigator.clipboard.writeText('Subject: ' + subject + '\n\n' + body)} className="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 rounded-lg transition">
-            Copy to Clipboard
+          <button onClick={handleCopy} className="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 rounded-lg transition">
+            {copied ? 'Copied!' : 'Copy to Clipboard'}
           </button>
         </div>
       )}
