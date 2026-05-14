@@ -50,7 +50,7 @@ export default function BlogGeneratorPage() {
       }
       setArticle(data.article)
     } catch {
-      setError('Failed to generate article. Please try again.')
+      setError('Failed to generate article.')
     } finally {
       setLoading(false)
     }
