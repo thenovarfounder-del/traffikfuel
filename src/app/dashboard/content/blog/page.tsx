@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase'
 export default function BlogGeneratorPage() {
   const [topic, setTopic] = useState('')
   const [loading, setLoading] = useState(false)
-  const [article, setArticle] = useState<any>(null)
+  const [article, setArticle] = useState(null as any)
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
   const [userId, setUserId] = useState('')
@@ -14,13 +14,15 @@ export default function BlogGeneratorPage() {
 
   useEffect(() => {
     async function loadUser() {
-      const { data: { user } } = await supabase.auth.getUser()
+      const result = await supabase.auth.getUser()
+      const user = result.data.user
       if (user) {
         setUserId(user.id)
-        const { data: profiles } = await supabase
+        const profileResult = await supabase
           .from('business_profiles')
           .select('id, business_name')
           .eq('user_id', user.id)
+        const profiles = profileResult.data
         if (profiles && profiles.length > 0) {
           setBusinessId(profiles[0].id)
         }
@@ -67,7 +69,7 @@ export default function BlogGeneratorPage() {
     <div className="min-h-screen bg-gray-950 text-white p-6">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Blog / Article Generator</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">Blog Article Generator</h1>
           <p className="text-gray-400">Generate a full SEO-optimized article using your Business Brain.</p>
         </div>
         <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 mb-6">
@@ -99,36 +101,3 @@ export default function BlogGeneratorPage() {
             <div className="flex items-start justify-between mb-6">
               <div>
                 <span className="text-xs text-orange-400 font-medium uppercase tracking-wide">Generated Article</span>
-                <h2 className="text-2xl font-bold text-white mt-1">{article.title}</h2>
-                <p className="text-gray-500 text-sm mt-1">{article.word_count} words - Saved as draft</p>
-              </div>
-              <button
-                onClick={copyArticle}
-                className="shrink-0 ml-4 bg-gray-800 hover:bg-gray-700 text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-              >
-                {copied ? 'Copied!' : 'Copy'}
-              </button>
-            </div>
-            <div className="border-t border-gray-800 pt-6 text-gray-300 whitespace-pre-wrap">
-              {article.content}
-            </div>
-            <div className="border-t border-gray-800 pt-4 mt-6 flex gap-3">
-              <button
-                onClick={() => { setArticle(null); setTopic('') }}
-                className="bg-gray-800 hover:bg-gray-700 text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-              >
-                Generate Another
-              </button>
-              
-                href="/dashboard/content/queue"
-                className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-              >
-                View Content Queue
-              </a>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
