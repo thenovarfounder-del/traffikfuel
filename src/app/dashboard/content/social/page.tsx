@@ -104,4 +104,23 @@ export default function SocialPage() {
       {posts.instagram && (
         <div className="space-y-4">
           {platforms.map(platform => (
-            <div key={platform} className="rounded-xl p-5" style={{ backgroundColor: cfg[platform].bg, border: '1px solid ' + (approved[platform] ? cfg[platform
+            <div key={platform} className="rounded-xl p-5" style={{ backgroundColor: cfg[platform].bg, border: '1px solid ' + (approved[platform] ? cfg[platform].color : cfg[platform].border) }}>
+              <div className="flex items-center justify-between mb-3">
+                <span className="font-bold text-white">{cfg[platform].label}</span>
+                <div className="flex gap-2">
+                  <button onClick={() => copyPost(platform)} style={{ backgroundColor: copied[platform] ? '#16a34a' : '#1a1f3a', color: copied[platform] ? '#fff' : '#9ca3af', border: '1px solid #374151', padding: '6px 12px', borderRadius: '8px', fontSize: '14px', fontWeight: 600 }}>
+                    {copied[platform] ? 'Copied!' : 'Copy'}
+                  </button>
+                  <button onClick={() => toggleApprove(platform)} style={{ backgroundColor: approved[platform] ? cfg[platform].color : '#1a1f3a', color: approved[platform] ? '#fff' : '#9ca3af', border: '1px solid #374151', padding: '6px 12px', borderRadius: '8px', fontSize: '14px', fontWeight: 600 }}>
+                    {approved[platform] ? 'Approved' : 'Approve'}
+                  </button>
+                </div>
+              </div>
+              <p className="text-gray-200 text-sm whitespace-pre-wrap leading-relaxed">{posts[platform]}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
