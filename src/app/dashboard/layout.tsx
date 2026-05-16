@@ -35,6 +35,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { href: '/dashboard/content/queue', label: 'Content Queue' },
   { href: '/dashboard/content/schema', label: 'Schema Markup' },
   { href: '/dashboard/content/faq', label: 'FAQ Schema' },
+  { href: '/dashboard/content/authority', label: 'Authority Content' },
     { href: '/dashboard/onboarding', label: 'Onboarding' },
     { href: '/dashboard/settings', label: 'Settings' },
     { href: '/dashboard/account', label: 'Account' },
@@ -82,4 +83,5 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     </div>
   )
 }
+
 
