@@ -1,31 +1,20 @@
 ﻿'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
-import Link from 'next/link'
+import { useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter()
   const pathname = usePathname()
-  const [email, setEmail] = useState('')
+  const router = useRouter()
+  const [mobileOpen, setMobileOpen] = useState(false)
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        router.push('/login')
-      } else {
-        setEmail(session.user.email ?? '')
-      }
-    })
-  }, [router])
-
-  const handleSignOut = async () => {
+  async function handleSignOut() {
     await supabase.auth.signOut()
     router.push('/login')
   }
 
-  const navLinks = [
+  const links = [
     { href: '/dashboard', label: 'Dashboard' },
     { href: '/dashboard/business', label: 'Business Profile' },
     { href: '/dashboard/scrape', label: 'Business Brain' },
@@ -33,55 +22,72 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { href: '/dashboard/content/blog', label: 'Blog Generator' },
     { href: '/dashboard/content/social', label: 'Social Media' },
     { href: '/dashboard/content/queue', label: 'Content Queue' },
-  { href: '/dashboard/content/schema', label: 'Schema Markup' },
-  { href: '/dashboard/content/faq', label: 'FAQ Schema' },
-  { href: '/dashboard/content/authority', label: 'Authority Content' },
+    { href: '/dashboard/content/schema', label: 'Schema Markup' },
+    { href: '/dashboard/content/faq', label: 'FAQ Schema' },
+    { href: '/dashboard/content/authority', label: 'Authority Content' },
+    { href: '/dashboard/content/citations', label: 'Citation Tracker' },
     { href: '/dashboard/onboarding', label: 'Onboarding' },
     { href: '/dashboard/settings', label: 'Settings' },
     { href: '/dashboard/account', label: 'Account' },
     { href: '/dashboard/data', label: 'My Data' },
   ]
 
+  function navClass(href: string) {
+    const active = href === '/dashboard' ? pathname === '/dashboard' : pathname.startsWith(href)
+    return active
+      ? 'block px-3 py-2 rounded-lg text-sm bg-gray-700 text-white transition'
+      : 'block px-3 py-2 rounded-lg text-sm text-gray-400 hover:text-white transition'
+  }
+
+  const sidebar = (
+    <div className="flex flex-col h-full bg-gray-900 border-r border-gray-800 w-64 p-4">
+      <div className="mb-6">
+        <span className="text-white font-bold text-xl">TraffikFuel</span>
+      </div>
+      <nav className="flex-1 space-y-1 overflow-y-auto">
+        {links.map((link) => (
+          <a key={link.href} href={link.href} className={navClass(link.href)}>
+            {link.label}
+          </a>
+        ))}
+      </nav>
+      <button
+        onClick={handleSignOut}
+        className="mt-4 text-sm text-gray-500 hover:text-white transition text-left px-3 py-2"
+      >
+        Sign Out
+      </button>
+    </div>
+  )
+
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#0a0a0a', color: '#fff' }}>
-      <div style={{ width: '220px', background: '#111', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ padding: '0 24px 24px', fontSize: '20px', fontWeight: 'bold', color: '#f97316' }}>
-          TraffikFuel
+    <div className="flex h-screen bg-gray-950 text-white overflow-hidden">
+      {/* Desktop sidebar */}
+      <div className="hidden md:flex flex-shrink-0">
+        {sidebar}
+      </div>
+
+      {/* Mobile sidebar */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 flex md:hidden">
+          <div className="flex-shrink-0">{sidebar}</div>
+          <div className="flex-1 bg-black/50" onClick={() => setMobileOpen(false)} />
         </div>
-        <nav style={{ flex: 1 }}>
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              style={{
-                display: 'block',
-                padding: '10px 24px',
-                color: pathname === link.href ? '#f97316' : '#ccc',
-                background: pathname === link.href ? '#1a1a1a' : 'transparent',
-                textDecoration: 'none',
-                fontSize: '14px',
-                borderLeft: pathname === link.href ? '3px solid #f97316' : '3px solid transparent',
-              }}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-        <div style={{ padding: '24px', borderTop: '1px solid #222' }}>
-          <div style={{ fontSize: '12px', color: '#888', marginBottom: '8px' }}>{email}</div>
-          <button
-            onClick={handleSignOut}
-            style={{ background: '#f97316', color: '#fff', border: 'none', borderRadius: '6px', padding: '8px 16px', cursor: 'pointer', fontSize: '14px' }}
-          >
-            Sign Out
+      )}
+
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Mobile header */}
+        <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-gray-800">
+          <span className="text-white font-bold">TraffikFuel</span>
+          <button onClick={() => setMobileOpen(true)} className="text-gray-400 hover:text-white">
+            ☰
           </button>
         </div>
+
+        <main className="flex-1 overflow-y-auto">
+          {children}
+        </main>
       </div>
-      <main style={{ flex: 1, overflowY: 'auto' }}>
-        {children}
-      </main>
     </div>
   )
 }
-
-
