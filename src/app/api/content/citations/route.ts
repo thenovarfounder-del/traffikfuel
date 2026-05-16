@@ -20,6 +20,7 @@ export async function POST(request: NextRequest) {
       { name: 'ChatGPT', persona: 'You are ChatGPT, made by OpenAI.' },
       { name: 'Gemini', persona: 'You are Gemini, made by Google.' },
       { name: 'Perplexity', persona: 'You are Perplexity AI, an AI search engine.' },
+      { name: 'Claude', persona: 'You are Claude, made by Anthropic.' },
     ]
 
     const results = await Promise.all(
