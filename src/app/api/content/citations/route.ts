@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { supabase } from '@/lib/supabase'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -7,7 +8,7 @@ const anthropic = new Anthropic({
 
 export async function POST(request: NextRequest) {
   try {
-    const { query, businessName } = await request.json()
+    const { query, businessName, userId } = await request.json()
 
     if (!query || !businessName) {
       return NextResponse.json(
@@ -48,13 +49,26 @@ export async function POST(request: NextRequest) {
     )
 
     const mentionCount = results.filter((r) => r.mentioned).length
+    const score = Math.round((mentionCount / results.length) * 100)
+
+    if (userId) {
+      await supabase.from('citation_checks').insert({
+        user_id: userId,
+        query,
+        business_name: businessName,
+        score,
+        mention_count: mentionCount,
+        total_engines: results.length,
+        results,
+      })
+    }
 
     return NextResponse.json({
       query,
       businessName,
       results,
       mentionCount,
-      score: Math.round((mentionCount / results.length) * 100),
+      score,
     })
   } catch (error) {
     console.error('Citation check error:', error)
