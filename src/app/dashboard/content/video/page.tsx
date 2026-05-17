@@ -107,7 +107,7 @@ export default function VideoScriptsPage() {
               value={topic}
               onChange={e => setTopic(e.target.value)}
               placeholder="e.g. Why every business needs a second passport"
-              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
             />
           </div>
 
@@ -117,7 +117,7 @@ export default function VideoScriptsPage() {
             <select
               value={platform}
               onChange={e => setPlatform(e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
             >
               <option>YouTube Shorts</option>
               <option>TikTok</option>
@@ -131,7 +131,7 @@ export default function VideoScriptsPage() {
             <select
               value={duration}
               onChange={e => setDuration(Number(e.target.value))}
-              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
             >
               <option value={30}>30 seconds</option>
               <option value={60}>60 seconds</option>
