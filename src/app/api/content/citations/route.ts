@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 })
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,22 +33,26 @@ export async function POST(request: NextRequest) {
       engines.map(async (engine) => {
         const message = await anthropic.messages.create({
           model: 'claude-haiku-4-5-20251001',
-          max_tokens: 1000,
+          max_tokens: 1024,
+          system: engine.persona,
           messages: [
             {
               role: 'user',
-              content: `${engine.persona} Answer this question as ${engine.name} would, based on your training data. Be specific and name real companies and experts when relevant.\n\nQuestion: ${query}`,
+              content: query,
             },
           ],
         })
 
-        const response = message.content[0].type === 'text' ? message.content[0].text : ''
-        const mentioned = response.toLowerCase().includes(businessName.toLowerCase())
+        const responseText =
+          message.content[0].type === 'text' ? message.content[0].text : ''
+
+        const mentioned =
+          responseText.toLowerCase().includes(businessName.toLowerCase())
 
         return {
           engine: engine.name,
-          response,
           mentioned,
+          response: responseText,
         }
       })
     )
@@ -51,16 +60,42 @@ export async function POST(request: NextRequest) {
     const mentionCount = results.filter((r) => r.mentioned).length
     const score = Math.round((mentionCount / results.length) * 100)
 
-    if (userId) {
-      await supabase.from('citation_checks').insert({
-        user_id: userId,
-        query,
-        business_name: businessName,
-        score,
-        mention_count: mentionCount,
-        total_engines: results.length,
-        results,
-      })
+    // Get userId from auth if not provided by frontend
+    let resolvedUserId = userId || null
+
+    if (!resolvedUserId) {
+      const authHeader = request.headers.get('authorization')
+      if (authHeader) {
+        const token = authHeader.replace('Bearer ', '')
+        const { data: { user } } = await supabase.auth.getUser(token)
+        resolvedUserId = user?.id || null
+      }
+    }
+
+    console.log('Citation check — resolvedUserId:', resolvedUserId)
+    console.log('Citation check — businessName:', businessName)
+    console.log('Citation check — score:', score)
+
+    if (resolvedUserId) {
+      const { data, error: insertError } = await supabase
+        .from('citation_checks')
+        .insert({
+          user_id: resolvedUserId,
+          query,
+          business_name: businessName,
+          score,
+          mention_count: mentionCount,
+          total_engines: results.length,
+          results,
+        })
+
+      if (insertError) {
+        console.error('Supabase insert error:', insertError)
+      } else {
+        console.log('Citation check saved successfully:', data)
+      }
+    } else {
+      console.warn('No userId found — citation check NOT saved to Supabase')
     }
 
     return NextResponse.json({
