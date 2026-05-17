@@ -3,14 +3,14 @@ import { createClient } from '@supabase/supabase-js'
 import Anthropic from '@anthropic-ai/sdk'
 
 export async function POST(req: NextRequest) {
-  const anthropic = new Anthropic()
-
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
-
   try {
+    const anthropic = new Anthropic()
+
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+
     const { topic, userId } = await req.json()
 
     if (!topic || !userId) {
@@ -24,32 +24,15 @@ export async function POST(req: NextRequest) {
       .single()
 
     if (profileError || !profile) {
-      return NextResponse.json({ error: 'Business profile not found' }, { status: 404 })
+      return NextResponse.json({ error: 'Business profile not found', details: profileError?.message }, { status: 404 })
     }
 
     const brain = (profile.brain || 'No business info available').substring(0, 500)
 
-    const prompt = `You are a Reddit marketing expert. Generate 3 authentic Reddit post drafts about "${topic}" for a business called "${profile.business_name}".
-
-Business context: ${brain}
-
-For each post, return JSON in this exact format:
-{
-  "drafts": [
-    {
-      "subreddit": "subreddit name without r/",
-      "title": "post title",
-      "body": "post body that naturally mentions the business without being spammy"
-    }
-  ]
-}
-
-Return ONLY the JSON, no other text.`
-
     const message = await anthropic.messages.create({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 1000,
-      messages: [{ role: 'user', content: prompt }],
+      messages: [{ role: 'user', content: `You are a Reddit marketing expert. Generate 3 authentic Reddit post drafts about "${topic}" for a business called "${profile.business_name}". Business context: ${brain}. Return ONLY a JSON object like: {"drafts":[{"subreddit":"subreddit_name","title":"post title","body":"post body"}]}` }],
     })
 
     const rawText = message.content[0].type === 'text' ? message.content[0].text : ''
@@ -82,7 +65,7 @@ Return ONLY the JSON, no other text.`
     }
 
     return NextResponse.json({ drafts: saved })
-  } catch (err) {
-    return NextResponse.json({ error: 'Internal server error', details: String(err) }, { status: 500 })
+  } catch (err: any) {
+    return NextResponse.json({ error: 'Internal server error', details: err?.message || String(err) }, { status: 500 })
   }
 }
