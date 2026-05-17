@@ -16,7 +16,7 @@ interface VideoScript {
 
 export default function VideoScriptsPage() {
   const [topic, setTopic] = useState('')
-  const [tone, setTone] = useState('professional')
+  const [platform, setPlatform] = useState('YouTube')
   const [duration, setDuration] = useState('60')
   const [loading, setLoading] = useState(false)
   const [voiceoverLoading, setVoiceoverLoading] = useState<string | null>(null)
@@ -62,7 +62,7 @@ export default function VideoScriptsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           topic,
-          tone,
+          platform,
           duration,
           businessName: profile?.business_name || 'my business',
           userId: user.id,
@@ -98,7 +98,6 @@ export default function VideoScriptsPage() {
       const data = await response.json()
       if (!response.ok) throw new Error(data.error || 'Failed to generate voiceover')
 
-      // Update result if this is the current script
       if (result?.id === script.id) {
         setResult({ ...result, audio_url: data.audioUrl, audio_status: 'ready' })
       }
@@ -125,7 +124,6 @@ export default function VideoScriptsPage() {
       <h1 className="text-2xl font-bold text-white mb-2">🎬 Video Script Generator</h1>
       <p className="text-gray-400 mb-8">Generate AI-powered video scripts with voiceover</p>
 
-      {/* Generator Form */}
       <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-300 mb-2">Video Topic</label>
@@ -140,16 +138,16 @@ export default function VideoScriptsPage() {
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Tone</label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Platform</label>
             <select
-              value={tone}
-              onChange={(e) => setTone(e.target.value)}
+              value={platform}
+              onChange={(e) => setPlatform(e.target.value)}
               className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-orange-500"
             >
-              <option value="professional">Professional</option>
-              <option value="conversational">Conversational</option>
-              <option value="energetic">Energetic</option>
-              <option value="educational">Educational</option>
+              <option value="YouTube">YouTube</option>
+              <option value="TikTok">TikTok</option>
+              <option value="Instagram">Instagram Reels</option>
+              <option value="Facebook">Facebook</option>
             </select>
           </div>
           <div>
@@ -182,7 +180,6 @@ export default function VideoScriptsPage() {
         </div>
       )}
 
-      {/* Result */}
       {result && (
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
@@ -227,7 +224,6 @@ export default function VideoScriptsPage() {
             </div>
           </div>
 
-          {/* Voiceover Section */}
           <div className="border-t border-gray-800 pt-4">
             {result.audio_status === 'ready' && result.audio_url ? (
               <div>
@@ -249,7 +245,6 @@ export default function VideoScriptsPage() {
         </div>
       )}
 
-      {/* History */}
       {history.length > 0 && (
         <div>
           <h2 className="text-lg font-semibold text-white mb-4">📚 Past Scripts</h2>
