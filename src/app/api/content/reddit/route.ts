@@ -29,45 +29,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Business profile not found' }, { status: 404 })
     }
 
-    const brain = profile.brain || 'No business context available.'
+    const brain = (profile.brain || 'No business context available.').substring(0, 500)
 
-    const prompt = `You are a Reddit marketing expert. Your job is to write authentic, helpful Reddit posts that naturally mention a business without sounding like ads.
+    const prompt = `You are a Reddit marketing expert. Write 3 authentic Reddit post drafts about "${topic}" that naturally mention ${profile.business_name}.
 
-Business Context:
-${brain}
+Business context: ${brain}
 
-Topic/Keyword: ${topic}
+Rules:
+- Sound like a real Reddit user, not an ad
+- Naturally weave in the business name
+- Each post 150-300 words
 
-Write exactly 3 Reddit post drafts. Each draft should:
-- Feel like a real Reddit post written by a genuine community member
-- Be helpful, informative, or tell a story
-- Naturally mention the business name (${profile.business_name}) in context — never forced
-- Include a suggested subreddit that fits the topic
-- Have a compelling title and a full post body (150-300 words)
+You MUST respond with ONLY a JSON array. No explanation. No markdown. No backticks. Start your response with [ and end with ].
 
-Return ONLY a valid JSON array with exactly 3 objects. No markdown, no explanation, no backticks, just raw JSON.
-
-[
-  {
-    "subreddit": "r/subredditname",
-    "title": "Post title here",
-    "body": "Full post body here"
-  },
-  {
-    "subreddit": "r/subredditname",
-    "title": "Post title here",
-    "body": "Full post body here"
-  },
-  {
-    "subreddit": "r/subredditname",
-    "title": "Post title here",
-    "body": "Full post body here"
-  }
-]`
+Example format:
+[{"subreddit":"r/example","title":"Title here","body":"Body here"},{"subreddit":"r/example2","title":"Title here","body":"Body here"},{"subreddit":"r/example3","title":"Title here","body":"Body here"}]`
 
     const message = await anthropic.messages.create({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1000,
+      max_tokens: 1500,
       messages: [{ role: 'user', content: prompt }],
     })
 
@@ -75,11 +55,12 @@ Return ONLY a valid JSON array with exactly 3 objects. No markdown, no explanati
       .filter((block) => block.type === 'text')
       .map((block) => (block as { type: 'text'; text: string }).text)
       .join('')
+      .trim()
 
     let drafts: { subreddit: string; title: string; body: string }[]
     try {
       const match = rawText.match(/\[[\s\S]*\]/)
-      if (!match) throw new Error('No JSON array found')
+      if (!match) throw new Error('No JSON found')
       drafts = JSON.parse(match[0])
     } catch {
       return NextResponse.json({ error: 'Failed to parse AI response', raw: rawText }, { status: 500 })
