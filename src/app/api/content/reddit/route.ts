@@ -19,7 +19,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing topic or userId' }, { status: 400 })
     }
 
-    // Fetch business brain
     const { data: profile, error: profileError } = await supabase
       .from('business_profiles')
       .select('id, business_name, brain')
@@ -46,9 +45,8 @@ Write exactly 3 Reddit post drafts. Each draft should:
 - Include a suggested subreddit that fits the topic
 - Have a compelling title and a full post body (150-300 words)
 
-Return ONLY a valid JSON array with exactly 3 objects. No markdown, no explanation, just the JSON.
+Return ONLY a valid JSON array with exactly 3 objects. No markdown, no explanation, no backticks, just raw JSON.
 
-Format:
 [
   {
     "subreddit": "r/subredditname",
@@ -80,12 +78,13 @@ Format:
 
     let drafts: { subreddit: string; title: string; body: string }[]
     try {
-      drafts = JSON.parse(rawText)
+      const match = rawText.match(/\[[\s\S]*\]/)
+      if (!match) throw new Error('No JSON array found')
+      drafts = JSON.parse(match[0])
     } catch {
       return NextResponse.json({ error: 'Failed to parse AI response', raw: rawText }, { status: 500 })
     }
 
-    // Save each draft to Supabase
     const inserts = drafts.map((draft) => ({
       user_id: userId,
       business_id: profile.id,
