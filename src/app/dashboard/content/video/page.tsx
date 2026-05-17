@@ -71,7 +71,7 @@ export default function VideoScriptsPage() {
 
       const data = await response.json()
       if (!response.ok) throw new Error(data.error || 'Failed to generate')
-      setResult(data)
+      setResult(data.script || data)
       loadHistory()
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
