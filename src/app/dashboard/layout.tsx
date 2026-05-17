@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
@@ -26,6 +26,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { href: '/dashboard/content/faq', label: 'FAQ Schema' },
     { href: '/dashboard/content/authority', label: 'Authority Content' },
     { href: '/dashboard/content/citations', label: 'Citation Tracker' },
+    { href: '/dashboard/content/reddit', label: 'Reddit Amplifier' },
+    { href: '/dashboard/content/video', label: 'Video Scripts' },
     { href: '/dashboard/onboarding', label: 'Onboarding' },
     { href: '/dashboard/settings', label: 'Settings' },
     { href: '/dashboard/account', label: 'Account' },
@@ -80,7 +82,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-gray-800">
           <span className="text-white font-bold">TraffikFuel</span>
           <button onClick={() => setMobileOpen(true)} className="text-gray-400 hover:text-white">
-            ☰
+            ?
           </button>
         </div>
 
@@ -91,4 +93,5 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     </div>
   )
 }
+
 
