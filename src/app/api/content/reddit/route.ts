@@ -27,19 +27,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Business profile not found', details: profileError?.message }, { status: 404 })
     }
 
-    const brain = (profile.brain || 'No business info available').substring(0, 500)
+    const brain = (profile.brain ? JSON.stringify(profile.brain) : 'No business info available').substring(0, 500)
 
     const message = await anthropic.messages.create({
-      model: 'claude-haiku-4-5-20251001',
+      model: 'claude-haiku-4-5',
       max_tokens: 1000,
-      messages: [{ role: 'user', content: `You are a Reddit marketing expert. Generate 3 authentic Reddit post drafts about "${topic}" for a business called "${profile.business_name}". Business context: ${brain}. Return ONLY a JSON object like: {"drafts":[{"subreddit":"subreddit_name","title":"post title","body":"post body"}]}` }],
+      messages: [{ role: 'user', content: `You are a Reddit marketing expert. Generate 3 authentic Reddit post drafts about "${topic}" for a business called "${profile.business_name}". Business context: ${brain}. Return ONLY a JSON object with no markdown, no backticks, no explanation. Format: {"drafts":[{"subreddit":"subreddit_name","title":"post title","body":"post body"}]}` }],
     })
 
     const rawText = message.content[0].type === 'text' ? message.content[0].text : ''
 
+    const cleaned = rawText.replace(/```json|```/g, '').trim()
+
     let drafts
     try {
-      const parsed = JSON.parse(rawText)
+      const parsed = JSON.parse(cleaned)
       drafts = parsed.drafts
     } catch {
       return NextResponse.json({ error: 'Failed to parse AI response', raw: rawText }, { status: 500 })
