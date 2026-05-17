@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import Anthropic from '@anthropic-ai/sdk'
 
 export async function POST(req: NextRequest) {
   const supabase = createClient(
@@ -8,118 +7,185 @@ export async function POST(req: NextRequest) {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 
-  const anthropic = new Anthropic()
+  const { scriptId } = await req.json()
 
-  try {
-    const { topic, platform, duration, userId } = await req.json()
+  const { data: script, error } = await supabase
+    .from('video_scripts')
+    .select('*')
+    .eq('id', scriptId)
+    .single()
 
-    if (!topic || !platform || !duration || !userId) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
-    }
-
-    // Fetch business profile
-    const { data: business, error: bizError } = await supabase
-      .from('business_profiles')
-      .select('*')
-      .eq('user_id', userId)
-      .single()
-
-    if (bizError || !business) {
-      return NextResponse.json({ error: 'Business profile not found' }, { status: 404 })
-    }
-
-    const businessName = business.business_name || 'this business'
-    const businessDesc = business.description || ''
-
-    const prompt = `You are a short-form video script expert. Write a ${duration}-second ${platform} video script for the following business and topic.
-
-Business Name: ${businessName}
-Business Description: ${businessDesc}
-Topic: ${topic}
-Platform: ${platform}
-Video Length: ${duration} seconds
-
-Write a script with exactly 3 sections. Return ONLY valid JSON with no extra text, in this exact format:
-{
-  "hook": "The first 3-5 seconds — one punchy sentence that grabs attention immediately",
-  "body": "The middle section — 2-4 sentences delivering the core value or story",
-  "cta": "The final 2-3 seconds — one clear call to action"
-}
-
-Make it conversational, platform-native, and optimized for ${platform}. The hook must stop the scroll.`
-
-    const message = await anthropic.messages.create({
-      model: 'claude-haiku-4-5',
-      max_tokens: 1000,
-      messages: [{ role: 'user', content: prompt }]
-    })
-
-    const rawText = message.content[0].type === 'text' ? message.content[0].text : ''
-
-    let parsed: { hook: string; body: string; cta: string }
-    try {
-      const cleaned = rawText.replace(/```json|```/g, '').trim()
-      parsed = JSON.parse(cleaned)
-    } catch {
-      return NextResponse.json({ error: 'Failed to parse AI response', raw: rawText }, { status: 500 })
-    }
-
-    // Save to Supabase
-    const { data: saved, error: saveError } = await supabase
-      .from('video_scripts')
-      .insert({
-        user_id: userId,
-        business_id: business.id || null,
-        topic,
-        platform,
-        duration,
-        hook: parsed.hook,
-        body: parsed.body,
-        cta: parsed.cta,
-        status: 'draft'
-      })
-      .select()
-      .single()
-
-    if (saveError) {
-      return NextResponse.json({ error: 'Failed to save script', details: saveError.message }, { status: 500 })
-    }
-
-    return NextResponse.json({ script: saved })
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
-    return NextResponse.json({ error: message }, { status: 500 })
+  if (error || !script) {
+    return NextResponse.json({ error: 'Script not found' }, { status: 404 })
   }
+
+  if (!script.audio_url) {
+    return NextResponse.json({ error: 'No voiceover found. Generate voiceover first.' }, { status: 400 })
+  }
+
+  const shotstackKey = process.env.SHOTSTACK_API_KEY!
+  const shotstackEnv = process.env.SHOTSTACK_ENV || 'stage'
+  const apiUrl = shotstackEnv === 'stage'
+    ? 'https://api.shotstack.io/stage/render'
+    : 'https://api.shotstack.io/v1/render'
+
+  const hookText = script.hook || ''
+  const bodyText = script.body || ''
+  const ctaText = script.cta || ''
+  const fullText = `${hookText}\n\n${bodyText}\n\n${ctaText}`
+  const duration = parseInt(script.duration) || 60
+
+  const timeline = {
+    tracks: [
+      {
+        clips: [
+          {
+            asset: {
+              type: 'audio',
+              src: script.audio_url,
+            },
+            start: 0,
+            length: duration,
+          },
+        ],
+      },
+      {
+        clips: [
+          {
+            asset: {
+              type: 'html',
+              html: `<p style="font-family:Arial;font-size:36px;color:white;text-align:center;padding:20px;">${hookText}</p>`,
+              width: 1000,
+              height: 200,
+            },
+            start: 0,
+            length: 5,
+            transition: { in: 'fade', out: 'fade' },
+            position: 'center',
+          },
+          {
+            asset: {
+              type: 'html',
+              html: `<p style="font-family:Arial;font-size:28px;color:white;text-align:center;padding:20px;">${bodyText.substring(0, 200)}</p>`,
+              width: 1000,
+              height: 400,
+            },
+            start: 5,
+            length: duration - 10,
+            transition: { in: 'fade', out: 'fade' },
+            position: 'center',
+          },
+          {
+            asset: {
+              type: 'html',
+              html: `<p style="font-family:Arial;font-size:32px;color:#00ff88;text-align:center;padding:20px;font-weight:bold;">${ctaText}</p>`,
+              width: 1000,
+              height: 200,
+            },
+            start: duration - 5,
+            length: 5,
+            transition: { in: 'fade', out: 'fade' },
+            position: 'center',
+          },
+        ],
+      },
+      {
+        clips: [
+          {
+            asset: {
+              type: 'color',
+              color: '#0a0a1a',
+            },
+            start: 0,
+            length: duration,
+          },
+        ],
+      },
+    ],
+  }
+
+  const renderPayload = {
+    timeline,
+    output: {
+      format: 'mp4',
+      resolution: 'hd',
+    },
+  }
+
+  const renderResponse = await fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': shotstackKey,
+    },
+    body: JSON.stringify(renderPayload),
+  })
+
+  const renderData = await renderResponse.json()
+
+  if (!renderData.response?.id) {
+    return NextResponse.json({ error: 'Shotstack render failed', detail: renderData }, { status: 500 })
+  }
+
+  const renderId = renderData.response.id
+
+  await supabase
+    .from('video_scripts')
+    .update({ video_status: 'rendering', video_url: null })
+    .eq('id', scriptId)
+
+  return NextResponse.json({ renderId, status: 'rendering' })
 }
 
 export async function GET(req: NextRequest) {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
+  const { searchParams } = new URL(req.url)
+  const renderId = searchParams.get('renderId')
+  const scriptId = searchParams.get('scriptId')
 
-  try {
-    const { searchParams } = new URL(req.url)
-    const userId = searchParams.get('userId')
-
-    if (!userId) {
-      return NextResponse.json({ error: 'Missing userId' }, { status: 400 })
-    }
-
-    const { data, error } = await supabase
-      .from('video_scripts')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-      .limit(20)
-
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 })
-    }
-
-    return NextResponse.json({ scripts: data })
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
-    return NextResponse.json({ error: message }, { status: 500 })
+  if (!renderId || !scriptId) {
+    return NextResponse.json({ error: 'Missing renderId or scriptId' }, { status: 400 })
   }
+
+  const shotstackKey = process.env.SHOTSTACK_API_KEY!
+  const shotstackEnv = process.env.SHOTSTACK_ENV || 'stage'
+  const statusUrl = shotstackEnv === 'stage'
+    ? `https://api.shotstack.io/stage/render/${renderId}`
+    : `https://api.shotstack.io/v1/render/${renderId}`
+
+  const statusResponse = await fetch(statusUrl, {
+    headers: { 'x-api-key': shotstackKey },
+  })
+
+  const statusData = await statusResponse.json()
+  const renderStatus = statusData.response?.status
+  const videoUrl = statusData.response?.url
+
+  if (renderStatus === 'done' && videoUrl) {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+
+    await supabase
+      .from('video_scripts')
+      .update({ video_url: videoUrl, video_status: 'done' })
+      .eq('id', scriptId)
+
+    return NextResponse.json({ status: 'done', videoUrl })
+  }
+
+  if (renderStatus === 'failed') {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+    await supabase
+      .from('video_scripts')
+      .update({ video_status: 'failed' })
+      .eq('id', scriptId)
+
+    return NextResponse.json({ status: 'failed' })
+  }
+
+  return NextResponse.json({ status: renderStatus || 'rendering' })
 }
