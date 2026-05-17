@@ -27,28 +27,23 @@ export default function RedditPage() {
   async function loadHistory() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
-
     const { data } = await supabase
       .from('reddit_drafts')
       .select('*')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .limit(20)
-
     if (data) setHistory(data)
   }
 
   async function generateDrafts() {
     setError('')
     setDrafts([])
-
     if (!topic.trim()) {
       setError('Please enter a topic or keyword.')
       return
     }
-
     setLoading(true)
-
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
@@ -56,27 +51,22 @@ export default function RedditPage() {
         setLoading(false)
         return
       }
-
       const res = await fetch('/api/content/reddit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic, userId: user.id }),
       })
-
       const json = await res.json()
-
       if (!res.ok) {
         setError(json.error || 'Something went wrong.')
         setLoading(false)
         return
       }
-
       setDrafts(json.drafts)
       loadHistory()
     } catch {
       setError('Network error. Please try again.')
     }
-
     setLoading(false)
   }
 
@@ -84,6 +74,13 @@ export default function RedditPage() {
     navigator.clipboard.writeText(text)
     setCopied(id)
     setTimeout(() => setCopied(null), 2000)
+  }
+
+  function openInReddit(draft: RedditDraft) {
+    const fullText = `${draft.title}\n\n${draft.body}`
+    navigator.clipboard.writeText(fullText)
+    const url = `https://www.reddit.com/r/${draft.subreddit}/submit?title=${encodeURIComponent(draft.title)}`
+    window.open(url, '_blank')
   }
 
   return (
@@ -129,12 +126,12 @@ export default function RedditPage() {
               {drafts.map((draft) => (
                 <div key={draft.id} className="bg-gray-900 border border-orange-500/30 rounded-xl p-6">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-orange-400 font-medium text-sm">{draft.subreddit}</span>
+                    <span className="text-orange-400 font-medium text-sm">r/{draft.subreddit}</span>
                     <span className="text-gray-500 text-xs">Draft saved</span>
                   </div>
                   <h3 className="text-white font-semibold text-lg mb-3">{draft.title}</h3>
                   <p className="text-gray-300 text-sm leading-relaxed mb-4 whitespace-pre-wrap">{draft.body}</p>
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 flex-wrap">
                     <button
                       onClick={() => copyText(draft.id + '-title', draft.title)}
                       className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition-colors"
@@ -153,6 +150,12 @@ export default function RedditPage() {
                     >
                       {copied === draft.id + '-full' ? '✓ Copied!' : 'Copy Full Post'}
                     </button>
+                    <button
+                      onClick={() => openInReddit(draft)}
+                      className="text-xs bg-orange-600 hover:bg-orange-700 text-white font-semibold px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1"
+                    >
+                      🚀 Open in Reddit
+                    </button>
                   </div>
                 </div>
               ))}
@@ -168,18 +171,26 @@ export default function RedditPage() {
               {history.map((draft) => (
                 <div key={draft.id} className="bg-gray-900 border border-gray-800 rounded-xl p-5">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-orange-400 text-sm font-medium">{draft.subreddit}</span>
+                    <span className="text-orange-400 text-sm font-medium">r/{draft.subreddit}</span>
                     <span className="text-gray-500 text-xs">{new Date(draft.created_at).toLocaleDateString()}</span>
                   </div>
                   <p className="text-gray-400 text-xs mb-2">Topic: {draft.topic}</p>
                   <h3 className="text-white font-medium mb-2">{draft.title}</h3>
                   <p className="text-gray-400 text-sm leading-relaxed mb-3 line-clamp-3">{draft.body}</p>
-                  <button
-                    onClick={() => copyText(draft.id + '-full', `${draft.title}\n\n${draft.body}`)}
-                    className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition-colors"
-                  >
-                    {copied === draft.id + '-full' ? '✓ Copied!' : 'Copy Full Post'}
-                  </button>
+                  <div className="flex gap-3 flex-wrap">
+                    <button
+                      onClick={() => copyText(draft.id + '-full', `${draft.title}\n\n${draft.body}`)}
+                      className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                      {copied === draft.id + '-full' ? '✓ Copied!' : 'Copy Full Post'}
+                    </button>
+                    <button
+                      onClick={() => openInReddit(draft)}
+                      className="text-xs bg-orange-600 hover:bg-orange-700 text-white font-semibold px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                      🚀 Open in Reddit
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
