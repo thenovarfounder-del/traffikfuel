@@ -1,29 +1,31 @@
-import { NextResponse } from 'next/server'
-import { stripe } from '@/lib/stripe'
-import { supabase } from '@/lib/supabase'
+import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+import Stripe from 'stripe'
 
-export async function POST() {
-const { data: { user } } = await supabase.auth.getUser()
-if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+export async function POST(req: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
-const { data: sub } = await supabase
-.from('subscriptions')
-.select('stripe_subscription_id')
-.eq('user_id', user.id)
-.single()
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
 
-if (!sub?.stripe_subscription_id) {
-return NextResponse.json({ error: 'No subscription found' }, { status: 404 })
-}
+  try {
+    const { subscriptionId } = await req.json()
 
-await stripe.subscriptions.update(sub.stripe_subscription_id, {
-cancel_at_period_end: true,
-})
+    if (!subscriptionId) {
+      return NextResponse.json({ error: 'Missing subscriptionId' }, { status: 400 })
+    }
 
-await supabase
-.from('subscriptions')
-.update({ status: 'cancelled', updated_at: new Date().toISOString() })
-.eq('user_id', user.id)
+    await stripe.subscriptions.cancel(subscriptionId)
 
-return NextResponse.json({ success: true })
+    await supabase
+      .from('subscriptions')
+      .update({ status: 'canceled' })
+      .eq('stripe_subscription_id', subscriptionId)
+
+    return NextResponse.json({ success: true })
+  } catch (err) {
+    return NextResponse.json({ error: 'Failed to cancel', details: String(err) }, { status: 500 })
+  }
 }

@@ -26,30 +26,23 @@ export async function POST(req: NextRequest) {
       .single()
 
     if (profileError || !profile) {
-      return NextResponse.json({ error: 'Business profile not found' }, { status: 404 })
+      return NextResponse.json({ error: 'Business profile not found', details: profileError?.message }, { status: 404 })
     }
 
     const brain = (profile.brain || 'No business context available.').substring(0, 500)
 
-    const prompt = `You are a Reddit marketing expert. Write 3 authentic Reddit post drafts about "${topic}" that naturally mention ${profile.business_name}.
+    const prompt = `You are a Reddit marketing expert. Write 3 authentic Reddit post drafts about "${topic}" that naturally mention ${profile.business_name}. Business context: ${brain}. Respond ONLY with a raw JSON array, no markdown, no backticks. Start with [ and end with ]. Format: [{"subreddit":"r/name","title":"title here","body":"body here"},{"subreddit":"r/name","title":"title here","body":"body here"},{"subreddit":"r/name","title":"title here","body":"body here"}]`
 
-Business context: ${brain}
-
-Rules:
-- Sound like a real Reddit user, not an ad
-- Naturally weave in the business name
-- Each post 150-300 words
-
-You MUST respond with ONLY a JSON array. No explanation. No markdown. No backticks. Start your response with [ and end with ].
-
-Example format:
-[{"subreddit":"r/example","title":"Title here","body":"Body here"},{"subreddit":"r/example2","title":"Title here","body":"Body here"},{"subreddit":"r/example3","title":"Title here","body":"Body here"}]`
-
-    const message = await anthropic.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1500,
-      messages: [{ role: 'user', content: prompt }],
-    })
+    let message
+    try {
+      message = await anthropic.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1500,
+        messages: [{ role: 'user', content: prompt }],
+      })
+    } catch (aiErr) {
+      return NextResponse.json({ error: 'AI call failed', details: String(aiErr) }, { status: 500 })
+    }
 
     const rawText = message.content
       .filter((block) => block.type === 'text')
@@ -87,7 +80,6 @@ Example format:
 
     return NextResponse.json({ drafts: saved })
   } catch (err) {
-    console.error('Reddit API error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error', details: String(err) }, { status: 500 })
   }
 }
