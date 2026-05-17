@@ -3,9 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import Anthropic from '@anthropic-ai/sdk'
 
 export async function POST(req: NextRequest) {
-  const anthropic = new Anthropic({
-    apiKey: process.env.ANTHROPIC_API_KEY,
-  })
+  const anthropic = new Anthropic()
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
