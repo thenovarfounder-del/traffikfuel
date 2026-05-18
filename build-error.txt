@@ -1,0 +1,781 @@
+﻿  Γû▓ Next.js 14.2.35
+  - Environments: .env.local
+  - Experiments (use with caution):
+    ┬╖ instrumentationHook
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully
+   Skipping linting
+   Checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/58) ...
+node.exe : 
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Error occurred prerendering page "/api/business/profile". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\3114.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\3114.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\3114.js:37:55393)
+    at c (C:\Users\randy\traffikfuel\.next\server\app\api\business\profile\route.js:1:3213)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-route.runtime.prod.js:6:38417
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\server\lib\trace\tracer.js:140:36
+    at NoopContextManager.with (C:\Users\randy\traffikfuel\node_modules\@opentelemetry\api\build\src\context\NoopContextManager.js:14:19)
+    at ContextAPI.with (C:\Users\randy\traffikfuel\node_modules\@opentelemetry\api\build\src\api\context.js:51:46)
+    at NoopTracer.startActiveSpan (C:\Users\randy\traffikfuel\node_modules\@opentelemetry\api\build\src\trace\NoopTracer.js:54:31)
+    at ProxyTracer.startActiveSpan (C:\Users\randy\traffikfuel\node_modules\@opentelemetry\api\build\src\trace\ProxyTracer.js:27:24)
+   Generating static pages (14/58) 
+
+Error occurred prerendering page "/api/tiktok/callback". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\3114.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\3114.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\3114.js:37:55393)
+    at p (C:\Users\randy\traffikfuel\.next\server\app\api\tiktok\callback\route.js:1:3210)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-route.runtime.prod.js:6:38417
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\server\lib\trace\tracer.js:140:36
+    at NoopContextManager.with (C:\Users\randy\traffikfuel\node_modules\@opentelemetry\api\build\src\context\NoopContextManager.js:14:19)
+    at ContextAPI.with (C:\Users\randy\traffikfuel\node_modules\@opentelemetry\api\build\src\api\context.js:51:46)
+    at NoopTracer.startActiveSpan (C:\Users\randy\traffikfuel\node_modules\@opentelemetry\api\build\src\trace\NoopTracer.js:54:31)
+    at ProxyTracer.startActiveSpan (C:\Users\randy\traffikfuel\node_modules\@opentelemetry\api\build\src\trace\ProxyTracer.js:27:24)
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\ads\page.js:1:14955)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 61349 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\ads\page.js:1:3019)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '696726700'
+}
+
+Error occurred prerendering page "/dashboard/content/ads". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\ads\page.js:1:14955)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 61349 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\ads\page.js:1:3019)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\signup\page.js:1:9463)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 26673 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\billing\page.js:1:3019)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '2375212274'
+}
+
+Error occurred prerendering page "/dashboard/billing". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\signup\page.js:1:9463)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 26673 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\billing\page.js:1:3019)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\authority\page.js:3:11180)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 37991 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\authority\page.js:3:3072)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '742425448'
+}
+
+Error occurred prerendering page "/dashboard/content/authority". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\authority\page.js:3:11180)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 37991 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\authority\page.js:3:3072)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+   Generating static pages (28/58) 
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\business\page.js:1:14589)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 91316 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\business\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '1651578223'
+}
+
+Error occurred prerendering page "/dashboard/business". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\business\page.js:1:14589)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 91316 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\business\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\email\page.js:1:14472)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 54695 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\email\page.js:1:3019)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '2168877670'
+}
+
+Error occurred prerendering page "/dashboard/content/email". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\email\page.js:1:14472)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 54695 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\email\page.js:1:3019)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\signup\page.js:1:9463)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 95632 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\faq\page.js:1:6882)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '1322856600'
+}
+
+Error occurred prerendering page "/dashboard/content/faq". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\signup\page.js:1:9463)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 95632 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\faq\page.js:1:6882)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\queue\page.js:1:18153)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 89846 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\queue\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '1146944711'
+}
+
+Error occurred prerendering page "/dashboard/content/queue". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\queue\page.js:1:18153)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 89846 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\queue\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\account\page.js:1:13353)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 92474 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\account\page.js:1:3030)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '1871704937'
+}
+
+Error occurred prerendering page "/dashboard/account". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\account\page.js:1:13353)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 92474 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\account\page.js:1:3030)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\reddit\page.js:7:8469)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 49244 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\reddit\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '1373787896'
+}
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\blog\page.js:1:14154)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 46414 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\blog\page.js:1:3019)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '2366153263'
+}
+
+Error occurred prerendering page "/dashboard/content/blog". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\blog\page.js:1:14154)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 46414 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\blog\page.js:1:3019)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+
+Error occurred prerendering page "/dashboard/content/reddit". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\reddit\page.js:7:8469)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 49244 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\reddit\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\citations\page.js:1:16162)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 9833 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\citations\page.js:1:8053)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '255816639'
+}
+
+Error occurred prerendering page "/dashboard/content/citations". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\citations\page.js:1:16162)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 9833 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\citations\page.js:1:8053)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\signup\page.js:1:9463)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 57260 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\video\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '3972549078'
+}
+
+Error occurred prerendering page "/dashboard/content/video". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\signup\page.js:1:9463)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 57260 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\video\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\social\page.js:1:15356)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 97819 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\social\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '2544319592'
+}
+
+Error occurred prerendering page "/dashboard/content/social". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\social\page.js:1:15356)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 97819 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\social\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\onboarding\page.js:1:14581)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 55373 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\onboarding\page.js:1:5711)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '3706479118'
+}
+
+Error occurred prerendering page "/dashboard/onboarding". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\onboarding\page.js:1:14581)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 55373 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\onboarding\page.js:1:5711)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\schema\page.js:1:14022)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 46846 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\schema\page.js:1:5939)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '1485083209'
+}
+
+Error occurred prerendering page "/dashboard/content/schema". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\schema\page.js:1:14022)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 46846 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\schema\page.js:1:5939)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\page.js:1:13349)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 16745 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\page.js:1:8104)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '3768427554'
+}
+
+Error occurred prerendering page "/dashboard". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\page.js:1:13349)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 16745 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\page.js:1:8104)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\data\page.js:1:13395)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 99369 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\data\page.js:1:3032)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '1514857953'
+}
+
+Error occurred prerendering page "/dashboard/data". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\data\page.js:1:13395)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 99369 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\data\page.js:1:3032)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\scrape\page.js:1:12661)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 4985 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\scrape\page.js:1:7341)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '310934833'
+}
+
+Error occurred prerendering page "/dashboard/scrape". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\scrape\page.js:1:12661)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 4985 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\scrape\page.js:1:7341)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+   Generating static pages (43/58) 
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\signup\page.js:1:9463)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 53048 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\settings\security\page.js:1:3032)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '359067539'
+}
+
+Error occurred prerendering page "/dashboard/settings/security". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\signup\page.js:1:9463)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 53048 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\settings\security\page.js:1:3032)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\login\page.js:1:9699)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 13053 (C:\Users\randy\traffikfuel\.next\server\app\login\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '3054944057'
+}
+
+Error occurred prerendering page "/login". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\login\page.js:1:9699)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 13053 (C:\Users\randy\traffikfuel\.next\server\app\login\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\phone-verify\page.js:1:218592)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 70155 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\phone-verify\page.js:1:5723)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '3683356690'
+}
+
+Error occurred prerendering page "/dashboard/phone-verify". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\phone-verify\page.js:1:218592)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 70155 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\phone-verify\page.js:1:5723)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\pricing\page.js:1:11546)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 15355 (C:\Users\randy\traffikfuel\.next\server\app\pricing\page.js:1:3032)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '3654256096'
+}
+
+Error occurred prerendering page "/pricing". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\pricing\page.js:1:11546)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 15355 (C:\Users\randy\traffikfuel\.next\server\app\pricing\page.js:1:3032)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\reset-password\page.js:1:8166)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 51183 (C:\Users\randy\traffikfuel\.next\server\app\reset-password\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '3636850965'
+}
+
+Error occurred prerendering page "/reset-password". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\reset-password\page.js:1:8166)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 51183 (C:\Users\randy\traffikfuel\.next\server\app\reset-password\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\signup\page.js:1:9463)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 71338 (C:\Users\randy\traffikfuel\.next\server\app\signup\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '2147401684'
+}
+
+Error occurred prerendering page "/signup". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\signup\page.js:1:9463)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 71338 (C:\Users\randy\traffikfuel\.next\server\app\signup\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\verify-email\page.js:1:7893)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 17174 (C:\Users\randy\traffikfuel\.next\server\app\verify-email\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '1582682515'
+}
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\visibility\page.js:1:13759)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 95627 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\visibility\page.js:1:5641)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875 {
+  digest: '1624986818'
+}
+
+Error occurred prerendering page "/verify-email". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\verify-email\page.js:1:7893)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 17174 (C:\Users\randy\traffikfuel\.next\server\app\verify-email\page.js:1:3021)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+
+Error occurred prerendering page "/dashboard/content/visibility". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: supabaseUrl is required.
+    at C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51271
+    at new rW (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:51522)
+    at rK (C:\Users\randy\traffikfuel\.next\server\chunks\6712.js:37:55393)
+    at 55774 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\visibility\page.js:1:13759)
+    at t (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at 95627 (C:\Users\randy\traffikfuel\.next\server\app\dashboard\content\visibility\page.js:1:5641)
+    at Object.t [as require] (C:\Users\randy\traffikfuel\.next\server\webpack-runtime.js:1:527)
+    at require (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:17:18811)
+    at s (C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:88330)
+    at C:\Users\randy\traffikfuel\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:98875
+ Γ£ô Generating static pages (58/58)
+
+> Export encountered errors on following paths:
+	/api/business/profile/route: /api/business/profile
+	/api/tiktok/callback/route: /api/tiktok/callback
+	/dashboard/account/page: /dashboard/account
+	/dashboard/billing/page: /dashboard/billing
+	/dashboard/business/page: /dashboard/business
+	/dashboard/content/ads/page: /dashboard/content/ads
+	/dashboard/content/authority/page: /dashboard/content/authority
+	/dashboard/content/blog/page: /dashboard/content/blog
+	/dashboard/content/citations/page: /dashboard/content/citations
+	/dashboard/content/email/page: /dashboard/content/email
+	/dashboard/content/faq/page: /dashboard/content/faq
+	/dashboard/content/queue/page: /dashboard/content/queue
+	/dashboard/content/reddit/page: /dashboard/content/reddit
+	/dashboard/content/schema/page: /dashboard/content/schema
+	/dashboard/content/social/page: /dashboard/content/social
+	/dashboard/content/video/page: /dashboard/content/video
+	/dashboard/content/visibility/page: /dashboard/content/visibility
+	/dashboard/data/page: /dashboard/data
+	/dashboard/onboarding/page: /dashboard/onboarding
+	/dashboard/page: /dashboard
+	/dashboard/phone-verify/page: /dashboard/phone-verify
+	/dashboard/scrape/page: /dashboard/scrape
+	/dashboard/settings/security/page: /dashboard/settings/security
+	/login/page: /login
+	/pricing/page: /pricing
+	/reset-password/page: /reset-password
+	/signup/page: /signup
+	/verify-email/page: /verify-email
