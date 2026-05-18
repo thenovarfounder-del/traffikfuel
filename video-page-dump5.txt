@@ -1,0 +1,7 @@
+﻿  async function generateVoiceover(scriptData) {
+    setVoiceoverLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/content/video/voiceover', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scriptId: scriptData.id }) })
+      const data = await res.json()
+      if (data.error) throw new Error(data.error)
