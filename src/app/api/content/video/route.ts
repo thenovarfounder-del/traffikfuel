@@ -1,4 +1,4 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import Anthropic from '@anthropic-ai/sdk'
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     const anthropic = new Anthropic()
 
     const message = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-4-5',
       max_tokens: 1024,
       messages: [{
         role: 'user',
@@ -51,3 +51,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }
+
