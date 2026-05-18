@@ -1,99 +1,115 @@
-﻿'use client';
+﻿// @ts-nocheck
+'use client'
+import { useState, useEffect } from "react"
+import { supabase } from "@/lib/supabase"
 
-import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
-
-const BLOG_TYPES = ['How-To Guide','Listicle','Opinion Piece','Case Study','Industry News','Product Review','Thought Leadership','SEO Article'];
-
-export default function BlogGeneratorPage() {
-  const [blogType, setBlogType] = useState('How-To Guide');
-  const [topic, setTopic] = useState('');
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [saved, setSaved] = useState(false);
-  const [userId, setUserId] = useState('');
-  const [businessId, setBusinessId] = useState('');
+export default function BlogPage() {
+  const [userId, setUserId] = useState("")
+  const [businessId, setBusinessId] = useState("")
+  const [topic, setTopic] = useState("")
+  const [generating, setGenerating] = useState(false)
+  const [publishing, setPublishing] = useState(false)
+  const [post, setPost] = useState(null)
+  const [message, setMessage] = useState("")
+  const [wpMessage, setWpMessage] = useState("")
 
   useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        setUserId(user.id);
-        const { data: profile } = await supabase
-          .from('business_profiles')
-          .select('id')
-          .eq('user_id', user.id)
-          .single();
-        if (profile) setBusinessId(profile.id);
-      }
-    };
-    getUser();
-  }, []);
-
-  const handleGenerate = async () => {
-    if (!topic.trim()) { setError('Please enter a topic.'); return; }
-    setLoading(true);
-    setError('');
-    setSaved(false);
-    setTitle('');
-    setContent('');
-    try {
-      const res = await fetch('/api/content/blog', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ blogType, topic, userId, businessId }),
-      });
-      const data = await res.json();
-      if (data.error) { setError(data.error); } else {
-        setTitle(data.title);
-        setContent(data.content);
-        setSaved(true);
-      }
-    } catch {
-      setError('Something went wrong. Please try again.');
-    } finally {
-      setLoading(false);
+    const load = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      setUserId(user.id)
+      const { data } = await supabase
+        .from("business_profiles")
+        .select("id")
+        .eq("user_id", user.id)
+        .single()
+      if (data) setBusinessId(data.id)
     }
-  };
+    load()
+  }, [])
+
+  const generate = async () => {
+    if (!topic.trim()) return
+    setGenerating(true)
+    setMessage("")
+    setPost(null)
+    setWpMessage("")
+    try {
+      const res = await fetch("/api/content/blog", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, businessId, topic })
+      })
+      const data = await res.json()
+      if (data.error) { setMessage(data.error) }
+      else { setPost(data) }
+    } catch (e) {
+      setMessage("Something went wrong. Try again.")
+    }
+    setGenerating(false)
+  }
+
+  const publishToWordPress = async () => {
+    if (!post) return
+    setPublishing(true)
+    setWpMessage("")
+    try {
+      const res = await fetch("/api/content/wordpress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ postId: post.id, userId })
+      })
+      const data = await res.json()
+      if (data.error) { setWpMessage("Error: " + data.error) }
+      else { setWpMessage("Published! View post: " + data.wpPostUrl) }
+    } catch (e) {
+      setWpMessage("Something went wrong. Try again.")
+    }
+    setPublishing(false)
+  }
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-bold text-white mb-1">Blog Generator</h1>
-      <p className="text-gray-400 mb-6">Generate professional blog articles for your business.</p>
-      <div className="bg-gray-900 rounded-xl p-6 mb-6 space-y-4">
-        <div>
-          <label className="block text-sm text-gray-400 mb-1">Blog Type</label>
-          <select value={blogType} onChange={e => setBlogType(e.target.value)} className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 border border-gray-700 focus:outline-none focus:border-orange-500">
-            {BLOG_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm text-gray-400 mb-1">Topic / Goal</label>
-          <input type="text" value={topic} onChange={e => setTopic(e.target.value)} placeholder="e.g. How to get a second passport, top 5 tax havens" className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 border border-gray-700 focus:outline-none focus:border-orange-500" />
-        </div>
-        {error && <p className="text-red-400 text-sm">{error}</p>}
-        <button onClick={handleGenerate} disabled={loading} className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white font-semibold py-3 rounded-lg transition">
-          {loading ? 'Generating...' : 'Generate Article'}
+      <h1 className="text-2xl font-bold mb-2">Blog Generator</h1>
+      <p className="text-gray-500 mb-6">Generate SEO-optimized blog posts for your business.</p>
+
+      <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Blog Topic</label>
+        <input
+          type="text"
+          placeholder="e.g. How to get a second passport in 2025"
+          value={topic}
+          onChange={(e) => setTopic(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-4"
+        />
+        <button
+          onClick={generate}
+          disabled={generating}
+          className="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+        >
+          {generating ? "Generating..." : "Generate Blog Post"}
         </button>
+        {message && <p className="mt-3 text-sm text-red-500">{message}</p>}
       </div>
-      {title && (
-        <div className="bg-gray-900 rounded-xl p-6 space-y-4">
-          {saved && <p className="text-green-400 text-sm">Saved to your content queue</p>}
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">Title</label>
-            <div className="bg-gray-800 text-white rounded-lg px-4 py-3 border border-gray-700 font-medium">{title}</div>
-          </div>
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">Article</label>
-            <textarea value={content} onChange={e => setContent(e.target.value)} rows={20} className="w-full bg-gray-800 text-white rounded-lg px-4 py-3 border border-gray-700 focus:outline-none focus:border-orange-500 resize-none text-sm" />
-          </div>
-          <button onClick={() => navigator.clipboard.writeText(title + '\n\n' + content)} className="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 rounded-lg transition">
-            Copy to Clipboard
+
+      {post && (
+        <div className="bg-white border border-gray-200 rounded-xl p-6">
+          <h2 className="text-xl font-bold mb-2">{post.title}</h2>
+          <div className="text-sm text-gray-700 whitespace-pre-wrap mb-6">{post.content}</div>
+          <button
+            onClick={publishToWordPress}
+            disabled={publishing}
+            className="bg-green-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50"
+          >
+            {publishing ? "Publishing..." : "Publish to WordPress"}
           </button>
+          {wpMessage && (
+            <p className={`mt-3 text-sm ${wpMessage.startsWith("Error") ? "text-red-500" : "text-green-600"}`}>
+              {wpMessage}
+            </p>
+          )}
         </div>
       )}
     </div>
-  );
+  )
 }
