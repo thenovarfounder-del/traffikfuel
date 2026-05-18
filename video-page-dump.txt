@@ -1,0 +1,80 @@
+﻿// @ts-nocheck
+'use client'
+// @ts-nocheck
+
+import { useState, useEffect } from 'react'
+import { supabase } from '@/lib/supabase'
+
+export default function VideoPage() {
+  const [topic, setTopic] = useState('')
+  const [platform, setPlatform] = useState('YouTube')
+  const [duration, setDuration] = useState('60')
+  const [loading, setLoading] = useState(false)
+  const [voiceoverLoading, setVoiceoverLoading] = useState(false)
+  const [assembleLoading, setAssembleLoading] = useState(false)
+  const [script, setScript] = useState(null)
+  const [history, setHistory] = useState([])
+  const [error, setError] = useState('')
+  const [pollingId, setPollingId] = useState(null)
+  const [pollingScriptId, setPollingScriptId] = useState(null)
+
+  useEffect(() => { loadHistory() }, [])
+
+  async function loadHistory() {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return
+    const { data } = await supabase.from('video_scripts').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(10)
+    if (data) setHistory(data)
+  }
+
+  async function generateScript() {
+    setLoading(true)
+    setError('')
+    setScript(null)
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not logged in')
+      const { data: profile } = await supabase.from('business_profiles').select('*').eq('user_id', user.id).single()
+      const res = await fetch('/api/content/video', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic, platform, duration, userId: user.id, businessId: profile?.id, businessName: profile?.business_name }) })
+      const data = await res.json()
+      if (data.error) throw new Error(data.error)
+      setScript(data)
+      loadHistory()
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function generateVoiceover(scriptData) {
+    setVoiceoverLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/content/video/voiceover', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scriptId: scriptData.id }) })
+      const data = await res.json()
+      if (data.error) throw new Error(data.error)
+      setScript(prev => prev ? { ...prev, audio_url: data.audioUrl, audio_status: 'done' } : prev)
+      loadHistory()
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setVoiceoverLoading(false)
+    }
+  }
+
+  async function assembleVideo(scriptData) {
+    setAssembleLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/content/video/assemble', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scriptId: scriptData.id }) })
+      const data = await res.json()
+      if (data.error) throw new Error(data.error)
+      setPollingId(data.renderId)
+      setPollingScriptId(scriptData.id)
+      const interval = setInterval(async () => {
+        const r = await fetch('/api/content/video/assemble?renderId=' + data.renderId + '&scriptId=' + scriptData.id)
+        const d = await r.json()
+        if (d.status === 'done') { clearInterval(interval); setAssembleLoading(false); setScript(prev => prev ? { ...prev, video_url: d.videoUrl, video_status: 'done' } : prev); loadHistory() }
+        if (d.status === 'failed') { clearInterval(interval); setAssembleLoading(false); setError('Video assembly failed.') }
+      }, 5000)

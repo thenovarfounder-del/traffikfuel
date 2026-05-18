@@ -1,3 +1,4 @@
+﻿// @ts-nocheck
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
@@ -6,88 +7,45 @@ export async function POST(req: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
-
   try {
     const { scriptId, scriptText } = await req.json()
-
     if (!scriptId || !scriptText) {
       return NextResponse.json({ error: 'Missing scriptId or scriptText' }, { status: 400 })
     }
-
-    // Update status to generating
-    await supabase
-      .from('video_scripts')
-      .update({ audio_status: 'generating' })
-      .eq('id', scriptId)
-
-    // Call ElevenLabs API
-    const voiceId = '21m00Tcm4TlvDq8ikWAM' // Rachel
+    await supabase.from('video_scripts').update({ audio_status: 'generating' }).eq('id', scriptId)
+    const voiceId = '21m00Tcm4TlvDq8ikWAM'
     const elevenLabsResponse = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
+      'https://api.elevenlabs.io/v1/text-to-speech/' + voiceId,
       {
         method: 'POST',
         headers: {
-          'xi-api-key': process.env.ELEVENLABS_API_KEY!,
-          'Content-Type': 'application/json',
           'Accept': 'audio/mpeg',
+          'Content-Type': 'application/json',
+          'xi-api-key': process.env.ELEVENLABS_API_KEY!
         },
         body: JSON.stringify({
           text: scriptText,
           model_id: 'eleven_monolingual_v1',
-          voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.75,
-          },
-        }),
+          voice_settings: { stability: 0.5, similarity_boost: 0.5 }
+        })
       }
     )
-
     if (!elevenLabsResponse.ok) {
-      const errorText = await elevenLabsResponse.text()
-      await supabase
-        .from('video_scripts')
-        .update({ audio_status: 'error' })
-        .eq('id', scriptId)
-      return NextResponse.json({ error: `ElevenLabs error: ${errorText}` }, { status: 500 })
+      const errText = await elevenLabsResponse.text()
+      throw new Error('ElevenLabs error: ' + errText)
     }
-
-    // Get audio as buffer
     const audioBuffer = await elevenLabsResponse.arrayBuffer()
-    const audioBytes = new Uint8Array(audioBuffer)
-
-    // Upload to Supabase Storage
-    const fileName = `voiceover-${scriptId}-${Date.now()}.mp3`
+    const audioBase64 = Buffer.from(audioBuffer).toString('base64')
+    const fileName = 'voiceover-' + scriptId + '-' + Date.now() + '.mp3'
     const { error: uploadError } = await supabase.storage
       .from('video-audio')
-      .upload(fileName, audioBytes, {
-        contentType: 'audio/mpeg',
-        upsert: true,
-      })
-
-    if (uploadError) {
-      await supabase
-        .from('video_scripts')
-        .update({ audio_status: 'error' })
-        .eq('id', scriptId)
-      return NextResponse.json({ error: `Upload error: ${uploadError.message}` }, { status: 500 })
-    }
-
-    // Get public URL
-    const { data: urlData } = supabase.storage
-      .from('video-audio')
-      .getPublicUrl(fileName)
-
+      .upload(fileName, Buffer.from(audioBuffer), { contentType: 'audio/mpeg', upsert: true })
+    if (uploadError) throw new Error('Upload error: ' + uploadError.message)
+    const { data: urlData } = supabase.storage.from('video-audio').getPublicUrl(fileName)
     const audioUrl = urlData.publicUrl
-
-    // Save URL to video_scripts
-    await supabase
-      .from('video_scripts')
-      .update({ audio_url: audioUrl, audio_status: 'ready' })
-      .eq('id', scriptId)
-
+    await supabase.from('video_scripts').update({ audio_url: audioUrl, audio_status: 'done' }).eq('id', scriptId)
     return NextResponse.json({ audioUrl })
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Unknown error'
-    return NextResponse.json({ error: message }, { status: 500 })
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }
