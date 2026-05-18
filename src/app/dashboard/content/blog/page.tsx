@@ -69,42 +69,42 @@ export default function BlogPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-2">Blog Generator</h1>
-      <p className="text-gray-500 mb-6">Generate SEO-optimized blog posts for your business.</p>
+    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "24px" }}>
+      <h1 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "8px" }}>Blog Generator</h1>
+      <p style={{ color: "#6b7280", marginBottom: "24px" }}>Generate SEO-optimized blog posts for your business.</p>
 
-      <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-1">Blog Topic</label>
-        <input
-          type="text"
+      <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: "12px", padding: "24px", marginBottom: "24px" }}>
+        <label style={{ display: "block", fontSize: "14px", fontWeight: "500", color: "#374151", marginBottom: "6px" }}>Blog Topic</label>
+        <textarea
+          rows={3}
           placeholder="e.g. How to get a second passport in 2025"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-4"
+          style={{ width: "100%", border: "1px solid #d1d5db", borderRadius: "8px", padding: "10px 12px", fontSize: "14px", marginBottom: "16px", color: "#111827", background: "#fff", resize: "vertical", boxSizing: "border-box" }}
         />
         <button
           onClick={generate}
           disabled={generating}
-          className="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+          style={{ background: generating ? "#93c5fd" : "#2563eb", color: "#fff", padding: "10px 20px", borderRadius: "8px", fontSize: "14px", fontWeight: "500", border: "none", cursor: "pointer" }}
         >
           {generating ? "Generating..." : "Generate Blog Post"}
         </button>
-        {message && <p className="mt-3 text-sm text-red-500">{message}</p>}
+        {message && <p style={{ marginTop: "12px", fontSize: "14px", color: "#ef4444" }}>{message}</p>}
       </div>
 
       {post && (
-        <div className="bg-white border border-gray-200 rounded-xl p-6">
-          <h2 className="text-xl font-bold mb-2">{post.title}</h2>
-          <div className="text-sm text-gray-700 whitespace-pre-wrap mb-6">{post.content}</div>
+        <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: "12px", padding: "24px" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "12px", color: "#111827" }}>{post.title}</h2>
+          <div style={{ fontSize: "14px", color: "#374151", whiteSpace: "pre-wrap", marginBottom: "24px" }}>{post.content}</div>
           <button
             onClick={publishToWordPress}
             disabled={publishing}
-            className="bg-green-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50"
+            style={{ background: publishing ? "#86efac" : "#16a34a", color: "#fff", padding: "10px 20px", borderRadius: "8px", fontSize: "14px", fontWeight: "500", border: "none", cursor: "pointer" }}
           >
             {publishing ? "Publishing..." : "Publish to WordPress"}
           </button>
           {wpMessage && (
-            <p className={`mt-3 text-sm ${wpMessage.startsWith("Error") ? "text-red-500" : "text-green-600"}`}>
+            <p style={{ marginTop: "12px", fontSize: "14px", color: wpMessage.startsWith("Error") ? "#ef4444" : "#16a34a" }}>
               {wpMessage}
             </p>
           )}
