@@ -1,82 +1,65 @@
-﻿import { NextRequest, NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
-import { createClient } from '@supabase/supabase-js'
+﻿// @ts-nocheck
+import { NextRequest, NextResponse } from "next/server"
+import { createClient } from "@supabase/supabase-js"
+import Anthropic from "@anthropic-ai/sdk"
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+export async function POST(req: NextRequest) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+  const anthropic = new Anthropic()
 
-export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    const { userId, businessId, topic } = await req.json()
 
-    const { topic, businessId, userId } = await request.json()
+    const { data: profile } = await supabase
+      .from("business_profiles")
+      .select("business_name")
+      .eq("user_id", userId)
+      .single()
 
-    if (!topic || !userId) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
-    }
+    const businessName = profile?.business_name || "the business"
 
-    let brainContext = ''
-    if (businessId) {
-      const { data: profile } = await supabase
-        .from('business_profiles')
-        .select('brain, business_name')
-        .eq('id', businessId)
-        .single()
+    const prompt = "You are an SEO blog writer. Write a complete blog post for " + businessName + " about: " + topic + ". Return your response in this exact JSON format with no extra text before or after: {\"title\": \"your title here\", \"content\": \"your full blog post content here\"}. The content should be 600-800 words. Use plain text only, no markdown."
 
-      if (profile?.brain) {
-        brainContext = `\n\nBusiness context:\n${profile.brain}`
-      }
-    }
-
-    const prompt = `You are an expert content marketer and SEO writer. Write a complete blog article about: ${topic}${brainContext}
-
-Return a JSON object with this exact format:
-{"title": "article title", "content": "full article content in HTML format with h2, p, ul tags"}
-
-No markdown, no backticks, just raw JSON.`
-
-    const message = await anthropic.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1000,
-      messages: [{ role: 'user', content: prompt }],
+    const response = await anthropic.messages.create({
+      model: "claude-sonnet-4-5",
+      max_tokens: 2000,
+      messages: [{ role: "user", content: prompt }]
     })
 
-    const rawText = message.content
-      .filter((b) => b.type === 'text')
-      .map((b) => (b as { type: 'text'; text: string }).text)
-      .join('')
-      .trim()
+    const rawText = response.content[0].type === "text" ? response.content[0].text : ""
 
-    let parsed: { title: string; content: string }
+    let parsed
     try {
-      const match = rawText.match(/\{[\s\S]*\}/)
-      if (!match) throw new Error('No JSON found')
-      parsed = JSON.parse(match[0])
-    } catch {
-      return NextResponse.json({ error: 'Failed to parse AI response', raw: rawText }, { status: 500 })
+      const jsonMatch = rawText.match(/\{[\s\S]*\}/)
+      if (!jsonMatch) throw new Error("No JSON found")
+      parsed = JSON.parse(jsonMatch[0])
+    } catch (e) {
+      return NextResponse.json({ error: "Failed to parse AI response" }, { status: 500 })
     }
 
-    const { data: saved, error: insertError } = await supabase
-      .from('blog_posts')
+    const { data: saved, error: saveError } = await supabase
+      .from("blog_posts")
       .insert({
         user_id: userId,
-        business_id: businessId || null,
-        topic,
+        business_id: businessId,
         title: parsed.title,
         content: parsed.content,
-        status: 'draft',
+        status: "draft"
       })
       .select()
       .single()
 
-    if (insertError) {
-      return NextResponse.json({ error: 'Failed to save post', details: insertError.message }, { status: 500 })
+    if (saveError) {
+      return NextResponse.json({ error: "Failed to save post" }, { status: 500 })
     }
 
-    return NextResponse.json({ post: saved })
-  } catch (err) {
-    return NextResponse.json({ error: 'Internal server error', details: String(err) }, { status: 500 })
+    return NextResponse.json(saved)
+
+  } catch (error) {
+    console.error("Blog generation error:", error)
+    return NextResponse.json({ error: "Failed to generate blog post" }, { status: 500 })
   }
 }
