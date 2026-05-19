@@ -27,10 +27,9 @@ export default function VideoPage() {
       if (userError) { setDebug('Auth error: ' + userError.message); return }
       if (!user) { setDebug('No user logged in'); return }
       setUserId(user.id)
-      setDebug('User: ' + user.id)
       const { data: biz, error: bizError } = await supabase.from('business_profiles').select('id, business_name').eq('user_id', user.id).single()
-      if (bizError) { setDebug('Biz error: ' + bizError.message + ' | user_id: ' + user.id); return }
-      if (!biz) { setDebug('No biz found for user_id: ' + user.id); return }
+      if (bizError) { setDebug('Biz error: ' + bizError.message); return }
+      if (!biz) { setDebug('No biz found'); return }
       setBusinessId(biz.id)
       setBusinessName(biz.business_name || '')
       setDebug('Ready: ' + biz.business_name)
@@ -51,6 +50,7 @@ export default function VideoPage() {
     if (!topic) return
     setLoading(true)
     setError('')
+    setDebug('Calling API...')
     try {
       const res = await fetch('/api/content/video', {
         method: 'POST',
@@ -58,12 +58,20 @@ export default function VideoPage() {
         body: JSON.stringify({ topic, platform, duration, userId, businessId, businessName })
       })
       const data = await res.json()
+      setDebug('API response keys: ' + Object.keys(data).join(', '))
       if (data.error) throw new Error(data.error)
-      setScript(data.script)
+      if (data.script) {
+        setScript(data.script)
+      } else if (data.hook) {
+        setScript(data)
+      } else {
+        setDebug('Unexpected response: ' + JSON.stringify(data).slice(0, 100))
+      }
       setAssembleResult(null)
       loadHistory()
     } catch (err) {
       setError(err.message)
+      setDebug('Error: ' + err.message)
     } finally {
       setLoading(false)
     }
