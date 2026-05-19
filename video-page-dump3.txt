@@ -1,14 +1,62 @@
-﻿      setError(err.message)
+﻿// @ts-nocheck
+'use client'
+import { useState, useEffect } from 'react'
+import { supabase } from '@/lib/supabase'
+
+export default function VideoPage() {
+  const [userId, setUserId] = useState('')
+  const [businessId, setBusinessId] = useState('')
+  const [topic, setTopic] = useState('')
+  const [platform, setPlatform] = useState('TikTok')
+  const [duration, setDuration] = useState('60')
+  const [script, setScript] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [voiceoverLoading, setVoiceoverLoading] = useState(false)
+  const [assembleLoading, setAssembleLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [history, setHistory] = useState([])
+
+  useEffect(() => {
+    async function load() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      setUserId(user.id)
+      const { data: biz } = await supabase.from('business_profiles').select('id').eq('user_id', user.id).single()
+      if (biz) setBusinessId(biz.id)
+      loadHistory(user.id)
+    }
+    load()
+  }, [])
+
+  async function loadHistory(uid) {
+    const id = uid || userId
+    if (!id) return
+    const { data } = await supabase.from('video_scripts').select('*').eq('user_id', id).order('created_at', { ascending: false }).limit(10)
+    if (data) setHistory(data)
+  }
+
+  async function generateScript() {
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/content/video', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId, businessId, topic, platform, duration }) })
+      const data = await res.json()
+      if (data.error) throw new Error(data.error)
+      setScript(data.script || data)
+      loadHistory()
+    } catch (err) {
+      setError(err.message)
     } finally {
       setLoading(false)
     }
   }
 
-  async function generateVoiceover(scriptData) {
+  async function generateVoiceover(s) {
     setVoiceoverLoading(true)
     setError('')
     try {
-      const res = await fetch('/api/content/video/voiceover', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scriptId: scriptData.id }) })
+      const scriptText = s.hook + ' ' + s.body + ' ' + s.cta
+      const res = await fetch('/api/content/video/voiceover', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scriptId: s.id, scriptText: scriptText }) })
       const data = await res.json()
       if (data.error) throw new Error(data.error)
       setScript(prev => prev ? { ...prev, audio_url: data.audioUrl, audio_status: 'done' } : prev)
@@ -20,21 +68,126 @@
     }
   }
 
-  async function assembleVideo(scriptData) {
+  async function assembleVideo(s) {
     setAssembleLoading(true)
     setError('')
     try {
-      const res = await fetch('/api/content/video/assemble', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scriptId: scriptData.id }) })
+      const res = await fetch('/api/content/video/assemble', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scriptId: s.id }) })
       const data = await res.json()
       if (data.error) throw new Error(data.error)
-      setPollingId(data.renderId)
-      setPollingScriptId(scriptData.id)
+      const renderId = data.renderId
       const interval = setInterval(async () => {
-        const r = await fetch('/api/content/video/assemble?renderId=' + data.renderId + '&scriptId=' + scriptData.id)
+        const r = await fetch('/api/content/video/assemble?renderId=' + renderId + '&scriptId=' + s.id)
         const d = await r.json()
-        if (d.status === 'done') { clearInterval(interval); setAssembleLoading(false); setScript(prev => prev ? { ...prev, video_url: d.videoUrl, video_status: 'done' } : prev); loadHistory() }
-        if (d.status === 'failed') { clearInterval(interval); setAssembleLoading(false); setError('Video assembly failed.') }
+        if (d.status === 'done') {
+          clearInterval(interval)
+          setAssembleLoading(false)
+          setScript(prev => prev ? { ...prev, video_url: d.videoUrl, video_status: 'done' } : prev)
+          loadHistory()
+        }
+        if (d.status === 'failed') {
+          clearInterval(interval)
+          setAssembleLoading(false)
+          setError('Video assembly failed.')
+        }
       }, 5000)
     } catch (err) {
       setError(err.message)
       setAssembleLoading(false)
+    }
+  }
+
+  return (
+    <div style={{ padding: '32px', maxWidth: '800px', margin: '0 auto' }}>
+      <h1 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '8px' }}>Video Generator</h1>
+      <p style={{ color: '#6b7280', marginBottom: '24px' }}>Generate a script, voiceover, and assembled video with stock footage.</p>
+
+      <div style={{ background: 'white', borderRadius: '12px', padding: '24px', marginBottom: '24px', border: '1px solid #e5e7eb' }}>
+        <div style={{ marginBottom: '16px' }}>
+          <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Topic</label>
+          <input value={topic} onChange={e => setTopic(e.target.value)} placeholder="e.g. second passport benefits" style={{ width: '100%', padding: '10px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px' }} />
+        </div>
+        <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
+          <div style={{ flex: 1 }}>
+            <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Platform</label>
+            <select value={platform} onChange={e => setPlatform(e.target.value)} style={{ width: '100%', padding: '10px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px' }}>
+              <option>TikTok</option>
+              <option>Instagram Reels</option>
+              <option>YouTube Shorts</option>
+              <option>LinkedIn</option>
+            </select>
+          </div>
+          <div style={{ flex: 1 }}>
+            <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Duration (seconds)</label>
+            <select value={duration} onChange={e => setDuration(e.target.value)} style={{ width: '100%', padding: '10px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px' }}>
+              <option value="30">30s</option>
+              <option value="60">60s</option>
+              <option value="90">90s</option>
+            </select>
+          </div>
+        </div>
+        <button onClick={generateScript} disabled={loading || !businessId} style={{ background: loading ? '#9ca3af' : '#f97316', color: 'white', padding: '10px 24px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '14px', cursor: loading ? 'not-allowed' : 'pointer' }}>
+          {loading ? 'Generating...' : 'Generate Script'}
+        </button>
+      </div>
+
+      {error && <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '12px', color: '#dc2626', marginBottom: '16px' }}>{error}</div>}
+
+      {script && (
+        <div style={{ background: 'white', borderRadius: '12px', padding: '24px', marginBottom: '24px', border: '1px solid #e5e7eb' }}>
+          <h2 style={{ fontWeight: '700', fontSize: '18px', marginBottom: '16px' }}>Generated Script</h2>
+          <div style={{ marginBottom: '12px' }}>
+            <div style={{ color: '#f97316', fontWeight: '700', marginBottom: '4px' }}>HOOK</div>
+            <div>{script.hook}</div>
+          </div>
+          <div style={{ marginBottom: '12px' }}>
+            <div style={{ color: '#3b82f6', fontWeight: '700', marginBottom: '4px' }}>BODY</div>
+            <div>{script.body}</div>
+          </div>
+          <div style={{ marginBottom: '20px' }}>
+            <div style={{ color: '#10b981', fontWeight: '700', marginBottom: '4px' }}>CTA</div>
+            <div>{script.cta}</div>
+          </div>
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
+            <button onClick={() => generateVoiceover(script)} disabled={voiceoverLoading || script.audio_status === 'done'} style={{ background: script.audio_status === 'done' ? '#6b7280' : '#10b981', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '14px', cursor: voiceoverLoading ? 'not-allowed' : 'pointer' }}>
+              {voiceoverLoading ? 'Generating Voiceover...' : script.audio_status === 'done' ? '🎙 Voiceover Ready' : 'Generate Voiceover'}
+            </button>
+            {script.audio_status === 'done' && (
+              <button onClick={() => assembleVideo(script)} disabled={assembleLoading} style={{ background: assembleLoading ? '#9ca3af' : '#10b981', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '14px', cursor: assembleLoading ? 'not-allowed' : 'pointer' }}>
+                {assembleLoading ? 'Assembling Video...' : '🎬 Assemble Video with Pexels'}
+              </button>
+            )}
+          </div>
+          {script.audio_url && (
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ fontWeight: '600', marginBottom: '8px' }}>Voiceover Audio</div>
+              <audio controls src={script.audio_url} style={{ width: '100%' }} />
+            </div>
+          )}
+          {script.video_status === 'done' && script.video_url && (
+            <div>
+              <div style={{ fontWeight: '600', marginBottom: '8px', color: '#10b981' }}>✅ Final Video (with Voiceover)</div>
+              <video controls src={script.video_url} style={{ width: '100%', borderRadius: '8px' }} />
+              <a href={script.video_url} download style={{ display: 'inline-block', marginTop: '8px', background: '#3b82f6', color: 'white', padding: '8px 16px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>Download Video</a>
+            </div>
+          )}
+          {assembleLoading && (
+            <div style={{ color: '#f97316', fontWeight: '600' }}>⏳ Rendering video with voiceover... this takes 1-2 minutes.</div>
+          )}
+        </div>
+      )}
+
+      {history.length > 0 && (
+        <div style={{ background: 'white', borderRadius: '12px', padding: '24px', border: '1px solid #e5e7eb' }}>
+          <h2 style={{ fontWeight: '700', fontSize: '18px', marginBottom: '16px' }}>Recent Scripts</h2>
+          {history.map(s => (
+            <div key={s.id} onClick={() => setScript(s)} style={{ padding: '12px', border: '1px solid #e5e7eb', borderRadius: '8px', marginBottom: '8px', cursor: 'pointer' }}>
+              <div style={{ fontWeight: '600' }}>{s.topic}</div>
+              <div style={{ color: '#6b7280', fontSize: '13px' }}>{s.platform} • {s.duration}s • {s.audio_status === 'done' ? '🎙 Voiceover ready' : 'No voiceover'} • {s.video_status === 'done' ? '🎬 Video ready' : 'No video'}</div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
