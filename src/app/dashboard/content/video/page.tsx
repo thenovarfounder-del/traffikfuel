@@ -36,6 +36,7 @@ export default function VideoPage() {
   }
 
   async function generateScript() {
+    setScript(null)
     setLoading(true)
     setError('')
     try {
@@ -116,11 +117,7 @@ export default function VideoPage() {
         <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
           <div style={{ flex: 1 }}>
             <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Platform</label>
-            <select
-              value={platform}
-              onChange={e => setPlatform(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px', backgroundColor: 'white', color: '#111827', outline: 'none', boxSizing: 'border-box' }}
-            >
+            <select value={platform} onChange={e => setPlatform(e.target.value)} style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px', backgroundColor: 'white', color: '#111827', outline: 'none', boxSizing: 'border-box' }}>
               <option value="TikTok">TikTok</option>
               <option value="Instagram Reels">Instagram Reels</option>
               <option value="YouTube Shorts">YouTube Shorts</option>
@@ -129,59 +126,41 @@ export default function VideoPage() {
           </div>
           <div style={{ flex: 1 }}>
             <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Duration (seconds)</label>
-            <select
-              value={duration}
-              onChange={e => setDuration(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px', backgroundColor: 'white', color: '#111827', outline: 'none', boxSizing: 'border-box' }}
-            >
+            <select value={duration} onChange={e => setDuration(e.target.value)} style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px', backgroundColor: 'white', color: '#111827', outline: 'none', boxSizing: 'border-box' }}>
               <option value="30">30s</option>
               <option value="60">60s</option>
               <option value="90">90s</option>
             </select>
           </div>
         </div>
-        <button
-          onClick={generateScript}
-          disabled={loading || !businessId}
-          style={{ background: loading ? '#9ca3af' : '#f97316', color: 'white', padding: '10px 24px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '14px', cursor: loading ? 'not-allowed' : 'pointer' }}
-        >
+        <button onClick={generateScript} disabled={loading || !businessId} style={{ background: loading ? '#9ca3af' : '#f97316', color: 'white', padding: '10px 24px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '14px', cursor: loading ? 'not-allowed' : 'pointer' }}>
           {loading ? 'Generating...' : 'Generate Script'}
         </button>
       </div>
 
-      {error && (
-        <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '12px', color: '#dc2626', marginBottom: '16px' }}>{error}</div>
-      )}
+      {error && <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '12px', color: '#dc2626', marginBottom: '16px' }}>{error}</div>}
 
       {script && (
         <div style={{ background: 'white', borderRadius: '12px', padding: '24px', marginBottom: '24px', border: '1px solid #e5e7eb' }}>
           <h2 style={{ fontWeight: '700', fontSize: '18px', marginBottom: '16px' }}>Generated Script</h2>
           <div style={{ marginBottom: '12px' }}>
             <div style={{ color: '#f97316', fontWeight: '700', marginBottom: '4px' }}>HOOK</div>
-            <div>{script.hook}</div>
+            <div style={{ lineHeight: '1.6' }}>{script.hook}</div>
           </div>
           <div style={{ marginBottom: '12px' }}>
             <div style={{ color: '#3b82f6', fontWeight: '700', marginBottom: '4px' }}>BODY</div>
-            <div>{script.body}</div>
+            <div style={{ lineHeight: '1.6' }}>{script.body}</div>
           </div>
           <div style={{ marginBottom: '20px' }}>
             <div style={{ color: '#10b981', fontWeight: '700', marginBottom: '4px' }}>CTA</div>
-            <div>{script.cta}</div>
+            <div style={{ lineHeight: '1.6' }}>{script.cta}</div>
           </div>
           <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
-            <button
-              onClick={() => generateVoiceover(script)}
-              disabled={voiceoverLoading || script.audio_status === 'done'}
-              style={{ background: script.audio_status === 'done' ? '#6b7280' : '#10b981', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '14px', cursor: voiceoverLoading ? 'not-allowed' : 'pointer' }}
-            >
+            <button onClick={() => generateVoiceover(script)} disabled={voiceoverLoading || script.audio_status === 'done'} style={{ background: script.audio_status === 'done' ? '#6b7280' : '#10b981', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '14px', cursor: voiceoverLoading ? 'not-allowed' : 'pointer' }}>
               {voiceoverLoading ? 'Generating Voiceover...' : script.audio_status === 'done' ? 'Voiceover Ready' : 'Generate Voiceover'}
             </button>
             {script.audio_status === 'done' && (
-              <button
-                onClick={() => assembleVideo(script)}
-                disabled={assembleLoading}
-                style={{ background: assembleLoading ? '#9ca3af' : '#10b981', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '14px', cursor: assembleLoading ? 'not-allowed' : 'pointer' }}
-              >
+              <button onClick={() => assembleVideo(script)} disabled={assembleLoading} style={{ background: assembleLoading ? '#9ca3af' : '#10b981', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '14px', cursor: assembleLoading ? 'not-allowed' : 'pointer' }}>
                 {assembleLoading ? 'Assembling Video...' : 'Assemble Video with Pexels'}
               </button>
             )}
