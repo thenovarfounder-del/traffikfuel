@@ -31,7 +31,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { href: '/dashboard/onboarding', label: 'Onboarding' },
     { href: '/dashboard/settings', label: 'Settings' },
     { href: '/dashboard/account', label: 'Account' },
-    { href: '/dashboard/content/searchconsole', label: 'Search Console' },
+    { href: '/dashboard/content/publish', label: 'Publish Engine' },
+          { href: '/dashboard/content/searchconsole', label: 'Search Console' },
   { href: '/dashboard/data', label: 'My Data' },
   ]
 
