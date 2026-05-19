@@ -25,7 +25,11 @@ export async function POST(req: NextRequest) {
       .eq('id', business_id)
       .single()
 
-    if (wpProfile?.wp_site_url && wpProfile?.wp_username && wpProfile?.wp_app_password) {
+    const hasWP = wpProfile?.wp_site_url && wpProfile?.wp_username && wpProfile?.wp_app_password
+
+    if (!hasWP) {
+      results.wordpress = { status: 'skipped', message: 'WordPress not configured' }
+    } else {
       const { data: blogPosts } = await supabase
         .from('blog_posts')
         .select('*')
@@ -33,7 +37,9 @@ export async function POST(req: NextRequest) {
         .eq('status', 'draft')
         .limit(1)
 
-      if (blogPosts && blogPosts.length > 0) {
+      if (!blogPosts || blogPosts.length === 0) {
+        results.wordpress = { status: 'skipped', message: 'No draft blog posts to publish' }
+      } else {
         const post = blogPosts[0]
         try {
           const wpRes = await fetch(`${wpProfile.wp_site_url}/wp-json/wp/v2/posts`, {
@@ -53,11 +59,7 @@ export async function POST(req: NextRequest) {
         } catch (e) {
           results.wordpress = { status: 'error', message: 'Could not reach WordPress' }
         }
-      } else {
-        results.wordpress = { status: 'skipped', message: 'No draft blog posts to publish' }
       }
-    } else {
-      results.wordpress = { status: 'skipped', message: 'WordPress not configured' }
     }
 
     // Social posts
@@ -135,12 +137,9 @@ export async function POST(req: NextRequest) {
       results.video = { status: 'skipped', message: 'No draft video scripts' }
     }
 
-    // Schema, FAQ, Authority — mark as queued if any drafts exist
-    for (const table of ['citation_checks']) {
-      results.schema = { status: 'skipped', message: 'Schema queued via content generator' }
-      results.faq = { status: 'skipped', message: 'FAQ queued via content generator' }
-      results.authority = { status: 'skipped', message: 'Authority content queued via content generator' }
-    }
+    results.schema = { status: 'skipped', message: 'Schema queued via content generator' }
+    results.faq = { status: 'skipped', message: 'FAQ queued via content generator' }
+    results.authority = { status: 'skipped', message: 'Authority content queued via content generator' }
 
     return NextResponse.json({ success: true, results })
 
