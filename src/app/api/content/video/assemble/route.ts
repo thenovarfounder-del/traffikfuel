@@ -8,71 +8,99 @@ export async function POST(req: NextRequest) {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 
-  const { script_id } = await req.json()
+  try {
+    const { scriptId } = await req.json()
+    if (!scriptId) return NextResponse.json({ error: 'Missing scriptId' }, { status: 400 })
 
-  if (!script_id) {
-    return NextResponse.json({ error: 'script_id required' }, { status: 400 })
-  }
+    const { data: script } = await supabase.from('video_scripts').select('*').eq('id', scriptId).single()
+    if (!script) return NextResponse.json({ error: 'Script not found' }, { status: 404 })
+    if (!script.audio_url) return NextResponse.json({ error: 'No voiceover yet. Generate voiceover first.' }, { status: 400 })
 
-  const { data: script, error } = await supabase
-    .from('video_scripts')
-    .select('*')
-    .eq('id', script_id)
-    .single()
+    const pexelsRes = await fetch('https://api.pexels.com/videos/search?query=' + encodeURIComponent(script.topic) + '&per_page=6&orientation=portrait', {
+      headers: { Authorization: process.env.PEXELS_API_KEY! }
+    })
+    const pexelsData = await pexelsRes.json()
+    const videoClips = pexelsData.videos.map((v: any) => {
+      const file = v.video_files.find((f: any) => f.quality === 'hd') || v.video_files[0]
+      return { url: file.link, duration: Math.min(v.duration, 15) }
+    })
 
-  if (error || !script) {
-    return NextResponse.json({ error: 'Script not found' }, { status: 404 })
-  }
+    const totalDuration = videoClips.reduce((sum: number, c: any) => sum + c.duration, 0)
 
-  const keywords = [script.topic, script.platform, 'business', 'marketing']
-    .filter(Boolean)
-    .join(' ')
-
-  const pexelsRes = await fetch(
-    'https://api.pexels.com/videos/search?query=' + encodeURIComponent(keywords) + '&per_page=6&orientation=landscape',
-    {
-      headers: {
-        Authorization: process.env.PEXELS_API_KEY!
-      }
+    const timeline = {
+      soundtrack: {
+        src: script.audio_url,
+        effect: 'fadeOut'
+      },
+      tracks: [
+        {
+          clips: videoClips.map((clip: any, i: number) => ({
+            asset: { type: 'video', src: clip.url },
+            start: videoClips.slice(0, i).reduce((sum: number, c: any) => sum + c.duration, 0),
+            length: clip.duration,
+            fit: 'crop'
+          }))
+        }
+      ]
     }
+
+    const output = { format: 'mp4', resolution: 'hd' }
+
+    const shotRes = await fetch('https://api.shotstack.io/stage/render', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.SHOTSTACK_API_KEY!
+      },
+      body: JSON.stringify({ timeline, output })
+    })
+
+    const shotData = await shotRes.json()
+    if (!shotData.success) return NextResponse.json({ error: 'Shotstack error', detail: shotData }, { status: 500 })
+
+    const renderId = shotData.response.id
+
+    await supabase.from('video_scripts').update({ video_status: 'rendering' }).eq('id', scriptId)
+
+    return NextResponse.json({ success: true, renderId, message: 'Video rendering started' })
+
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 })
+  }
+}
+
+export async function GET(req: NextRequest) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 
-  const pexelsData = await pexelsRes.json()
+  try {
+    const { searchParams } = new URL(req.url)
+    const renderId = searchParams.get('renderId')
+    const scriptId = searchParams.get('scriptId')
+    if (!renderId || !scriptId) return NextResponse.json({ error: 'Missing params' }, { status: 400 })
 
-  const videoClips = (pexelsData.videos || []).map((v: any) => {
-    const file = v.video_files.find((f: any) => f.quality === 'hd') || v.video_files[0]
-    return {
-      id: v.id,
-      url: file?.link || '',
-      duration: v.duration,
-      thumbnail: v.image,
-      width: file?.width,
-      height: file?.height
-    }
-  })
-
-  const videoUrl = JSON.stringify({
-    type: 'pexels_assembly',
-    clips: videoClips,
-    audio_url: script.audio_url,
-    topic: script.topic,
-    platform: script.platform,
-    hook: script.hook,
-    cta: script.cta
-  })
-
-  await supabase
-    .from('video_scripts')
-    .update({
-      video_url: videoUrl,
-      video_status: 'ready'
+    const shotRes = await fetch('https://api.shotstack.io/stage/render/' + renderId, {
+      headers: { 'x-api-key': process.env.SHOTSTACK_API_KEY! }
     })
-    .eq('id', script_id)
+    const shotData = await shotRes.json()
+    const status = shotData.response.status
+    const videoUrl = shotData.response.url
 
-  return NextResponse.json({
-    success: true,
-    video_clips: videoClips,
-    audio_url: script.audio_url,
-    message: 'Video assembled with ' + videoClips.length + ' Pexels clips'
-  })
+    if (status === 'done' && videoUrl) {
+      await supabase.from('video_scripts').update({ video_url: videoUrl, video_status: 'done' }).eq('id', scriptId)
+      return NextResponse.json({ status: 'done', videoUrl })
+    }
+
+    if (status === 'failed') {
+      await supabase.from('video_scripts').update({ video_status: 'failed' }).eq('id', scriptId)
+      return NextResponse.json({ status: 'failed' })
+    }
+
+    return NextResponse.json({ status: 'rendering' })
+
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 })
+  }
 }
