@@ -17,20 +17,28 @@ export default function VideoPage() {
   const [userId, setUserId] = useState(null)
   const [businessId, setBusinessId] = useState(null)
   const [businessName, setBusinessName] = useState('')
+  const [debug, setDebug] = useState('')
 
   useEffect(() => { init() }, [])
 
   async function init() {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
-    setUserId(user.id)
-    const { data: biz } = await supabase.from('business_profiles').select('id, business_name').eq('user_id', user.id).single()
-    if (biz) {
+    try {
+      const { data: { user }, error: userError } = await supabase.auth.getUser()
+      if (userError) { setDebug('Auth error: ' + userError.message); return }
+      if (!user) { setDebug('No user logged in'); return }
+      setUserId(user.id)
+      setDebug('User: ' + user.id)
+      const { data: biz, error: bizError } = await supabase.from('business_profiles').select('id, business_name').eq('user_id', user.id).single()
+      if (bizError) { setDebug('Biz error: ' + bizError.message + ' | user_id: ' + user.id); return }
+      if (!biz) { setDebug('No biz found for user_id: ' + user.id); return }
       setBusinessId(biz.id)
       setBusinessName(biz.business_name || '')
+      setDebug('Ready: ' + biz.business_name)
+      const { data } = await supabase.from('video_scripts').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(10)
+      if (data) setHistory(data)
+    } catch (e) {
+      setDebug('Exception: ' + e.message)
     }
-    const { data } = await supabase.from('video_scripts').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(10)
-    if (data) setHistory(data)
   }
 
   async function loadHistory() {
@@ -110,13 +118,11 @@ export default function VideoPage() {
   return (
     <div style={{ padding: '32px', maxWidth: '860px', margin: '0 auto', fontFamily: 'system-ui, sans-serif' }}>
       <h1 style={{ fontSize: '26px', fontWeight: '700', marginBottom: '6px', color: '#111' }}>Video Scripts + Voiceover + Assembly</h1>
-      <p style={{ color: '#6b7280', marginBottom: '28px', fontSize: '15px' }}>Generate a script, add AI voiceover, then assemble with Pexels stock footage.</p>
+      <p style={{ color: '#6b7280', marginBottom: '16px', fontSize: '15px' }}>Generate a script, add AI voiceover, then assemble with Pexels stock footage.</p>
 
-      {!businessId && (
-        <div style={{ background: '#fef3c7', border: '1px solid #fcd34d', borderRadius: '8px', padding: '12px 16px', marginBottom: '20px', fontSize: '14px', color: '#92400e' }}>
-          ⚠️ No business profile found. Please set up your Business Profile first.
-        </div>
-      )}
+      <div style={{ background: '#e0f2fe', border: '1px solid #7dd3fc', borderRadius: '8px', padding: '10px 14px', marginBottom: '20px', fontSize: '13px', color: '#0369a1' }}>
+        Debug: {debug || 'loading...'}
+      </div>
 
       <div style={{ background: '#f9fafb', borderRadius: '12px', padding: '24px', marginBottom: '24px', border: '1px solid #e5e7eb' }}>
         <div style={{ marginBottom: '18px' }}>
