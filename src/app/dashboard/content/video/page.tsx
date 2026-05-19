@@ -14,13 +14,28 @@ export default function VideoPage() {
   const [history, setHistory] = useState([])
   const [error, setError] = useState('')
   const [assembleResult, setAssembleResult] = useState(null)
+  const [userId, setUserId] = useState(null)
+  const [businessId, setBusinessId] = useState(null)
+  const [businessName, setBusinessName] = useState('')
 
-  useEffect(() => { loadHistory() }, [])
+  useEffect(() => { init() }, [])
 
-  async function loadHistory() {
+  async function init() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
+    setUserId(user.id)
+    const { data: biz } = await supabase.from('business_profiles').select('id, business_name').eq('user_id', user.id).single()
+    if (biz) {
+      setBusinessId(biz.id)
+      setBusinessName(biz.business_name || '')
+    }
     const { data } = await supabase.from('video_scripts').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(10)
+    if (data) setHistory(data)
+  }
+
+  async function loadHistory() {
+    if (!userId) return
+    const { data } = await supabase.from('video_scripts').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(10)
     if (data) setHistory(data)
   }
 
@@ -29,7 +44,11 @@ export default function VideoPage() {
     setLoading(true)
     setError('')
     try {
-      const res = await fetch('/api/content/video', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic, platform, duration }) })
+      const res = await fetch('/api/content/video', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic, platform, duration, userId, businessId, businessName })
+      })
       const data = await res.json()
       if (data.error) throw new Error(data.error)
       setScript(data.script)
@@ -46,7 +65,11 @@ export default function VideoPage() {
     setVoiceoverLoading(true)
     setError('')
     try {
-      const res = await fetch('/api/content/video/voiceover', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scriptId: scriptData.id }) })
+      const res = await fetch('/api/content/video/voiceover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scriptId: scriptData.id })
+      })
       const data = await res.json()
       if (data.error) throw new Error(data.error)
       setScript(prev => prev ? { ...prev, audio_url: data.audioUrl, audio_status: 'done' } : prev)
@@ -63,7 +86,11 @@ export default function VideoPage() {
     setAssembleResult(null)
     setError('')
     try {
-      const res = await fetch('/api/content/video/assemble', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ script_id: scriptData.id }) })
+      const res = await fetch('/api/content/video/assemble', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ script_id: scriptData.id })
+      })
       const data = await res.json()
       if (data.error) throw new Error(data.error)
       setAssembleResult(data)
@@ -77,13 +104,19 @@ export default function VideoPage() {
   }
 
   const inputStyle = { width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '15px', background: 'white', color: '#111', boxSizing: 'border-box' }
-  const selectStyle = { width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '15px', background: 'white', color: '#111', cursor: 'pointer', appearance: 'auto' }
+  const selectStyle = { width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '15px', background: 'white', color: '#111', cursor: 'pointer' }
   const labelStyle = { display: 'block', fontWeight: '600', fontSize: '14px', marginBottom: '6px', color: '#374151' }
 
   return (
     <div style={{ padding: '32px', maxWidth: '860px', margin: '0 auto', fontFamily: 'system-ui, sans-serif' }}>
       <h1 style={{ fontSize: '26px', fontWeight: '700', marginBottom: '6px', color: '#111' }}>Video Scripts + Voiceover + Assembly</h1>
       <p style={{ color: '#6b7280', marginBottom: '28px', fontSize: '15px' }}>Generate a script, add AI voiceover, then assemble with Pexels stock footage.</p>
+
+      {!businessId && (
+        <div style={{ background: '#fef3c7', border: '1px solid #fcd34d', borderRadius: '8px', padding: '12px 16px', marginBottom: '20px', fontSize: '14px', color: '#92400e' }}>
+          ⚠️ No business profile found. Please set up your Business Profile first.
+        </div>
+      )}
 
       <div style={{ background: '#f9fafb', borderRadius: '12px', padding: '24px', marginBottom: '24px', border: '1px solid #e5e7eb' }}>
         <div style={{ marginBottom: '18px' }}>
@@ -119,8 +152,8 @@ export default function VideoPage() {
         </div>
         <button
           onClick={generateScript}
-          disabled={loading || !topic}
-          style={{ background: loading || !topic ? '#9ca3af' : '#f97316', color: 'white', padding: '12px 28px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '15px', cursor: loading || !topic ? 'not-allowed' : 'pointer' }}
+          disabled={loading || !topic || !businessId}
+          style={{ background: loading || !topic || !businessId ? '#9ca3af' : '#f97316', color: 'white', padding: '12px 28px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '15px', cursor: loading || !topic || !businessId ? 'not-allowed' : 'pointer' }}
         >
           {loading ? 'Generating Script...' : 'Generate Script'}
         </button>
@@ -187,7 +220,7 @@ export default function VideoPage() {
             <div
               key={s.id}
               onClick={() => { setScript(s); setAssembleResult(null) }}
-              style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: '10px', padding: '14px 16px', marginBottom: '10px', cursor: 'pointer', transition: 'border-color 0.15s' }}
+              style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: '10px', padding: '14px 16px', marginBottom: '10px', cursor: 'pointer' }}
             >
               <div style={{ fontWeight: '600', color: '#111', marginBottom: '4px' }}>{s.topic}</div>
               <div style={{ fontSize: '13px', color: '#6b7280' }}>
