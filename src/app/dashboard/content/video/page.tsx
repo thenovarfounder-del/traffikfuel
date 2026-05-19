@@ -67,7 +67,7 @@ export default function VideoPage() {
       const res = await fetch('/api/content/video/voiceover', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scriptId: scriptData.id })
+        body: JSON.stringify({ scriptId: scriptData.id, scriptText: scriptData.hook + " " + scriptData.body + " " + scriptData.cta })
       })
       const data = await res.json()
       if (data.error) throw new Error(data.error)
@@ -207,3 +207,6 @@ export default function VideoPage() {
     </div>
   )
 }
+
+
+
