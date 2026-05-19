@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   )
   try {
     const { scriptId, scriptText } = await req.json()
-    if (!scriptId || !scriptText) {
+    if (!scriptId) {
       return NextResponse.json({ error: 'Missing scriptId or scriptText' }, { status: 400 })
     }
     await supabase.from('video_scripts').update({ audio_status: 'generating' }).eq('id', scriptId)
@@ -49,3 +49,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }
+
