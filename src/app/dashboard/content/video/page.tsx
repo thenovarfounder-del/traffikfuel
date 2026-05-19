@@ -17,27 +17,19 @@ export default function VideoPage() {
   const [userId, setUserId] = useState(null)
   const [businessId, setBusinessId] = useState(null)
   const [businessName, setBusinessName] = useState('')
-  const [debug, setDebug] = useState('')
 
   useEffect(() => { init() }, [])
 
   async function init() {
     try {
-      const { data: { user }, error: userError } = await supabase.auth.getUser()
-      if (userError) { setDebug('Auth error: ' + userError.message); return }
-      if (!user) { setDebug('No user logged in'); return }
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
       setUserId(user.id)
-      const { data: biz, error: bizError } = await supabase.from('business_profiles').select('id, business_name').eq('user_id', user.id).single()
-      if (bizError) { setDebug('Biz error: ' + bizError.message); return }
-      if (!biz) { setDebug('No biz found'); return }
-      setBusinessId(biz.id)
-      setBusinessName(biz.business_name || '')
-      setDebug('Ready: ' + biz.business_name)
+      const { data: biz } = await supabase.from('business_profiles').select('id, business_name').eq('user_id', user.id).single()
+      if (biz) { setBusinessId(biz.id); setBusinessName(biz.business_name || '') }
       const { data } = await supabase.from('video_scripts').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(10)
       if (data) setHistory(data)
-    } catch (e) {
-      setDebug('Exception: ' + e.message)
-    }
+    } catch (e) {}
   }
 
   async function loadHistory() {
@@ -50,7 +42,6 @@ export default function VideoPage() {
     if (!topic) return
     setLoading(true)
     setError('')
-    setDebug('Calling API...')
     try {
       const res = await fetch('/api/content/video', {
         method: 'POST',
@@ -58,20 +49,12 @@ export default function VideoPage() {
         body: JSON.stringify({ topic, platform, duration, userId, businessId, businessName })
       })
       const data = await res.json()
-      setDebug('API response keys: ' + Object.keys(data).join(', '))
       if (data.error) throw new Error(data.error)
-      if (data.script) {
-        setScript(data.script)
-      } else if (data.hook) {
-        setScript(data)
-      } else {
-        setDebug('Unexpected response: ' + JSON.stringify(data).slice(0, 100))
-      }
+      if (data.script) { setScript(data.script) } else { setScript(data) }
       setAssembleResult(null)
       loadHistory()
     } catch (err) {
       setError(err.message)
-      setDebug('Error: ' + err.message)
     } finally {
       setLoading(false)
     }
@@ -119,29 +102,19 @@ export default function VideoPage() {
     }
   }
 
-  const inputStyle = { width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '15px', background: 'white', color: '#111', boxSizing: 'border-box' }
-  const selectStyle = { width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '15px', background: 'white', color: '#111', cursor: 'pointer' }
+  const inputStyle = { width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '15px', background: 'white', color: '#111827', boxSizing: 'border-box' }
+  const selectStyle = { width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '15px', background: 'white', color: '#111827', cursor: 'pointer' }
   const labelStyle = { display: 'block', fontWeight: '600', fontSize: '14px', marginBottom: '6px', color: '#374151' }
 
   return (
-    <div style={{ padding: '32px', maxWidth: '860px', margin: '0 auto', fontFamily: 'system-ui, sans-serif' }}>
-      <h1 style={{ fontSize: '26px', fontWeight: '700', marginBottom: '6px', color: '#111' }}>Video Scripts + Voiceover + Assembly</h1>
-      <p style={{ color: '#6b7280', marginBottom: '16px', fontSize: '15px' }}>Generate a script, add AI voiceover, then assemble with Pexels stock footage.</p>
-
-      <div style={{ background: '#e0f2fe', border: '1px solid #7dd3fc', borderRadius: '8px', padding: '10px 14px', marginBottom: '20px', fontSize: '13px', color: '#0369a1' }}>
-        Debug: {debug || 'loading...'}
-      </div>
+    <div style={{ padding: '32px', maxWidth: '860px', margin: '0 auto', fontFamily: 'system-ui, sans-serif', color: '#111827' }}>
+      <h1 style={{ fontSize: '26px', fontWeight: '700', marginBottom: '6px', color: '#111827' }}>Video Scripts + Voiceover + Assembly</h1>
+      <p style={{ color: '#6b7280', marginBottom: '28px', fontSize: '15px' }}>Generate a script, add AI voiceover, then assemble with Pexels stock footage.</p>
 
       <div style={{ background: '#f9fafb', borderRadius: '12px', padding: '24px', marginBottom: '24px', border: '1px solid #e5e7eb' }}>
         <div style={{ marginBottom: '18px' }}>
           <label style={labelStyle}>Topic</label>
-          <input
-            type="text"
-            value={topic}
-            onChange={e => setTopic(e.target.value)}
-            placeholder="e.g. Benefits of a second passport"
-            style={inputStyle}
-          />
+          <input type="text" value={topic} onChange={e => setTopic(e.target.value)} placeholder="e.g. Benefits of a second passport" style={inputStyle} />
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
           <div>
@@ -164,43 +137,36 @@ export default function VideoPage() {
             </select>
           </div>
         </div>
-        <button
-          onClick={generateScript}
-          disabled={loading || !topic || !businessId}
-          style={{ background: loading || !topic || !businessId ? '#9ca3af' : '#f97316', color: 'white', padding: '12px 28px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '15px', cursor: loading || !topic || !businessId ? 'not-allowed' : 'pointer' }}
-        >
+        <button onClick={generateScript} disabled={loading || !topic || !businessId} style={{ background: loading || !topic || !businessId ? '#9ca3af' : '#f97316', color: 'white', padding: '12px 28px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '15px', cursor: loading || !topic || !businessId ? 'not-allowed' : 'pointer' }}>
           {loading ? 'Generating Script...' : 'Generate Script'}
         </button>
       </div>
 
-      {error && (
-        <div style={{ background: '#fef2f2', color: '#dc2626', padding: '12px 16px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #fecaca', fontSize: '14px' }}>
-          {error}
-        </div>
-      )}
+      {error && <div style={{ background: '#fef2f2', color: '#dc2626', padding: '12px 16px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #fecaca', fontSize: '14px' }}>{error}</div>}
 
       {script && (
         <div style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '24px', marginBottom: '28px' }}>
-          <h2 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '16px', color: '#111' }}>Generated Script</h2>
-          <div style={{ background: '#f9fafb', borderRadius: '8px', padding: '16px', marginBottom: '16px' }}>
-            <div style={{ marginBottom: '10px' }}><span style={{ fontWeight: '700', color: '#f97316' }}>Hook: </span>{script.hook}</div>
-            <div style={{ marginBottom: '10px' }}><span style={{ fontWeight: '700', color: '#6366f1' }}>Body: </span>{script.body}</div>
-            <div><span style={{ fontWeight: '700', color: '#10b981' }}>CTA: </span>{script.cta}</div>
+          <h2 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '16px', color: '#111827' }}>Generated Script</h2>
+          <div style={{ background: '#f9fafb', borderRadius: '8px', padding: '16px', marginBottom: '16px', border: '1px solid #e5e7eb' }}>
+            <div style={{ marginBottom: '14px' }}>
+              <div style={{ fontWeight: '700', color: '#f97316', marginBottom: '4px', fontSize: '13px', textTransform: 'uppercase' }}>Hook</div>
+              <div style={{ color: '#111827', fontSize: '15px', lineHeight: '1.6' }}>{script.hook}</div>
+            </div>
+            <div style={{ marginBottom: '14px' }}>
+              <div style={{ fontWeight: '700', color: '#6366f1', marginBottom: '4px', fontSize: '13px', textTransform: 'uppercase' }}>Body</div>
+              <div style={{ color: '#111827', fontSize: '15px', lineHeight: '1.6' }}>{script.body}</div>
+            </div>
+            <div>
+              <div style={{ fontWeight: '700', color: '#10b981', marginBottom: '4px', fontSize: '13px', textTransform: 'uppercase' }}>CTA</div>
+              <div style={{ color: '#111827', fontSize: '15px', lineHeight: '1.6' }}>{script.cta}</div>
+            </div>
           </div>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '16px' }}>
-            <button
-              onClick={() => generateVoiceover(script)}
-              disabled={voiceoverLoading || script.audio_status === 'done'}
-              style={{ background: script.audio_status === 'done' ? '#6b7280' : '#6366f1', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '14px', cursor: script.audio_status === 'done' ? 'default' : 'pointer' }}
-            >
+            <button onClick={() => generateVoiceover(script)} disabled={voiceoverLoading || script.audio_status === 'done'} style={{ background: script.audio_status === 'done' ? '#6b7280' : '#6366f1', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '14px', cursor: script.audio_status === 'done' ? 'default' : 'pointer' }}>
               {voiceoverLoading ? 'Generating Voiceover...' : script.audio_status === 'done' ? '🎙 Voiceover Ready' : 'Generate Voiceover'}
             </button>
             {script.audio_url && (
-              <button
-                onClick={() => assembleVideo(script)}
-                disabled={assembleLoading}
-                style={{ background: assembleLoading ? '#9ca3af' : '#10b981', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '14px', cursor: assembleLoading ? 'not-allowed' : 'pointer' }}
-              >
+              <button onClick={() => assembleVideo(script)} disabled={assembleLoading} style={{ background: assembleLoading ? '#9ca3af' : '#10b981', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', fontWeight: '600', fontSize: '14px', cursor: assembleLoading ? 'not-allowed' : 'pointer' }}>
                 {assembleLoading ? 'Assembling Video...' : '🎬 Assemble Video with Pexels'}
               </button>
             )}
@@ -229,17 +195,11 @@ export default function VideoPage() {
 
       {history.length > 0 && (
         <div>
-          <h2 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '14px', color: '#111' }}>Recent Scripts</h2>
+          <h2 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '14px', color: '#111827' }}>Recent Scripts</h2>
           {history.map(s => (
-            <div
-              key={s.id}
-              onClick={() => { setScript(s); setAssembleResult(null) }}
-              style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: '10px', padding: '14px 16px', marginBottom: '10px', cursor: 'pointer' }}
-            >
-              <div style={{ fontWeight: '600', color: '#111', marginBottom: '4px' }}>{s.topic}</div>
-              <div style={{ fontSize: '13px', color: '#6b7280' }}>
-                {s.platform} &middot; {s.duration}s &middot; {s.audio_status === 'done' ? '🎙 Voiceover ready' : 'No voiceover'} &middot; {s.video_status === 'ready' ? '🎬 Video ready' : 'No video'}
-              </div>
+            <div key={s.id} onClick={() => { setScript(s); setAssembleResult(null) }} style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: '10px', padding: '14px 16px', marginBottom: '10px', cursor: 'pointer' }}>
+              <div style={{ fontWeight: '600', color: '#111827', marginBottom: '4px' }}>{s.topic}</div>
+              <div style={{ fontSize: '13px', color: '#6b7280' }}>{s.platform} &middot; {s.duration}s &middot; {s.audio_status === 'done' ? '🎙 Voiceover ready' : 'No voiceover'} &middot; {s.video_status === 'ready' ? '🎬 Video ready' : 'No video'}</div>
             </div>
           ))}
         </div>
