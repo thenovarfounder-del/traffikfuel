@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
@@ -31,7 +31,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { href: '/dashboard/onboarding', label: 'Onboarding' },
     { href: '/dashboard/settings', label: 'Settings' },
     { href: '/dashboard/account', label: 'Account' },
-    { href: '/dashboard/data', label: 'My Data' },
+    { href: '/dashboard/content/searchconsole', label: 'Search Console' },
+  { href: '/dashboard/data', label: 'My Data' },
   ]
 
   function navClass(href: string) {
@@ -93,5 +94,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     </div>
   )
 }
+
 
 
