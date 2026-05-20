@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
 const HEYGEN_API_KEY = process.env.HEYGEN_API_KEY
-const AVATAR_ID = 'nik_blue_expressive_20240910'
+const AVATAR_ID = '1727686832'
 const VOICE_ID = 'b966c31caf124c2a99f19ff1479c964f'
 
 export async function POST(req: NextRequest) {
