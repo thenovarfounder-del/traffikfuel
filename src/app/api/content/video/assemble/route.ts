@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 
 const HEYGEN_API_KEY = process.env.HEYGEN_API_KEY
 const AVATAR_ID = 'nik_blue_expressive_20240910'
+const VOICE_ID = 'b966c31caf124c2a99f19ff1479c964f'
 
 export async function POST(req: NextRequest) {
   const supabase = createClient(
@@ -28,9 +29,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Video already processing or complete' }, { status: 400 })
     }
 
-    if (!script.audio_url) {
-      return NextResponse.json({ error: 'No voiceover audio found. Generate voiceover first.' }, { status: 400 })
-    }
+    const scriptText = script.hook + ' ' + script.body + ' ' + script.cta
 
     const heygenRes = await fetch('https://api.heygen.com/v2/video/generate', {
       method: 'POST',
@@ -47,8 +46,9 @@ export async function POST(req: NextRequest) {
               avatar_style: 'normal'
             },
             voice: {
-              type: 'audio',
-              audio_url: script.audio_url
+              type: 'text',
+              input_text: scriptText,
+              voice_id: VOICE_ID
             }
           }
         ],
@@ -62,7 +62,6 @@ export async function POST(req: NextRequest) {
     const videoId = heygenData?.data?.video_id
 
     if (!videoId) {
-      console.error('No video ID:', JSON.stringify(heygenData))
       return NextResponse.json({ error: 'No video ID from HeyGen' }, { status: 500 })
     }
 
