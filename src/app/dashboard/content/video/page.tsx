@@ -151,15 +151,15 @@ export default function VideoPage() {
 
       {script && (
         <div style={{ background: 'white', borderRadius: '12px', padding: '24px', marginBottom: '24px', border: '1px solid #e5e7eb' }}>
-          <div style={{ background: '#fff7ed', borderRadius: '8px', padding: '16px', marginBottom: '12px' }}>
+          <div style={{ background: '#fff7ed', color: '#111827', borderRadius: '8px', padding: '16px', marginBottom: '12px' }}>
             <div style={{ fontWeight: '700', color: '#ea580c', marginBottom: '6px' }}>HOOK</div>
             <div>{script.hook}</div>
           </div>
-          <div style={{ background: '#eff6ff', borderRadius: '8px', padding: '16px', marginBottom: '12px' }}>
+          <div style={{ background: '#eff6ff', color: '#111827', borderRadius: '8px', padding: '16px', marginBottom: '12px' }}>
             <div style={{ fontWeight: '700', color: '#2563eb', marginBottom: '6px' }}>BODY</div>
             <div>{script.body}</div>
           </div>
-          <div style={{ background: '#f0fdf4', borderRadius: '8px', padding: '16px', marginBottom: '16px' }}>
+          <div style={{ background: '#f0fdf4', color: '#111827', borderRadius: '8px', padding: '16px', marginBottom: '16px' }}>
             <div style={{ fontWeight: '700', color: '#16a34a', marginBottom: '6px' }}>CTA</div>
             <div>{script.cta}</div>
           </div>
