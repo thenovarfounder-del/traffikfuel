@@ -79,7 +79,7 @@ export default function VideoPage() {
       })
       const data = await res.json()
       if (data.error) throw new Error(data.error)
-      const renderId = data.renderId
+      const renderId = data.videoId
       if (!renderId) throw new Error('No render ID returned')
       const interval = setInterval(async () => {
         try {
@@ -211,3 +211,4 @@ export default function VideoPage() {
     </div>
   )
 }
+
