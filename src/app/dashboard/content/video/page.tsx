@@ -86,7 +86,7 @@ export default function VideoPage() {
           const r = await fetch('/api/content/video/assemble', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ renderId: renderId, scriptId: s.id })
+            body: JSON.stringify({ videoId: renderId, scriptId: s.id })
           })
           const d = await r.json()
           if (d.status === 'succeeded') {

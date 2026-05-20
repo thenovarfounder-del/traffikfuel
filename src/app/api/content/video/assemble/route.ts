@@ -2,21 +2,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-function buildPexelsQuery(topic: string): string {
-  const t = topic.toLowerCase()
-  if (t.includes('passport') || t.includes('citizenship') || t.includes('second passport')) return 'passport travel visa international'
-  if (t.includes('real estate') || t.includes('property') || t.includes('house')) return 'luxury real estate property home'
-  if (t.includes('invest') || t.includes('finance') || t.includes('money') || t.includes('wealth')) return 'business investment finance money'
-  if (t.includes('lawyer') || t.includes('legal') || t.includes('attorney') || t.includes('law')) return 'lawyer office legal professional'
-  if (t.includes('market') || t.includes('social media') || t.includes('brand')) return 'marketing digital business success'
-  if (t.includes('restaurant') || t.includes('food') || t.includes('cafe')) return 'restaurant food dining chef'
-  if (t.includes('fitness') || t.includes('gym') || t.includes('health')) return 'fitness gym workout healthy'
-  if (t.includes('travel') || t.includes('hotel') || t.includes('vacation')) return 'travel luxury hotel destination'
-  if (t.includes('tech') || t.includes('software') || t.includes('app') || t.includes('saas')) return 'technology software computer business'
-  if (t.includes('dental') || t.includes('medical') || t.includes('doctor')) return 'medical doctor healthcare professional'
-  if (t.includes('consulting') || t.includes('coach') || t.includes('mentor')) return 'business consulting professional meeting'
-  return topic.split(' ').slice(0, 3).join(' ')
-}
+const HEYGEN_AVATAR_ID = 'Angela-inblackskirt-20220820'
+const HEYGEN_VOICE_ID = '2d5b0e6cf36f460aa7fc47e3eee4ba54'
 
 export async function POST(req: NextRequest) {
   const supabase = createClient(
@@ -25,22 +12,26 @@ export async function POST(req: NextRequest) {
   )
 
   try {
-    const { scriptId, renderId } = await req.json()
+    const { scriptId, videoId } = await req.json()
 
     // POLL MODE
-    if (renderId) {
-      const statusRes = await fetch('https://api.creatomate.com/v2/renders/' + renderId, {
-        headers: { 'Authorization': 'Bearer ' + process.env.CREATOMATE_API_KEY }
+    if (videoId) {
+      const statusRes = await fetch('https://api.heygen.com/v1/video_status.get?video_id=' + videoId, {
+        headers: {
+          'X-Api-Key': process.env.HEYGEN_API_KEY!,
+          'Accept': 'application/json'
+        }
       })
 
       if (!statusRes.ok) {
-        return NextResponse.json({ error: 'Failed to check render status' }, { status: 500 })
+        return NextResponse.json({ error: 'Failed to check HeyGen status' }, { status: 500 })
       }
 
       const statusData = await statusRes.json()
+      const video = statusData.data
 
-      if (statusData.status === 'succeeded') {
-        const videoUrl = statusData.url
+      if (video.status === 'completed') {
+        const videoUrl = video.video_url
         if (scriptId) {
           await supabase
             .from('video_scripts')
@@ -50,11 +41,11 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: true, videoUrl, status: 'succeeded' })
       }
 
-      if (statusData.status === 'failed') {
-        return NextResponse.json({ error: 'Render failed: ' + (statusData.error_message || 'unknown'), status: 'failed' }, { status: 500 })
+      if (video.status === 'failed') {
+        return NextResponse.json({ error: 'HeyGen render failed: ' + (video.error || 'unknown'), status: 'failed' }, { status: 500 })
       }
 
-      return NextResponse.json({ status: statusData.status, renderId })
+      return NextResponse.json({ status: video.status, videoId })
     }
 
     // START MODE
@@ -72,98 +63,56 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Script not found' }, { status: 404 })
     }
 
-    if (!script.audio_url) {
-      return NextResponse.json({ error: 'No audio_url found. Generate voiceover first.' }, { status: 400 })
-    }
+    const scriptText = (script.hook || '') + ' ' + (script.body || '') + ' ' + (script.cta || '')
 
-    const pexelsQuery = encodeURIComponent(buildPexelsQuery(script.topic || ''))
-    const pexelsRes = await fetch(
-      'https://api.pexels.com/videos/search?query=' + pexelsQuery + '&per_page=3&orientation=landscape&size=medium',
-      { headers: { Authorization: process.env.PEXELS_API_KEY! } }
-    )
-
-    if (!pexelsRes.ok) {
-      return NextResponse.json({ error: 'Pexels API failed' }, { status: 500 })
-    }
-
-    const pexelsData = await pexelsRes.json()
-    const videos = pexelsData.videos || []
-
-    if (videos.length === 0) {
-      return NextResponse.json({ error: 'No Pexels videos found' }, { status: 404 })
-    }
-
-    const clipUrls: string[] = videos.slice(0, 3).map((v: any) => {
-      const files = v.video_files || []
-      const hd = files.find((f: any) => f.quality === 'hd') || files.find((f: any) => f.quality === 'sd') || files[0]
-      return hd ? hd.link : ''
-    }).filter(Boolean)
-
-    if (clipUrls.length === 0) {
-      return NextResponse.json({ error: 'Could not extract video URLs from Pexels' }, { status: 500 })
-    }
-
-    const videoElements = clipUrls.map((url: string, index: number) => {
-      const element: any = {
-        name: 'Video-' + (index + 1),
-        type: 'video',
-        track: 1,
-        source: url,
-        fit: 'cover'
-      }
-      if (index > 0) {
-        element.animations = [
-          { time: 0, duration: 1, transition: true, type: 'fade', enable: 'second-only' }
-        ]
-      }
-      return element
-    })
-
-    const renderScriptBody = {
-      output_format: 'mp4',
-      width: 1280,
-      height: 720,
-      elements: [
-        {
-          type: 'audio',
-          track: 1,
-          time: 0,
-          duration: null,
-          source: script.audio_url,
-          audio_fade_out: 1
-        },
-        {
-          type: 'composition',
-          track: 2,
-          time: 0,
-          elements: videoElements
-        }
-      ]
-    }
-
-    const creatomateRes = await fetch('https://api.creatomate.com/v2/renders', {
+    const heygenRes = await fetch('https://api.heygen.com/v2/video/generate', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + process.env.CREATOMATE_API_KEY
+        'X-Api-Key': process.env.HEYGEN_API_KEY!,
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(renderScriptBody)
+      body: JSON.stringify({
+        video_inputs: [
+          {
+            character: {
+              type: 'avatar',
+              avatar_id: HEYGEN_AVATAR_ID,
+              avatar_style: 'normal'
+            },
+            voice: {
+              type: 'text',
+              input_text: scriptText,
+              voice_id: HEYGEN_VOICE_ID,
+              speed: 1.0
+            },
+            background: {
+              type: 'color',
+              value: '#f0f4ff'
+            }
+          }
+        ],
+        dimension: {
+          width: 1280,
+          height: 720
+        },
+        aspect_ratio: '16:9',
+        caption: false
+      })
     })
 
-    if (!creatomateRes.ok) {
-      const errText = await creatomateRes.text()
-      return NextResponse.json({ error: 'Creatomate API error: ' + errText }, { status: 500 })
+    if (!heygenRes.ok) {
+      const errText = await heygenRes.text()
+      return NextResponse.json({ error: 'HeyGen API error: ' + errText }, { status: 500 })
     }
 
-    const creatomateData = await creatomateRes.json()
-    const render = Array.isArray(creatomateData) ? creatomateData[0] : creatomateData
-    const newRenderId = render?.id
+    const heygenData = await heygenRes.json()
+    const newVideoId = heygenData.data?.video_id
 
-    if (!newRenderId) {
-      return NextResponse.json({ error: 'No render ID returned from Creatomate' }, { status: 500 })
+    if (!newVideoId) {
+      return NextResponse.json({ error: 'No video_id returned from HeyGen: ' + JSON.stringify(heygenData) }, { status: 500 })
     }
 
-    return NextResponse.json({ status: 'rendering', renderId: newRenderId })
+    return NextResponse.json({ status: 'rendering', videoId: newVideoId })
 
   } catch (err: any) {
     console.error('Video assemble error:', err)
