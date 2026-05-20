@@ -2,6 +2,22 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
+function buildPexelsQuery(topic: string): string {
+  const t = topic.toLowerCase()
+  if (t.includes('passport') || t.includes('citizenship') || t.includes('second passport')) return 'passport travel visa international'
+  if (t.includes('real estate') || t.includes('property') || t.includes('house')) return 'luxury real estate property home'
+  if (t.includes('invest') || t.includes('finance') || t.includes('money') || t.includes('wealth')) return 'business investment finance money'
+  if (t.includes('lawyer') || t.includes('legal') || t.includes('attorney') || t.includes('law')) return 'lawyer office legal professional'
+  if (t.includes('market') || t.includes('social media') || t.includes('brand')) return 'marketing digital business success'
+  if (t.includes('restaurant') || t.includes('food') || t.includes('cafe')) return 'restaurant food dining chef'
+  if (t.includes('fitness') || t.includes('gym') || t.includes('health')) return 'fitness gym workout healthy'
+  if (t.includes('travel') || t.includes('hotel') || t.includes('vacation')) return 'travel luxury hotel destination'
+  if (t.includes('tech') || t.includes('software') || t.includes('app') || t.includes('saas')) return 'technology software computer business'
+  if (t.includes('dental') || t.includes('medical') || t.includes('doctor')) return 'medical doctor healthcare professional'
+  if (t.includes('consulting') || t.includes('coach') || t.includes('mentor')) return 'business consulting professional meeting'
+  return topic.split(' ').slice(0, 3).join(' ')
+}
+
 export async function POST(req: NextRequest) {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -11,12 +27,10 @@ export async function POST(req: NextRequest) {
   try {
     const { scriptId, renderId } = await req.json()
 
-    // POLL MODE: if renderId passed in, check status and return
+    // POLL MODE
     if (renderId) {
       const statusRes = await fetch('https://api.creatomate.com/v2/renders/' + renderId, {
-        headers: {
-          'Authorization': 'Bearer ' + process.env.CREATOMATE_API_KEY
-        }
+        headers: { 'Authorization': 'Bearer ' + process.env.CREATOMATE_API_KEY }
       })
 
       if (!statusRes.ok) {
@@ -27,14 +41,12 @@ export async function POST(req: NextRequest) {
 
       if (statusData.status === 'succeeded') {
         const videoUrl = statusData.url
-
         if (scriptId) {
           await supabase
             .from('video_scripts')
             .update({ video_url: videoUrl, video_status: 'done' })
             .eq('id', scriptId)
         }
-
         return NextResponse.json({ success: true, videoUrl, status: 'succeeded' })
       }
 
@@ -45,7 +57,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: statusData.status, renderId })
     }
 
-    // START MODE: kick off the render
+    // START MODE
     if (!scriptId) {
       return NextResponse.json({ error: 'scriptId is required' }, { status: 400 })
     }
@@ -64,12 +76,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No audio_url found. Generate voiceover first.' }, { status: 400 })
     }
 
-    const pexelsQuery = encodeURIComponent(script.topic || 'business marketing')
+    const pexelsQuery = encodeURIComponent(buildPexelsQuery(script.topic || ''))
     const pexelsRes = await fetch(
-      'https://api.pexels.com/videos/search?query=' + pexelsQuery + '&per_page=3&orientation=landscape',
-      {
-        headers: { Authorization: process.env.PEXELS_API_KEY! }
-      }
+      'https://api.pexels.com/videos/search?query=' + pexelsQuery + '&per_page=3&orientation=landscape&size=medium',
+      { headers: { Authorization: process.env.PEXELS_API_KEY! } }
     )
 
     if (!pexelsRes.ok) {
@@ -80,12 +90,12 @@ export async function POST(req: NextRequest) {
     const videos = pexelsData.videos || []
 
     if (videos.length === 0) {
-      return NextResponse.json({ error: 'No Pexels videos found for topic: ' + script.topic }, { status: 404 })
+      return NextResponse.json({ error: 'No Pexels videos found' }, { status: 404 })
     }
 
     const clipUrls: string[] = videos.slice(0, 3).map((v: any) => {
       const files = v.video_files || []
-      const hd = files.find((f: any) => f.quality === 'hd') || files[0]
+      const hd = files.find((f: any) => f.quality === 'hd') || files.find((f: any) => f.quality === 'sd') || files[0]
       return hd ? hd.link : ''
     }).filter(Boolean)
 
