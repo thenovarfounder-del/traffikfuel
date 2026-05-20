@@ -2,8 +2,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const HEYGEN_AVATAR_ID = 'Angela-inblackskirt-20220820'
-const HEYGEN_VOICE_ID = '2d5b0e6cf36f460aa7fc47e3eee4ba54'
+const HEYGEN_AVATAR_ID = 'Tyler-insuit-20220721'
+const HEYGEN_VOICE_ID = 'c4a8ceb7a2954500bc047fb092bcff3f'
 
 export async function POST(req: NextRequest) {
   const supabase = createClient(
