@@ -1,6 +1,6 @@
 ﻿// @ts-nocheck
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
 
 export default function VideoPage() {
@@ -15,6 +15,8 @@ export default function VideoPage() {
   const [assembleLoading, setAssembleLoading] = useState(false)
   const [error, setError] = useState('')
   const [history, setHistory] = useState([])
+  const intervalRef = useRef(null)
+  const assemblingRef = useRef(false)
 
   useEffect(() => {
     async function load() {
@@ -26,6 +28,9 @@ export default function VideoPage() {
       loadHistory(user.id)
     }
     load()
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
   }, [])
 
   async function loadHistory(uid) {
@@ -69,24 +74,54 @@ export default function VideoPage() {
   }
 
   async function assembleVideo(s) {
+    if (assemblingRef.current) return
+    assemblingRef.current = true
     setAssembleLoading(true)
     setError('')
+
     try {
-      const res = await fetch('/api/content/video/assemble', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scriptId: s.id }) })
+      const res = await fetch('/api/content/video/assemble', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scriptId: s.id })
+      })
       const data = await res.json()
       if (data.error) throw new Error(data.error)
-      const interval = setInterval(async () => {
-        const { data: row } = await supabase.from('video_scripts').select('video_url, video_status').eq('id', s.id).single()
-        if (row && row.video_status === 'done' && row.video_url) {
-          clearInterval(interval)
-          setAssembleLoading(false)
-          setScript(prev => prev ? { ...prev, video_url: row.video_url, video_status: 'done' } : prev)
-          loadHistory()
+
+      const videoId = data.videoId
+
+      if (intervalRef.current) clearInterval(intervalRef.current)
+
+      intervalRef.current = setInterval(async () => {
+        try {
+          const r = await fetch('/api/content/video/status?videoId=' + videoId + '&scriptId=' + s.id)
+          const d = await r.json()
+
+          if (d.status === 'done') {
+            clearInterval(intervalRef.current)
+            intervalRef.current = null
+            assemblingRef.current = false
+            setAssembleLoading(false)
+            setScript(prev => prev ? { ...prev, video_url: d.videoUrl, video_status: 'done' } : prev)
+            loadHistory()
+          }
+
+          if (d.status === 'failed') {
+            clearInterval(intervalRef.current)
+            intervalRef.current = null
+            assemblingRef.current = false
+            setAssembleLoading(false)
+            setError('HeyGen rendering failed. Check your HeyGen credits.')
+          }
+        } catch (pollErr) {
+          console.error('Poll error:', pollErr)
         }
-      }, 8000)
+      }, 10000)
+
     } catch (err) {
-      setError(err.message)
+      assemblingRef.current = false
       setAssembleLoading(false)
+      setError(err.message)
     }
   }
 
@@ -94,17 +129,17 @@ export default function VideoPage() {
 
   return (
     <div style={{ padding: '32px', maxWidth: '800px', margin: '0 auto' }}>
-      <h1 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '8px' }}>Video Generator</h1>
+      <h1 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '8px', color: '#111827' }}>Video Generator</h1>
       <p style={{ color: '#6b7280', marginBottom: '24px' }}>Generate a script, voiceover, and assembled video with an AI avatar.</p>
 
       <div style={{ background: 'white', borderRadius: '12px', padding: '24px', marginBottom: '24px', border: '1px solid #e5e7eb' }}>
         <div style={{ marginBottom: '16px' }}>
-          <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Topic</label>
+          <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#111827' }}>Topic</label>
           <input type="text" value={topic} onChange={e => setTopic(e.target.value)} placeholder="e.g. Citizenship by investment" style={inputStyle} />
         </div>
         <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
           <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Platform</label>
+            <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#111827' }}>Platform</label>
             <select value={platform} onChange={e => setPlatform(e.target.value)} style={inputStyle}>
               <option>TikTok</option>
               <option>YouTube Shorts</option>
@@ -113,7 +148,7 @@ export default function VideoPage() {
             </select>
           </div>
           <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Duration</label>
+            <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#111827' }}>Duration</label>
             <select value={duration} onChange={e => setDuration(e.target.value)} style={inputStyle}>
               <option value="30">30s</option>
               <option value="60">60s</option>
@@ -143,13 +178,13 @@ export default function VideoPage() {
             <div style={{ color: '#111827' }}>{script.cta}</div>
           </div>
 
-          <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', flexWrap: 'wrap' }}>
             <button onClick={() => generateVoiceover(script)} disabled={voiceoverLoading || script.audio_status === 'done'} style={{ backgroundColor: script.audio_status === 'done' ? '#6b7280' : '#3b82f6', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', fontWeight: '600', cursor: 'pointer' }}>
               {voiceoverLoading ? 'Generating...' : script.audio_status === 'done' ? 'Voiceover Ready' : 'Generate Voiceover'}
             </button>
-            {script.audio_status === 'done' && (
-              <button onClick={() => assembleVideo(script)} disabled={assembleLoading || script.video_status === 'done'} style={{ backgroundColor: assembleLoading ? '#9ca3af' : '#8b5cf6', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', fontWeight: '600', cursor: 'pointer' }}>
-                {assembleLoading ? 'Assembling...' : script.video_status === 'done' ? 'Video Ready' : 'Assemble Video'}
+            {script.audio_status === 'done' && script.video_status !== 'done' && (
+              <button onClick={() => assembleVideo(script)} disabled={assembleLoading} style={{ backgroundColor: assembleLoading ? '#9ca3af' : '#8b5cf6', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', fontWeight: '600', cursor: assembleLoading ? 'not-allowed' : 'pointer' }}>
+                {assembleLoading ? 'Assembling...' : 'Assemble Video'}
               </button>
             )}
           </div>
@@ -159,10 +194,10 @@ export default function VideoPage() {
           )}
 
           {assembleLoading && (
-            <p style={{ color: '#f97316', fontWeight: '500' }}>Rendering video... this takes 2-4 minutes. Do not close this page.</p>
+            <p style={{ color: '#f97316', fontWeight: '500', marginBottom: '12px' }}>Rendering video... this takes 3-5 minutes. Do not close this page.</p>
           )}
 
-          {script.video_url && script.video_status === 'done' && (
+          {script.video_status === 'done' && script.video_url && (
             <video controls src={script.video_url} style={{ width: '100%', borderRadius: '8px' }} />
           )}
         </div>
@@ -170,10 +205,10 @@ export default function VideoPage() {
 
       {history.length > 0 && (
         <div style={{ background: 'white', borderRadius: '12px', padding: '24px', border: '1px solid #e5e7eb' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px' }}>History</h2>
+          <h2 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', color: '#111827' }}>History</h2>
           {history.map(h => (
             <div key={h.id} style={{ borderBottom: '1px solid #f3f4f6', paddingBottom: '12px', marginBottom: '12px' }}>
-              <div style={{ fontWeight: '600', marginBottom: '4px' }}>{h.topic}</div>
+              <div style={{ fontWeight: '600', color: '#111827', marginBottom: '4px' }}>{h.topic}</div>
               <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '8px' }}>{h.platform} · {h.duration}s · {new Date(h.created_at).toLocaleDateString()}</div>
               {h.video_url && <video controls src={h.video_url} style={{ width: '100%', borderRadius: '8px' }} />}
             </div>
@@ -183,4 +218,3 @@ export default function VideoPage() {
     </div>
   )
 }
-
