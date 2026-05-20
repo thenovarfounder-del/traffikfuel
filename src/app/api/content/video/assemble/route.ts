@@ -45,8 +45,6 @@ export async function POST(req: NextRequest) {
       dimension: { width: 1280, height: 720 }
     }
 
-    console.log('HeyGen payload:', JSON.stringify(heygenPayload, null, 2))
-
     const heygenRes = await fetch('https://api.heygen.com/v2/video/generate', {
       method: 'POST',
       headers: {
@@ -57,72 +55,59 @@ export async function POST(req: NextRequest) {
     })
 
     const heygenData = await heygenRes.json()
+    console.log('HeyGen generate response:', JSON.stringify(heygenData))
 
-    console.log('HeyGen RAW RESPONSE STATUS:', heygenRes.status)
-    console.log('HeyGen RAW RESPONSE BODY:', JSON.stringify(heygenData, null, 2))
+    const videoId = heygenData?.data?.video_id
 
-    const newVideoId = heygenData?.data?.video_id || heygenData?.video_id || null
-
-    if (!newVideoId) {
-      console.error('No video_id found in HeyGen response:', JSON.stringify(heygenData))
-      return NextResponse.json({ error: 'No video ID returned from HeyGen. Check Vercel logs.' }, { status: 500 })
+    if (!videoId) {
+      return NextResponse.json({ error: 'No video ID from HeyGen' }, { status: 500 })
     }
 
     await supabase
       .from('video_scripts')
-      .update({ video_url: null, video_status: 'rendering', status: 'assembling' })
+      .update({ video_status: 'rendering', status: 'assembling' })
       .eq('id', scriptId)
 
-    return NextResponse.json({ status: 'rendering', videoId: newVideoId })
+    let attempts = 0
+    const maxAttempts = 40
+
+    while (attempts < maxAttempts) {
+      await new Promise(resolve => setTimeout(resolve, 15000))
+      attempts++
+
+      const statusRes = await fetch('https://api.heygen.com/v1/video_status.get?video_id=' + videoId, {
+        headers: { 'X-Api-Key': HEYGEN_API_KEY! }
+      })
+
+      const statusData = await statusRes.json()
+      console.log('HeyGen status attempt ' + attempts + ':', JSON.stringify(statusData))
+
+      const status = statusData?.data?.status
+      const videoUrl = statusData?.data?.video_url
+
+      if (status === 'completed' && videoUrl) {
+        await supabase
+          .from('video_scripts')
+          .update({ video_url: videoUrl, video_status: 'done', status: 'done' })
+          .eq('id', scriptId)
+
+        return NextResponse.json({ status: 'done', videoUrl })
+      }
+
+      if (status === 'failed') {
+        await supabase
+          .from('video_scripts')
+          .update({ video_status: 'failed', status: 'failed' })
+          .eq('id', scriptId)
+
+        return NextResponse.json({ error: 'HeyGen rendering failed' }, { status: 500 })
+      }
+    }
+
+    return NextResponse.json({ error: 'Timed out waiting for video' }, { status: 500 })
 
   } catch (err: any) {
     console.error('Video assemble error:', err)
-    return NextResponse.json({ error: err.message || 'Unknown error' }, { status: 500 })
-  }
-}
-
-export async function GET(req: NextRequest) {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
-
-  try {
-    const { searchParams } = new URL(req.url)
-    const videoId = searchParams.get('renderId')
-    const scriptId = searchParams.get('scriptId')
-
-    if (!videoId || !scriptId) {
-      return NextResponse.json({ error: 'Missing videoId or scriptId' }, { status: 400 })
-    }
-
-    const statusRes = await fetch('https://api.heygen.com/v1/video_status.get?video_id=' + videoId, {
-      headers: { 'X-Api-Key': HEYGEN_API_KEY! }
-    })
-
-    const statusData = await statusRes.json()
-    console.log('HeyGen status response:', JSON.stringify(statusData, null, 2))
-
-    const videoStatus = statusData?.data?.status
-    const videoUrl = statusData?.data?.video_url
-
-    if (videoStatus === 'completed' && videoUrl) {
-      await supabase
-        .from('video_scripts')
-        .update({ video_url: videoUrl, video_status: 'done', status: 'done' })
-        .eq('id', scriptId)
-
-      return NextResponse.json({ status: 'done', videoUrl })
-    }
-
-    if (videoStatus === 'failed') {
-      return NextResponse.json({ status: 'failed' })
-    }
-
-    return NextResponse.json({ status: 'rendering' })
-
-  } catch (err: any) {
-    console.error('Video status error:', err)
     return NextResponse.json({ error: err.message || 'Unknown error' }, { status: 500 })
   }
 }
