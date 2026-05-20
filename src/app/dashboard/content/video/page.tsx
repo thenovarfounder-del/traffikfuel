@@ -84,7 +84,7 @@ export default function VideoPage() {
       const interval = setInterval(async () => {
         const r = await fetch('/api/content/video/assemble?renderId=' + renderId + '&scriptId=' + script.id)
         const d = await r.json()
-        if (d.status === 'done') {
+        if (d.status === 'succeeded') {
           clearInterval(interval)
           setAssembleLoading(false)
           setScript(prev => ({ ...prev, video_url: d.videoUrl, video_status: 'done' }))
