@@ -132,15 +132,15 @@ export default function VideoPage() {
         <div style={{ background: 'white', borderRadius: '12px', padding: '24px', marginBottom: '24px', border: '1px solid #e5e7eb' }}>
           <div style={{ background: '#fff7ed', borderRadius: '8px', padding: '16px', marginBottom: '12px' }}>
             <div style={{ fontWeight: '700', color: '#f97316', marginBottom: '6px' }}>HOOK</div>
-            <div>{script.hook}</div>
+            <div style={{ color: '#111827' }}>{script.hook}</div>
           </div>
           <div style={{ background: '#eff6ff', borderRadius: '8px', padding: '16px', marginBottom: '12px' }}>
             <div style={{ fontWeight: '700', color: '#3b82f6', marginBottom: '6px' }}>BODY</div>
-            <div>{script.body}</div>
+            <div style={{ color: '#111827' }}>{script.body}</div>
           </div>
           <div style={{ background: '#f0fdf4', borderRadius: '8px', padding: '16px', marginBottom: '16px' }}>
             <div style={{ fontWeight: '700', color: '#22c55e', marginBottom: '6px' }}>CTA</div>
-            <div>{script.cta}</div>
+            <div style={{ color: '#111827' }}>{script.cta}</div>
           </div>
 
           <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
@@ -183,3 +183,4 @@ export default function VideoPage() {
     </div>
   )
 }
+
