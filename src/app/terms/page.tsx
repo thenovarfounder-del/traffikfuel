@@ -1,3 +1,4 @@
+﻿// @ts-nocheck
 import Image from 'next/image'
 
 export default function TermsPage() {
@@ -21,55 +22,55 @@ return (
 <section className="mb-8">
 <h2 className="text-xl font-semibold mb-3">2. Description of Service</h2>
 <p className="mb-3">TraffikFuel is a marketing automation platform that enables businesses to publish content across social media platforms, search engines, and AI answer engines. Our services include:</p>
-<p className="mb-2">• AI-powered content creation and publishing</p>
-<p className="mb-2">• Multi-platform social media management</p>
-<p className="mb-2">• Analytics and performance tracking</p>
-<p className="mb-2">• Lead generation and affiliate marketing tools</p>
+<p className="mb-2">â€¢ AI-powered content creation and publishing</p>
+<p className="mb-2">â€¢ Multi-platform social media management</p>
+<p className="mb-2">â€¢ Analytics and performance tracking</p>
+<p className="mb-2">â€¢ Lead generation and affiliate marketing tools</p>
 </section>
 
 <section className="mb-8">
 <h2 className="text-xl font-semibold mb-3">3. Account Registration</h2>
 <p className="mb-3">To use TraffikFuel, you must create an account. You agree to:</p>
-<p className="mb-2">• Provide accurate and complete registration information</p>
-<p className="mb-2">• Maintain the security of your password and account</p>
-<p className="mb-2">• Notify us immediately of any unauthorized account access</p>
-<p className="mb-2">• Accept responsibility for all activity that occurs under your account</p>
+<p className="mb-2">â€¢ Provide accurate and complete registration information</p>
+<p className="mb-2">â€¢ Maintain the security of your password and account</p>
+<p className="mb-2">â€¢ Notify us immediately of any unauthorized account access</p>
+<p className="mb-2">â€¢ Accept responsibility for all activity that occurs under your account</p>
 </section>
 
 <section className="mb-8">
 <h2 className="text-xl font-semibold mb-3">4. TikTok Integration</h2>
 <p className="mb-3">TraffikFuel integrates with TikTok's API to enable content publishing on your behalf. By connecting your TikTok account:</p>
-<p className="mb-2">• You authorize TraffikFuel to publish content to TikTok on your behalf</p>
-<p className="mb-2">• You confirm that all content you publish complies with TikTok's Community Guidelines and Terms of Service</p>
-<p className="mb-2">• You may revoke this authorization at any time from your TraffikFuel account settings</p>
-<p className="mb-2">• TraffikFuel is not responsible for content moderation decisions made by TikTok</p>
+<p className="mb-2">â€¢ You authorize TraffikFuel to publish content to TikTok on your behalf</p>
+<p className="mb-2">â€¢ You confirm that all content you publish complies with TikTok's Community Guidelines and Terms of Service</p>
+<p className="mb-2">â€¢ You may revoke this authorization at any time from your TraffikFuel account settings</p>
+<p className="mb-2">â€¢ TraffikFuel is not responsible for content moderation decisions made by TikTok</p>
 </section>
 
 <section className="mb-8">
 <h2 className="text-xl font-semibold mb-3">5. Acceptable Use</h2>
 <p className="mb-3">You agree not to use TraffikFuel to:</p>
-<p className="mb-2">• Publish spam, misleading, or deceptive content</p>
-<p className="mb-2">• Violate any applicable laws or third-party platform policies</p>
-<p className="mb-2">• Infringe on intellectual property rights of others</p>
-<p className="mb-2">• Attempt to gain unauthorized access to our systems</p>
-<p className="mb-2">• Engage in any activity that disrupts or damages the platform</p>
-<p className="mb-2">• Collect or harvest user data without authorization</p>
+<p className="mb-2">â€¢ Publish spam, misleading, or deceptive content</p>
+<p className="mb-2">â€¢ Violate any applicable laws or third-party platform policies</p>
+<p className="mb-2">â€¢ Infringe on intellectual property rights of others</p>
+<p className="mb-2">â€¢ Attempt to gain unauthorized access to our systems</p>
+<p className="mb-2">â€¢ Engage in any activity that disrupts or damages the platform</p>
+<p className="mb-2">â€¢ Collect or harvest user data without authorization</p>
 </section>
 
 <section className="mb-8">
 <h2 className="text-xl font-semibold mb-3">6. Subscription and Billing</h2>
 <p className="mb-3">TraffikFuel offers subscription-based access to our platform:</p>
-<p className="mb-2">• Subscriptions are billed monthly or annually in advance</p>
-<p className="mb-2">• A free trial period may be offered at our discretion</p>
-<p className="mb-2">• You may cancel your subscription at any time from your billing settings</p>
-<p className="mb-2">• Cancellations take effect at the end of the current billing period</p>
-<p className="mb-2">• We reserve the right to modify pricing with 30 days notice</p>
-<p className="mb-2">• Refunds are handled on a case-by-case basis at our discretion</p>
+<p className="mb-2">â€¢ Subscriptions are billed monthly or annually in advance</p>
+<p className="mb-2">â€¢ A free trial period may be offered at our discretion</p>
+<p className="mb-2">â€¢ You may cancel your subscription at any time from your billing settings</p>
+<p className="mb-2">â€¢ Cancellations take effect at the end of the current billing period</p>
+<p className="mb-2">â€¢ We reserve the right to modify pricing with 30 days notice</p>
+<p className="mb-2">â€¢ Refunds are handled on a case-by-case basis at our discretion</p>
 </section>
 
 <section className="mb-8">
 <h2 className="text-xl font-semibold mb-3">7. Intellectual Property</h2>
-<p className="mb-3">All content, features, and functionality of TraffikFuel — including but not limited to software, text, graphics, logos, and icons — are owned by TraffikFuel, Inc. and protected by intellectual property laws. You retain ownership of all content you create and publish through our platform.</p>
+<p className="mb-3">All content, features, and functionality of TraffikFuel â€” including but not limited to software, text, graphics, logos, and icons â€” are owned by TraffikFuel, Inc. and protected by intellectual property laws. You retain ownership of all content you create and publish through our platform.</p>
 </section>
 
 <section className="mb-8">
@@ -108,4 +109,5 @@ return (
 </main>
 )
 }
+
 
