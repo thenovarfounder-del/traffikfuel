@@ -67,25 +67,45 @@ export default function VideoHubPage() {
       setError('Please fill in title, platform, and select a video file.')
       return
     }
+    if (!user) {
+      setError('Not logged in.')
+      return
+    }
     setError('')
     setSuccess('')
     setUploading(true)
 
-    const formData = new FormData()
-    formData.append('file', selectedFile)
-    formData.append('user_id', user.id)
-    formData.append('business_id', businessId || '')
-    formData.append('title', title)
-    formData.append('description', description)
-    formData.append('platform', platform)
-
     try {
-      const res = await fetch('/api/content/video/upload', {
-        method: 'POST',
-        body: formData
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Upload failed')
+      const fileExt = selectedFile.name.split('.').pop()
+      const fileName = user.id + '/' + Date.now() + '.' + fileExt
+
+      const { error: uploadError } = await supabase.storage
+        .from('client-videos')
+        .upload(fileName, selectedFile, {
+          contentType: selectedFile.type,
+          upsert: false
+        })
+
+      if (uploadError) throw new Error(uploadError.message)
+
+      const { data: urlData } = supabase.storage
+        .from('client-videos')
+        .getPublicUrl(fileName)
+
+      const { error: dbError } = await supabase
+        .from('client_videos')
+        .insert({
+          user_id: user.id,
+          business_id: businessId || null,
+          title,
+          description,
+          platform,
+          video_url: urlData.publicUrl,
+          enabled: true
+        })
+
+      if (dbError) throw new Error(dbError.message)
+
       setSuccess('Video uploaded successfully!')
       setTitle('')
       setDescription('')
