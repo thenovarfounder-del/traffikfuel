@@ -3,224 +3,217 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
 
-export default function VideoPage() {
-  const [userId, setUserId] = useState('')
-  const [businessId, setBusinessId] = useState('')
-  const [topic, setTopic] = useState('')
-  const [platform, setPlatform] = useState('TikTok')
-  const [duration, setDuration] = useState('60')
-  const [script, setScript] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [voiceoverLoading, setVoiceoverLoading] = useState(false)
-  const [assembleLoading, setAssembleLoading] = useState(false)
+const PLATFORMS = ['TikTok', 'YouTube Shorts', 'Instagram Reels', 'Facebook', 'LinkedIn']
+
+const PLATFORM_COLORS = {
+  'TikTok': '#010101',
+  'YouTube Shorts': '#FF0000',
+  'Instagram Reels': '#E1306C',
+  'Facebook': '#1877F2',
+  'LinkedIn': '#0A66C2',
+}
+
+export default function VideoHubPage() {
+  const [user, setUser] = useState(null)
+  const [businessId, setBusinessId] = useState(null)
+  const [videos, setVideos] = useState([])
+  const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState('')
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [platform, setPlatform] = useState(PLATFORMS[0])
+  const [selectedFile, setSelectedFile] = useState(null)
   const [error, setError] = useState('')
-  const [history, setHistory] = useState([])
-  const intervalRef = useRef(null)
-  const assemblingRef = useRef(false)
+  const [success, setSuccess] = useState('')
+  const fileInputRef = useRef(null)
 
   useEffect(() => {
-    async function load() {
+    const init = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
-      setUserId(user.id)
-      const { data: biz } = await supabase.from('business_profiles').select('id').eq('user_id', user.id).single()
-      if (biz) setBusinessId(biz.id)
-      await loadHistory(user.id)
+      setUser(user)
+      const { data: bp } = await supabase
+        .from('business_profiles')
+        .select('id')
+        .eq('user_id', user.id)
+        .single()
+      if (bp) setBusinessId(bp.id)
+      loadVideos(user.id)
     }
-    load()
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
-    }
+    init()
   }, [])
 
-  async function loadHistory(uid) {
-    const id = uid || userId
-    if (!id) return
-    const { data } = await supabase.from('video_scripts').select('*').eq('user_id', id).order('created_at', { ascending: false }).limit(10)
-    if (data) setHistory(data)
-    return data
+  const loadVideos = async (uid) => {
+    const { data } = await supabase
+      .from('client_videos')
+      .select('*')
+      .eq('user_id', uid)
+      .order('created_at', { ascending: false })
+    if (data) setVideos(data)
   }
 
-  async function generateScript() {
-    setLoading(true)
-    setError('')
-    try {
-      const res = await fetch('/api/content/video', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId, businessId, topic, platform, duration }) })
-      const data = await res.json()
-      if (data.error) throw new Error(data.error)
-      setScript(data.script || data)
-      loadHistory()
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+    if (!['video/mp4', 'video/quicktime'].includes(file.type)) {
+      setError('Only MP4 and MOV files are supported.')
+      return
     }
+    setError('')
+    setSelectedFile(file)
   }
 
-  async function generateVoiceover(s) {
-    setVoiceoverLoading(true)
-    setError('')
-    try {
-      const scriptText = s.hook + ' ' + s.body + ' ' + s.cta
-      const res = await fetch('/api/content/video/voiceover', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scriptId: s.id, scriptText }) })
-      const data = await res.json()
-      if (data.error) throw new Error(data.error)
-      setScript(prev => prev ? { ...prev, audio_url: data.audioUrl, audio_status: 'done' } : prev)
-      loadHistory()
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setVoiceoverLoading(false)
+  const handleUpload = async () => {
+    if (!selectedFile || !title || !platform) {
+      setError('Please fill in title, platform, and select a video file.')
+      return
     }
-  }
-
-  function startPolling(videoId, scriptId) {
-    if (intervalRef.current) clearInterval(intervalRef.current)
-    setAssembleLoading(true)
-
-    intervalRef.current = setInterval(async () => {
-      try {
-        const r = await fetch('/api/content/video/status?videoId=' + videoId + '&scriptId=' + scriptId)
-        const d = await r.json()
-
-        if (d.status === 'done') {
-          clearInterval(intervalRef.current)
-          intervalRef.current = null
-          assemblingRef.current = false
-          setAssembleLoading(false)
-          setScript(prev => prev ? { ...prev, video_url: d.videoUrl, video_status: 'done' } : prev)
-          loadHistory()
-        }
-
-        if (d.status === 'failed') {
-          clearInterval(intervalRef.current)
-          intervalRef.current = null
-          assemblingRef.current = false
-          setAssembleLoading(false)
-          setError('Video rendering failed. Please try again.')
-          await supabase.from('video_scripts').update({ video_status: 'failed' }).eq('id', scriptId)
-          loadHistory()
-        }
-      } catch (pollErr) {
-        console.error('Poll error:', pollErr)
-      }
-    }, 10000)
-  }
-
-  async function assembleVideo(s) {
-    if (assemblingRef.current) return
-    assemblingRef.current = true
     setError('')
+    setSuccess('')
+    setUploading(true)
+    setUploadProgress('Uploading video...')
+
+    const formData = new FormData()
+    formData.append('file', selectedFile)
+    formData.append('user_id', user.id)
+    formData.append('business_id', businessId || '')
+    formData.append('title', title)
+    formData.append('description', description)
+    formData.append('platform', platform)
 
     try {
-      const res = await fetch('/api/content/video/assemble', {
+      const res = await fetch('/api/content/video/upload', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scriptId: s.id })
+        body: formData
       })
       const data = await res.json()
-      if (data.error) throw new Error(data.error)
-
-      startPolling(data.videoId, s.id)
-
+      if (!res.ok) throw new Error(data.error || 'Upload failed')
+      setSuccess('Video uploaded successfully!')
+      setTitle('')
+      setDescription('')
+      setPlatform(PLATFORMS[0])
+      setSelectedFile(null)
+      if (fileInputRef.current) fileInputRef.current.value = ''
+      loadVideos(user.id)
     } catch (err) {
-      assemblingRef.current = false
-      setAssembleLoading(false)
       setError(err.message)
+    } finally {
+      setUploading(false)
+      setUploadProgress('')
     }
   }
 
-  const inputStyle = { width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px', backgroundColor: 'white', color: '#111827', outline: 'none' }
+  const toggleVideo = async (id, current) => {
+    await supabase.from('client_videos').update({ enabled: !current }).eq('id', id)
+    setVideos(v => v.map(x => x.id === id ? { ...x, enabled: !current } : x))
+  }
+
+  const deleteVideo = async (id) => {
+    if (!confirm('Delete this video?')) return
+    await supabase.from('client_videos').delete().eq('id', id)
+    setVideos(v => v.filter(x => x.id !== id))
+  }
 
   return (
-    <div style={{ padding: '32px', maxWidth: '800px', margin: '0 auto' }}>
-      <h1 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '8px', color: '#111827' }}>Video Generator</h1>
-      <p style={{ color: '#6b7280', marginBottom: '24px' }}>Generate a script, voiceover, and assembled video with an AI avatar.</p>
+    <div style={{ padding: '32px', maxWidth: '900px', margin: '0 auto', fontFamily: 'sans-serif' }}>
+      <h1 style={{ fontSize: '28px', fontWeight: '700', marginBottom: '4px' }}>Video Hub</h1>
+      <p style={{ color: '#6b7280', marginBottom: '32px' }}>Upload your videos. TraffikFuel handles the rest — titles, descriptions, hashtags, and captions optimized for each platform.</p>
 
-      <div style={{ background: 'white', borderRadius: '12px', padding: '24px', marginBottom: '24px', border: '1px solid #e5e7eb' }}>
+      <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '24px', marginBottom: '32px' }}>
+        <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '20px' }}>Upload a Video</h2>
+
         <div style={{ marginBottom: '16px' }}>
-          <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#111827' }}>Topic</label>
-          <input type="text" value={topic} onChange={e => setTopic(e.target.value)} placeholder="e.g. Citizenship by investment" style={inputStyle} />
+          <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Title *</label>
+          <input
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            placeholder="e.g. Behind the scenes at our shop"
+            style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box' }}
+          />
         </div>
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
-          <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#111827' }}>Platform</label>
-            <select value={platform} onChange={e => setPlatform(e.target.value)} style={inputStyle}>
-              <option>TikTok</option>
-              <option>YouTube Shorts</option>
-              <option>Instagram Reels</option>
-              <option>LinkedIn</option>
-            </select>
-          </div>
-          <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#111827' }}>Duration</label>
-            <select value={duration} onChange={e => setDuration(e.target.value)} style={inputStyle}>
-              <option value="30">30s</option>
-              <option value="60">60s</option>
-              <option value="90">90s</option>
-            </select>
-          </div>
+
+        <div style={{ marginBottom: '16px' }}>
+          <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Description (optional)</label>
+          <textarea
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            placeholder="Brief description of the video..."
+            rows={3}
+            style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', resize: 'vertical' }}
+          />
         </div>
-        <button onClick={generateScript} disabled={loading || !topic} style={{ backgroundColor: loading || !topic ? '#9ca3af' : '#f97316', color: 'white', padding: '10px 24px', borderRadius: '8px', border: 'none', fontWeight: '600', cursor: loading || !topic ? 'not-allowed' : 'pointer' }}>
-          {loading ? 'Generating...' : 'Generate Script'}
-        </button>
-      </div>
 
-      {error && <div style={{ background: '#fee2e2', color: '#dc2626', padding: '12px', borderRadius: '8px', marginBottom: '16px' }}>{error}</div>}
+        <div style={{ marginBottom: '16px' }}>
+          <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Target Platform *</label>
+          <select
+            value={platform}
+            onChange={e => setPlatform(e.target.value)}
+            style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box' }}
+          >
+            {PLATFORMS.map(p => <option key={p} value={p}>{p}</option>)}
+          </select>
+        </div>
 
-      {script && (
-        <div style={{ background: 'white', borderRadius: '12px', padding: '24px', marginBottom: '24px', border: '1px solid #e5e7eb' }}>
-          <div style={{ background: '#fff7ed', borderRadius: '8px', padding: '16px', marginBottom: '12px' }}>
-            <div style={{ fontWeight: '700', color: '#f97316', marginBottom: '6px' }}>HOOK</div>
-            <div style={{ color: '#111827' }}>{script.hook}</div>
-          </div>
-          <div style={{ background: '#eff6ff', borderRadius: '8px', padding: '16px', marginBottom: '12px' }}>
-            <div style={{ fontWeight: '700', color: '#3b82f6', marginBottom: '6px' }}>BODY</div>
-            <div style={{ color: '#111827' }}>{script.body}</div>
-          </div>
-          <div style={{ background: '#f0fdf4', borderRadius: '8px', padding: '16px', marginBottom: '16px' }}>
-            <div style={{ fontWeight: '700', color: '#22c55e', marginBottom: '6px' }}>CTA</div>
-            <div style={{ color: '#111827' }}>{script.cta}</div>
-          </div>
-
-          <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', flexWrap: 'wrap' }}>
-            <button onClick={() => generateVoiceover(script)} disabled={voiceoverLoading || script.audio_status === 'done'} style={{ backgroundColor: script.audio_status === 'done' ? '#6b7280' : '#3b82f6', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', fontWeight: '600', cursor: 'pointer' }}>
-              {voiceoverLoading ? 'Generating...' : script.audio_status === 'done' ? 'Voiceover Ready' : 'Generate Voiceover'}
-            </button>
-            {script.audio_status === 'done' && script.video_status !== 'done' && script.video_status !== 'rendering' && (
-              <button onClick={() => assembleVideo(script)} disabled={assembleLoading} style={{ backgroundColor: assembleLoading ? '#9ca3af' : '#8b5cf6', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', fontWeight: '600', cursor: assembleLoading ? 'not-allowed' : 'pointer' }}>
-                Assemble Video
-              </button>
-            )}
-          </div>
-
-          {script.audio_url && (
-            <audio controls src={script.audio_url} style={{ width: '100%', marginBottom: '16px' }} />
-          )}
-
-          {assembleLoading && (
-            <p style={{ color: '#f97316', fontWeight: '500', marginBottom: '12px' }}>Rendering video... this takes 3-5 minutes. Do not close this page.</p>
-          )}
-
-          {script.video_status === 'done' && script.video_url && (
-            <div>
-              <div style={{ fontWeight: '600', marginBottom: '8px', color: '#111827' }}>Your Video</div>
-              <video controls src={script.video_url} style={{ width: '100%', borderRadius: '8px' }} />
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Video File * (MP4 or MOV)</label>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="video/mp4,video/quicktime"
+            onChange={handleFileChange}
+            style={{ fontSize: '14px' }}
+          />
+          {selectedFile && (
+            <div style={{ marginTop: '8px', fontSize: '13px', color: '#6b7280' }}>
+              Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(1)} MB)
             </div>
           )}
         </div>
-      )}
 
-      {history.length > 0 && (
-        <div style={{ background: 'white', borderRadius: '12px', padding: '24px', border: '1px solid #e5e7eb' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', color: '#111827' }}>History</h2>
-          {history.map(h => (
-            <div key={h.id} style={{ borderBottom: '1px solid #f3f4f6', paddingBottom: '16px', marginBottom: '16px' }}>
-              <div style={{ fontWeight: '600', color: '#111827', marginBottom: '4px' }}>{h.topic}</div>
-              <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '8px' }}>{h.platform} · {h.duration}s · {new Date(h.created_at).toLocaleDateString()}</div>
-              {h.video_url && (
-                <video controls src={h.video_url} style={{ width: '100%', borderRadius: '8px' }} />
-              )}
+        {error && <div style={{ background: '#fee2e2', color: '#dc2626', padding: '10px 14px', borderRadius: '8px', marginBottom: '16px', fontSize: '14px' }}>{error}</div>}
+        {success && <div style={{ background: '#dcfce7', color: '#16a34a', padding: '10px 14px', borderRadius: '8px', marginBottom: '16px', fontSize: '14px' }}>{success}</div>}
+
+        <button
+          onClick={handleUpload}
+          disabled={uploading}
+          style={{ background: uploading ? '#9ca3af' : '#E8610A', color: 'white', border: 'none', borderRadius: '8px', padding: '12px 24px', fontSize: '15px', fontWeight: '600', cursor: uploading ? 'not-allowed' : 'pointer' }}
+        >
+          {uploading ? uploadProgress || 'Uploading...' : 'Upload Video'}
+        </button>
+      </div>
+
+      <h2 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '16px' }}>Your Video Library</h2>
+
+      {videos.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '48px', color: '#9ca3af', border: '2px dashed #e5e7eb', borderRadius: '12px' }}>
+          No videos uploaded yet. Upload your first video above!
+        </div>
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
+          {videos.map(v => (
+            <div key={v.id} style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', overflow: 'hidden' }}>
+              <video src={v.video_url} style={{ width: '100%', height: '160px', objectFit: 'cover', background: '#000' }} muted />
+              <div style={{ padding: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <span style={{ background: PLATFORM_COLORS[v.platform] || '#6b7280', color: 'white', fontSize: '11px', fontWeight: '600', padding: '2px 8px', borderRadius: '20px' }}>{v.platform}</span>
+                </div>
+                <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '4px' }}>{v.title}</div>
+                {v.description && <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '10px' }}>{v.description}</div>}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <button
+                    onClick={() => toggleVideo(v.id, v.enabled)}
+                    style={{ background: v.enabled ? '#dcfce7' : '#f3f4f6', color: v.enabled ? '#16a34a' : '#6b7280', border: 'none', borderRadius: '6px', padding: '4px 10px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+                  >
+                    {v.enabled ? 'ON' : 'OFF'}
+                  </button>
+                  <button
+                    onClick={() => deleteVideo(v.id)}
+                    style={{ background: '#fee2e2', color: '#dc2626', border: 'none', borderRadius: '6px', padding: '4px 10px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
             </div>
           ))}
         </div>

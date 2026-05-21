@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     }
 
     const fileExt = file.name.split('.').pop()
-    const fileName = `${user_id}/${Date.now()}.${fileExt}`
+    const fileName = user_id + '/' + Date.now() + '.' + fileExt
     const arrayBuffer = await file.arrayBuffer()
     const buffer = new Uint8Array(arrayBuffer)
 
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ success: true, video: record })
-  } catch (err: any) {
+  } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }
