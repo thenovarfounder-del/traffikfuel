@@ -27,7 +27,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { href: '/dashboard/content/authority', label: 'Authority Content' },
     { href: '/dashboard/content/citations', label: 'Citation Tracker' },
     { href: '/dashboard/content/reddit', label: 'Reddit Amplifier' },
-    { href: '/dashboard/content/video', label: 'Video Scripts' },
+    { href: '/dashboard/content/video', label: 'Video Hub' },
+    { href: '/dashboard/content/tiktok', label: 'TikTok' },
     { href: '/dashboard/onboarding', label: 'Onboarding' },
     { href: '/dashboard/settings', label: 'Settings' },
     { href: '/dashboard/account', label: 'Account' },
@@ -46,7 +47,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const sidebar = (
     <div className="flex flex-col h-full bg-gray-900 border-r border-gray-800 w-64 p-4">
       <div className="mb-6">
-        <span className="text-white font-bold text-xl">TraffikFuel</span>
+        <span className="text-white font-bold text-xl">Traffikora</span>
       </div>
       <nav className="flex-1 space-y-1 overflow-y-auto">
         {links.map((link) => (
@@ -82,7 +83,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Mobile header */}
         <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-gray-800">
-          <span className="text-white font-bold">TraffikFuel</span>
+          <span className="text-white font-bold">Traffikora</span>
           <button onClick={() => setMobileOpen(true)} className="text-gray-400 hover:text-white">
             ?
           </button>
