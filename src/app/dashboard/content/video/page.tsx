@@ -18,10 +18,9 @@ export default function VideoHubPage() {
   const [businessId, setBusinessId] = useState(null)
   const [videos, setVideos] = useState([])
   const [uploading, setUploading] = useState(false)
-  const [uploadProgress, setUploadProgress] = useState('')
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const [platform, setPlatform] = useState(PLATFORMS[0])
+  const [platform, setPlatform] = useState('TikTok')
   const [selectedFile, setSelectedFile] = useState(null)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
@@ -71,7 +70,6 @@ export default function VideoHubPage() {
     setError('')
     setSuccess('')
     setUploading(true)
-    setUploadProgress('Uploading video...')
 
     const formData = new FormData()
     formData.append('file', selectedFile)
@@ -91,7 +89,7 @@ export default function VideoHubPage() {
       setSuccess('Video uploaded successfully!')
       setTitle('')
       setDescription('')
-      setPlatform(PLATFORMS[0])
+      setPlatform('TikTok')
       setSelectedFile(null)
       if (fileInputRef.current) fileInputRef.current.value = ''
       loadVideos(user.id)
@@ -99,7 +97,6 @@ export default function VideoHubPage() {
       setError(err.message)
     } finally {
       setUploading(false)
-      setUploadProgress('')
     }
   }
 
@@ -115,53 +112,54 @@ export default function VideoHubPage() {
   }
 
   return (
-    <div style={{ padding: '32px', maxWidth: '900px', margin: '0 auto', fontFamily: 'sans-serif' }}>
-      <h1 style={{ fontSize: '28px', fontWeight: '700', marginBottom: '4px' }}>Video Hub</h1>
-      <p style={{ color: '#6b7280', marginBottom: '32px' }}>Upload your videos. TraffikFuel handles the rest — titles, descriptions, hashtags, and captions optimized for each platform.</p>
+    <div style={{ padding: '32px', maxWidth: '900px', margin: '0 auto', fontFamily: 'sans-serif', color: '#111' }}>
+      <h1 style={{ fontSize: '28px', fontWeight: '700', marginBottom: '4px', color: '#111' }}>Video Hub</h1>
+      <p style={{ color: '#6b7280', marginBottom: '32px' }}>Upload your videos. Traffikora handles the rest — titles, descriptions, hashtags, and captions optimized for each platform.</p>
 
-      <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '24px', marginBottom: '32px' }}>
-        <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '20px' }}>Upload a Video</h2>
+      <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '24px', marginBottom: '32px' }}>
+        <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '20px', color: '#111' }}>Upload a Video</h2>
 
         <div style={{ marginBottom: '16px' }}>
-          <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Title *</label>
+          <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#111' }}>Title *</label>
           <input
+            type="text"
             value={title}
             onChange={e => setTitle(e.target.value)}
             placeholder="e.g. Behind the scenes at our shop"
-            style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box' }}
+            style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', color: '#111', background: '#fff' }}
           />
         </div>
 
         <div style={{ marginBottom: '16px' }}>
-          <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Description (optional)</label>
+          <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#111' }}>Description (optional)</label>
           <textarea
             value={description}
             onChange={e => setDescription(e.target.value)}
             placeholder="Brief description of the video..."
             rows={3}
-            style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', resize: 'vertical' }}
+            style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', color: '#111', background: '#fff', resize: 'vertical' }}
           />
         </div>
 
         <div style={{ marginBottom: '16px' }}>
-          <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Target Platform *</label>
+          <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#111' }}>Target Platform *</label>
           <select
             value={platform}
             onChange={e => setPlatform(e.target.value)}
-            style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box' }}
+            style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', color: '#111', background: '#fff' }}
           >
             {PLATFORMS.map(p => <option key={p} value={p}>{p}</option>)}
           </select>
         </div>
 
         <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Video File * (MP4 or MOV)</label>
+          <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#111' }}>Video File * (MP4 or MOV)</label>
           <input
             ref={fileInputRef}
             type="file"
             accept="video/mp4,video/quicktime"
             onChange={handleFileChange}
-            style={{ fontSize: '14px' }}
+            style={{ fontSize: '14px', color: '#111' }}
           />
           {selectedFile && (
             <div style={{ marginTop: '8px', fontSize: '13px', color: '#6b7280' }}>
@@ -178,11 +176,11 @@ export default function VideoHubPage() {
           disabled={uploading}
           style={{ background: uploading ? '#9ca3af' : '#E8610A', color: 'white', border: 'none', borderRadius: '8px', padding: '12px 24px', fontSize: '15px', fontWeight: '600', cursor: uploading ? 'not-allowed' : 'pointer' }}
         >
-          {uploading ? uploadProgress || 'Uploading...' : 'Upload Video'}
+          {uploading ? 'Uploading...' : 'Upload Video'}
         </button>
       </div>
 
-      <h2 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '16px' }}>Your Video Library</h2>
+      <h2 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '16px', color: '#111' }}>Your Video Library</h2>
 
       {videos.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '48px', color: '#9ca3af', border: '2px dashed #e5e7eb', borderRadius: '12px' }}>
@@ -197,7 +195,7 @@ export default function VideoHubPage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                   <span style={{ background: PLATFORM_COLORS[v.platform] || '#6b7280', color: 'white', fontSize: '11px', fontWeight: '600', padding: '2px 8px', borderRadius: '20px' }}>{v.platform}</span>
                 </div>
-                <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '4px' }}>{v.title}</div>
+                <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '4px', color: '#111' }}>{v.title}</div>
                 {v.description && <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '10px' }}>{v.description}</div>}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <button
