@@ -19,7 +19,7 @@ export default function HomePage() {
   return (
     <main>
       <style>{`
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0}#crisp-chatbox{display:none!important;}#crisp-chatbox{display:none!important;}
 html{scroll-behavior:smooth}
 body{background:#fff;color:#111;font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden}
 nav{display:flex;align-items:center;justify-content:space-between;padding:18px 60px;border-bottom:2.5px solid #111;background:#fff;position:sticky;top:0;z-index:200}
