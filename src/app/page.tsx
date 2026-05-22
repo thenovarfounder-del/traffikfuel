@@ -158,10 +158,10 @@ footer{background:#111;padding:48px 60px;display:flex;align-items:flex-start;jus
 .footer-logo{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#fff}
 .footer-logo span{color:#E8610A}
 .footer-domain{font-size:13px;color:#444;margin-top:6px}
-.footer-copy{font-size:13px;color:#555;line-height:1.9;text-align:center}
+.footer-copy{font-size:13px;color:#aaa;line-height:1.9;text-align:left}
 .footer-copy a{color:#E8610A;text-decoration:none}
-.footer-links{display:flex;flex-direction:column;gap:10px;align-items:flex-end}
-.footer-links a{font-size:14px;color:#888;text-decoration:none;font-weight:500}
+.footer-links{display:flex;flex-direction:row;gap:24px;align-items:center}
+.footer-links a{font-size:13px;color:#aaa;text-decoration:none;font-weight:500}
 .footer-links a:hover{color:#fff}
 @media(max-width:900px){
 .nav-links,.nav-btns{display:none}
