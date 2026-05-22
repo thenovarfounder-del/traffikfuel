@@ -132,7 +132,7 @@ export default function PrivacyPage() {
             <p>We share your information only in the following limited circumstances:</p>
             <ul>
               <li><strong>Service Providers:</strong> Trusted third-party vendors who help us operate our platform — including Supabase (database), Vercel (hosting), Stripe (payments), Resend (email), and Twilio (SMS). These providers are bound by confidentiality agreements and may not use your data for any other purpose.</li>
-              <li><strong>Connected Platforms:</strong> When you authorize Traffikora to post on your behalf, we share relevant content with the platforms you've connected (Google, Meta, TikTok, etc.).</li>
+              <li><strong>Connected Platforms:</strong> When you authorize Traffikora to post on your behalf, we share relevant content with the platforms you have connected (Google, Meta, TikTok, etc.).</li>
               <li><strong>Legal Requirements:</strong> If required by law, court order, or governmental authority.</li>
               <li><strong>Business Transfers:</strong> In the event of a merger, acquisition, or sale of assets, your data may be transferred. We will notify you before this occurs.</li>
             </ul>
@@ -162,7 +162,7 @@ export default function PrivacyPage() {
             <ul>
               <li><strong>Access:</strong> Request a copy of the personal data we hold about you.</li>
               <li><strong>Correction:</strong> Request that we correct inaccurate or incomplete information.</li>
-              <li><strong>Deletion:</strong> Request that we delete your personal data ("right to be forgotten").</li>
+              <li><strong>Deletion:</strong> Request that we delete your personal data.</li>
               <li><strong>Portability:</strong> Request your data in a portable, machine-readable format.</li>
               <li><strong>Objection:</strong> Object to certain types of processing, including direct marketing.</li>
               <li><strong>Restriction:</strong> Request that we limit how we use your data in certain circumstances.</li>
