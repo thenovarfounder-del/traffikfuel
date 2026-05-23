@@ -1,10 +1,20 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Social Media Automation | Traffikora',
-  description: 'Traffikora creates and publishes social media content to every platform automatically. Facebook, Instagram, TikTok, LinkedIn, Twitter/X — set it once, post forever.',
+  title: 'Social Media Automation for Small Businesses | Traffikora',
+  description: 'Automate social media posting across every platform. Traffikora creates and schedules content for you forever. Free 7-day trial, no credit card needed.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({"@context":"https://schema.org","@type":"SoftwareApplication","name":"Traffikora","url":"https://www.traffikora.com","applicationCategory":"BusinessApplication","description":"Traffikora is an AI-powered marketing automation platform for small businesses. It automates social media, local SEO, Google Business Profile, and AI engine optimization.","offers":{"@type":"Offer","price":"97","priceCurrency":"USD"},"operatingSystem":"Web","provider":{"@type":"Organization","name":"Traffikora","url":"https://www.traffikora.com"}})
+        }}
+      />
+      {children}
+    </>
+  )
 }

@@ -1,10 +1,20 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'FAQ | Traffikora',
-  description: 'Answers to the most common questions about Traffikora — features, pricing, how it works, and what makes it different from agencies and other marketing tools.',
+  title: 'FAQ — Traffikora Marketing Automation Platform',
+  description: 'Got questions about Traffikora? Find answers about pricing, features, AI engine optimization, and how it all works. Start your free 7-day trial today.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({"@context":"https://schema.org","@type":"SoftwareApplication","name":"Traffikora","url":"https://www.traffikora.com","applicationCategory":"BusinessApplication","description":"Traffikora is an AI-powered marketing automation platform for small businesses. It automates social media, local SEO, Google Business Profile, and AI engine optimization.","offers":{"@type":"Offer","price":"97","priceCurrency":"USD"},"operatingSystem":"Web","provider":{"@type":"Organization","name":"Traffikora","url":"https://www.traffikora.com"}})
+        }}
+      />
+      {children}
+    </>
+  )
 }

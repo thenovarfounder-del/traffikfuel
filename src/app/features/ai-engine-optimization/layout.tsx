@@ -1,10 +1,20 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'AI Engine Optimization | Traffikora',
-  description: 'Get your business found in ChatGPT, Perplexity, Gemini, Claude, Copilot, and Google AI Overviews. Traffikora is the only platform that optimizes for every AI search engine.',
+  title: 'AI Engine Optimization for Small Businesses | Traffikora',
+  description: 'Get your business found on ChatGPT, Perplexity, Gemini, and Google AI. Traffikora automates AI engine optimization. Free 7-day trial.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({"@context":"https://schema.org","@type":"SoftwareApplication","name":"Traffikora","url":"https://www.traffikora.com","applicationCategory":"BusinessApplication","description":"Traffikora is an AI-powered marketing automation platform for small businesses. It automates social media, local SEO, Google Business Profile, and AI engine optimization.","offers":{"@type":"Offer","price":"97","priceCurrency":"USD"},"operatingSystem":"Web","provider":{"@type":"Organization","name":"Traffikora","url":"https://www.traffikora.com"}})
+        }}
+      />
+      {children}
+    </>
+  )
 }
