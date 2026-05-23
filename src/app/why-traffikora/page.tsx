@@ -150,7 +150,7 @@ export default function WhyTraffikoraPage() {
                 </div>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
                   <span style={{ color: '#E8610A', fontSize: '18px', marginTop: '2px' }}>✓</span>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#ccc', lineHeight: 1.5 }}>ChatGPT, Perplexity, Gemini cite your business</p>
+                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#ccc', lineHeight: 1.5 }}>ChatGPT, Perplexity, Gemini, Claude cite your business</p>
                 </div>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
                   <span style={{ color: '#E8610A', fontSize: '18px', marginTop: '2px' }}>✓</span>
