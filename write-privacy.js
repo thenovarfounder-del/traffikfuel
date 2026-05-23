@@ -1,4 +1,5 @@
-// @ts-nocheck
+const fs = require('fs');
+const content = `// @ts-nocheck
 'use client'
 
 import { useEffect } from 'react'
@@ -7,7 +8,7 @@ export default function PrivacyPage() {
   useEffect(() => { window.scrollTo(0, 0) }, [])
   return (
     <main style={{fontFamily:"'DM Sans',sans-serif",color:'#111',background:'#fff',minHeight:'100vh'}}>
-      <style>{`
+      <style>{\`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
         .pp-hero{background:#111;padding:90px 24px 70px;text-align:center}
         .pp-hero h1{font-family:'Playfair Display',serif;font-size:52px;font-weight:700;color:#fff;margin:0 0 16px;letter-spacing:-1px}
@@ -36,7 +37,7 @@ export default function PrivacyPage() {
         .pp-dark b{color:#fff}
         a{color:#E8610A;text-decoration:none}
         a:hover{text-decoration:underline}
-      `}</style>
+      \`}</style>
 
       <div className='pp-hero'>
         <h1>Privacy Policy</h1>
@@ -188,3 +189,6 @@ export default function PrivacyPage() {
     </main>
   )
 }
+`;
+fs.writeFileSync('C:/Users/randy/traffikfuel/src/app/privacy/page.tsx', content, {encoding:'utf8'});
+console.log('Privacy page written successfully');
