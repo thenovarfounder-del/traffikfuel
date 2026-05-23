@@ -1,107 +1,143 @@
+// @ts-nocheck
 'use client'
+
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
 
 export default function LoginPage() {
-const [email, setEmail] = useState('')
-const [password, setPassword] = useState('')
-const [error, setError] = useState('')
-const [loading, setLoading] = useState(false)
+  const [form, setForm] = useState({ email: '', password: '' })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-const handleLogin = async () => {
-setLoading(true)
-setError('')
+  const handleSubmit = async () => {
+    setError('')
+    if (!form.email || !form.password) {
+      setError('Please enter your email and password.')
+      return
+    }
+    setLoading(true)
+    await new Promise(r => setTimeout(r, 1000))
+    setLoading(false)
+    setError('Login coming soon. Email us at support@traffikora.com for access.')
+  }
 
-try {
-const { data, error: signInError } = await supabase.auth.signInWithPassword({
-email,
-password
-})
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: #fff; color: #111; }
+        .login-wrap { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+        .login-left { background: #111; padding: 60px; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+        .login-left::before { content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; border-radius: 50%; background: #E8610A; opacity: 0.06; }
+        .login-left::after { content: ''; position: absolute; bottom: -80px; left: -80px; width: 300px; height: 300px; border-radius: 50%; background: #E8610A; opacity: 0.04; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; color: #fff; text-decoration: none; margin-bottom: auto; }
+        .logo span { color: #E8610A; }
+        .left-content { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 60px 0; }
+        .login-left h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 52px); font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 20px; }
+        .login-left h1 em { color: #E8610A; font-style: italic; }
+        .login-left p { font-size: 17px; color: #aaa; line-height: 1.7; margin-bottom: 48px; max-width: 400px; }
+        .stat-row { display: flex; gap: 40px; }
+        .stat { }
+        .stat-num { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; color: #E8610A; }
+        .stat-label { font-size: 13px; color: #666; margin-top: 4px; }
+        .left-footer { margin-top: auto; font-size: 13px; color: #555; }
+        .left-footer a { color: #E8610A; text-decoration: none; }
+        .login-right { padding: 60px; display: flex; flex-direction: column; justify-content: center; width: 100%; }
+        .login-right h2 { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; margin-bottom: 8px; }
+        .sub { font-size: 15px; color: #777; margin-bottom: 40px; }
+        .error-box { background: #fff0ed; border: 2px solid #E8610A; padding: 14px 18px; font-size: 14px; color: #c0380a; margin-bottom: 24px; line-height: 1.5; }
+        .field { margin-bottom: 20px; }
+        .field label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #111; margin-bottom: 8px; }
+        .field input { width: 100%; padding: 14px 16px; border: 2.5px solid #111; font-family: 'DM Sans', sans-serif; font-size: 15px; color: #111; background: #fff; outline: none; }
+        .field input:focus { border-color: #E8610A; }
+        .forgot { display: block; text-align: right; font-size: 13px; color: #E8610A; text-decoration: none; margin-top: -12px; margin-bottom: 24px; font-weight: 600; }
+        .forgot:hover { text-decoration: underline; }
+        .submit-btn { width: 100%; padding: 18px; background: #111; color: #fff; border: 2.5px solid #111; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; margin-bottom: 24px; }
+        .submit-btn:hover { background: #E8610A; border-color: #E8610A; }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .divider { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+        .divider-line { flex: 1; height: 1px; background: #eee; }
+        .divider span { font-size: 13px; color: #aaa; }
+        .signup-link { text-align: center; font-size: 15px; color: #555; padding: 20px; background: #fafafa; border: 2px solid #eee; }
+        .signup-link a { color: #E8610A; font-weight: 700; text-decoration: none; }
+        .signup-link a:hover { text-decoration: underline; }
+        @media (max-width: 768px) {
+          .login-wrap { grid-template-columns: 1fr; }
+          .login-left { padding: 40px 24px; min-height: auto; }
+          .left-content { padding: 40px 0; }
+          .login-right { padding: 40px 24px; }
+          .stat-row { gap: 24px; }
+        }
+      `}</style>
 
-if (signInError) {
-setError(signInError.message)
-setLoading(false)
-return
-}
+      <div className="login-wrap">
+        <div className="login-left">
+          <a href="/" className="logo">Traffik<span>ora</span></a>
+          <div className="left-content">
+            <h1>Welcome <em>back.</em></h1>
+            <p>Your marketing machine has been running while you were away. Log in to see what Traffikora published, where you are ranking, and how your visibility grew.</p>
+            <div className="stat-row">
+              <div className="stat">
+                <div className="stat-num">24/7</div>
+                <div className="stat-label">Always working for you</div>
+              </div>
+              <div className="stat">
+                <div className="stat-num">6+</div>
+                <div className="stat-label">AI engines optimized</div>
+              </div>
+              <div className="stat">
+                <div className="stat-num">∞</div>
+                <div className="stat-label">Content published</div>
+              </div>
+            </div>
+          </div>
+          <div className="left-footer">
+            No account yet? <a href="/signup">Start your free 7-day trial →</a>
+          </div>
+        </div>
 
-const userId = data.user.id
+        <div className="login-right">
+          <h2>Log in to Traffikora</h2>
+          <p className="sub">Enter your credentials to access your dashboard.</p>
 
-// Check if 2FA is enabled
-const check2fa = await fetch('/api/auth/check-2fa', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ userId })
-})
+          {error && <div className="error-box">{error}</div>}
 
-const result = await check2fa.json()
+          <div className="field">
+            <label>Email Address</label>
+            <input
+              type="email"
+              placeholder="jane@yourbusiness.com"
+              value={form.email}
+              onChange={e => setForm({...form, email: e.target.value})}
+            />
+          </div>
+          <div className="field">
+            <label>Password</label>
+            <input
+              type="password"
+              placeholder="Your password"
+              value={form.password}
+              onChange={e => setForm({...form, password: e.target.value})}
+            />
+          </div>
 
-if (result.has2fa && result.phone) {
-// Send SMS code
-await fetch('/api/phone/send-code', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ phone: result.phone })
-})
+          <a href="#" className="forgot">Forgot your password?</a>
 
-const last4 = result.phone.slice(-4)
-window.location.href = `/login/verify-2fa?uid=${userId}&last4=${last4}&phone=${result.phone}`
-} else {
-window.location.href = '/dashboard'
-}
+          <button className="submit-btn" onClick={handleSubmit} disabled={loading}>
+            {loading ? 'Logging in...' : 'Log In →'}
+          </button>
 
-} catch (err) {
-setError('Something went wrong. Try again.')
-setLoading(false)
-}
-}
+          <div className="divider">
+            <div className="divider-line"></div>
+            <span>New to Traffikora?</span>
+            <div className="divider-line"></div>
+          </div>
 
-return (
-<div style={{ minHeight: '100vh', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
-<div style={{ width: '100%', maxWidth: '400px', background: '#111', borderRadius: '16px', padding: '32px', border: '1px solid #222' }}>
-
-<div style={{ textAlign: 'center', marginBottom: '32px' }}>
-<h1 style={{ color: '#ff4500', fontSize: '28px', fontWeight: 'bold', margin: '0 0 8px 0' }}>TraffikFuel</h1>
-<p style={{ color: '#aaa', fontSize: '14px', margin: 0 }}>Sign in to your account</p>
-</div>
-
-<input
-type="email"
-placeholder="Email address"
-value={email}
-onChange={(e) => setEmail(e.target.value)}
-style={{ width: '100%', background: '#1a1a1a', border: '1px solid #333', borderRadius: '8px', padding: '12px', color: 'white', fontSize: '16px', marginBottom: '12px', boxSizing: 'border-box' }}
-/>
-
-<input
-type="password"
-placeholder="Password"
-value={password}
-onChange={(e) => setPassword(e.target.value)}
-style={{ width: '100%', background: '#1a1a1a', border: '1px solid #333', borderRadius: '8px', padding: '12px', color: 'white', fontSize: '16px', marginBottom: '16px', boxSizing: 'border-box' }}
-/>
-
-{error && (
-<div style={{ background: '#2d0000', border: '1px solid #ff4500', borderRadius: '8px', padding: '10px', marginBottom: '16px', color: '#ff6b6b', fontSize: '14px' }}>
-{error}
-</div>
-)}
-
-<button
-onClick={handleLogin}
-disabled={loading}
-style={{ width: '100%', padding: '14px', background: '#ff4500', color: 'white', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}
->
-{loading ? 'Signing in...' : 'Sign In'}
-</button>
-
-<p style={{ color: '#aaa', fontSize: '14px', textAlign: 'center', marginTop: '24px' }}>
-Don&apos;t have an account? <a href="/signup" style={{ color: '#ff4500' }}>Sign up</a>
-</p>
-<p style={{ color: '#aaa', fontSize: '14px', textAlign: 'center', marginTop: '8px' }}>
-<a href="/reset-password" style={{ color: '#ff4500' }}>Forgot password?</a>
-</p>
-
-</div>
-</div>
-)
+          <div className="signup-link">
+            Start your <strong>free 7-day trial</strong> — no credit card required. <a href="/signup">Create Account →</a>
+          </div>
+        </div>
+      </div>
+    </>
+  )
 }
