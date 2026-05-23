@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Social Media Automation for Small Business | Traffikora',
-  description: 'Traffikora automatically optimizes and manages your Google Business Profile — posts, reviews, photos, and keywords — so you rank higher in local search. Start free.',
+  title: 'Social Media Automation | Traffikora',
+  description: 'Traffikora creates and publishes social media content to every platform automatically. Facebook, Instagram, TikTok, LinkedIn, Twitter/X — set it once, post forever.',
 }
 
-export default function GBPLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }
