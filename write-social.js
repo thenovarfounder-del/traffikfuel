@@ -1,13 +1,43 @@
 const fs = require('fs');
 
-const page = `// @ts-nocheck
+const content = `// @ts-nocheck
 'use client'
 
 import Link from 'next/link'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
-export default function MarketingAgenciesPage() {
+const features = [
+  { title: 'Google Business Profile', desc: 'We keep your listing updated with fresh posts, accurate hours, services, and photos every single week.' },
+  { title: 'Local SEO Automation', desc: 'Rank higher when patients search dentist near me. We optimize your local presence across every directory.' },
+  { title: 'AI Engine Optimization', desc: 'When patients ask ChatGPT or Perplexity for a dentist, Traffikora helps your practice get recommended.' },
+  { title: 'Social Media Posting', desc: 'We create and publish dental tips, promotions, and practice content to Facebook, Instagram, and more.' },
+  { title: 'Review Management', desc: 'We help you collect more 5-star reviews and respond automatically to protect your online reputation.' },
+  { title: 'Blog & Content Creation', desc: 'SEO-optimized blog posts published to your site every month without you writing a single word.' },
+];
+
+const steps = [
+  { step: '01', title: 'Connect your accounts', desc: 'Link your Google Business Profile, social media, and website in minutes. No tech skills needed.' },
+  { step: '02', title: 'We learn your practice', desc: 'Traffikora reads your services, location, and brand voice to create content that sounds like you.' },
+  { step: '03', title: 'Marketing runs automatically', desc: 'Posts go out, SEO updates happen, AI engines get fed every day without you lifting a finger.' },
+  { step: '04', title: 'New patients find you', desc: 'Your practice shows up on Google, in AI answers, and on social and your phone starts ringing.' },
+];
+
+const problems = [
+  'Your Google Business Profile goes stale',
+  'Competitors outrank you in local search',
+  'AI engines recommend practices with more content',
+  'Social media goes weeks without a post',
+  'New patients choose someone else',
+];
+
+const testimonials = [
+  { quote: 'We went from 12 Google reviews to 94 in four months. New patient calls doubled. I did not change a thing — Traffikora just ran.', name: 'Dr. Sandra M.', practice: 'Family Dentistry, Austin TX' },
+  { quote: 'I used to spend my Sunday nights writing social posts. Now I do not touch it. Traffikora handles everything and our online presence has never been stronger.', name: 'Dr. James T.', practice: 'Cosmetic Dental Studio, Denver CO' },
+  { quote: 'Our practice started showing up when people asked AI assistants for dentists near us. That never happened before Traffikora.', name: 'Dr. Priya K.', practice: 'Smile Dental Group, Atlanta GA' },
+];
+
+export default function DentistsPage() {
   return (
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,122 +45,80 @@ export default function MarketingAgenciesPage() {
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
       <Nav />
 
-      {/* HERO */}
       <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>For Marketing Agencies</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Deliver better results for every client. Without hiring more staff.</h1>
-        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto 40px' }}>Traffikora is the white-label marketing automation platform agencies use to scale client results across social media, local SEO, Google Business Profile, and AI engine optimization — automatically.</p>
-        <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free 7-Day Trial</Link>
-          <Link href="/pricing" style={{ background: 'transparent', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>See Pricing</Link>
-        </div>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>For Dental Practices</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Your dental practice, marketed automatically.</h1>
+        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto 40px' }}>Traffikora handles your Google Business Profile, local SEO, social media, and AI engine visibility so you can focus on patients, not marketing.</p>
+        <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free 7-Day Trial</Link>
       </section>
 
-      {/* STATS */}
-      <section style={{ background: '#111', padding: '0 32px 80px' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
-          <div style={{ textAlign: 'center', padding: '40px 24px', border: '2.5px solid #333' }}>
-            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '56px', fontWeight: 900, color: '#E8610A', lineHeight: 1, marginBottom: '12px' }}>10x</p>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#ccc', lineHeight: 1.6 }}>more clients manageable per team member with AI automation</p>
-          </div>
-          <div style={{ textAlign: 'center', padding: '40px 24px', border: '2.5px solid #333' }}>
-            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '56px', fontWeight: 900, color: '#E8610A', lineHeight: 1, marginBottom: '12px' }}>60%</p>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#ccc', lineHeight: 1.6 }}>reduction in content production time using AI marketing tools</p>
-          </div>
-          <div style={{ textAlign: 'center', padding: '40px 24px', border: '2.5px solid #333' }}>
-            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '56px', fontWeight: 900, color: '#E8610A', lineHeight: 1, marginBottom: '12px' }}>3x</p>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#ccc', lineHeight: 1.6 }}>higher client retention when results are consistent and automated</p>
-          </div>
-        </div>
-      </section>
-
-      {/* WHY AGENCIES USE TRAFFIKORA */}
       <section style={{ background: '#fff', padding: '80px 32px', borderBottom: '2.5px solid #111' }}>
+        <div style={{ maxWidth: '1060px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', alignItems: 'center' }}>
+          <div>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>The Problem</p>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, lineHeight: 1.15, marginBottom: '24px', color: '#111' }}>Patients search online first. Most dental practices are invisible.</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.7, marginBottom: '16px' }}>When someone needs a dentist, they ask Google or an AI. If your practice is not showing up with great reviews, updated hours, and consistent content, they book your competitor.</p>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.7 }}>Most dentists do not have time to post on social media, respond to reviews, update their Google listing, and optimize for AI search engines. Traffikora does all of it automatically.</p>
+          </div>
+          <div style={{ background: '#f7f7f7', border: '2.5px solid #111', padding: '40px', borderRadius: '2px' }}>
+            {problems.map((item, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', marginBottom: '20px' }}>
+                <span style={{ color: '#E8610A', fontSize: '20px', fontWeight: 900, lineHeight: 1 }}>x</span>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#333', lineHeight: 1.5, margin: 0 }}>{item}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ background: '#f7f7f7', padding: '80px 32px', borderBottom: '2.5px solid #111' }}>
         <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px', textAlign: 'center' }}>Why Agencies Use Traffikora</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 700, color: '#111', textAlign: 'center', marginBottom: '48px' }}>Scale delivery. Increase margins. Keep clients longer.</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Automated Content at Scale</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Traffikora creates and publishes social media content for all your clients simultaneously — no writers, no designers, no bottlenecks.</p>
-            </div>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Local SEO for Every Client</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Citation building, keyword tracking, and schema markup run automatically across your entire client base — delivering consistent SEO results without manual effort.</p>
-            </div>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>GBP Management at Scale</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Weekly GBP posts, review responses, and profile optimization handled for every client — automatically, with no per-client overhead.</p>
-            </div>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>AI Engine Optimization</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Offer your clients something no other agency can — optimization for ChatGPT, Perplexity, Gemini, Claude, and Google AI Overviews. This is Traffikora territory.</p>
-            </div>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>White-Label Ready</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Deliver Traffikora results under your agency brand. Your clients see your name, your reports, your value — powered by Traffikora behind the scenes.</p>
-            </div>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Monthly Reporting</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Automated monthly reports for every client show the work done, rankings improved, and results delivered — making retention conversations easy.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* BEFORE/AFTER */}
-      <section style={{ background: '#f9f9f9', padding: '80px 32px', borderBottom: '2.5px solid #111' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
-          <div style={{ background: '#fff', border: '2.5px solid #111', padding: '40px' }}>
-            <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px', fontWeight: 700, color: '#111', marginBottom: '24px' }}>Without Traffikora</h3>
-            {['Hiring writers and designers for every new client', 'Manually managing each client GBP profile', 'Capped on how many clients you can take on', 'No differentiated offering vs other agencies', 'Clients churn when results are slow or inconsistent', 'Hours of reporting every month per client'].map((item, i) => (
-              <div key={i} style={{ display: 'flex', gap: '12px', marginBottom: '14px', alignItems: 'flex-start' }}>
-                <span style={{ color: '#cc0000', fontSize: '16px', marginTop: '2px' }}>X</span>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555' }}>{item}</p>
-              </div>
-            ))}
-          </div>
-          <div style={{ background: '#111', border: '2.5px solid #111', padding: '40px' }}>
-            <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px', fontWeight: 700, color: '#E8610A', marginBottom: '24px' }}>With Traffikora</h3>
-            {['Content created automatically for every client simultaneously', 'GBP managed for all clients with zero manual effort', 'Scale to 50+ clients without adding headcount', 'Offer AI engine optimization no other agency can match', 'Consistent results keep clients paying month after month', 'Automated reports delivered to every client automatically'].map((item, i) => (
-              <div key={i} style={{ display: 'flex', gap: '12px', marginBottom: '14px', alignItems: 'flex-start' }}>
-                <span style={{ color: '#E8610A', fontSize: '16px', marginTop: '2px' }}>O</span>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#ccc' }}>{item}</p>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px', textAlign: 'center' }}>What Traffikora Does For Dentists</p>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '42px', fontWeight: 900, textAlign: 'center', marginBottom: '56px', color: '#111' }}>Everything your practice needs. Done automatically.</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '28px' }}>
+            {features.map((f, i) => (
+              <div key={i} style={{ background: '#fff', border: '2.5px solid #111', padding: '32px', borderRadius: '2px' }}>
+                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px', color: '#111' }}>{f.title}</h3>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#444', lineHeight: 1.65 }}>{f.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
       <section style={{ background: '#fff', padding: '80px 32px', borderBottom: '2.5px solid #111' }}>
-        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px', textAlign: 'center' }}>FAQ</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 700, color: '#111', textAlign: 'center', marginBottom: '48px' }}>Questions from agency owners.</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
-            <div style={{ borderBottom: '2px solid #eee', paddingBottom: '28px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Can we resell Traffikora to our clients?</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.7 }}>Yes. The Agency plan is designed for resale. You manage all client accounts from one dashboard and can brand the reporting under your agency name.</p>
+        <div style={{ maxWidth: '760px', margin: '0 auto', textAlign: 'center' }}>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>How It Works</p>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '42px', fontWeight: 900, marginBottom: '56px', color: '#111' }}>Set it up once. It runs forever.</h2>
+          {steps.map((s, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '24px', marginBottom: '40px', textAlign: 'left' }}>
+              <span style={{ fontFamily: 'Playfair Display, serif', fontSize: '36px', fontWeight: 900, color: '#E8610A', minWidth: '52px' }}>{s.step}</span>
+              <div>
+                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '8px', color: '#111' }}>{s.title}</h3>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.65 }}>{s.desc}</p>
+              </div>
             </div>
-            <div style={{ borderBottom: '2px solid #eee', paddingBottom: '28px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>How many client accounts can we manage?</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.7 }}>The Agency plan supports up to 20 client locations. The Enterprise plan is unlimited. Contact us if you need a custom arrangement for a large portfolio.</p>
-            </div>
-            <div style={{ borderBottom: '2px solid #eee', paddingBottom: '28px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Will Traffikora replace our team?</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.7 }}>No — Traffikora handles the execution so your team can focus on strategy, client relationships, and growth. It makes your existing team dramatically more productive.</p>
-            </div>
-            <div style={{ borderBottom: '2px solid #eee', paddingBottom: '28px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>What makes Traffikora different from other agency tools?</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.7 }}>Traffikora is the only platform that optimizes for both Google and every major AI engine. No other agency tool offers AI engine optimization for ChatGPT, Perplexity, Gemini, and Claude — giving your agency a service no competitor can match.</p>
-            </div>
+          ))}
+        </div>
+      </section>
+
+      <section style={{ background: '#f7f7f7', padding: '80px 32px', borderBottom: '2.5px solid #111' }}>
+        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '42px', fontWeight: 900, textAlign: 'center', marginBottom: '56px', color: '#111' }}>Dental practices love Traffikora.</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '28px' }}>
+            {testimonials.map((t, i) => (
+              <div key={i} style={{ background: '#fff', border: '2.5px solid #111', padding: '32px', borderRadius: '2px' }}>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#333', lineHeight: 1.7, marginBottom: '24px', fontStyle: 'italic' }}>"{t.quote}"</p>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#111', margin: 0 }}>{t.name}</p>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888', margin: 0 }}>{t.practice}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Scale your agency. Without scaling your headcount.</h2>
+        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Ready to fill your schedule automatically?</h2>
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
         <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Trial</Link>
       </section>
@@ -141,5 +129,5 @@ export default function MarketingAgenciesPage() {
 }
 `;
 
-fs.writeFileSync('src/app/solutions/marketing-agencies/page.tsx', page);
-console.log('done');
+fs.writeFileSync('src/app/solutions/dentists/page.tsx', content, 'utf8');
+console.log('Done: dentists/page.tsx written.');
