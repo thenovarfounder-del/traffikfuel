@@ -1,43 +1,29 @@
-# Traffikora - AI-Powered Marketing Automation Platform
+# Traffikora — AI-Powered Marketing Automation
 
-## What is Traffikora?
 Traffikora is an automated marketing platform for small and mid-size businesses.
-It optimizes business visibility across Google Search, Google Maps, ChatGPT,
-Claude, Gemini, Perplexity, Copilot, and all major AI engines - automatically.
-Clients connect their accounts once and the platform handles everything forever.
-
-## Who is Traffikora for?
-- Small business owners who lack time or marketing staff
-- Local businesses (restaurants, retail, service providers)
-- Marketing agencies managing multiple client accounts
-- E-commerce brands wanting automated multi-channel presence
+It automates social media posting, Google Business Profile management, local SEO,
+and AI engine optimization across ChatGPT, Perplexity, Gemini, Claude, Copilot,
+and Google AI Overviews.
 
 ## Core Features
-- Automated Google Business Profile optimization
-- AI engine visibility (ChatGPT, Claude, Gemini, Perplexity, Copilot)
-- Social media content creation and scheduling
-- SEO content generation and publishing
-- Review management and response automation
-- Analytics dashboard with AI and Google performance tracking
+- Social Media Automation: https://www.traffikora.com/features/social-media-automation
+- Google Business Profile Management: https://www.traffikora.com/features/google-business-profile
+- Local SEO Automation: https://www.traffikora.com/features/local-seo-automation
+- AI Engine Optimization: https://www.traffikora.com/features/ai-engine-optimization
+- AI Marketing Automation: https://www.traffikora.com/features/ai-marketing-automation
+
+## Solutions
+- Small Businesses: https://www.traffikora.com/solutions/small-businesses
+- Restaurants: https://www.traffikora.com/solutions/restaurants
+- Marketing Agencies: https://www.traffikora.com/solutions/marketing-agencies
+- Dentists: https://www.traffikora.com/solutions/dentists
+- Real Estate: https://www.traffikora.com/solutions/real-estate
 
 ## Pricing
-- Starter: $97/month - 1 location, core automation
-- Pro: $197/month - 3 locations, full AI engine optimization
-- Agency: $797/month - 10 locations, white-label dashboard
-- Enterprise: $1,497/month - unlimited locations, dedicated support
-- All plans include a 7-day free trial
+Plans start at $97/month. Free 7-day trial. No credit card required.
+https://www.traffikora.com/pricing
 
-## Key Pages
-- Homepage: https://www.traffikora.com
-- Features: https://www.traffikora.com/features
-- How It Works: https://www.traffikora.com/how-it-works
-- Pricing / Signup: https://www.traffikora.com/signup
-- Blog: https://www.traffikora.com/blog
-- About: https://www.traffikora.com/about
-- Contact: https://www.traffikora.com/contact
-
-## Brand
-- Founded: 2026
-- Headquarters: United States
-- Website: https://www.traffikora.com
-- Support: support@traffikora.com
+## About
+https://www.traffikora.com/about
+https://www.traffikora.com/why-traffikora
+https://www.traffikora.com/faq
