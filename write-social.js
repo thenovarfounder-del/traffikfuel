@@ -1,13 +1,13 @@
 const fs = require('fs');
 
-const content = `// @ts-nocheck
+const page = `// @ts-nocheck
 'use client'
 
 import Link from 'next/link'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
-export default function SocialPage() {
+export default function AIMarketingPage() {
   return (
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,9 +17,9 @@ export default function SocialPage() {
 
       {/* HERO */}
       <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Social Media Automation</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, marginBottom: '24px', maxWidth: '820px', margin: '0 auto 24px' }}>Social media that runs itself. Every platform. Every week.</h1>
-        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto 40px' }}>Traffikora creates and publishes content to your social media accounts on a consistent schedule — without you writing a single post.</p>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>AI Marketing Automation</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Your entire marketing strategy. Running on autopilot.</h1>
+        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto 40px' }}>Traffikora uses AI to plan, create, publish, and optimize your marketing across every channel — continuously, without you lifting a finger.</p>
         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free 7-Day Trial</Link>
           <Link href="/how-it-works" style={{ background: 'transparent', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>See How It Works</Link>
@@ -30,66 +30,74 @@ export default function SocialPage() {
       <section style={{ background: '#111', padding: '0 32px 80px' }}>
         <div style={{ maxWidth: '1060px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
           <div style={{ textAlign: 'center', padding: '40px 24px', border: '2.5px solid #333' }}>
-            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '56px', fontWeight: 900, color: '#E8610A', lineHeight: 1, marginBottom: '12px' }}>5B+</p>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#ccc', lineHeight: 1.6 }}>people use social media worldwide in 2026</p>
+            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '56px', fontWeight: 900, color: '#E8610A', lineHeight: 1, marginBottom: '12px' }}>80%</p>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#ccc', lineHeight: 1.6 }}>of marketing tasks can be fully automated with AI</p>
           </div>
           <div style={{ textAlign: 'center', padding: '40px 24px', border: '2.5px solid #333' }}>
-            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '56px', fontWeight: 900, color: '#E8610A', lineHeight: 1, marginBottom: '12px' }}>54%</p>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#ccc', lineHeight: 1.6 }}>of consumers research businesses on social before buying</p>
+            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '56px', fontWeight: 900, color: '#E8610A', lineHeight: 1, marginBottom: '12px' }}>14hrs</p>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#ccc', lineHeight: 1.6 }}>per week saved by small businesses using AI marketing tools</p>
           </div>
           <div style={{ textAlign: 'center', padding: '40px 24px', border: '2.5px solid #333' }}>
-            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '56px', fontWeight: 900, color: '#E8610A', lineHeight: 1, marginBottom: '12px' }}>6hrs</p>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#ccc', lineHeight: 1.6 }}>per week saved by businesses using social automation</p>
+            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '56px', fontWeight: 900, color: '#E8610A', lineHeight: 1, marginBottom: '12px' }}>3x</p>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#ccc', lineHeight: 1.6 }}>more leads generated by businesses with consistent automated marketing</p>
           </div>
         </div>
       </section>
 
-      {/* PLATFORMS */}
+      {/* WHAT IT DOES */}
       <section style={{ background: '#fff', padding: '80px 32px', borderBottom: '2.5px solid #111' }}>
         <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px', textAlign: 'center' }}>Platforms</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 700, color: '#111', textAlign: 'center', marginBottom: '16px' }}>Every platform your customers use.</h2>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.8, maxWidth: '600px', margin: '0 auto 48px', textAlign: 'center' }}>Traffikora publishes to all major social platforms simultaneously.</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
-            {['Facebook', 'Instagram', 'TikTok', 'LinkedIn', 'Twitter / X', 'Google Business Profile'].map((platform, i) => (
-              <div key={i} style={{ border: '2.5px solid #111', padding: '28px 32px', textAlign: 'center' }}>
-                <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111' }}>{platform}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FEATURES GRID */}
-      <section style={{ background: '#f9f9f9', padding: '80px 32px', borderBottom: '2.5px solid #111' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px', textAlign: 'center' }}>What Traffikora Does</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 700, color: '#111', textAlign: 'center', marginBottom: '48px' }}>Everything social. Nothing manual.</h2>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px', textAlign: 'center' }}>What It Does</p>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 700, color: '#111', textAlign: 'center', marginBottom: '48px' }}>Every marketing channel. Fully automated.</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
             <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Automated Content Creation</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Traffikora generates on-brand posts for your business tailored to your industry and audience.</p>
+              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>AI Content Strategy</h3>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Traffikora builds and executes a complete content strategy for your business based on your industry, location, and goals — updated automatically every month.</p>
             </div>
             <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Scheduled Publishing</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Posts go live at the optimal time for your audience on every platform automatically.</p>
+              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Social Media Automation</h3>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Posts created and published to Facebook, Instagram, TikTok, LinkedIn, Twitter/X, and Google Business Profile on a consistent weekly schedule.</p>
             </div>
             <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Multi-Platform Publishing</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Content adapted and published across all platforms formatted correctly for each one automatically.</p>
+              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Local SEO Automation</h3>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Citation building, keyword tracking, schema markup, and NAP monitoring run continuously to keep your local search rankings climbing.</p>
             </div>
             <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Hashtag Optimization</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Every post includes researched hashtags that maximize organic reach without any manual work.</p>
+              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Google Business Profile Management</h3>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Weekly posts, photo uploads, review responses, and profile optimization handled automatically to keep your GBP ranking above competitors.</p>
+            </div>
+            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
+              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>AI Engine Optimization</h3>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Your business optimized to appear in ChatGPT, Perplexity, Gemini, Claude, Copilot, and Google AI Overviews — the fastest growing search channels in 2026.</p>
             </div>
             <div style={{ border: '2.5px solid #111', padding: '32px' }}>
               <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Performance Reporting</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Monthly reports show reach, engagement, and follower growth so you always know what is working.</p>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Monthly reports across every channel show what is working, what grew, and how Traffikora is improving your visibility and lead flow.</p>
             </div>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Brand Voice Consistency</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Traffikora maintains your brand voice consistently across every post and every platform.</p>
-            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section style={{ background: '#f9f9f9', padding: '80px 32px', borderBottom: '2.5px solid #111' }}>
+        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px', textAlign: 'center' }}>How It Works</p>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 700, color: '#111', textAlign: 'center', marginBottom: '48px' }}>Connect once. Market forever.</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '32px' }}>
+            {[
+              { step: '01', title: 'Connect Your Accounts', desc: 'Link your social profiles, Google Business Profile, and website in minutes during onboarding.' },
+              { step: '02', title: 'AI Builds Your Strategy', desc: 'Traffikora analyzes your business, industry, location, and competitors to create a complete marketing plan.' },
+              { step: '03', title: 'Content Goes Live', desc: 'Posts, updates, citations, and optimizations publish automatically across every channel on your behalf.' },
+              { step: '04', title: 'AI Optimizes Continuously', desc: 'The system monitors performance and adjusts your strategy every month based on what is working.' },
+              { step: '05', title: 'You Get Monthly Reports', desc: 'See exactly what Traffikora did, what grew, and what is planned for next month — all in one report.' },
+              { step: '06', title: 'It Never Stops', desc: 'Your marketing runs 24/7, 365 days a year. You focus on your business. Traffikora handles the rest.' },
+            ].map((item, i) => (
+              <div key={i} style={{ border: '2.5px solid #111', padding: '32px' }}>
+                <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '36px', fontWeight: 900, color: '#E8610A', marginBottom: '12px' }}>{item.step}</p>
+                <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '10px' }}>{item.title}</p>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#444', lineHeight: 1.7 }}>{item.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -99,7 +107,7 @@ export default function SocialPage() {
         <div style={{ maxWidth: '1060px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
           <div style={{ background: '#f9f9f9', border: '2.5px solid #111', padding: '40px' }}>
             <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px', fontWeight: 700, color: '#111', marginBottom: '24px' }}>Without Traffikora</h3>
-            {['Spending hours every week creating content', 'Posting inconsistently or not at all', 'Missing the best times to post for reach', 'Managing 5 different platform dashboards', 'Losing followers to competitors who post regularly', 'No idea what content is actually working'].map((item, i) => (
+            {['Hiring agencies or freelancers for every channel', 'Inconsistent marketing with gaps and missed weeks', 'Spending hours creating content instead of running your business', 'No presence on AI search engines like ChatGPT or Perplexity', 'Guessing what is working with no clear reporting', 'Falling behind competitors who market consistently'].map((item, i) => (
               <div key={i} style={{ display: 'flex', gap: '12px', marginBottom: '14px', alignItems: 'flex-start' }}>
                 <span style={{ color: '#cc0000', fontSize: '16px', marginTop: '2px' }}>X</span>
                 <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555' }}>{item}</p>
@@ -108,7 +116,7 @@ export default function SocialPage() {
           </div>
           <div style={{ background: '#111', border: '2.5px solid #111', padding: '40px' }}>
             <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px', fontWeight: 700, color: '#E8610A', marginBottom: '24px' }}>With Traffikora</h3>
-            {['Content created and published automatically every week', 'Consistent posting schedule across all platforms', 'Posts go live at peak engagement times', 'One dashboard for all platforms', 'Your profiles stay active and grow organically', 'Monthly reports show exactly what is working'].map((item, i) => (
+            {['Every channel managed automatically for one flat fee', 'Consistent marketing running every week without gaps', 'Zero hours spent on content — Traffikora handles it all', 'Optimized for Google AND every major AI engine', 'Clear monthly reports showing exactly what is working', 'Your business visible everywhere your competitors are not'].map((item, i) => (
               <div key={i} style={{ display: 'flex', gap: '12px', marginBottom: '14px', alignItems: 'flex-start' }}>
                 <span style={{ color: '#E8610A', fontSize: '16px', marginTop: '2px' }}>O</span>
                 <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#ccc' }}>{item}</p>
@@ -122,23 +130,23 @@ export default function SocialPage() {
       <section style={{ background: '#f9f9f9', padding: '80px 32px', borderBottom: '2.5px solid #111' }}>
         <div style={{ maxWidth: '760px', margin: '0 auto' }}>
           <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px', textAlign: 'center' }}>FAQ</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 700, color: '#111', textAlign: 'center', marginBottom: '48px' }}>Common questions about social media automation.</h2>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 700, color: '#111', textAlign: 'center', marginBottom: '48px' }}>Common questions.</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
             <div style={{ borderBottom: '2px solid #eee', paddingBottom: '28px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Does Traffikora create the content or do I have to write it?</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.7 }}>Traffikora creates the content automatically. You provide basic information about your business during setup and Traffikora generates on-brand posts tailored to your industry and audience.</p>
+              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Do I need to do anything after I sign up?</h3>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.7 }}>Just complete onboarding — connect your accounts and answer a few questions about your business. After that, Traffikora handles everything automatically.</p>
             </div>
             <div style={{ borderBottom: '2px solid #eee', paddingBottom: '28px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>How many posts does Traffikora publish per week?</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.7 }}>Posting frequency depends on your plan. All plans include regular posting across your connected platforms. Higher plans include more frequent posting and more platforms.</p>
+              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>How is this different from hiring a marketing agency?</h3>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.7 }}>Agencies charge $2,000 to $10,000 per month and still require your time for approvals and meetings. Traffikora costs a fraction of that and runs fully automatically.</p>
             </div>
             <div style={{ borderBottom: '2px solid #eee', paddingBottom: '28px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Can I review posts before they go live?</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.7 }}>Yes. You can review and approve posts before they publish, or let Traffikora publish automatically on your behalf. Full automation or approval-first — the choice is yours.</p>
+              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>What channels does Traffikora manage?</h3>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.7 }}>Social media, Google Business Profile, Local SEO, and AI Engine Optimization across ChatGPT, Perplexity, Gemini, Claude, Copilot, and Google AI Overviews.</p>
             </div>
             <div style={{ borderBottom: '2px solid #eee', paddingBottom: '28px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Which social media platforms does Traffikora support?</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.7 }}>Traffikora currently supports Facebook, Instagram, TikTok, LinkedIn, Twitter/X, and Google Business Profile. Additional platforms are added regularly.</p>
+              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>How quickly will I see results?</h3>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.7 }}>Most businesses see increased social engagement within 30 days. SEO and AI engine results typically build over 60 to 90 days as consistency compounds.</p>
             </div>
           </div>
         </div>
@@ -146,7 +154,7 @@ export default function SocialPage() {
 
       {/* CTA */}
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Stop doing social media manually.</h2>
+        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Your marketing machine. Starting today.</h2>
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
         <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Trial</Link>
       </section>
@@ -157,5 +165,5 @@ export default function SocialPage() {
 }
 `;
 
-fs.writeFileSync('src/app/features/social-media-automation/page.tsx', content);
-console.log('Done!');
+fs.writeFileSync('src/app/features/ai-marketing-automation/page.tsx', page);
+console.log('page done');
