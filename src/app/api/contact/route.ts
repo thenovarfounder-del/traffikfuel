@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     }
 
     await resend.emails.send({
-      from: 'Traffikora Contact <onboarding@resend.dev>',
+      from: 'Traffikora Support <support@traffikora.com>',
       to: 'support@traffikora.com',
       replyTo: email,
       subject: `[Contact Form] ${subject || 'New Message'} — from ${name}`,
