@@ -175,7 +175,7 @@ export default function TermsPage() {
               <li>Attempt to gain unauthorized access to our systems or other users' accounts</li>
               <li>Reverse engineer, decompile, or copy any part of the Traffikora platform</li>
               <li>Use our services for any illegal business or activity</li>
-              <li>Resell or sublicense access to Traffikora without written permission (Agency plan customers should contact us for reseller terms)</li>
+              <li>Resell or sublicense access to Traffikora without written permission</li>
             </ul>
             <p>Violation of these prohibitions may result in immediate account termination without refund.</p>
           </div>
@@ -183,14 +183,14 @@ export default function TermsPage() {
           <div className="doc-section" id="ip">
             <h2>Intellectual Property</h2>
             <p>The Traffikora platform, including its design, code, features, branding, and proprietary methodology, is owned by Traffikora and protected by intellectual property laws. You may not copy, reproduce, distribute, or create derivative works from our platform without express written permission.</p>
-            <p>The AI-generated content created by Traffikora on your behalf for your business becomes your property upon creation and delivery. Traffikora retains no ownership over marketing content produced specifically for your business.</p>
+            <p>AI-generated content created by Traffikora on your behalf becomes your property upon creation and delivery. Traffikora retains no ownership over marketing content produced specifically for your business.</p>
           </div>
 
           <div className="doc-section" id="liability">
             <h2>Limitation of Liability</h2>
             <p>Traffikora provides its services "as is" and makes no guarantees regarding specific marketing results, search engine rankings, or business growth outcomes. Marketing results vary by industry, location, competition, and many factors outside our control.</p>
-            <p>To the maximum extent permitted by law, Traffikora shall not be liable for any indirect, incidental, special, consequential, or punitive damages — including lost profits, lost revenue, or loss of business — arising from your use of or inability to use our services.</p>
-            <p>Our total liability to you for any claim arising from these Terms or your use of our services shall not exceed the amount you paid to Traffikora in the 3 months preceding the claim.</p>
+            <p>To the maximum extent permitted by law, Traffikora shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of or inability to use our services.</p>
+            <p>Our total liability to you for any claim arising from these Terms shall not exceed the amount you paid to Traffikora in the 3 months preceding the claim.</p>
           </div>
 
           <div className="doc-section" id="termination">
