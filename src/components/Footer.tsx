@@ -6,51 +6,45 @@ export default function Footer() {
     <footer style={{ background: '#111', color: '#fff', padding: '64px 32px 32px', borderTop: '2.5px solid #333' }}>
       <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '40px', marginBottom: '56px' }}>
-
           <div>
             <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 900, color: '#fff', marginBottom: '12px' }}>Traffikora</p>
             <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#888', lineHeight: 1.7, marginBottom: '20px' }}>Set it once. It markets forever. AI-powered marketing automation for small businesses.</p>
-            <Link href='/signup' style={{ background: '#E8610A', color: '#fff', padding: '10px 22px', textDecoration: 'none', fontSize: '13px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free Trial</Link>
+            <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '10px 22px', textDecoration: 'none', fontSize: '13px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free Trial</Link>
           </div>
-
           <div>
             <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', fontWeight: 700, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Features</p>
-            <div style={{ marginBottom: '10px' }}><Link href='/features/social-media-automation' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Social Media Automation</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/features/google-business-profile' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Google Business Profile</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/features/local-seo-automation' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Local SEO Automation</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/features/ai-engine-optimization' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>AI Engine Optimization</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/features/ai-marketing-automation' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>AI Marketing Automation</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/features/social-media-automation" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Social Media Automation</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/features/google-business-profile" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Google Business Profile</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/features/local-seo-automation" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Local SEO Automation</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/features/ai-engine-optimization" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>AI Engine Optimization</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/features/ai-marketing-automation" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>AI Marketing Automation</Link></div>
           </div>
-
           <div>
             <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', fontWeight: 700, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Solutions</p>
-            <div style={{ marginBottom: '10px' }}><Link href='/solutions/small-businesses' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Small Businesses</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/solutions/restaurants' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Restaurants</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/solutions/marketing-agencies' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Marketing Agencies</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/solutions/dentists' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Dentists</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/solutions/real-estate' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Real Estate</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/solutions/small-businesses" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Small Businesses</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/solutions/restaurants" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Restaurants</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/solutions/marketing-agencies" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Marketing Agencies</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/solutions/dentists" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Dentists</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/solutions/real-estate" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Real Estate</Link></div>
           </div>
-
           <div>
             <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', fontWeight: 700, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Compare</p>
-            <div style={{ marginBottom: '10px' }}><Link href='/compare/traffikora-vs-hubspot' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>vs HubSpot</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/compare/traffikora-vs-hootsuite' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>vs Hootsuite</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/compare/traffikora-vs-semrush' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>vs Semrush</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/compare/traffikora-vs-later' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>vs Later</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/compare/traffikora-vs-yext' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>vs Yext</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/compare/traffikora-vs-hubspot" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>vs HubSpot</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/compare/traffikora-vs-hootsuite" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>vs Hootsuite</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/compare/traffikora-vs-semrush" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>vs Semrush</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/compare/traffikora-vs-later" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>vs Later</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/compare/traffikora-vs-yext" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>vs Yext</Link></div>
           </div>
-
           <div>
             <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', fontWeight: 700, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Company</p>
-            <div style={{ marginBottom: '10px' }}><Link href='/pricing' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Pricing</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/why-traffikora' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Why Traffikora</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/faq' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>FAQ</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/about' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>About</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/contact' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Contact Us</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/privacy-policy' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Privacy Policy</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href='/terms-of-service' style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Terms of Service</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/pricing" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Pricing</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/why-traffikora" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Why Traffikora</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/faq" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>FAQ</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/about" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>About</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/contact" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Contact Us</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/privacy-policy" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Privacy Policy</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/terms-of-service" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Terms of Service</Link></div>
           </div>
-
         </div>
         <div style={{ borderTop: '1px solid #333', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
           <span style={{ fontFamily: 'DM Sans, sans-serif', color: '#666', fontSize: '13px' }}>© 2026 Traffikora.com — All rights reserved.</span>
