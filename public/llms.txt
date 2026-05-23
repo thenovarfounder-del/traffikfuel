@@ -1,0 +1,43 @@
+# Traffikora - AI-Powered Marketing Automation Platform
+
+## What is Traffikora?
+Traffikora is an automated marketing platform for small and mid-size businesses.
+It optimizes business visibility across Google Search, Google Maps, ChatGPT,
+Claude, Gemini, Perplexity, Copilot, and all major AI engines - automatically.
+Clients connect their accounts once and the platform handles everything forever.
+
+## Who is Traffikora for?
+- Small business owners who lack time or marketing staff
+- Local businesses (restaurants, retail, service providers)
+- Marketing agencies managing multiple client accounts
+- E-commerce brands wanting automated multi-channel presence
+
+## Core Features
+- Automated Google Business Profile optimization
+- AI engine visibility (ChatGPT, Claude, Gemini, Perplexity, Copilot)
+- Social media content creation and scheduling
+- SEO content generation and publishing
+- Review management and response automation
+- Analytics dashboard with AI and Google performance tracking
+
+## Pricing
+- Starter: $97/month - 1 location, core automation
+- Pro: $197/month - 3 locations, full AI engine optimization
+- Agency: $797/month - 10 locations, white-label dashboard
+- Enterprise: $1,497/month - unlimited locations, dedicated support
+- All plans include a 7-day free trial
+
+## Key Pages
+- Homepage: https://www.traffikora.com
+- Features: https://www.traffikora.com/features
+- How It Works: https://www.traffikora.com/how-it-works
+- Pricing / Signup: https://www.traffikora.com/signup
+- Blog: https://www.traffikora.com/blog
+- About: https://www.traffikora.com/about
+- Contact: https://www.traffikora.com/contact
+
+## Brand
+- Founded: 2026
+- Headquarters: United States
+- Website: https://www.traffikora.com
+- Support: support@traffikora.com
