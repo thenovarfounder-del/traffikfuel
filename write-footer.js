@@ -11,7 +11,7 @@ export default function Footer() {
       <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
 
         {/* TOP ROW */}
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '40px', marginBottom: '48px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', gap: '32px', marginBottom: '48px' }}>
 
           {/* BRAND */}
           <div>
@@ -25,9 +25,11 @@ export default function Footer() {
             <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', fontWeight: 700, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Features</p>
             {[
               { label: 'AI Engine Optimization', href: '/features/ai-engine-optimization' },
+              { label: 'AI Marketing Automation', href: '/features/ai-marketing-automation' },
               { label: 'Google Business Profile', href: '/features/google-business-profile' },
               { label: 'Local SEO Automation', href: '/features/local-seo-automation' },
               { label: 'Social Media Automation', href: '/features/social-media-automation' },
+              { label: 'Integrations', href: '/integrations' },
               { label: 'How It Works', href: '/how-it-works' },
             ].map(link => (
               <Link key={link.href} href={link.href} style={{ display: 'block', fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#aaa', textDecoration: 'none', marginBottom: '10px' }}>{link.label}</Link>
@@ -42,7 +44,33 @@ export default function Footer() {
               { label: 'Restaurants', href: '/solutions/restaurants' },
               { label: 'Marketing Agencies', href: '/solutions/marketing-agencies' },
               { label: 'Dentists', href: '/solutions/dentists' },
+              { label: 'Real Estate', href: '/solutions/real-estate' },
+              { label: 'Retail Stores', href: '/solutions/retail' },
+              { label: 'Law Firms', href: '/solutions/lawyers' },
+              { label: 'Gyms & Fitness', href: '/solutions/gyms' },
               { label: 'Home Services', href: '/solutions/home-services' },
+            ].map(link => (
+              <Link key={link.href} href={link.href} style={{ display: 'block', fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#aaa', textDecoration: 'none', marginBottom: '10px' }}>{link.label}</Link>
+            ))}
+          </div>
+
+          {/* COMPARE */}
+          <div>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', fontWeight: 700, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Compare</p>
+            {[
+              { label: 'Traffikora vs HubSpot', href: '/compare/traffikora-vs-hubspot' },
+              { label: 'Traffikora vs Hootsuite', href: '/compare/traffikora-vs-hootsuite' },
+            ].map(link => (
+              <Link key={link.href} href={link.href} style={{ display: 'block', fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#aaa', textDecoration: 'none', marginBottom: '10px' }}>{link.label}</Link>
+            ))}
+
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', fontWeight: 700, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px', marginTop: '28px' }}>Resources</p>
+            {[
+              { label: 'Blog', href: '/blog' },
+              { label: 'FAQ', href: '/faq' },
+              { label: 'Glossary', href: '/resources/glossary' },
+              { label: 'Results', href: '/results' },
+              { label: 'Updates', href: '/updates' },
             ].map(link => (
               <Link key={link.href} href={link.href} style={{ display: 'block', fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#aaa', textDecoration: 'none', marginBottom: '10px' }}>{link.label}</Link>
             ))}
@@ -54,9 +82,10 @@ export default function Footer() {
             {[
               { label: 'Why Traffikora', href: '/why-traffikora' },
               { label: 'Pricing', href: '/pricing' },
-              { label: 'FAQ', href: '/faq' },
               { label: 'About', href: '/about' },
               { label: 'Contact', href: '/contact' },
+              { label: 'Support', href: '/support' },
+              { label: 'Affiliates', href: '/affiliates' },
               { label: 'Privacy Policy', href: '/privacy' },
               { label: 'Terms of Service', href: '/terms' },
             ].map(link => (
@@ -77,4 +106,4 @@ export default function Footer() {
 `;
 
 fs.writeFileSync("C:\\Users\\randy\\traffikfuel\\src\\components\\Footer.tsx", content, { encoding: "utf8" });
-console.log("Footer.tsx written");
+console.log("Footer.tsx updated");
