@@ -43,7 +43,7 @@ export default function WhyTraffikoraPage() {
                   <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#666' }}>✗ $2,000 – $5,000/month</p>
                 </div>
                 <div style={{ padding: '18px 32px', borderBottom: '1px solid #222', background: '#111' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#fff' }}>✓ $97 – $197/month</p>
+                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#fff' }}>✓ $97 – $1,497/month</p>
                 </div>
               </>
               <>
