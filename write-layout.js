@@ -4,8 +4,8 @@ const content = `// @ts-nocheck
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'What Is Local SEO and Why Does It Matter? | Traffikora',
-  description: 'Local SEO helps customers find your business online. Learn the 3 core pillars of local SEO and how to automate them with Traffikora.',
+  title: 'How AI Search Is Changing Local Business Marketing | Traffikora',
+  description: 'ChatGPT, Gemini, and Claude now recommend local businesses. Learn how AI search works and how Traffikora optimizes you for every AI engine automatically.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Article",
-            "headline": "What Is Local SEO and Why Does It Matter for Small Businesses?",
+            "headline": "How AI Search Is Changing Local Business Marketing Forever",
             "publisher": {
               "@type": "Organization",
               "name": "Traffikora",
@@ -32,5 +32,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 `;
 
-fs.writeFileSync('src/app/blog/what-is-local-seo/layout.tsx', content);
-console.log('Written: src/app/blog/what-is-local-seo/layout.tsx');
+fs.writeFileSync('src/app/blog/ai-search-for-local-business/layout.tsx', content);
+console.log('Written: src/app/blog/ai-search-for-local-business/layout.tsx');
