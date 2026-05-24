@@ -3,32 +3,40 @@ const fs = require('fs');
 const content = `// @ts-nocheck
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
-export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+export default function DashboardPage() {
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  async function handleLogin() {
-    setLoading(true)
-    setError('')
-    try {
+  useEffect(() => {
+    async function checkAuth() {
       const { supabase } = await import('@/lib/supabase')
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) {
-        setError('Invalid email or password. Please try again.')
-      } else {
-        window.location.href = '/dashboard'
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        window.location.href = '/login'
+        return
       }
-    } catch (e) {
-      setError('Something went wrong. Please try again.')
+      setUser(session.user)
+      setLoading(false)
     }
-    setLoading(false)
+    checkAuth()
+  }, [])
+
+  if (loading) {
+    return (
+      <>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+        <Nav />
+        <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#666' }}>Loading...</p>
+        </div>
+        <Footer />
+      </>
+    )
   }
 
   return (
@@ -38,49 +46,33 @@ export default function LoginPage() {
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
       <Nav />
 
-      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px 60px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Welcome Back</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, marginBottom: '16px' }}>Log in to Traffikora</h1>
-        <p style={{ fontSize: '18px', color: '#ccc', marginBottom: '0' }}>Pick up right where you left off.</p>
+      <section style={{ background: '#111', color: '#fff', padding: '60px 32px' }}>
+        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px' }}>Dashboard</p>
+          <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '42px', fontWeight: 900, marginBottom: '8px' }}>Welcome back.</h1>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#ccc' }}>{user?.email}</p>
+        </div>
       </section>
 
-      <section style={{ background: '#fff', padding: '60px 32px', display: 'flex', justifyContent: 'center' }}>
-        <div style={{ width: '100%', maxWidth: '460px' }}>
-          {error && (
-            <div style={{ background: '#fff0f0', border: '2px solid #e00', color: '#c00', padding: '14px 18px', marginBottom: '24px', fontFamily: 'DM Sans, sans-serif', fontSize: '15px' }}>
-              {error}
+      <section style={{ background: '#fff', padding: '60px 32px' }}>
+        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px' }}>Connect Accounts</h2>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', marginBottom: '20px' }}>Link your Google, Facebook, and Instagram accounts to get started.</p>
+              <Link href="/dashboard/connect/google" style={{ background: '#E8610A', color: '#fff', padding: '12px 24px', textDecoration: 'none', fontSize: '15px', fontWeight: 700, display: 'inline-block' }}>Connect Now</Link>
             </div>
-          )}
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Email address</label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }}
-            />
+            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px' }}>Business Settings</h2>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', marginBottom: '20px' }}>Set up your business name, category, and location.</p>
+              <Link href="/dashboard/settings" style={{ background: '#111', color: '#fff', padding: '12px 24px', textDecoration: 'none', fontSize: '15px', fontWeight: 700, display: 'inline-block' }}>Go to Settings</Link>
+            </div>
+            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px' }}>Support</h2>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', marginBottom: '20px' }}>Need help? Our team is standing by.</p>
+              <Link href="/support" style={{ background: '#111', color: '#fff', padding: '12px 24px', textDecoration: 'none', fontSize: '15px', fontWeight: 700, display: 'inline-block' }}>Get Help</Link>
+            </div>
           </div>
-          <div style={{ marginBottom: '28px' }}>
-            <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              placeholder="Your password"
-              style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }}
-            />
-          </div>
-          <button
-            onClick={handleLogin}
-            disabled={loading}
-            style={{ width: '100%', background: '#E8610A', color: '#fff', padding: '16px', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', opacity: loading ? 0.7 : 1 }}
-          >
-            {loading ? 'Logging in...' : 'Log In'}
-          </button>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#666', textAlign: 'center', marginTop: '24px' }}>
-            Don\u2019t have an account? <Link href="/signup" style={{ color: '#E8610A', fontWeight: 600, textDecoration: 'none' }}>Start free trial</Link>
-          </p>
         </div>
       </section>
 
@@ -90,5 +82,5 @@ export default function LoginPage() {
 }
 `;
 
-fs.writeFileSync('src/app/login/page.tsx', content);
-console.log('Written: src/app/login/page.tsx');
+fs.writeFileSync('src/app/dashboard/page.tsx', content);
+console.log('Written: src/app/dashboard/page.tsx');
