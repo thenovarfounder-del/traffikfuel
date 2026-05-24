@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Traffikora vs Birdeye: Full Comparison 2026 | Traffikora',
-  description: 'Traffikora vs Birdeye: See why local businesses choose Traffikora. More features, AI engine optimization, social media automation, and 3x lower price.',
+  description: 'Traffikora vs Birdeye: More features, AI engine optimization, social media automation, and 3x lower price. See why local businesses choose Traffikora.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
