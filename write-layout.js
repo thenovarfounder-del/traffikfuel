@@ -3,8 +3,8 @@ const fs = require('fs');
 const content = `import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Marketing Automation for Real Estate Agents | Traffikora',
-  description: 'Traffikora automates SEO, social media, and AI engine optimization for real estate agents. Get more listings and buyers on autopilot. Start free trial.',
+  title: 'Traffikora vs HubSpot — Better & More Affordable | Traffikora',
+  description: 'See how Traffikora beats HubSpot for small businesses. More features, AI engine optimization, and full automation starting at $97/mo vs $800+/mo. Try free.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -19,7 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             "name": "Traffikora",
             "url": "https://www.traffikora.com",
             "applicationCategory": "BusinessApplication",
-            "description": "Traffikora is an AI-powered marketing automation platform for real estate agents. It automates social media, local SEO, Google Business Profile, and AI engine optimization.",
+            "description": "Traffikora is an AI-powered marketing automation platform for small businesses — a powerful and affordable alternative to HubSpot.",
             "offers": {
               "@type": "Offer",
               "price": "97",
@@ -40,5 +40,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 `;
 
-fs.writeFileSync('src/app/solutions/real-estate/layout.tsx', content, 'utf8');
+fs.writeFileSync('src/app/compare/traffikora-vs-hubspot/layout.tsx', content, 'utf8');
 console.log('Done');
