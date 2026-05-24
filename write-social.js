@@ -6,7 +6,7 @@ import Link from 'next/link'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
-export default function ChiropractorsPage() {
+export default function VsMailchimpPage() {
   return (
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,44 +15,61 @@ export default function ChiropractorsPage() {
       <Nav />
 
       <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>For Chiropractic Offices</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Fill Your Appointment Book. Without Lifting a Finger.</h1>
-        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto 40px' }}>Traffikora automates your Google rankings, social media, and AI engine visibility so new patients find your chiropractic practice first \u2014 every single week.</p>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Traffikora vs Mailchimp</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Mailchimp Sends Emails. Traffikora Grows Your Business.</h1>
+        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '640px', margin: '0 auto 40px' }}>Mailchimp is an email tool. Traffikora is a full marketing automation platform that handles social media, local SEO, Google Business Profile, and AI engine optimization \u2014 all on autopilot.</p>
         <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free 7-Day Trial</Link>
       </section>
 
       <section style={{ background: '#fff', padding: '80px 32px' }}>
         <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#111', textAlign: 'center', marginBottom: '16px' }}>Patients are searching. The question is whether they find you.</h2>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', textAlign: 'center', maxWidth: '680px', margin: '0 auto 60px' }}>Every day, people in your city search for a chiropractor near me. If you are not in the top 3 Google results, those patients are booking with your competitors. Traffikora fixes that automatically.</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
-            {[
-              { icon: '\uD83D\uDCC9', title: 'Empty Slots in Your Schedule', body: 'Inconsistent patient flow means inconsistent revenue. Traffikora keeps your practice visible year-round so your calendar stays full.' },
-              { icon: '\uD83D\uDCF1', title: 'No Time for Marketing', body: 'Between adjustments, notes, and managing your office, marketing never gets done. Traffikora does it all automatically while you focus on patients.' },
-              { icon: '\uD83E\uDD16', title: 'Missing AI Referrals', body: 'When someone asks ChatGPT or Gemini to find a chiropractor nearby, is your name coming up? Traffikora makes sure it does.' },
-            ].map((item) => (
-              <div key={item.title} style={{ border: '2.5px solid #111', padding: '32px', background: '#fff' }}>
-                <div style={{ fontSize: '36px', marginBottom: '16px' }}>{item.icon}</div>
-                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px' }}>{item.title}</h3>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.6 }}>{item.body}</p>
-              </div>
-            ))}
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#111', textAlign: 'center', marginBottom: '56px' }}>Side by side. No spin.</h2>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'DM Sans, sans-serif' }}>
+              <thead>
+                <tr style={{ background: '#111', color: '#fff' }}>
+                  <th style={{ padding: '18px 24px', textAlign: 'left', fontSize: '15px', fontWeight: 700 }}>Feature</th>
+                  <th style={{ padding: '18px 24px', textAlign: 'center', fontSize: '15px', fontWeight: 700, color: '#E8610A' }}>Traffikora</th>
+                  <th style={{ padding: '18px 24px', textAlign: 'center', fontSize: '15px', fontWeight: 700 }}>Mailchimp</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Social Media Automation', '\u2705 Fully automated', '\u274C Not included'],
+                  ['Google Business Profile Management', '\u2705 Weekly automated posts', '\u274C Not included'],
+                  ['Local SEO Optimization', '\u2705 Built in', '\u274C Not included'],
+                  ['AI Engine Optimization', '\u2705 ChatGPT, Claude, Gemini, Perplexity', '\u274C Not included'],
+                  ['Email Marketing', '\u2705 Included', '\u2705 Core feature'],
+                  ['Review Generation', '\u2705 Automated', '\u274C Not included'],
+                  ['Content Written For You', '\u2705 AI writes everything', '\u26A0\uFE0F Templates only'],
+                  ['Setup Time', '\u2705 Under 10 minutes', '\u26A0\uFE0F Hours of configuration'],
+                  ['Ongoing Manual Work Required', '\u2705 None', '\u274C Must build every campaign'],
+                  ['Built for Local Businesses', '\u2705 Yes, specifically', '\u26A0\uFE0F General purpose'],
+                  ['Starting Price', '$97/month', 'Free to $350+/month'],
+                ].map(([feature, traffikora, mailchimp], i) => (
+                  <tr key={feature} style={{ background: i % 2 === 0 ? '#f9f9f9' : '#fff', borderBottom: '1px solid #eee' }}>
+                    <td style={{ padding: '16px 24px', fontSize: '15px', color: '#111', fontWeight: 500 }}>{feature}</td>
+                    <td style={{ padding: '16px 24px', fontSize: '15px', color: '#111', textAlign: 'center' }}>{traffikora}</td>
+                    <td style={{ padding: '16px 24px', fontSize: '15px', color: '#666', textAlign: 'center' }}>{mailchimp}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
 
       <section style={{ background: '#f9f9f9', padding: '80px 32px' }}>
         <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#111', textAlign: 'center', marginBottom: '56px' }}>Set it once. Traffikora runs forever.</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '32px' }}>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#111', textAlign: 'center', marginBottom: '16px' }}>Mailchimp is great at one thing. Traffikora does everything.</h2>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', textAlign: 'center', maxWidth: '700px', margin: '0 auto 60px' }}>Mailchimp built its reputation on email newsletters. But email alone does not grow a local business in 2026. You need Google, social media, AI engines, and reviews working together. That is what Traffikora delivers.</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
             {[
-              { step: '01', title: 'Connect Your Accounts', body: 'Link your Google Business Profile, Facebook, and Instagram in under 10 minutes.' },
-              { step: '02', title: 'We Write Your Content', body: 'Our AI creates chiropractic-specific posts, patient education content, and seasonal promotions for your market.' },
-              { step: '03', title: 'We Publish Automatically', body: 'Content goes live on schedule every week across every platform. No effort required from you or your staff.' },
-              { step: '04', title: 'New Patients Book With You', body: 'Google ranks you higher. AI engines recommend you. New patients find your practice and book appointments.' },
+              { title: 'Mailchimp requires you to do the work', body: 'Every email campaign in Mailchimp has to be built, written, designed, and sent by you. Traffikora writes and publishes everything automatically with zero effort on your part.' },
+              { title: 'Mailchimp does not touch Google', body: 'Your Google Business Profile, local SEO, and Google rankings are completely outside what Mailchimp does. Traffikora automates all of it.' },
+              { title: 'Mailchimp has no AI engine strategy', body: 'When customers ask ChatGPT or Perplexity for a recommendation, Mailchimp does nothing. Traffikora optimizes your presence across every major AI engine.' },
             ].map((item) => (
-              <div key={item.step} style={{ borderTop: '4px solid #E8610A', paddingTop: '24px' }}>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 700, color: '#E8610A', letterSpacing: '2px', marginBottom: '12px' }}>STEP {item.step}</p>
+              <div key={item.title} style={{ border: '2.5px solid #111', padding: '32px', background: '#fff' }}>
                 <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px', color: '#111' }}>{item.title}</h3>
                 <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.6 }}>{item.body}</p>
               </div>
@@ -63,16 +80,16 @@ export default function ChiropractorsPage() {
 
       <section style={{ background: '#fff', padding: '80px 32px' }}>
         <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#111', textAlign: 'center', marginBottom: '16px' }}>Everything your practice needs to dominate local search.</h2>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', textAlign: 'center', maxWidth: '620px', margin: '0 auto 56px' }}>One platform. Every marketing channel your chiropractic office needs. Zero effort from your team.</p>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#111', textAlign: 'center', marginBottom: '16px' }}>What Traffikora does that Mailchimp never will.</h2>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', textAlign: 'center', maxWidth: '620px', margin: '0 auto 56px' }}>Traffikora was built for local business growth from the ground up. Not retrofitted from an email tool.</p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
             {[
-              { title: 'Google Business Profile Management', body: 'Weekly posts, service updates, photo uploads, and review responses that keep your GBP active and ranking at the top of local search.' },
-              { title: 'Chiropractic SEO Automation', body: 'Keyword targeting for back pain relief, spinal adjustment, sports injury chiropractor, and every term your patients search for.' },
-              { title: 'Patient Education Content', body: 'Wellness tips, posture guides, and condition-specific posts that position you as the trusted expert in your community.' },
-              { title: 'AI Engine Optimization', body: 'Get recommended when patients ask ChatGPT, Claude, Gemini, or Perplexity for chiropractors in your area.' },
-              { title: 'Review Generation Automation', body: 'Automated follow-up requests after appointments build your 5-star reputation without any manual work from your front desk.' },
-              { title: 'Monthly Performance Reports', body: 'A clear breakdown of your Google rankings, profile views, and new patient growth delivered to your inbox every month.' },
+              { title: 'Automated Social Media', body: 'Traffikora writes and publishes to Instagram, Facebook, and Google every week. Mailchimp does not touch social media.' },
+              { title: 'Google Business Profile Automation', body: 'Weekly GBP posts and updates keep your Google profile active and ranking. This is completely outside Mailchimp\u2019s scope.' },
+              { title: 'Local SEO Built In', body: 'Traffikora builds citations, targets local keywords, and tracks your rankings automatically. Mailchimp has no SEO features.' },
+              { title: 'AI Engine Optimization', body: 'Traffikora gets you recommended by ChatGPT, Claude, Gemini, and Perplexity. Mailchimp has zero AI engine strategy.' },
+              { title: 'Review Generation', body: 'Automated review requests after every customer interaction build your reputation on autopilot. Mailchimp does not do this.' },
+              { title: 'Zero Ongoing Effort', body: 'Traffikora runs completely on autopilot once set up. Mailchimp requires you to build every campaign from scratch every time.' },
             ].map((item) => (
               <div key={item.title} style={{ background: '#f9f9f9', border: '2.5px solid #111', padding: '28px' }}>
                 <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, marginBottom: '10px', color: '#111' }}>{item.title}</h3>
@@ -85,12 +102,12 @@ export default function ChiropractorsPage() {
 
       <section style={{ background: '#111', padding: '80px 32px' }}>
         <div style={{ maxWidth: '1060px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#fff', marginBottom: '56px' }}>Chiropractors are growing their practices with Traffikora.</h2>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#fff', marginBottom: '56px' }}>Business owners who switched are growing faster.</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
             {[
-              { quote: 'I went from 22 Google reviews to 74 in three months. New patients mention they found me on Google every single week now.', name: 'Dr. Kevin T.', location: 'Chiropractic Office, Charlotte NC' },
-              { quote: 'My front desk used to spend hours trying to manage our online presence. Traffikora replaced all of that automatically. We just focus on patients now.', name: 'Dr. Lisa M.', location: 'Family Chiropractic, Portland OR' },
-              { quote: 'A patient said they asked Perplexity for the best chiropractor in our city and we came up first. That was a first for us and it keeps happening.', name: 'Dr. Anthony R.', location: 'Sports Chiropractic, Dallas TX' },
+              { quote: 'I used Mailchimp for years and my business stayed flat. Three months with Traffikora and I am ranking on page one of Google for the first time. Completely different league.', name: 'Amanda T.', location: 'Boutique Owner, Scottsdale AZ' },
+              { quote: 'Mailchimp was always sitting there waiting for me to do something. Traffikora just runs. My Google reviews went from 11 to 58 without me asking a single customer.', name: 'Robert C.', location: 'Restaurant Owner, Miami FL' },
+              { quote: 'I was paying for Mailchimp and barely using it. Traffikora replaced it and three other tools. Now everything is automated and I actually show up when people search for me.', name: 'Karen L.', location: 'Spa Owner, San Diego CA' },
             ].map((item) => (
               <div key={item.name} style={{ background: '#1a1a1a', border: '2.5px solid #333', padding: '32px', textAlign: 'left' }}>
                 <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#ddd', lineHeight: 1.7, marginBottom: '20px' }}>\u201C{item.quote}\u201D</p>
@@ -103,14 +120,14 @@ export default function ChiropractorsPage() {
       </section>
 
       <section style={{ background: '#fff', padding: '80px 32px', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#111', marginBottom: '16px' }}>Starts at $97/month. Less than two patient visits.</h2>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', maxWidth: '600px', margin: '0 auto 40px' }}>Two new patients cover your entire Traffikora subscription. Every new patient after that is pure growth for your practice.</p>
+        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#111', marginBottom: '16px' }}>Both start at $97/month. Only one does everything.</h2>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', maxWidth: '640px', margin: '0 auto 40px' }}>Mailchimp\u2019s paid plans can run $300+ per month for a list of any size \u2014 and you still have to do all the work yourself. Traffikora starts at $97 and runs your entire marketing operation automatically.</p>
         <Link href="/pricing" style={{ background: '#111', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #111', display: 'inline-block', marginRight: '16px' }}>See Pricing</Link>
         <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free Trial</Link>
       </section>
 
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Your next 50 patients are already searching for you.</h2>
+        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Stop building campaigns. Start growing automatically.</h2>
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
         <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Trial</Link>
       </section>
@@ -120,5 +137,5 @@ export default function ChiropractorsPage() {
   )
 }
 `;
-fs.writeFileSync('src/app/solutions/chiropractors/page.tsx', content);
+fs.writeFileSync('src/app/compare/traffikora-vs-mailchimp/page.tsx', content);
 console.log('page.tsx written');
