@@ -1,10 +1,10 @@
 const fs = require('fs');
 
-const restaurants = `import type { Metadata } from 'next'
+const semrush = `import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Restaurant Marketing Automation — Fill More Tables | Traffikora',
-  description: 'Traffikora automates Google SEO, TikTok, Instagram, and AI engine optimization for restaurants. Get more diners without lifting a finger. Start free trial.',
+  title: 'Traffikora vs Semrush — Automate vs Analyze | Traffikora',
+  description: 'Semrush shows you what to do. Traffikora does it automatically. Compare SEO automation, content creation, and AI engine optimization. Start free trial.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -19,7 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             "name": "Traffikora",
             "url": "https://www.traffikora.com",
             "applicationCategory": "BusinessApplication",
-            "description": "Traffikora automates marketing for restaurants — Google SEO, social media, AI engine optimization, and Google Business Profile.",
+            "description": "Traffikora is a fully automated marketing platform — a powerful alternative to Semrush that executes SEO, content, and social automatically.",
             "offers": { "@type": "Offer", "price": "97", "priceCurrency": "USD" },
             "operatingSystem": "Web",
             "provider": { "@type": "Organization", "name": "Traffikora", "url": "https://www.traffikora.com" }
@@ -32,11 +32,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 `;
 
-const smallBiz = `import type { Metadata } from 'next'
+const later = `import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Marketing Automation for Small Businesses | Traffikora',
-  description: 'Traffikora gives small businesses Fortune 500 marketing power for $97/mo. Automate Google SEO, social media, and AI engines. Start your free trial today.',
+  title: 'Traffikora vs Later — More Than Instagram Scheduling | Traffikora',
+  description: 'Later only schedules Instagram posts. Traffikora automates SEO, AI engines, blogs, and 9+ social platforms. Same price — infinitely more power. Try free.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -51,7 +51,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             "name": "Traffikora",
             "url": "https://www.traffikora.com",
             "applicationCategory": "BusinessApplication",
-            "description": "Traffikora is an AI-powered marketing automation platform built for small businesses. Automate SEO, social media, and AI engine optimization.",
+            "description": "Traffikora is a full marketing automation platform — a powerful alternative to Later with SEO, AI engine optimization, and multi-platform social automation.",
             "offers": { "@type": "Offer", "price": "97", "priceCurrency": "USD" },
             "operatingSystem": "Web",
             "provider": { "@type": "Organization", "name": "Traffikora", "url": "https://www.traffikora.com" }
@@ -64,11 +64,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 `;
 
-const agencies = `import type { Metadata } from 'next'
+const yext = `import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Marketing Automation for Agencies — Scale Without Hiring | Traffikora',
-  description: 'Traffikora helps marketing agencies manage 10+ clients with white-label reports, multi-client dashboard, and full automation. Scale revenue without scaling headcount.',
+  title: 'Traffikora vs Yext — Full Marketing vs Listing Sync | Traffikora',
+  description: 'Yext charges $500+/mo just to sync listings. Traffikora automates your full marketing machine for $97/mo. SEO, social, AI engines, and more. Try free.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -83,8 +83,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             "name": "Traffikora",
             "url": "https://www.traffikora.com",
             "applicationCategory": "BusinessApplication",
-            "description": "Traffikora helps marketing agencies scale with white-label reports, multi-client dashboards, and full marketing automation for every client.",
-            "offers": { "@type": "Offer", "price": "797", "priceCurrency": "USD" },
+            "description": "Traffikora is a full marketing automation platform — a powerful and affordable alternative to Yext with SEO, social media, and AI engine optimization.",
+            "offers": { "@type": "Offer", "price": "97", "priceCurrency": "USD" },
             "operatingSystem": "Web",
             "provider": { "@type": "Organization", "name": "Traffikora", "url": "https://www.traffikora.com" }
           })
@@ -96,7 +96,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 `;
 
-fs.writeFileSync('src/app/solutions/restaurants/layout.tsx', restaurants, 'utf8');
-fs.writeFileSync('src/app/solutions/small-businesses/layout.tsx', smallBiz, 'utf8');
-fs.writeFileSync('src/app/solutions/marketing-agencies/layout.tsx', agencies, 'utf8');
+fs.writeFileSync('src/app/compare/traffikora-vs-semrush/layout.tsx', semrush, 'utf8');
+fs.writeFileSync('src/app/compare/traffikora-vs-later/layout.tsx', later, 'utf8');
+fs.writeFileSync('src/app/compare/traffikora-vs-yext/layout.tsx', yext, 'utf8');
 console.log('Done');
