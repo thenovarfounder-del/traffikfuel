@@ -11,7 +11,7 @@ export async function POST(req) {
     mode: 'subscription',
     customer_email: email,
     line_items: [{ price: priceId, quantity: 1 }],
-    trial_period_days: 7,
+    subscription_data: { trial_period_days: 7 },
     success_url: 'https://www.traffikora.com/dashboard?checkout=success',
     cancel_url: 'https://www.traffikora.com/pricing',
   })

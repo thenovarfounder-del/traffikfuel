@@ -1,27 +1,27 @@
 const fs = require('fs')
+const path = require('path')
 
-const additions = `
-NEXT_PUBLIC_SUPABASE_URL=https://ehjhsbrcbtqcvmgzjzkm.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoamhzYnJjYnRxY3ZtZ3pqemttIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzkwNzAyNCwiZXhwIjoyMDkzNDgzMDI0fQ.JooyTIK4dPUsLoFw-l-delBU9DtSvBC1_-srK4kp4co
+const content = `// @ts-nocheck
+import { NextResponse } from 'next/server'
+import Stripe from 'stripe'
+
+export async function POST(req) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+  const { priceId, email } = await req.json()
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    mode: 'subscription',
+    customer_email: email,
+    line_items: [{ price: priceId, quantity: 1 }],
+    subscription_data: { trial_period_days: 7 },
+    success_url: 'https://www.traffikora.com/dashboard?checkout=success',
+    cancel_url: 'https://www.traffikora.com/pricing',
+  })
+
+  return NextResponse.json({ url: session.url })
+}
 `
 
-const envPath = '.env.local'
-const current = fs.readFileSync(envPath, 'utf8')
-let updated = current
-
-if (!current.includes('NEXT_PUBLIC_SUPABASE_URL')) {
-  updated += '\nNEXT_PUBLIC_SUPABASE_URL=https://ehjhsbrcbtqcvmgzjzkm.supabase.co'
-  console.log('Added: NEXT_PUBLIC_SUPABASE_URL')
-} else {
-  console.log('NEXT_PUBLIC_SUPABASE_URL already exists')
-}
-
-if (!current.includes('SUPABASE_SERVICE_ROLE_KEY')) {
-  updated += '\nSUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoamhzYnJjYnRxY3ZtZ3pqemttIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzkwNzAyNCwiZXhwIjoyMDkzNDgzMDI0fQ.JooyTIK4dPUsLoFw-l-delBU9DtSvBC1_-srK4kp4co'
-  console.log('Added: SUPABASE_SERVICE_ROLE_KEY')
-} else {
-  console.log('SUPABASE_SERVICE_ROLE_KEY already exists')
-}
-
-fs.writeFileSync(envPath, updated)
-console.log('Written: .env.local')
+fs.writeFileSync(path.join('src', 'app', 'api', 'stripe', 'checkout', 'route.ts'), content)
+console.log('Written: route.ts')
