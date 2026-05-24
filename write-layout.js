@@ -2,8 +2,8 @@ const fs = require('fs');
 const content = `import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Traffikora vs Constant Contact: Full Comparison | Traffikora',
-  description: 'Traffikora vs Constant Contact compared. See why local businesses replace Constant Contact with Traffikora for automated SEO, social media, and AI engine optimization.',
+  title: 'Pricing — Marketing Automation for Small Businesses | Traffikora',
+  description: 'Traffikora plans start at $97/month. Social media, local SEO, Google Business Profile, and AI engine optimization — all automated. Free 7-day trial, no credit card.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -18,12 +18,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             "name": "Traffikora",
             "url": "https://www.traffikora.com",
             "applicationCategory": "BusinessApplication",
-            "description": "Traffikora is an AI-powered marketing automation platform for small businesses. Automates social media, local SEO, Google Business Profile, and AI engine optimization.",
-            "offers": {
-              "@type": "Offer",
-              "price": "97",
-              "priceCurrency": "USD"
-            },
+            "description": "Traffikora is an AI-powered marketing automation platform for small businesses. Plans start at $97/month. Automates social media, local SEO, Google Business Profile, and AI engine optimization.",
+            "offers": [
+              { "@type": "Offer", "name": "Starter", "price": "97", "priceCurrency": "USD" },
+              { "@type": "Offer", "name": "Pro", "price": "197", "priceCurrency": "USD" },
+              { "@type": "Offer", "name": "Agency", "price": "797", "priceCurrency": "USD" },
+              { "@type": "Offer", "name": "Enterprise", "price": "1497", "priceCurrency": "USD" }
+            ],
             "operatingSystem": "Web",
             "provider": {
               "@type": "Organization",
@@ -38,5 +39,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   )
 }
 `;
-fs.writeFileSync('src/app/compare/traffikora-vs-constant-contact/layout.tsx', content);
+fs.writeFileSync('src/app/pricing/layout.tsx', content);
 console.log('layout.tsx written');

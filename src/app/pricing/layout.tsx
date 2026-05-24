@@ -1,10 +1,39 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Traffikora Pricing — Plans Starting at 97 per month',
-  description: 'Simple, transparent pricing. Starter at 97, Pro at 197, Agency at 797, Enterprise at 1497. All plans include a 7-day free trial.',
+  title: 'Pricing — Marketing Automation for Small Businesses | Traffikora',
+  description: 'Traffikora plans start at $97/month. Social media, local SEO, Google Business Profile, and AI engine optimization — all automated. Free 7-day trial, no credit card.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "Traffikora",
+            "url": "https://www.traffikora.com",
+            "applicationCategory": "BusinessApplication",
+            "description": "Traffikora is an AI-powered marketing automation platform for small businesses. Plans start at $97/month. Automates social media, local SEO, Google Business Profile, and AI engine optimization.",
+            "offers": [
+              { "@type": "Offer", "name": "Starter", "price": "97", "priceCurrency": "USD" },
+              { "@type": "Offer", "name": "Pro", "price": "197", "priceCurrency": "USD" },
+              { "@type": "Offer", "name": "Agency", "price": "797", "priceCurrency": "USD" },
+              { "@type": "Offer", "name": "Enterprise", "price": "1497", "priceCurrency": "USD" }
+            ],
+            "operatingSystem": "Web",
+            "provider": {
+              "@type": "Organization",
+              "name": "Traffikora",
+              "url": "https://www.traffikora.com"
+            }
+          })
+        }}
+      />
+      {children}
+    </>
+  )
 }
