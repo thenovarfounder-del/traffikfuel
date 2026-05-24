@@ -6,52 +6,48 @@ import Link from 'next/link'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
+const PLANS = [
+  { name: 'Starter', price: '$97/mo', priceId: 'price_1TUvcsHuRIVTwN2fMNH7SjRh' },
+  { name: 'Pro', price: '$197/mo', priceId: 'price_1TUve7HuRIVTwN2fYvrd1UgG' },
+  { name: 'Agency', price: '$797/mo', priceId: 'price_1TUvfKHuRIVTwN2fzlinyhei' },
+  { name: 'Enterprise', price: '$1,497/mo', priceId: 'price_1TUvgSHuRIVTwN2fhUwmR6Kb' },
+]
+
 export default function SignupPage() {
   const [step, setStep] = useState(1)
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
   const [business, setBusiness] = useState('')
-  const [plan, setPlan] = useState('starter')
+  const [selectedPlan, setSelectedPlan] = useState(PLANS[1])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const plans = [
-    { id: 'starter', label: 'Starter', price: '$97/mo', description: 'Perfect for solo operators and single-location businesses.' },
-    { id: 'pro', label: 'Pro', price: '$197/mo', description: 'For growing businesses that want more automation and reporting.' },
-    { id: 'agency', label: 'Agency', price: '$797/mo', description: 'Manage up to 10 client locations from one dashboard.' },
-    { id: 'enterprise', label: 'Enterprise', price: '$1,497/mo', description: 'Unlimited locations, dedicated support, and custom onboarding.' },
-  ]
-
-  async function handleSubmit() {
+  async function handleFinalSubmit() {
     setLoading(true)
     setError('')
     try {
       const res = await fetch('/api/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name, business, plan })
+        body: JSON.stringify({ name, email, password, business }),
       })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Something went wrong')
-      window.location.href = '/dashboard'
-    } catch (err: any) {
+      if (!res.ok) throw new Error(data.error || 'Signup failed')
+
+      const stripeRes = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priceId: selectedPlan.priceId, email }),
+      })
+      const stripeData = await stripeRes.json()
+      if (!stripeRes.ok) throw new Error(stripeData.error || 'Stripe error')
+
+      window.location.href = stripeData.url
+    } catch (err) {
       setError(err.message)
-    } finally {
       setLoading(false)
     }
-  }
-
-  const inputStyle = {
-    width: '100%',
-    padding: '14px 16px',
-    fontSize: '16px',
-    border: '2.5px solid #111',
-    outline: 'none',
-    fontFamily: 'DM Sans, sans-serif',
-    marginBottom: '16px',
-    boxSizing: 'border-box' as const,
-    background: '#fff',
   }
 
   return (
@@ -61,85 +57,47 @@ export default function SignupPage() {
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
       <Nav />
 
-      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '70px 32px' }}>
+      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Get Started</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, maxWidth: '700px', margin: '0 auto 16px' }}>Start Your Free 7-Day Trial</h1>
-        <p style={{ fontSize: '18px', color: '#ccc', maxWidth: '500px', margin: '0 auto' }}>No credit card required. Cancel anytime. Setup takes under 5 minutes.</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Start Your Free 7-Day Trial</h1>
+        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto' }}>No credit card charged today. Cancel anytime.</p>
       </section>
 
-      <section style={{ background: '#f9f9f9', padding: '80px 32px' }}>
-        <div style={{ maxWidth: '560px', margin: '0 auto', background: '#fff', border: '2.5px solid #111', padding: '48px' }}>
+      <section style={{ padding: '80px 32px', maxWidth: '560px', margin: '0 auto' }}>
 
-          {/* STEP INDICATOR */}
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '40px' }}>
-            {[1, 2, 3].map(s => (
-              <div key={s} style={{ flex: 1, height: '4px', background: step >= s ? '#E8610A' : '#eee' }} />
-            ))}
+        {step === 1 && (
+          <div>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 700, marginBottom: '32px' }}>Step 1 — Your Info</h2>
+            <input placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} style={{ width: '100%', padding: '14px', fontSize: '16px', border: '2.5px solid #111', marginBottom: '16px', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+            <input placeholder="Email Address" type="email" value={email} onChange={e => setEmail(e.target.value)} style={{ width: '100%', padding: '14px', fontSize: '16px', border: '2.5px solid #111', marginBottom: '16px', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+            <input placeholder="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} style={{ width: '100%', padding: '14px', fontSize: '16px', border: '2.5px solid #111', marginBottom: '24px', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+            <button onClick={() => setStep(2)} style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', cursor: 'pointer', width: '100%' }}>Continue</button>
           </div>
+        )}
 
-          {/* STEP 1 — ACCOUNT */}
-          {step === 1 && (
-            <div>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 900, marginBottom: '8px' }}>Create Your Account</h2>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#666', marginBottom: '28px' }}>Step 1 of 3</p>
-              <input style={inputStyle} type="text" placeholder="Your Full Name" value={name} onChange={e => setName(e.target.value)} />
-              <input style={inputStyle} type="email" placeholder="Email Address" value={email} onChange={e => setEmail(e.target.value)} />
-              <input style={inputStyle} type="password" placeholder="Create Password" value={password} onChange={e => setPassword(e.target.value)} />
-              <button
-                onClick={() => { if (name && email && password) setStep(2); else setError('Please fill in all fields.') }}
-                style={{ width: '100%', background: '#E8610A', color: '#fff', padding: '16px', fontSize: '17px', fontWeight: 700, border: 'none', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}
-              >Continue</button>
-              {error && <p style={{ color: 'red', marginTop: '12px', fontSize: '14px' }}>{error}</p>}
-            </div>
-          )}
+        {step === 2 && (
+          <div>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 700, marginBottom: '32px' }}>Step 2 — Your Business</h2>
+            <input placeholder="Business Name" value={business} onChange={e => setBusiness(e.target.value)} style={{ width: '100%', padding: '14px', fontSize: '16px', border: '2.5px solid #111', marginBottom: '24px', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+            <button onClick={() => setStep(3)} style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', cursor: 'pointer', width: '100%' }}>Continue</button>
+          </div>
+        )}
 
-          {/* STEP 2 — BUSINESS */}
-          {step === 2 && (
-            <div>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 900, marginBottom: '8px' }}>About Your Business</h2>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#666', marginBottom: '28px' }}>Step 2 of 3</p>
-              <input style={inputStyle} type="text" placeholder="Business Name" value={business} onChange={e => setBusiness(e.target.value)} />
-              <button
-                onClick={() => { if (business) setStep(3); else setError('Please enter your business name.') }}
-                style={{ width: '100%', background: '#E8610A', color: '#fff', padding: '16px', fontSize: '17px', fontWeight: 700, border: 'none', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}
-              >Continue</button>
-              <button onClick={() => setStep(1)} style={{ width: '100%', background: 'transparent', color: '#111', padding: '12px', fontSize: '15px', border: 'none', cursor: 'pointer', marginTop: '8px', fontFamily: 'DM Sans, sans-serif' }}>Back</button>
-              {error && <p style={{ color: 'red', marginTop: '12px', fontSize: '14px' }}>{error}</p>}
-            </div>
-          )}
-
-          {/* STEP 3 — PLAN */}
-          {step === 3 && (
-            <div>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 900, marginBottom: '8px' }}>Choose Your Plan</h2>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#666', marginBottom: '28px' }}>Step 3 of 3 — Free for 7 days, then billed monthly.</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
-                {plans.map(p => (
-                  <div
-                    key={p.id}
-                    onClick={() => setPlan(p.id)}
-                    style={{ border: plan === p.id ? '2.5px solid #E8610A' : '2.5px solid #ddd', padding: '16px 20px', cursor: 'pointer', background: plan === p.id ? '#fff8f5' : '#fff' }}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 700, fontSize: '16px' }}>{p.label}</span>
-                      <span style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 700, fontSize: '16px', color: '#E8610A' }}>{p.price}</span>
-                    </div>
-                    <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#666', marginTop: '4px' }}>{p.description}</p>
-                  </div>
-                ))}
+        {step === 3 && (
+          <div>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 700, marginBottom: '32px' }}>Step 3 — Choose Your Plan</h2>
+            {PLANS.map(plan => (
+              <div key={plan.priceId} onClick={() => setSelectedPlan(plan)} style={{ border: selectedPlan.priceId === plan.priceId ? '2.5px solid #E8610A' : '2.5px solid #111', padding: '20px', marginBottom: '16px', cursor: 'pointer', background: selectedPlan.priceId === plan.priceId ? '#fff8f5' : '#fff' }}>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 700, fontSize: '18px', margin: 0 }}>{plan.name} — {plan.price}</p>
               </div>
-              <button
-                onClick={handleSubmit}
-                disabled={loading}
-                style={{ width: '100%', background: '#E8610A', color: '#fff', padding: '16px', fontSize: '17px', fontWeight: 700, border: 'none', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', opacity: loading ? 0.7 : 1 }}
-              >{loading ? 'Creating your account...' : 'Start Free Trial'}</button>
-              <button onClick={() => setStep(2)} style={{ width: '100%', background: 'transparent', color: '#111', padding: '12px', fontSize: '15px', border: 'none', cursor: 'pointer', marginTop: '8px', fontFamily: 'DM Sans, sans-serif' }}>Back</button>
-              {error && <p style={{ color: 'red', marginTop: '12px', fontSize: '14px' }}>{error}</p>}
-            </div>
-          )}
+            ))}
+            {error && <p style={{ color: 'red', marginBottom: '16px' }}>{error}</p>}
+            <button onClick={handleFinalSubmit} disabled={loading} style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', cursor: 'pointer', width: '100%' }}>
+              {loading ? 'Processing...' : 'Start Free Trial →'}
+            </button>
+          </div>
+        )}
 
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#999', textAlign: 'center', marginTop: '24px' }}>Already have an account? <Link href="/login" style={{ color: '#E8610A', textDecoration: 'none', fontWeight: 600 }}>Log in</Link></p>
-        </div>
       </section>
 
       <Footer />
