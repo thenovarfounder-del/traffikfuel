@@ -8,36 +8,100 @@ import Link from 'next/link'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
-export default function DashboardPage() {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+const plans = [
+  { name: 'Starter', price: '$97/mo', priceId: 'price_1TUvcsHuRIVTwN2fMNH7SjRh', features: ['1 Location', 'Google + Facebook', 'AI Content', 'Monthly Reports'] },
+  { name: 'Pro', price: '$197/mo', priceId: 'price_1TUve7HuRIVTwN2fYvrd1UgG', features: ['3 Locations', 'All Platforms', 'AI Content', 'Weekly Reports', 'Priority Support'] },
+  { name: 'Agency', price: '$797/mo', priceId: 'price_1TUvfKHuRIVTwN2fzlinyhei', features: ['25 Locations', 'All Platforms', 'AI Content', 'Daily Reports', 'Dedicated Manager'] },
+  { name: 'Enterprise', price: '$1,497/mo', priceId: 'price_1TUvgSHuRIVTwN2fhUwmR6Kb', features: ['Unlimited Locations', 'All Platforms', 'Custom AI', 'Real-time Reports', 'White Glove Service'] },
+]
+
+export default function SignupPage() {
+  const [step, setStep] = useState(1)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [phone, setPhone] = useState('')
+  const [business, setBusiness] = useState('')
+  const [selectedPlan, setSelectedPlan] = useState(plans[1])
+  const [verifyCode, setVerifyCode] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    async function checkAuth() {
-      const { supabase } = await import('@/lib/supabase')
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        window.location.href = '/login'
-        return
-      }
-      setUser(session.user)
-      setLoading(false)
+    const params = new URLSearchParams(window.location.search)
+    const plan = params.get('plan')
+    if (plan) {
+      const found = plans.find(p => p.name.toLowerCase() === plan.toLowerCase())
+      if (found) setSelectedPlan(found)
     }
-    checkAuth()
   }, [])
 
-  if (loading) {
-    return (
-      <>
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-        <Nav />
-        <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#666' }}>Loading...</p>
-        </div>
-        <Footer />
-      </>
-    )
+  async function handleStep1() {
+    setError('')
+    if (!name || !email || !password || !phone || !business) { setError('Please fill in all fields.'); return }
+    if (password.length < 6) { setError('Password must be at least 6 characters.'); return }
+    setLoading(true)
+    const res = await fetch('/api/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password, business })
+    })
+    if (!res.ok) {
+      const d = await res.json()
+      setError(d.error || 'Signup failed. Please try again.')
+      setLoading(false)
+      return
+    }
+    setStep(2)
+    setLoading(false)
   }
+
+  async function handleStep2() {
+    setError('')
+    setLoading(true)
+    const sendRes = await fetch('/api/verify/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone })
+    })
+    if (!sendRes.ok) {
+      setError('Failed to send code. Check your phone number and try again.')
+      setLoading(false)
+      return
+    }
+    setStep(3)
+    setLoading(false)
+  }
+
+  async function handleVerify() {
+    setError('')
+    setLoading(true)
+    const checkRes = await fetch('/api/verify/check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, code: verifyCode })
+    })
+    if (!checkRes.ok) {
+      setError('Invalid code. Please try again.')
+      setLoading(false)
+      return
+    }
+    const stripeRes = await fetch('/api/stripe/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ priceId: selectedPlan.priceId, email })
+    })
+    const stripeData = await stripeRes.json()
+    if (stripeData.url) {
+      window.location.href = stripeData.url
+    } else {
+      setError('Payment setup failed. Please try again.')
+      setLoading(false)
+    }
+  }
+
+  const inputStyle = { width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box', marginBottom: '16px' }
+  const btnStyle = { width: '100%', background: '#E8610A', color: '#fff', padding: '16px', fontSize: '17px', fontWeight: 700, border: 'none', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', opacity: loading ? 0.7 : 1 }
 
   return (
     <>
@@ -46,33 +110,60 @@ export default function DashboardPage() {
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
       <Nav />
 
-      <section style={{ background: '#111', color: '#fff', padding: '60px 32px' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px' }}>Dashboard</p>
-          <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '42px', fontWeight: 900, marginBottom: '8px' }}>Welcome back.</h1>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#ccc' }}>{user?.email}</p>
-        </div>
+      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '70px 32px 50px' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Get Started</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, marginBottom: '16px' }}>Start Your Free 7-Day Trial</h1>
+        <p style={{ fontSize: '18px', color: '#ccc' }}>No credit card charged today. Cancel anytime.</p>
       </section>
 
-      <section style={{ background: '#fff', padding: '60px 32px' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px' }}>Connect Accounts</h2>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', marginBottom: '20px' }}>Link your Google, Facebook, and Instagram accounts to get started.</p>
-              <Link href="/dashboard/connect/google" style={{ background: '#E8610A', color: '#fff', padding: '12px 24px', textDecoration: 'none', fontSize: '15px', fontWeight: 700, display: 'inline-block' }}>Connect Now</Link>
+      <section style={{ background: '#fff', padding: '60px 32px', display: 'flex', justifyContent: 'center' }}>
+        <div style={{ width: '100%', maxWidth: '500px' }}>
+
+          {error && <div style={{ background: '#fff0f0', border: '2px solid #e00', color: '#c00', padding: '14px 18px', marginBottom: '24px', fontFamily: 'DM Sans, sans-serif', fontSize: '15px' }}>{error}</div>}
+
+          {step === 1 && (
+            <div>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, marginBottom: '28px' }}>Step 1 \u2014 Your Info</h2>
+              <input style={inputStyle} placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} />
+              <input style={inputStyle} placeholder="Email Address" type="email" value={email} onChange={e => setEmail(e.target.value)} />
+              <input style={inputStyle} placeholder="Password (min 6 characters)" type="password" value={password} onChange={e => setPassword(e.target.value)} />
+              <input style={inputStyle} placeholder="Phone Number (e.g. +13055551234)" value={phone} onChange={e => setPhone(e.target.value)} />
+              <input style={inputStyle} placeholder="Business Name" value={business} onChange={e => setBusiness(e.target.value)} />
+              <button style={btnStyle} onClick={handleStep1} disabled={loading}>{loading ? 'Please wait...' : 'Continue'}</button>
             </div>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px' }}>Business Settings</h2>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', marginBottom: '20px' }}>Set up your business name, category, and location.</p>
-              <Link href="/dashboard/settings" style={{ background: '#111', color: '#fff', padding: '12px 24px', textDecoration: 'none', fontSize: '15px', fontWeight: 700, display: 'inline-block' }}>Go to Settings</Link>
+          )}
+
+          {step === 2 && (
+            <div>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, marginBottom: '28px' }}>Step 2 \u2014 Choose Your Plan</h2>
+              {plans.map(plan => (
+                <div key={plan.name} onClick={() => setSelectedPlan(plan)} style={{ border: selectedPlan.name === plan.name ? '2.5px solid #E8610A' : '2.5px solid #111', padding: '20px 24px', marginBottom: '16px', cursor: 'pointer', background: selectedPlan.name === plan.name ? '#fff8f4' : '#fff' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <span style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700 }}>{plan.name}</span>
+                    <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', fontWeight: 700, color: '#E8610A' }}>{plan.price}</span>
+                  </div>
+                  <ul style={{ margin: 0, padding: '0 0 0 18px' }}>
+                    {plan.features.map(f => <li key={f} style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#555', marginBottom: '4px' }}>{f}</li>)}
+                  </ul>
+                </div>
+              ))}
+              <button style={btnStyle} onClick={handleStep2} disabled={loading}>{loading ? 'Sending code...' : 'Continue \u2014 Verify Phone'}</button>
             </div>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px' }}>Support</h2>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', marginBottom: '20px' }}>Need help? Our team is standing by.</p>
-              <Link href="/support" style={{ background: '#111', color: '#fff', padding: '12px 24px', textDecoration: 'none', fontSize: '15px', fontWeight: 700, display: 'inline-block' }}>Get Help</Link>
+          )}
+
+          {step === 3 && (
+            <div>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, marginBottom: '16px' }}>Step 3 \u2014 Verify Your Phone</h2>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', marginBottom: '28px' }}>We sent a 6-digit code to {phone}. Enter it below.</p>
+              <input style={inputStyle} placeholder="6-digit code" value={verifyCode} onChange={e => setVerifyCode(e.target.value)} />
+              <button style={btnStyle} onClick={handleVerify} disabled={loading}>{loading ? 'Verifying...' : 'Verify \u0026 Go to Payment'}</button>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#999', textAlign: 'center', marginTop: '16px', cursor: 'pointer' }} onClick={handleStep2}>Resend code</p>
             </div>
-          </div>
+          )}
+
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#999', textAlign: 'center', marginTop: '24px' }}>
+            Already have an account? <Link href="/login" style={{ color: '#E8610A', fontWeight: 600, textDecoration: 'none' }}>Log in</Link>
+          </p>
         </div>
       </section>
 
@@ -82,5 +173,5 @@ export default function DashboardPage() {
 }
 `;
 
-fs.writeFileSync('src/app/dashboard/page.tsx', content);
-console.log('Written: src/app/dashboard/page.tsx');
+fs.writeFileSync('src/app/signup/page.tsx', content);
+console.log('Written: src/app/signup/page.tsx');
