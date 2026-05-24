@@ -1,9 +1,15 @@
 const fs = require('fs');
-let content = fs.readFileSync('src/app/page.tsx', 'utf8');
+const content = fs.readFileSync('src/app/page.tsx', 'utf8');
 
-// Replace <Footer /> }} /> with }} /> and add Footer after </main>
-content = content.replace('<Footer />  }} />', '}} />');
-content = content.replace('</main>', '</main>\n      <Footer />');
+const withImport = content.replace(
+  "import Link from 'next/link'",
+  "import Link from 'next/link'\nimport Footer from '@/components/Footer'"
+);
 
-fs.writeFileSync('src/app/page.tsx', content, 'utf8');
-console.log('Done: Footer fixed.');
+const withFooter = withImport.replace(
+  /<footer[\s\S]*?<\/footer>/,
+  '<Footer />'
+);
+
+fs.writeFileSync('src/app/page.tsx', withFooter);
+console.log('Done');
