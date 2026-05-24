@@ -1,51 +1,27 @@
 const fs = require('fs')
-const path = require('path')
 
-const content = `// @ts-nocheck
-import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-
-export async function POST(req) {
-  try {
-    const { name, email, password, business } = await req.json()
-
-    if (!email || !password) {
-      return NextResponse.json({ error: 'Email and password required' }, { status: 400 })
-    }
-
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    )
-
-    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-      email,
-      password,
-      email_confirm: true,
-    })
-
-    if (authError) {
-      return NextResponse.json({ error: authError.message }, { status: 400 })
-    }
-
-    const userId = authData.user.id
-
-    await supabase.from('profiles').upsert({
-      id: userId,
-      name,
-      email,
-      business,
-      created_at: new Date().toISOString(),
-    })
-
-    return NextResponse.json({ success: true, userId }, { status: 200 })
-  } catch (err) {
-    return NextResponse.json({ error: err.message || 'Server error' }, { status: 500 })
-  }
-}
+const additions = `
+NEXT_PUBLIC_SUPABASE_URL=https://ehjhsbrcbtqcvmgzjzkm.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoamhzYnJjYnRxY3ZtZ3pqemttIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzkwNzAyNCwiZXhwIjoyMDkzNDgzMDI0fQ.JooyTIK4dPUsLoFw-l-delBU9DtSvBC1_-srK4kp4co
 `
 
-const dir = path.join('src', 'app', 'api', 'signup')
-fs.mkdirSync(dir, { recursive: true })
-fs.writeFileSync(path.join(dir, 'route.ts'), content)
-console.log('Written: src/app/api/signup/route.ts')
+const envPath = '.env.local'
+const current = fs.readFileSync(envPath, 'utf8')
+let updated = current
+
+if (!current.includes('NEXT_PUBLIC_SUPABASE_URL')) {
+  updated += '\nNEXT_PUBLIC_SUPABASE_URL=https://ehjhsbrcbtqcvmgzjzkm.supabase.co'
+  console.log('Added: NEXT_PUBLIC_SUPABASE_URL')
+} else {
+  console.log('NEXT_PUBLIC_SUPABASE_URL already exists')
+}
+
+if (!current.includes('SUPABASE_SERVICE_ROLE_KEY')) {
+  updated += '\nSUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoamhzYnJjYnRxY3ZtZ3pqemttIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzkwNzAyNCwiZXhwIjoyMDkzNDgzMDI0fQ.JooyTIK4dPUsLoFw-l-delBU9DtSvBC1_-srK4kp4co'
+  console.log('Added: SUPABASE_SERVICE_ROLE_KEY')
+} else {
+  console.log('SUPABASE_SERVICE_ROLE_KEY already exists')
+}
+
+fs.writeFileSync(envPath, updated)
+console.log('Written: .env.local')
