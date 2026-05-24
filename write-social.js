@@ -3,57 +3,53 @@ const fs = require('fs');
 const content = `// @ts-nocheck
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Nav from '@/components/Nav'
-import Footer from '@/components/Footer'
 
-export default function SignupPage() {
-  const [step, setStep] = useState(1)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
-  const [business, setBusiness] = useState('')
-  const [plan, setPlan] = useState('starter')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+export default function DashboardPage() {
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  const plans = [
-    { id: 'starter', label: 'Starter', price: '$97/mo', description: 'Perfect for solo operators and single-location businesses.' },
-    { id: 'pro', label: 'Pro', price: '$197/mo', description: 'For growing businesses that want more automation and reporting.' },
-    { id: 'agency', label: 'Agency', price: '$797/mo', description: 'Manage up to 10 client locations from one dashboard.' },
-    { id: 'enterprise', label: 'Enterprise', price: '$1,497/mo', description: 'Unlimited locations, dedicated support, and custom onboarding.' },
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const res = await fetch('/api/me')
+        if (!res.ok) {
+          window.location.href = '/signup'
+          return
+        }
+        const data = await res.json()
+        setUser(data.user)
+      } catch {
+        window.location.href = '/signup'
+      } finally {
+        setLoading(false)
+      }
+    }
+    checkAuth()
+  }, [])
+
+  const stats = [
+    { label: 'Posts Published', value: '0', sub: 'This month' },
+    { label: 'Reviews Monitored', value: '0', sub: 'All platforms' },
+    { label: 'Profile Updates', value: '0', sub: 'Google Business' },
+    { label: 'AI Engine Score', value: '--', sub: 'Optimization score' },
   ]
 
-  async function handleSubmit() {
-    setLoading(true)
-    setError('')
-    try {
-      const res = await fetch('/api/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name, business, plan })
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Something went wrong')
-      window.location.href = '/dashboard'
-    } catch (err: any) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const tasks = [
+    { title: 'Connect Google Business Profile', done: false, href: '/dashboard/connect/google' },
+    { title: 'Connect Facebook', done: false, href: '/dashboard/connect/facebook' },
+    { title: 'Connect Instagram', done: false, href: '/dashboard/connect/instagram' },
+    { title: 'Set your business category', done: false, href: '/dashboard/settings' },
+    { title: 'Review your first automated post', done: false, href: '/dashboard/posts' },
+  ]
 
-  const inputStyle = {
-    width: '100%',
-    padding: '14px 16px',
-    fontSize: '16px',
-    border: '2.5px solid #111',
-    outline: 'none',
-    fontFamily: 'DM Sans, sans-serif',
-    marginBottom: '16px',
-    boxSizing: 'border-box' as const,
-    background: '#fff',
+  if (loading) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#f9f9f9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#666' }}>Loading your dashboard...</p>
+      </div>
+    )
   }
 
   return (
@@ -61,94 +57,83 @@ export default function SignupPage() {
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-      <Nav />
 
-      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '70px 32px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Get Started</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, maxWidth: '700px', margin: '0 auto 16px' }}>Start Your Free 7-Day Trial</h1>
-        <p style={{ fontSize: '18px', color: '#ccc', maxWidth: '500px', margin: '0 auto' }}>No credit card required. Cancel anytime. Setup takes under 5 minutes.</p>
-      </section>
+      {/* TOP NAV */}
+      <nav style={{ background: '#fff', borderBottom: '2.5px solid #111', padding: '0 32px', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100 }}>
+        <Link href="/" style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 900, color: '#111', textDecoration: 'none' }}>Traffikora</Link>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+          <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#666' }}>{user?.email || ''}</span>
+          <Link href="/api/logout" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#E8610A', textDecoration: 'none', fontWeight: 600 }}>Log Out</Link>
+        </div>
+      </nav>
 
-      <section style={{ background: '#f9f9f9', padding: '80px 32px' }}>
-        <div style={{ maxWidth: '560px', margin: '0 auto', background: '#fff', border: '2.5px solid #111', padding: '48px' }}>
+      <div style={{ display: 'flex', minHeight: 'calc(100vh - 64px)', background: '#f9f9f9' }}>
 
-          {/* STEP INDICATOR */}
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '40px' }}>
-            {[1, 2, 3].map(s => (
-              <div key={s} style={{ flex: 1, height: '4px', background: step >= s ? '#E8610A' : '#eee' }} />
+        {/* SIDEBAR */}
+        <aside style={{ width: '240px', background: '#111', padding: '32px 0', flexShrink: 0 }}>
+          {[
+            { label: 'Dashboard', href: '/dashboard' },
+            { label: 'Posts', href: '/dashboard/posts' },
+            { label: 'Reviews', href: '/dashboard/reviews' },
+            { label: 'Google Profile', href: '/dashboard/google' },
+            { label: 'Analytics', href: '/dashboard/analytics' },
+            { label: 'Connections', href: '/dashboard/connect' },
+            { label: 'Settings', href: '/dashboard/settings' },
+            { label: 'Billing', href: '/dashboard/billing' },
+          ].map((item, i) => (
+            <Link key={i} href={item.href} style={{ display: 'block', padding: '12px 28px', fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: i === 0 ? '#E8610A' : '#ccc', textDecoration: 'none', fontWeight: i === 0 ? 600 : 400 }}>{item.label}</Link>
+          ))}
+        </aside>
+
+        {/* MAIN CONTENT */}
+        <main style={{ flex: 1, padding: '40px' }}>
+
+          {/* HEADER */}
+          <div style={{ marginBottom: '40px' }}>
+            <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '36px', fontWeight: 900, color: '#111', marginBottom: '8px' }}>Welcome to Traffikora</h1>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#666' }}>Your marketing automation is almost live. Complete the steps below to get started.</p>
+          </div>
+
+          {/* STATS */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '40px' }}>
+            {stats.map((stat, i) => (
+              <div key={i} style={{ background: '#fff', border: '2.5px solid #111', padding: '24px' }}>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#666', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>{stat.label}</p>
+                <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '36px', fontWeight: 900, color: '#111', marginBottom: '4px' }}>{stat.value}</p>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#999' }}>{stat.sub}</p>
+              </div>
             ))}
           </div>
 
-          {/* STEP 1 — ACCOUNT */}
-          {step === 1 && (
-            <div>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 900, marginBottom: '8px' }}>Create Your Account</h2>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#666', marginBottom: '28px' }}>Step 1 of 3</p>
-              <input style={inputStyle} type="text" placeholder="Your Full Name" value={name} onChange={e => setName(e.target.value)} />
-              <input style={inputStyle} type="email" placeholder="Email Address" value={email} onChange={e => setEmail(e.target.value)} />
-              <input style={inputStyle} type="password" placeholder="Create Password" value={password} onChange={e => setPassword(e.target.value)} />
-              <button
-                onClick={() => { if (name && email && password) setStep(2); else setError('Please fill in all fields.') }}
-                style={{ width: '100%', background: '#E8610A', color: '#fff', padding: '16px', fontSize: '17px', fontWeight: 700, border: 'none', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}
-              >Continue</button>
-              {error && <p style={{ color: 'red', marginTop: '12px', fontSize: '14px' }}>{error}</p>}
+          {/* SETUP CHECKLIST */}
+          <div style={{ background: '#fff', border: '2.5px solid #111', padding: '32px', marginBottom: '32px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px', fontWeight: 900, color: '#111', marginBottom: '24px' }}>Setup Checklist</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {tasks.map((task, i) => (
+                <Link key={i} href={task.href} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', border: '1.5px solid #eee', textDecoration: 'none', background: '#fff' }}>
+                  <div style={{ width: '24px', height: '24px', border: '2px solid #ddd', borderRadius: '50%', flexShrink: 0, background: task.done ? '#E8610A' : '#fff' }} />
+                  <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#111', fontWeight: 500 }}>{task.title}</span>
+                  <span style={{ marginLeft: 'auto', fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#E8610A', fontWeight: 600 }}>Start \u2192</span>
+                </Link>
+              ))}
             </div>
-          )}
+          </div>
 
-          {/* STEP 2 — BUSINESS */}
-          {step === 2 && (
+          {/* UPGRADE BANNER */}
+          <div style={{ background: '#111', padding: '32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
             <div>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 900, marginBottom: '8px' }}>About Your Business</h2>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#666', marginBottom: '28px' }}>Step 2 of 3</p>
-              <input style={inputStyle} type="text" placeholder="Business Name" value={business} onChange={e => setBusiness(e.target.value)} />
-              <button
-                onClick={() => { if (business) setStep(3); else setError('Please enter your business name.') }}
-                style={{ width: '100%', background: '#E8610A', color: '#fff', padding: '16px', fontSize: '17px', fontWeight: 700, border: 'none', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}
-              >Continue</button>
-              <button onClick={() => setStep(1)} style={{ width: '100%', background: 'transparent', color: '#111', padding: '12px', fontSize: '15px', border: 'none', cursor: 'pointer', marginTop: '8px', fontFamily: 'DM Sans, sans-serif' }}>Back</button>
-              {error && <p style={{ color: 'red', marginTop: '12px', fontSize: '14px' }}>{error}</p>}
+              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 900, color: '#fff', marginBottom: '8px' }}>Your free trial ends in 7 days.</h3>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#ccc' }}>Add a payment method to keep your automation running after the trial.</p>
             </div>
-          )}
+            <Link href="/dashboard/billing" style={{ background: '#E8610A', color: '#fff', padding: '14px 32px', textDecoration: 'none', fontSize: '15px', fontWeight: 700, border: '2.5px solid #E8610A', whiteSpace: 'nowrap' }}>Add Payment Method</Link>
+          </div>
 
-          {/* STEP 3 — PLAN */}
-          {step === 3 && (
-            <div>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 900, marginBottom: '8px' }}>Choose Your Plan</h2>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#666', marginBottom: '28px' }}>Step 3 of 3 — Free for 7 days, then billed monthly.</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
-                {plans.map(p => (
-                  <div
-                    key={p.id}
-                    onClick={() => setPlan(p.id)}
-                    style={{ border: plan === p.id ? '2.5px solid #E8610A' : '2.5px solid #ddd', padding: '16px 20px', cursor: 'pointer', background: plan === p.id ? '#fff8f5' : '#fff' }}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 700, fontSize: '16px' }}>{p.label}</span>
-                      <span style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 700, fontSize: '16px', color: '#E8610A' }}>{p.price}</span>
-                    </div>
-                    <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#666', marginTop: '4px' }}>{p.description}</p>
-                  </div>
-                ))}
-              </div>
-              <button
-                onClick={handleSubmit}
-                disabled={loading}
-                style={{ width: '100%', background: '#E8610A', color: '#fff', padding: '16px', fontSize: '17px', fontWeight: 700, border: 'none', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', opacity: loading ? 0.7 : 1 }}
-              >{loading ? 'Creating your account...' : 'Start Free Trial'}</button>
-              <button onClick={() => setStep(2)} style={{ width: '100%', background: 'transparent', color: '#111', padding: '12px', fontSize: '15px', border: 'none', cursor: 'pointer', marginTop: '8px', fontFamily: 'DM Sans, sans-serif' }}>Back</button>
-              {error && <p style={{ color: 'red', marginTop: '12px', fontSize: '14px' }}>{error}</p>}
-            </div>
-          )}
-
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#999', textAlign: 'center', marginTop: '24px' }}>Already have an account? <Link href="/login" style={{ color: '#E8610A', textDecoration: 'none', fontWeight: 600 }}>Log in</Link></p>
-        </div>
-      </section>
-
-      <Footer />
+        </main>
+      </div>
     </>
   )
 }
 `;
 
-fs.writeFileSync('src/app/signup/page.tsx', content);
-console.log('Written: src/app/signup/page.tsx');
+fs.writeFileSync('src/app/dashboard/page.tsx', content);
+console.log('Written: src/app/dashboard/page.tsx');

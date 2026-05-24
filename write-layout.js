@@ -4,41 +4,14 @@ const content = `// @ts-nocheck
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Start Your Free Trial | Traffikora',
-  description: 'Sign up for Traffikora and start your free 7-day trial. No credit card required. Automate your marketing in under 5 minutes.',
+  title: 'Dashboard | Traffikora',
+  description: 'Your Traffikora marketing dashboard. Manage your automation, posts, reviews, and Google Business Profile all in one place.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            "name": "Traffikora",
-            "url": "https://www.traffikora.com",
-            "applicationCategory": "BusinessApplication",
-            "offers": {
-              "@type": "Offer",
-              "price": "97",
-              "priceCurrency": "USD"
-            },
-            "operatingSystem": "Web",
-            "provider": {
-              "@type": "Organization",
-              "name": "Traffikora",
-              "url": "https://www.traffikora.com"
-            }
-          })
-        }}
-      />
-      {children}
-    </>
-  )
+  return <>{children}</>
 }
 `;
 
-fs.writeFileSync('src/app/signup/layout.tsx', content);
-console.log('Written: src/app/signup/layout.tsx');
+fs.writeFileSync('src/app/dashboard/layout.tsx', content);
+console.log('Written: src/app/dashboard/layout.tsx');
