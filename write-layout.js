@@ -1,47 +1,44 @@
 const fs = require('fs');
 
 const content = `import type { Metadata } from 'next'
-import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Traffikora — AI-Powered Marketing Automation for Small Businesses',
-  description: 'Traffikora automates social media, local SEO, Google Business Profile, and AI engine optimization for small businesses. Set it once. It markets forever. Free 7-day trial.',
+  title: 'Marketing Automation for Real Estate Agents | Traffikora',
+  description: 'Traffikora automates SEO, social media, and AI engine optimization for real estate agents. Get more listings and buyers on autopilot. Start free trial.',
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "SoftwareApplication",
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "Traffikora",
+            "url": "https://www.traffikora.com",
+            "applicationCategory": "BusinessApplication",
+            "description": "Traffikora is an AI-powered marketing automation platform for real estate agents. It automates social media, local SEO, Google Business Profile, and AI engine optimization.",
+            "offers": {
+              "@type": "Offer",
+              "price": "97",
+              "priceCurrency": "USD"
+            },
+            "operatingSystem": "Web",
+            "provider": {
+              "@type": "Organization",
               "name": "Traffikora",
-              "url": "https://www.traffikora.com",
-              "applicationCategory": "BusinessApplication",
-              "description": "Traffikora is an AI-powered marketing automation platform for small businesses. Set it once and it markets forever — automating social media, local SEO, Google Business Profile, and AI engine optimization across ChatGPT, Perplexity, Gemini, Claude, Copilot, and Google AI Overviews.",
-              "offers": {
-                "@type": "Offer",
-                "price": "97",
-                "priceCurrency": "USD"
-              },
-              "operatingSystem": "Web",
-              "provider": {
-                "@type": "Organization",
-                "name": "Traffikora",
-                "url": "https://www.traffikora.com"
-              }
-            })
-          }}
-        />
-        {children}
-      </body>
-    </html>
+              "url": "https://www.traffikora.com"
+            }
+          })
+        }}
+      />
+      {children}
+    </>
   )
 }
 `;
 
-fs.writeFileSync('src/app/layout.tsx', content, 'utf8');
-console.log('Done: root layout.tsx fixed.');
+fs.writeFileSync('src/app/solutions/real-estate/layout.tsx', content, 'utf8');
+console.log('Done');
