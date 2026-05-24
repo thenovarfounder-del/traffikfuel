@@ -8,225 +8,117 @@ import Footer from '@/components/Footer'
 export default function WhyTraffikoraPage() {
   return (
     <>
-      
-
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
       <Nav />
 
+      {/* HERO */}
       <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Why Traffikora</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, marginBottom: '24px', maxWidth: '800px', margin: '0 auto 24px' }}>The smartest marketing decision a small business can make in 2026.</h1>
-        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '600px', margin: '0 auto 40px' }}>Not another tool. Not another agency. An automated marketing machine that runs forever — for less than you spend on lunch each week.</p>
-        <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Your Free 7-Day Trial</Link>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Every other platform optimizes for Google. We optimize for everything.</h1>
+        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '640px', margin: '0 auto 40px' }}>Google is still king. But ChatGPT, Claude, Gemini, Perplexity, and Copilot are where your next customers are searching right now. Traffikora is the only platform built to win on all of them simultaneously.</p>
+        <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free 7-Day Trial</Link>
       </section>
 
+      {/* THE SHIFT */}
       <section style={{ background: '#fff', padding: '80px 32px' }}>
         <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px', textAlign: 'center' }}>The Math</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 700, color: '#111', textAlign: 'center', marginBottom: '56px' }}>$97/mo vs $2,000+/mo. Same results.</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0', border: '2.5px solid #111' }}>
-            <div style={{ background: '#f5f5f5', padding: '20px 32px', borderBottom: '2.5px solid #111', borderRight: '2.5px solid #111' }}>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: '#666' }}>Marketing Agency</p>
-            </div>
-            <div style={{ background: '#111', padding: '20px 32px', borderBottom: '2.5px solid #111' }}>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: '#E8610A' }}>Traffikora</p>
-            </div>
-              <>
-                <div style={{ padding: '18px 32px', borderBottom: '1px solid #eee', borderRight: '2.5px solid #111', background: '#fff' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#666' }}>✗ $2,000 – $5,000/month</p>
-                </div>
-                <div style={{ padding: '18px 32px', borderBottom: '1px solid #222', background: '#111' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#fff' }}>✓ $97 – $1,497/month</p>
-                </div>
-              </>
-              <>
-                <div style={{ padding: '18px 32px', borderBottom: '1px solid #eee', borderRight: '2.5px solid #111', background: '#fff' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#666' }}>✗ 3–6 month contracts</p>
-                </div>
-                <div style={{ padding: '18px 32px', borderBottom: '1px solid #222', background: '#111' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#fff' }}>✓ Cancel anytime</p>
-                </div>
-              </>
-              <>
-                <div style={{ padding: '18px 32px', borderBottom: '1px solid #eee', borderRight: '2.5px solid #111', background: '#fff' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#666' }}>✗ Google only</p>
-                </div>
-                <div style={{ padding: '18px 32px', borderBottom: '1px solid #222', background: '#111' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#fff' }}>✓ Google + all AI engines</p>
-                </div>
-              </>
-              <>
-                <div style={{ padding: '18px 32px', borderBottom: '1px solid #eee', borderRight: '2.5px solid #111', background: '#fff' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#666' }}>✗ Manual work, slow updates</p>
-                </div>
-                <div style={{ padding: '18px 32px', borderBottom: '1px solid #222', background: '#111' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#fff' }}>✓ Fully automated, 24/7</p>
-                </div>
-              </>
-              <>
-                <div style={{ padding: '18px 32px', borderBottom: '1px solid #eee', borderRight: '2.5px solid #111', background: '#fff' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#666' }}>✗ Monthly reports, delayed</p>
-                </div>
-                <div style={{ padding: '18px 32px', borderBottom: '1px solid #222', background: '#111' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#fff' }}>✓ Real-time dashboard</p>
-                </div>
-              </>
-              <>
-                <div style={{ padding: '18px 32px', borderBottom: '1px solid #eee', borderRight: '2.5px solid #111', background: '#fff' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#666' }}>✗ You depend on their team</p>
-                </div>
-                <div style={{ padding: '18px 32px', borderBottom: '1px solid #222', background: '#111' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#fff' }}>✓ Set it once, runs forever</p>
-                </div>
-              </>
-              <>
-                <div style={{ padding: '18px 32px', borderBottom: '1px solid #eee', borderRight: '2.5px solid #111', background: '#fff' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#666' }}>✗ Optimizes for yesterday</p>
-                </div>
-                <div style={{ padding: '18px 32px', borderBottom: '1px solid #222', background: '#111' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#fff' }}>✓ Built for 2026 and beyond</p>
-                </div>
-              </>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#111', textAlign: 'center', marginBottom: '16px' }}>The way people find businesses has changed forever.</h2>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', textAlign: 'center', maxWidth: '700px', margin: '0 auto 60px' }}>In 2024, over 100 million people started using AI engines to find recommendations instead of typing into Google. By 2026, that number has grown dramatically. Most marketing platforms have not adapted. Traffikora was built specifically for this new reality.</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
+            {[
+              { icon: '🔍', title: 'Then: Google only', body: 'For 20 years, winning local search meant one thing: ranking on Google. SEO agencies built entire businesses around this single channel.' },
+              { icon: '🤖', title: 'Now: AI engines everywhere', body: 'Today your customers ask ChatGPT who to call, ask Perplexity what the best option is, and ask Gemini for recommendations. Most businesses are invisible on all of them.' },
+              { icon: '⚡', title: 'Traffikora: built for both', body: 'Traffikora automates your Google presence AND your AI engine visibility simultaneously. No other platform does this for small and mid-size businesses.' },
+            ].map((item) => (
+              <div key={item.title} style={{ border: '2.5px solid #111', padding: '32px', background: '#fff' }}>
+                <div style={{ fontSize: '36px', marginBottom: '16px' }}>{item.icon}</div>
+                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px' }}>{item.title}</h3>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.6 }}>{item.body}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <section style={{ background: '#f9f9f9', padding: '80px 32px', borderTop: '2.5px solid #111', borderBottom: '2.5px solid #111' }}>
+      {/* THE PROBLEM WITH OTHER TOOLS */}
+      <section style={{ background: '#f9f9f9', padding: '80px 32px' }}>
         <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px', textAlign: 'center' }}>Then vs Now</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 700, color: '#111', textAlign: 'center', marginBottom: '56px' }}>The old way is broken.</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
-            <div style={{ background: '#fff', border: '2.5px solid #111', padding: '40px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px', fontWeight: 700, color: '#111', marginBottom: '24px' }}>The Old Way</h3>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                  <span style={{ color: '#cc0000', fontSize: '18px', marginTop: '2px' }}>✗</span>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.5 }}>Hire an agency for $2,000+/month</p>
-                </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                  <span style={{ color: '#cc0000', fontSize: '18px', marginTop: '2px' }}>✗</span>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.5 }}>Wait weeks for content to go live</p>
-                </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                  <span style={{ color: '#cc0000', fontSize: '18px', marginTop: '2px' }}>✗</span>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.5 }}>Only optimized for Google search</p>
-                </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                  <span style={{ color: '#cc0000', fontSize: '18px', marginTop: '2px' }}>✗</span>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.5 }}>AI engines have never heard of you</p>
-                </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                  <span style={{ color: '#cc0000', fontSize: '18px', marginTop: '2px' }}>✗</span>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.5 }}>Miss customer reviews for days</p>
-                </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                  <span style={{ color: '#cc0000', fontSize: '18px', marginTop: '2px' }}>✗</span>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.5 }}>Pay for reports you don't understand</p>
-                </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                  <span style={{ color: '#cc0000', fontSize: '18px', marginTop: '2px' }}>✗</span>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.5 }}>Renew contracts you're locked into</p>
-                </div>
-            </div>
-            <div style={{ background: '#111', border: '2.5px solid #111', padding: '40px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px', fontWeight: 700, color: '#E8610A', marginBottom: '24px' }}>The Traffikora Way</h3>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                  <span style={{ color: '#E8610A', fontSize: '18px', marginTop: '2px' }}>✓</span>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#ccc', lineHeight: 1.5 }}>Connect once. Automated forever.</p>
-                </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                  <span style={{ color: '#E8610A', fontSize: '18px', marginTop: '2px' }}>✓</span>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#ccc', lineHeight: 1.5 }}>Content goes live on schedule, always</p>
-                </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                  <span style={{ color: '#E8610A', fontSize: '18px', marginTop: '2px' }}>✓</span>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#ccc', lineHeight: 1.5 }}>Google AND every major AI engine</p>
-                </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                  <span style={{ color: '#E8610A', fontSize: '18px', marginTop: '2px' }}>✓</span>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#ccc', lineHeight: 1.5 }}>ChatGPT, Perplexity, Gemini, Claude cite your business</p>
-                </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                  <span style={{ color: '#E8610A', fontSize: '18px', marginTop: '2px' }}>✓</span>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#ccc', lineHeight: 1.5 }}>Reviews monitored and flagged instantly</p>
-                </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                  <span style={{ color: '#E8610A', fontSize: '18px', marginTop: '2px' }}>✓</span>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#ccc', lineHeight: 1.5 }}>Simple dashboard, real results</p>
-                </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                  <span style={{ color: '#E8610A', fontSize: '18px', marginTop: '2px' }}>✓</span>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#ccc', lineHeight: 1.5 }}>Cancel anytime. No contracts.</p>
-                </div>
-            </div>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#111', textAlign: 'center', marginBottom: '16px' }}>Other platforms were not built for this moment.</h2>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', textAlign: 'center', maxWidth: '700px', margin: '0 auto 56px' }}>HubSpot, Hootsuite, Mailchimp, SEMrush — these are great tools built for a world that is rapidly changing. None of them were designed to optimize your presence across AI engines. Traffikora was.</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+            {[
+              { tool: 'HubSpot', problem: 'Built for enterprise sales teams. Overwhelming for small businesses. No AI engine optimization. Starts at $800+/month for real features.' },
+              { tool: 'Hootsuite', problem: 'A social media scheduler. Does not write your content, does not touch Google, does not do SEO, and has zero AI engine strategy.' },
+              { tool: 'Mailchimp', problem: 'An email newsletter tool. Completely ignores Google, social media automation, local SEO, and AI engine visibility.' },
+              { tool: 'SEMrush', problem: 'A powerful SEO research tool for experts. Requires significant marketing knowledge to use. Does not automate or publish anything for you.' },
+              { tool: 'Yext', problem: 'Manages your business listings across directories. Does not create content, does not post to social media, and does not optimize for AI engines.' },
+              { tool: 'Later', problem: 'A social media scheduling tool. You still have to create every piece of content yourself. No SEO, no Google, no AI engine optimization.' },
+            ].map((item) => (
+              <div key={item.tool} style={{ background: '#fff', border: '2.5px solid #111', padding: '28px' }}>
+                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, marginBottom: '10px', color: '#111' }}>{item.tool}</h3>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#444', lineHeight: 1.6 }}>{item.problem}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <section style={{ background: '#fff', padding: '80px 32px' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px', textAlign: 'center' }}>The Differentiator</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 700, color: '#111', textAlign: 'center', marginBottom: '24px' }}>Why Google + AI engines together?</h2>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.8, maxWidth: '760px', margin: '0 auto 40px', textAlign: 'center' }}>In 2026, your customers find businesses two ways: Google and AI tools like ChatGPT, Perplexity, and Gemini. Most platforms only handle Google. Traffikora wins in both places simultaneously.</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
-              <div style={{ border: '2.5px solid #111', padding: '32px', textAlign: 'center' }}>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '8px' }}>Google Search</p>
-                <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, color: '#111', lineHeight: 1 }}>8.5B</p>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#666', marginBottom: '16px' }}>searches per day</p>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#444', lineHeight: 1.5 }}>Traditional SEO — Traffikora has you covered.</p>
-              </div>
-              <div style={{ border: '2.5px solid #111', padding: '32px', textAlign: 'center' }}>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '8px' }}>ChatGPT + Perplexity</p>
-                <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, color: '#111', lineHeight: 1 }}>100M+</p>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#666', marginBottom: '16px' }}>AI searches daily</p>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#444', lineHeight: 1.5 }}>The fastest growing discovery channel. Traffikora optimizes for this.</p>
-              </div>
-              <div style={{ border: '2.5px solid #111', padding: '32px', textAlign: 'center' }}>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '8px' }}>Gemini + Copilot</p>
-                <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, color: '#111', lineHeight: 1 }}>2026</p>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#666', marginBottom: '16px' }}>is the tipping point</p>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#444', lineHeight: 1.5 }}>AI search is now mainstream. Miss it and you miss customers.</p>
-              </div>
-          </div>
-        </div>
-      </section>
-
+      {/* THE TRAFFIKORA DIFFERENCE */}
       <section style={{ background: '#111', padding: '80px 32px' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto', textAlign: 'center' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px' }}>What You Get</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 700, color: '#fff', marginBottom: '56px' }}>Real outcomes. Zero effort.</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '32px', textAlign: 'left' }}>
-              <div style={{ borderLeft: '4px solid #E8610A', paddingLeft: '24px' }}>
-                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#fff', marginBottom: '10px' }}>More visibility on Google</h3>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#aaa', lineHeight: 1.7 }}>Your Google Business Profile is continuously optimized — posts, photos, hours, reviews, and keywords — so you rank higher in local search results.</p>
+        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#fff', textAlign: 'center', marginBottom: '16px' }}>What makes Traffikora different.</h2>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#aaa', textAlign: 'center', maxWidth: '680px', margin: '0 auto 56px' }}>Four things that no other platform for small businesses does simultaneously.</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '32px' }}>
+            {[
+              { number: '01', title: 'It runs completely on autopilot', body: 'Connect your accounts once. Traffikora writes your content, publishes it, manages your Google profile, and builds your SEO automatically — forever. Zero ongoing effort required.' },
+              { number: '02', title: 'It optimizes for AI engines', body: 'Traffikora is the only platform built to get small businesses recommended by ChatGPT, Claude, Gemini, Perplexity, and Copilot. This is the future of local discovery.' },
+              { number: '03', title: 'It covers every channel', body: 'Social media, Google Business Profile, local SEO, AI engines, and reputation management — all in one platform, all automated, all working together.' },
+              { number: '04', title: 'It was built for non-marketers', body: 'You do not need to understand SEO, content strategy, or social media algorithms. Traffikora handles all of it. You just run your business.' },
+            ].map((item) => (
+              <div key={item.number} style={{ borderTop: '4px solid #E8610A', paddingTop: '24px' }}>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 700, color: '#E8610A', letterSpacing: '2px', marginBottom: '12px' }}>{item.number}</p>
+                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px', color: '#fff' }}>{item.title}</h3>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#aaa', lineHeight: 1.6 }}>{item.body}</p>
               </div>
-              <div style={{ borderLeft: '4px solid #E8610A', paddingLeft: '24px' }}>
-                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#fff', marginBottom: '10px' }}>Cited by AI engines</h3>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#aaa', lineHeight: 1.7 }}>Traffikora builds the structured data and content signals that cause ChatGPT, Perplexity, and Gemini to recommend your business when users ask for local options.</p>
-              </div>
-              <div style={{ borderLeft: '4px solid #E8610A', paddingLeft: '24px' }}>
-                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#fff', marginBottom: '10px' }}>Social media on autopilot</h3>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#aaa', lineHeight: 1.7 }}>Content is created and published to your social accounts on a consistent schedule without you writing a single post.</p>
-              </div>
-              <div style={{ borderLeft: '4px solid #E8610A', paddingLeft: '24px' }}>
-                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#fff', marginBottom: '10px' }}>Review management</h3>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#aaa', lineHeight: 1.7 }}>Every new review across Google, Yelp, and other platforms is monitored in real time so you never miss customer feedback again.</p>
-              </div>
-              <div style={{ borderLeft: '4px solid #E8610A', paddingLeft: '24px' }}>
-                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#fff', marginBottom: '10px' }}>More traffic, more calls</h3>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#aaa', lineHeight: 1.7 }}>Higher visibility on Google and AI engines means more people find your business, visit your website, and call your phone number.</p>
-              </div>
-              <div style={{ borderLeft: '4px solid #E8610A', paddingLeft: '24px' }}>
-                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#fff', marginBottom: '10px' }}>Monthly performance reports</h3>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#aaa', lineHeight: 1.7 }}>A clear, simple report shows you exactly what Traffikora has done and what results it has driven — no jargon, just numbers.</p>
-              </div>
+            ))}
           </div>
         </div>
       </section>
 
+      {/* VISION */}
+      <section style={{ background: '#fff', padding: '80px 32px', textAlign: 'center' }}>
+        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#111', marginBottom: '24px' }}>Our vision: an automated marketing machine for every small business on earth.</h2>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.8, marginBottom: '24px' }}>Small and mid-size businesses are the backbone of every community. But they have always been outgunned on marketing — outspent by big brands, overwhelmed by complexity, and underserved by tools built for enterprise teams.</p>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.8, marginBottom: '24px' }}>Traffikora changes that. For the first time, a local restaurant, a family-owned salon, a two-person HVAC company, or a solo attorney can have the same marketing power as a national brand — running automatically, 24 hours a day, 7 days a week.</p>
+          <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', fontStyle: 'italic' }}>Set it once. It markets forever.</p>
+        </div>
+      </section>
+
+      {/* STATS */}
+      <section style={{ background: '#f9f9f9', padding: '80px 32px', borderTop: '2.5px solid #111', borderBottom: '2.5px solid #111' }}>
+        <div style={{ maxWidth: '1060px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '48px', textAlign: 'center' }}>
+          {[
+            { stat: '10+', label: 'Marketing channels automated' },
+            { stat: '7 min', label: 'Average setup time' },
+            { stat: '6', label: 'AI engines optimized' },
+            { stat: '$97', label: 'Starting price per month' },
+          ].map((item) => (
+            <div key={item.label}>
+              <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '56px', fontWeight: 900, color: '#E8610A', marginBottom: '8px' }}>{item.stat}</p>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555' }}>{item.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Ready to stop paying agency fees?</h2>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Start your free 7-day trial. No credit card required. Cancel anytime.</p>
-        <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Trial — It is Free for 7 Days</Link>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#fff', opacity: 0.7, marginTop: '16px' }}>Join businesses already running on Traffikora</p>
+        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>The future of local marketing is automated. Start today.</h2>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
+        <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Trial</Link>
       </section>
 
       <Footer />
