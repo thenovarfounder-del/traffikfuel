@@ -2,8 +2,8 @@ const fs = require('fs');
 const content = `import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Traffikora vs Mailchimp: Full Comparison | Traffikora',
-  description: 'Traffikora vs Mailchimp compared. See why local businesses replace Mailchimp with Traffikora for automated SEO, social media, and AI engine optimization.',
+  title: 'Traffikora vs Constant Contact: Full Comparison | Traffikora',
+  description: 'Traffikora vs Constant Contact compared. See why local businesses replace Constant Contact with Traffikora for automated SEO, social media, and AI engine optimization.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -38,5 +38,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   )
 }
 `;
-fs.writeFileSync('src/app/compare/traffikora-vs-mailchimp/layout.tsx', content);
+fs.writeFileSync('src/app/compare/traffikora-vs-constant-contact/layout.tsx', content);
 console.log('layout.tsx written');
