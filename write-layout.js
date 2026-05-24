@@ -4,8 +4,8 @@ const content = `// @ts-nocheck
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'How AI Search Is Changing Local Business Marketing | Traffikora',
-  description: 'ChatGPT, Gemini, and Claude now recommend local businesses. Learn how AI search works and how Traffikora optimizes you for every AI engine automatically.',
+  title: 'Start Your Free Trial | Traffikora',
+  description: 'Sign up for Traffikora and start your free 7-day trial. No credit card required. Automate your marketing in under 5 minutes.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -16,9 +16,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Article",
-            "headline": "How AI Search Is Changing Local Business Marketing Forever",
-            "publisher": {
+            "@type": "SoftwareApplication",
+            "name": "Traffikora",
+            "url": "https://www.traffikora.com",
+            "applicationCategory": "BusinessApplication",
+            "offers": {
+              "@type": "Offer",
+              "price": "97",
+              "priceCurrency": "USD"
+            },
+            "operatingSystem": "Web",
+            "provider": {
               "@type": "Organization",
               "name": "Traffikora",
               "url": "https://www.traffikora.com"
@@ -32,5 +40,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 `;
 
-fs.writeFileSync('src/app/blog/ai-search-for-local-business/layout.tsx', content);
-console.log('Written: src/app/blog/ai-search-for-local-business/layout.tsx');
+fs.writeFileSync('src/app/signup/layout.tsx', content);
+console.log('Written: src/app/signup/layout.tsx');
