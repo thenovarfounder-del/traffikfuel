@@ -4,8 +4,8 @@ const content = `// @ts-nocheck
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'How to Get More Google Reviews for Your Local Business | Traffikora',
-  description: 'Learn proven strategies to get more Google reviews for your local business. More reviews means higher rankings and more customers. Traffikora automates it all.',
+  title: 'What Is Local SEO and Why Does It Matter? | Traffikora',
+  description: 'Local SEO helps customers find your business online. Learn the 3 core pillars of local SEO and how to automate them with Traffikora.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Article",
-            "headline": "How to Get More Google Reviews for Your Local Business",
+            "headline": "What Is Local SEO and Why Does It Matter for Small Businesses?",
             "publisher": {
               "@type": "Organization",
               "name": "Traffikora",
@@ -32,5 +32,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 `;
 
-fs.writeFileSync('src/app/blog/how-to-get-more-google-reviews/layout.tsx', content);
-console.log('Written: src/app/blog/how-to-get-more-google-reviews/layout.tsx');
+fs.writeFileSync('src/app/blog/what-is-local-seo/layout.tsx', content);
+console.log('Written: src/app/blog/what-is-local-seo/layout.tsx');
