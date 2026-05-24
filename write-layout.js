@@ -2,8 +2,8 @@ const fs = require('fs');
 const content = `import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Why Traffikora — AI Marketing Automation for Local Businesses',
-  description: 'Traffikora is the only platform that automates Google, social media, AND AI engine optimization for small businesses. See why owners choose Traffikora over every alternative.',
+  title: 'FAQ — Frequently Asked Questions | Traffikora',
+  description: 'Got questions about Traffikora? Find answers about setup, features, pricing, and how Traffikora automates marketing for local businesses. Free 7-day trial.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -14,22 +14,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            "name": "Traffikora",
-            "url": "https://www.traffikora.com",
-            "applicationCategory": "BusinessApplication",
-            "description": "Traffikora is an AI-powered marketing automation platform for small businesses. The only platform that optimizes for Google AND every major AI engine simultaneously.",
-            "offers": {
-              "@type": "Offer",
-              "price": "97",
-              "priceCurrency": "USD"
-            },
-            "operatingSystem": "Web",
-            "provider": {
-              "@type": "Organization",
-              "name": "Traffikora",
-              "url": "https://www.traffikora.com"
-            }
+            "@type": "FAQPage",
+            "mainEntity": [
+              { "@type": "Question", "name": "What is Traffikora?", "acceptedAnswer": { "@type": "Answer", "text": "Traffikora is an AI-powered marketing automation platform for small and mid-size businesses. Connect your accounts once and Traffikora handles social media, Google Business Profile, local SEO, and AI engine optimization automatically." } },
+              { "@type": "Question", "name": "How much does Traffikora cost?", "acceptedAnswer": { "@type": "Answer", "text": "Traffikora starts at $97 per month for the Starter plan. Pro is $197/month, Agency is $797/month, and Enterprise is $1,497/month. All plans include a free 7-day trial." } },
+              { "@type": "Question", "name": "Do I need a credit card to start the free trial?", "acceptedAnswer": { "@type": "Answer", "text": "No. You can start your 7-day free trial with just your email address. No credit card required." } },
+              { "@type": "Question", "name": "What is AI engine optimization?", "acceptedAnswer": { "@type": "Answer", "text": "AI engine optimization means getting your business recommended when people ask ChatGPT, Claude, Gemini, or Perplexity for suggestions. Traffikora is the only platform that automates this for small businesses." } },
+              { "@type": "Question", "name": "Can I cancel anytime?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Cancel anytime from your dashboard with one click. No cancellation fees and no contracts." } }
+            ]
           })
         }}
       />
@@ -38,5 +30,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   )
 }
 `;
-fs.writeFileSync('src/app/why-traffikora/layout.tsx', content);
+fs.writeFileSync('src/app/faq/layout.tsx', content);
 console.log('layout.tsx written');

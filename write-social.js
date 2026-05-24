@@ -2,11 +2,65 @@ const fs = require('fs');
 const content = `// @ts-nocheck
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
-export default function WhyTraffikoraPage() {
+export default function FaqPage() {
+  const [open, setOpen] = useState(null)
+
+  const faqs = [
+    {
+      category: 'Getting Started',
+      questions: [
+        { q: 'What is Traffikora?', a: 'Traffikora is an AI-powered marketing automation platform built for small and mid-size businesses. You connect your accounts once, and Traffikora handles your social media, Google Business Profile, local SEO, and AI engine optimization automatically \u2014 forever.' },
+        { q: 'How long does setup take?', a: 'Most businesses are fully set up in under 10 minutes. You connect your Google Business Profile, social media accounts, and tell us about your business. Traffikora takes it from there.' },
+        { q: 'Do I need any marketing experience to use Traffikora?', a: 'None at all. Traffikora was built specifically for business owners who are not marketers. You do not need to understand SEO, social media algorithms, or content strategy. The platform handles everything automatically.' },
+        { q: 'Do I need a credit card to start the free trial?', a: 'No. You can start your 7-day free trial with just your email address. You will not be charged anything until your trial ends and you choose to continue.' },
+      ]
+    },
+    {
+      category: 'Features',
+      questions: [
+        { q: 'What does Traffikora actually do for my business?', a: 'Traffikora automates six core marketing functions: social media content creation and publishing, Google Business Profile management, local SEO optimization, AI engine optimization, review generation, and monthly performance reporting. All of it runs automatically after your initial setup.' },
+        { q: 'What social media platforms does Traffikora post to?', a: 'Traffikora publishes to Instagram, Facebook, and Google Business Profile automatically. Additional platform support is available on higher plans.' },
+        { q: 'Does Traffikora write the content or do I have to write it?', a: 'Traffikora writes all of your content automatically. Our AI creates posts, captions, and updates tailored to your specific business type, location, and brand. You never have to write a single post.' },
+        { q: 'What is AI engine optimization and why does it matter?', a: 'AI engine optimization means making sure your business gets recommended when people ask ChatGPT, Claude, Gemini, Perplexity, or Copilot for suggestions. Over 100 million people now use AI engines to find businesses instead of traditional search. Traffikora is the only platform that automates this for small businesses.' },
+        { q: 'How does Traffikora improve my Google ranking?', a: 'Traffikora improves your Google ranking through three automated actions: consistent Google Business Profile activity (posts, photos, Q and A), local SEO citation building and keyword targeting, and reputation management through review generation. Together, these signals tell Google your business is active, relevant, and trusted.' },
+        { q: 'Does Traffikora manage Google reviews?', a: 'Yes. Traffikora automates review request follow-ups after customer interactions, monitors every new review across platforms, and flags negative reviews immediately so you can respond quickly.' },
+      ]
+    },
+    {
+      category: 'Pricing and Plans',
+      questions: [
+        { q: 'How much does Traffikora cost?', a: 'Traffikora starts at $97 per month for the Starter plan, which covers one business location. The Pro plan is $197 per month for up to 3 locations. The Agency plan is $797 per month for up to 20 locations. Enterprise is $1,497 per month for unlimited locations and custom needs.' },
+        { q: 'Can I cancel anytime?', a: 'Yes. Cancel anytime from your dashboard with one click. There are no cancellation fees, no long-term contracts, and no questions asked.' },
+        { q: 'Can I upgrade or downgrade my plan?', a: 'Yes. You can change your plan at any time from your account settings. Upgrades take effect immediately. Downgrades take effect at the start of your next billing cycle.' },
+        { q: 'Is there a contract or minimum commitment?', a: 'No contracts and no minimum commitment. Traffikora is month-to-month. You pay only for what you use and cancel whenever you want.' },
+        { q: 'Do you offer refunds?', a: 'We offer a 7-day free trial so you can experience Traffikora before being charged. If you have a billing issue after your trial, contact our support team and we will work with you to make it right.' },
+      ]
+    },
+    {
+      category: 'Comparisons',
+      questions: [
+        { q: 'How is Traffikora different from Hootsuite or Later?', a: 'Hootsuite and Later are social media schedulers. You still have to create every piece of content yourself. They do not write content, do not touch Google, do not do SEO, and have no AI engine strategy. Traffikora automates all of this from one platform.' },
+        { q: 'How is Traffikora different from Mailchimp or Constant Contact?', a: 'Mailchimp and Constant Contact are email marketing tools. They have no social media automation, no Google Business Profile management, no local SEO, and no AI engine optimization. Traffikora covers all of these channels automatically.' },
+        { q: 'How is Traffikora different from HubSpot?', a: 'HubSpot is an enterprise CRM built for large sales teams. It is complex, expensive (often $800+ per month for real features), and requires dedicated marketing staff to operate. Traffikora is built for small business owners with no marketing experience and runs completely on autopilot.' },
+        { q: 'How is Traffikora different from SEMrush?', a: 'SEMrush is an SEO research tool for marketing professionals. It gives you data and insights but does not automate or publish anything for you. Traffikora takes action automatically \u2014 it does the work, not just the analysis.' },
+      ]
+    },
+    {
+      category: 'Technical',
+      questions: [
+        { q: 'What accounts do I need to connect?', a: 'At minimum, you connect your Google Business Profile. You can also connect Instagram and Facebook. The more accounts you connect, the more channels Traffikora can automate for you.' },
+        { q: 'Is my data secure?', a: 'Yes. Traffikora uses industry-standard encryption for all data in transit and at rest. We never sell your data to third parties. Your business information is used only to power your marketing automation.' },
+        { q: 'Does Traffikora work for businesses outside the United States?', a: 'Traffikora is currently optimized for businesses in the United States, Canada, and the United Kingdom. We are expanding to additional markets throughout 2026.' },
+        { q: 'Can I see what Traffikora is posting before it goes live?', a: 'On Pro and higher plans, you can review a content preview dashboard. On all plans, you receive a monthly performance report showing everything that was published and how it performed.' },
+      ]
+    },
+  ]
+
   return (
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -14,110 +68,50 @@ export default function WhyTraffikoraPage() {
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
       <Nav />
 
-      {/* HERO */}
       <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Why Traffikora</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Every other platform optimizes for Google. We optimize for everything.</h1>
-        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '640px', margin: '0 auto 40px' }}>Google is still king. But ChatGPT, Claude, Gemini, Perplexity, and Copilot are where your next customers are searching right now. Traffikora is the only platform built to win on all of them simultaneously.</p>
-        <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free 7-Day Trial</Link>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>FAQ</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Everything you want to know about Traffikora.</h1>
+        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '580px', margin: '0 auto' }}>Can not find your answer? Email us at support@traffikora.com and we will get back to you within one business day.</p>
       </section>
 
-      {/* THE SHIFT */}
       <section style={{ background: '#fff', padding: '80px 32px' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#111', textAlign: 'center', marginBottom: '16px' }}>The way people find businesses has changed forever.</h2>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', textAlign: 'center', maxWidth: '700px', margin: '0 auto 60px' }}>In 2024, over 100 million people started using AI engines to find recommendations instead of typing into Google. By 2026, that number has grown dramatically. Most marketing platforms have not adapted. Traffikora was built specifically for this new reality.</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
-            {[
-              { icon: '\uD83D\uDD0D', title: 'Then: Google only', body: 'For 20 years, winning local search meant one thing: ranking on Google. SEO agencies built entire businesses around this single channel.' },
-              { icon: '\uD83E\uDD16', title: 'Now: AI engines everywhere', body: 'Today your customers ask ChatGPT who to call, ask Perplexity what the best option is, and ask Gemini for recommendations. Most businesses are invisible on all of them.' },
-              { icon: '\u26A1', title: 'Traffikora: built for both', body: 'Traffikora automates your Google presence AND your AI engine visibility simultaneously. No other platform does this for small and mid-size businesses.' },
-            ].map((item) => (
-              <div key={item.title} style={{ border: '2.5px solid #111', padding: '32px', background: '#fff' }}>
-                <div style={{ fontSize: '36px', marginBottom: '16px' }}>{item.icon}</div>
-                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px' }}>{item.title}</h3>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.6 }}>{item.body}</p>
+        <div style={{ maxWidth: '820px', margin: '0 auto' }}>
+          {faqs.map((section) => (
+            <div key={section.category} style={{ marginBottom: '56px' }}>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 900, color: '#111', marginBottom: '8px', paddingBottom: '16px', borderBottom: '4px solid #E8610A' }}>{section.category}</h2>
+              <div>
+                {section.questions.map((item, i) => {
+                  const id = section.category + i
+                  const isOpen = open === id
+                  return (
+                    <div key={i} style={{ borderBottom: '1.5px solid #eee' }}>
+                      <button
+                        onClick={() => setOpen(isOpen ? null : id)}
+                        style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', padding: '22px 0', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' }}
+                      >
+                        <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', fontWeight: 600, color: '#111', lineHeight: 1.4 }}>{item.q}</span>
+                        <span style={{ color: '#E8610A', fontSize: '22px', fontWeight: 700, flexShrink: 0 }}>{isOpen ? '\u2212' : '\u002B'}</span>
+                      </button>
+                      {isOpen && (
+                        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8, paddingBottom: '22px', margin: 0 }}>{item.a}</p>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* THE PROBLEM WITH OTHER TOOLS */}
-      <section style={{ background: '#f9f9f9', padding: '80px 32px' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#111', textAlign: 'center', marginBottom: '16px' }}>Other platforms were not built for this moment.</h2>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', textAlign: 'center', maxWidth: '700px', margin: '0 auto 56px' }}>HubSpot, Hootsuite, Mailchimp, SEMrush \u2014 these are great tools built for a world that is rapidly changing. None of them were designed to optimize your presence across AI engines. Traffikora was.</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
-            {[
-              { tool: 'HubSpot', problem: 'Built for enterprise sales teams. Overwhelming for small businesses. No AI engine optimization. Starts at $800+/month for real features.' },
-              { tool: 'Hootsuite', problem: 'A social media scheduler. Does not write your content, does not touch Google, does not do SEO, and has zero AI engine strategy.' },
-              { tool: 'Mailchimp', problem: 'An email newsletter tool. Completely ignores Google, social media automation, local SEO, and AI engine visibility.' },
-              { tool: 'SEMrush', problem: 'A powerful SEO research tool for experts. Requires significant marketing knowledge to use. Does not automate or publish anything for you.' },
-              { tool: 'Yext', problem: 'Manages your business listings across directories. Does not create content, does not post to social media, and does not optimize for AI engines.' },
-              { tool: 'Later', problem: 'A social media scheduling tool. You still have to create every piece of content yourself. No SEO, no Google, no AI engine optimization.' },
-            ].map((item) => (
-              <div key={item.tool} style={{ background: '#fff', border: '2.5px solid #111', padding: '28px' }}>
-                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, marginBottom: '10px', color: '#111' }}>{item.tool}</h3>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#444', lineHeight: 1.6 }}>{item.problem}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* THE TRAFFIKORA DIFFERENCE */}
-      <section style={{ background: '#111', padding: '80px 32px' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#fff', textAlign: 'center', marginBottom: '16px' }}>What makes Traffikora different.</h2>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#aaa', textAlign: 'center', maxWidth: '680px', margin: '0 auto 56px' }}>Four things that no other platform for small businesses does simultaneously.</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '32px' }}>
-            {[
-              { number: '01', title: 'It runs completely on autopilot', body: 'Connect your accounts once. Traffikora writes your content, publishes it, manages your Google profile, and builds your SEO automatically \u2014 forever. Zero ongoing effort required.' },
-              { number: '02', title: 'It optimizes for AI engines', body: 'Traffikora is the only platform built to get small businesses recommended by ChatGPT, Claude, Gemini, Perplexity, and Copilot. This is the future of local discovery.' },
-              { number: '03', title: 'It covers every channel', body: 'Social media, Google Business Profile, local SEO, AI engines, and reputation management \u2014 all in one platform, all automated, all working together.' },
-              { number: '04', title: 'It was built for non-marketers', body: 'You do not need to understand SEO, content strategy, or social media algorithms. Traffikora handles all of it. You just run your business.' },
-            ].map((item) => (
-              <div key={item.number} style={{ borderTop: '4px solid #E8610A', paddingTop: '24px' }}>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 700, color: '#E8610A', letterSpacing: '2px', marginBottom: '12px' }}>{item.number}</p>
-                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px', color: '#fff' }}>{item.title}</h3>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#aaa', lineHeight: 1.6 }}>{item.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* VISION */}
-      <section style={{ background: '#fff', padding: '80px 32px', textAlign: 'center' }}>
-        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 900, color: '#111', marginBottom: '24px' }}>Our vision: an automated marketing machine for every small business on earth.</h2>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.8, marginBottom: '24px' }}>Small and mid-size businesses are the backbone of every community. But they have always been outgunned on marketing \u2014 outspent by big brands, overwhelmed by complexity, and underserved by tools built for enterprise teams.</p>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.8, marginBottom: '24px' }}>Traffikora changes that. For the first time, a local restaurant, a family-owned salon, a two-person HVAC company, or a solo attorney can have the same marketing power as a national brand \u2014 running automatically, 24 hours a day, 7 days a week.</p>
-          <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', fontStyle: 'italic' }}>Set it once. It markets forever.</p>
-        </div>
-      </section>
-
-      {/* STATS */}
-      <section style={{ background: '#f9f9f9', padding: '80px 32px', borderTop: '2.5px solid #111', borderBottom: '2.5px solid #111' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '48px', textAlign: 'center' }}>
-          {[
-            { stat: '10+', label: 'Marketing channels automated' },
-            { stat: '7 min', label: 'Average setup time' },
-            { stat: '6', label: 'AI engines optimized' },
-            { stat: '$97', label: 'Starting price per month' },
-          ].map((item) => (
-            <div key={item.label}>
-              <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '56px', fontWeight: 900, color: '#E8610A', marginBottom: '8px' }}>{item.stat}</p>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555' }}>{item.label}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* CTA */}
+      <section style={{ background: '#f9f9f9', padding: '64px 32px', textAlign: 'center', borderTop: '2.5px solid #111' }}>
+        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', marginBottom: '16px' }}>Still have questions?</h2>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', maxWidth: '500px', margin: '0 auto 32px' }}>Our team responds to every email within one business day. We are here to help.</p>
+        <a href="mailto:support@traffikora.com" style={{ background: '#111', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #111', display: 'inline-block' }}>Email Support</a>
+      </section>
+
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>The future of local marketing is automated. Start today.</h2>
+        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Ready to see it for yourself?</h2>
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
         <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Trial</Link>
       </section>
@@ -127,5 +121,5 @@ export default function WhyTraffikoraPage() {
   )
 }
 `;
-fs.writeFileSync('src/app/why-traffikora/page.tsx', content);
+fs.writeFileSync('src/app/faq/page.tsx', content);
 console.log('page.tsx written');

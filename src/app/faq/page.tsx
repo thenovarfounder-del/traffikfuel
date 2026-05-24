@@ -1,116 +1,120 @@
 // @ts-nocheck
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
-import { useState } from 'react'
 
-const faqs = [
-  {
-    category: "General",
-    questions: [
-      { q: "What is Traffikora?", a: "Traffikora is an automated marketing platform built for small and mid-size businesses. You connect your accounts once — Google Business Profile, social media, review platforms — and Traffikora handles everything else automatically. It optimizes your visibility on Google and every major AI engine including ChatGPT, Perplexity, Gemini, Claude, and Copilot." },
-      { q: "How is Traffikora different from other marketing tools?", a: "Every other platform optimizes for Google only. Traffikora optimizes for Google AND every major AI engine. In 2026, millions of people find local businesses by asking ChatGPT or Perplexity — not just Googling. Traffikora makes sure your business shows up in both places automatically." },
-      { q: "Do I need any marketing experience to use Traffikora?", a: "None at all. Traffikora is built for business owners, not marketers. You connect your accounts, answer a few questions about your business, and the platform does the rest. No technical skills required." },
-      { q: "What size businesses is Traffikora designed for?", a: "Traffikora is built for small and mid-size businesses — restaurants, retail stores, dental practices, law firms, gyms, home service businesses, and more. It also works for marketing agencies managing multiple clients." },
-    ]
-  },
-  {
-    category: "Features & How It Works",
-    questions: [
-      { q: "What does Traffikora actually do automatically?", a: "Once connected, Traffikora continuously optimizes your Google Business Profile, publishes content to your social media accounts on schedule, monitors and responds to reviews, builds your presence across AI engine databases, generates keyword-optimized content, and sends you monthly performance reports — all without you lifting a finger." },
-      { q: "What is AI engine optimization and why does it matter?", a: "AI engine optimization (AEO) is the process of making your business visible when people search using AI tools like ChatGPT, Perplexity, Gemini, and Claude. When someone types 'best Italian restaurant near me' into ChatGPT, AI engine optimization determines whether your business gets recommended. Traffikora is the first platform built to optimize for both Google and AI engines simultaneously." },
-      { q: "What is the difference between SEO and AI engine optimization?", a: "Traditional SEO optimizes your website to rank on Google's search results page. AI engine optimization (AEO) optimizes your business to be cited and recommended by AI tools when users ask questions. Both matter in 2026 — Traffikora handles both automatically." },
-      { q: "What platforms does Traffikora connect to?", a: "Traffikora connects to Google Business Profile, Google Search Console, Google Analytics, Facebook, Instagram, TikTok, LinkedIn, Twitter/X, Yelp, TripAdvisor, and all major AI engine databases. More integrations are added regularly." },
-      { q: "How long does setup take?", a: "Most businesses are fully set up in under 15 minutes. You connect your accounts, enter your business details, and Traffikora starts working immediately. There is no lengthy onboarding or configuration required." },
-    ]
-  },
-  {
-    category: "Pricing & Trial",
-    questions: [
-      { q: "Is there a free trial?", a: "Yes. Every plan includes a 7-day free trial with full access to all features. No credit card is required to start. You only pay if you decide to continue after the trial." },
-      { q: "How much does Traffikora cost?", a: "Traffikora offers four plans: Starter at $97/month, Pro at $197/month, Agency at $797/month, and Enterprise at $1,497/month. Annual billing is available at a 20% discount. Every plan includes a 7-day free trial." },
-      { q: "Can I cancel anytime?", a: "Yes. There are no contracts and no cancellation fees. You can cancel your subscription at any time from your account dashboard and you will not be charged again." },
-      { q: "What happens when my free trial ends?", a: "At the end of your 7-day trial, you will receive an email asking if you want to continue. If you choose to subscribe, your selected plan will begin billing. If you do nothing, your account pauses — no charges, no surprises." },
-      { q: "Do you offer refunds?", a: "Yes. If you are not satisfied within the first 30 days of a paid subscription, contact support@traffikora.com for a full refund. No questions asked." },
-    ]
-  },
-  {
-    category: "Industries & Use Cases",
-    questions: [
-      { q: "Does Traffikora work for restaurants?", a: "Yes. Restaurants are one of Traffikora's strongest use cases. The platform automatically manages your Google Business Profile hours, posts, and reviews, publishes social content promoting your menu and specials, and optimizes your visibility when people ask AI engines for restaurant recommendations in your city." },
-      { q: "Can marketing agencies use Traffikora for clients?", a: "Yes. The Agency plan is built specifically for marketing agencies managing multiple client accounts. You get a single dashboard to manage all clients, white-label reporting, and bulk automation across all accounts." },
-      { q: "Does Traffikora work for local service businesses?", a: "Absolutely. Traffikora is ideal for home service businesses, dental practices, law firms, gyms, real estate agents, and any business that relies on local customers finding them online. Local visibility is one of Traffikora's core strengths." },
-    ]
-  },
-  {
-    category: "Technical & Support",
-    questions: [
-      { q: "Is my data secure?", a: "Yes. Traffikora uses enterprise-grade security including encrypted data storage, secure OAuth connections to all third-party platforms, and strict data handling policies. We never sell your data to third parties. See our Privacy Policy for full details." },
-      { q: "What support is available?", a: "All plans include live chat support via the Traffikora dashboard, plus email support at support@traffikora.com. Pro, Agency, and Enterprise plans include priority response times." },
-      { q: "Do I need to install any software?", a: "No. Traffikora is entirely web-based. You access it from any browser on any device — no downloads, no plugins, no technical setup required." },
-      { q: "What if I already have a marketing team or agency?", a: "Traffikora works alongside your existing team. Many businesses use Traffikora to handle the repetitive, time-consuming automation work so their marketing team can focus on strategy and creative. It is also significantly more cost-effective than paying agency fees for routine tasks." },
-    ]
-  }
-]
+export default function FaqPage() {
+  const [open, setOpen] = useState(null)
 
-function FAQItem({ q, a }: { q: string, a: string }) {
-  const [open, setOpen] = useState(false)
-  return (
-    <div style={{ borderBottom: '2px solid #eee' }}>
-      <button
-        onClick={() => setOpen(!open)}
-        style={{ width: '100%', textAlign: 'left', padding: '20px 0', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' }}
-      >
-        <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', fontWeight: 600, color: '#111', lineHeight: 1.4 }}>{q}</span>
-        <span style={{ fontSize: '24px', color: '#E8610A', fontWeight: 700, flexShrink: 0 }}>{open ? '−' : '+'}</span>
-      </button>
-      {open && (
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.7, paddingBottom: '20px', maxWidth: '760px' }}>{a}</p>
-      )}
-    </div>
-  )
-}
+  const faqs = [
+    {
+      category: 'Getting Started',
+      questions: [
+        { q: 'What is Traffikora?', a: 'Traffikora is an AI-powered marketing automation platform built for small and mid-size businesses. You connect your accounts once, and Traffikora handles your social media, Google Business Profile, local SEO, and AI engine optimization automatically — forever.' },
+        { q: 'How long does setup take?', a: 'Most businesses are fully set up in under 10 minutes. You connect your Google Business Profile, social media accounts, and tell us about your business. Traffikora takes it from there.' },
+        { q: 'Do I need any marketing experience to use Traffikora?', a: 'None at all. Traffikora was built specifically for business owners who are not marketers. You do not need to understand SEO, social media algorithms, or content strategy. The platform handles everything automatically.' },
+        { q: 'Do I need a credit card to start the free trial?', a: 'No. You can start your 7-day free trial with just your email address. You will not be charged anything until your trial ends and you choose to continue.' },
+      ]
+    },
+    {
+      category: 'Features',
+      questions: [
+        { q: 'What does Traffikora actually do for my business?', a: 'Traffikora automates six core marketing functions: social media content creation and publishing, Google Business Profile management, local SEO optimization, AI engine optimization, review generation, and monthly performance reporting. All of it runs automatically after your initial setup.' },
+        { q: 'What social media platforms does Traffikora post to?', a: 'Traffikora publishes to Instagram, Facebook, and Google Business Profile automatically. Additional platform support is available on higher plans.' },
+        { q: 'Does Traffikora write the content or do I have to write it?', a: 'Traffikora writes all of your content automatically. Our AI creates posts, captions, and updates tailored to your specific business type, location, and brand. You never have to write a single post.' },
+        { q: 'What is AI engine optimization and why does it matter?', a: 'AI engine optimization means making sure your business gets recommended when people ask ChatGPT, Claude, Gemini, Perplexity, or Copilot for suggestions. Over 100 million people now use AI engines to find businesses instead of traditional search. Traffikora is the only platform that automates this for small businesses.' },
+        { q: 'How does Traffikora improve my Google ranking?', a: 'Traffikora improves your Google ranking through three automated actions: consistent Google Business Profile activity (posts, photos, Q and A), local SEO citation building and keyword targeting, and reputation management through review generation. Together, these signals tell Google your business is active, relevant, and trusted.' },
+        { q: 'Does Traffikora manage Google reviews?', a: 'Yes. Traffikora automates review request follow-ups after customer interactions, monitors every new review across platforms, and flags negative reviews immediately so you can respond quickly.' },
+      ]
+    },
+    {
+      category: 'Pricing and Plans',
+      questions: [
+        { q: 'How much does Traffikora cost?', a: 'Traffikora starts at $97 per month for the Starter plan, which covers one business location. The Pro plan is $197 per month for up to 3 locations. The Agency plan is $797 per month for up to 20 locations. Enterprise is $1,497 per month for unlimited locations and custom needs.' },
+        { q: 'Can I cancel anytime?', a: 'Yes. Cancel anytime from your dashboard with one click. There are no cancellation fees, no long-term contracts, and no questions asked.' },
+        { q: 'Can I upgrade or downgrade my plan?', a: 'Yes. You can change your plan at any time from your account settings. Upgrades take effect immediately. Downgrades take effect at the start of your next billing cycle.' },
+        { q: 'Is there a contract or minimum commitment?', a: 'No contracts and no minimum commitment. Traffikora is month-to-month. You pay only for what you use and cancel whenever you want.' },
+        { q: 'Do you offer refunds?', a: 'We offer a 7-day free trial so you can experience Traffikora before being charged. If you have a billing issue after your trial, contact our support team and we will work with you to make it right.' },
+      ]
+    },
+    {
+      category: 'Comparisons',
+      questions: [
+        { q: 'How is Traffikora different from Hootsuite or Later?', a: 'Hootsuite and Later are social media schedulers. You still have to create every piece of content yourself. They do not write content, do not touch Google, do not do SEO, and have no AI engine strategy. Traffikora automates all of this from one platform.' },
+        { q: 'How is Traffikora different from Mailchimp or Constant Contact?', a: 'Mailchimp and Constant Contact are email marketing tools. They have no social media automation, no Google Business Profile management, no local SEO, and no AI engine optimization. Traffikora covers all of these channels automatically.' },
+        { q: 'How is Traffikora different from HubSpot?', a: 'HubSpot is an enterprise CRM built for large sales teams. It is complex, expensive (often $800+ per month for real features), and requires dedicated marketing staff to operate. Traffikora is built for small business owners with no marketing experience and runs completely on autopilot.' },
+        { q: 'How is Traffikora different from SEMrush?', a: 'SEMrush is an SEO research tool for marketing professionals. It gives you data and insights but does not automate or publish anything for you. Traffikora takes action automatically — it does the work, not just the analysis.' },
+      ]
+    },
+    {
+      category: 'Technical',
+      questions: [
+        { q: 'What accounts do I need to connect?', a: 'At minimum, you connect your Google Business Profile. You can also connect Instagram and Facebook. The more accounts you connect, the more channels Traffikora can automate for you.' },
+        { q: 'Is my data secure?', a: 'Yes. Traffikora uses industry-standard encryption for all data in transit and at rest. We never sell your data to third parties. Your business information is used only to power your marketing automation.' },
+        { q: 'Does Traffikora work for businesses outside the United States?', a: 'Traffikora is currently optimized for businesses in the United States, Canada, and the United Kingdom. We are expanding to additional markets throughout 2026.' },
+        { q: 'Can I see what Traffikora is posting before it goes live?', a: 'On Pro and higher plans, you can review a content preview dashboard. On all plans, you receive a monthly performance report showing everything that was published and how it performed.' },
+      ]
+    },
+  ]
 
-export default function FAQPage() {
   return (
     <>
-      
-
-      {/* NAV */}
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
       <Nav />
 
-      {/* HERO */}
-      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '80px 32px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Support</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '52px', fontWeight: 900, lineHeight: 1.1, marginBottom: '20px' }}>Frequently Asked Questions</h1>
-        <p style={{ fontSize: '18px', color: '#ccc', maxWidth: '560px', margin: '0 auto' }}>Everything you need to know about Traffikora. Can't find your answer? Email us at support@traffikora.com.</p>
+      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>FAQ</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Everything you want to know about Traffikora.</h1>
+        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '580px', margin: '0 auto' }}>Can not find your answer? Email us at support@traffikora.com and we will get back to you within one business day.</p>
       </section>
 
-      {/* FAQ CONTENT */}
-      <section style={{ maxWidth: '860px', margin: '0 auto', padding: '80px 32px' }}>
-        {faqs.map((section) => (
-          <div key={section.category} style={{ marginBottom: '60px' }}>
-            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, color: '#111', marginBottom: '8px', paddingBottom: '16px', borderBottom: '2.5px solid #111' }}>{section.category}</h2>
-            {section.questions.map((item) => (
-              <FAQItem key={item.q} q={item.q} a={item.a} />
-            ))}
-          </div>
-        ))}
-
-        {/* BOTTOM CTA */}
-        <div style={{ background: '#111', padding: '48px', textAlign: 'center', marginTop: '40px' }}>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 700, color: '#fff', marginBottom: '16px' }}>Still have questions?</h2>
-          <p style={{ color: '#ccc', fontSize: '16px', marginBottom: '32px' }}>Our team is happy to help. Or just start your free trial and see Traffikora in action.</p>
-          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="mailto:support@traffikora.com" style={{ background: '#fff', color: '#111', padding: '14px 32px', textDecoration: 'none', fontSize: '16px', fontWeight: 700, border: '2.5px solid #fff' }}>Email Support</a>
-            <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '14px 32px', textDecoration: 'none', fontSize: '16px', fontWeight: 700, border: '2.5px solid #E8610A' }}>Start Free Trial</Link>
-          </div>
+      <section style={{ background: '#fff', padding: '80px 32px' }}>
+        <div style={{ maxWidth: '820px', margin: '0 auto' }}>
+          {faqs.map((section) => (
+            <div key={section.category} style={{ marginBottom: '56px' }}>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 900, color: '#111', marginBottom: '8px', paddingBottom: '16px', borderBottom: '4px solid #E8610A' }}>{section.category}</h2>
+              <div>
+                {section.questions.map((item, i) => {
+                  const id = section.category + i
+                  const isOpen = open === id
+                  return (
+                    <div key={i} style={{ borderBottom: '1.5px solid #eee' }}>
+                      <button
+                        onClick={() => setOpen(isOpen ? null : id)}
+                        style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', padding: '22px 0', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' }}
+                      >
+                        <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', fontWeight: 600, color: '#111', lineHeight: 1.4 }}>{item.q}</span>
+                        <span style={{ color: '#E8610A', fontSize: '22px', fontWeight: 700, flexShrink: 0 }}>{isOpen ? '−' : '+'}</span>
+                      </button>
+                      {isOpen && (
+                        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8, paddingBottom: '22px', margin: 0 }}>{item.a}</p>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* FOOTER */}
+      <section style={{ background: '#f9f9f9', padding: '64px 32px', textAlign: 'center', borderTop: '2.5px solid #111' }}>
+        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', marginBottom: '16px' }}>Still have questions?</h2>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', maxWidth: '500px', margin: '0 auto 32px' }}>Our team responds to every email within one business day. We are here to help.</p>
+        <a href="mailto:support@traffikora.com" style={{ background: '#111', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #111', display: 'inline-block' }}>Email Support</a>
+      </section>
+
+      <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
+        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Ready to see it for yourself?</h2>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
+        <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Trial</Link>
+      </section>
+
       <Footer />
     </>
   )
