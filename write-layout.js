@@ -3,8 +3,8 @@ const fs = require('fs');
 const content = `import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'What Is Traffikora? The Marketing Platform That Never Stops Working | Traffikora',
-  description: 'Traffikora is an automated marketing platform for small businesses. Connect once and it handles social media, local SEO, Google Business Profile, and AI engine optimization forever.',
+  title: 'Why We Optimize for AI Engines, Not Just Google | Traffikora',
+  description: 'Google is no longer the only search engine that matters. Learn why Traffikora optimizes your business for ChatGPT, Claude, Gemini, Perplexity, and every major AI engine.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -16,11 +16,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "BlogPosting",
-            "headline": "What Is Traffikora? The Marketing Platform That Never Stops Working",
-            "description": "Traffikora is an automated marketing machine for small and mid-size businesses. Connect your accounts once and it markets forever.",
-            "url": "https://www.traffikora.com/blog/what-is-traffikora",
+            "headline": "Why We Optimize for AI Engines, Not Just Google",
+            "description": "Traffikora is the only marketing platform built to optimize your business for Google AND every major AI engine including ChatGPT, Claude, Gemini, and Perplexity.",
+            "url": "https://www.traffikora.com/blog/why-ai-engine-optimization",
             "publisher": { "@type": "Organization", "name": "Traffikora", "url": "https://www.traffikora.com" },
-            "mainEntityOfPage": "https://www.traffikora.com/blog/what-is-traffikora"
+            "mainEntityOfPage": "https://www.traffikora.com/blog/why-ai-engine-optimization"
           })
         }}
       />
@@ -30,5 +30,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 `;
 
-fs.writeFileSync('src/app/blog/what-is-traffikora/layout.tsx', content);
-console.log('Written: src/app/blog/what-is-traffikora/layout.tsx');
+fs.writeFileSync('src/app/blog/why-ai-engine-optimization/layout.tsx', content);
+console.log('Written: src/app/blog/why-ai-engine-optimization/layout.tsx');
