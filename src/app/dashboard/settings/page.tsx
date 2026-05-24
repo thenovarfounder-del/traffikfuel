@@ -1,103 +1,64 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 'use client'
-import { useState, useEffect } from "react"
-import { supabase } from "@/lib/supabase"
 
-export default function SettingsPage() {
-  const [userId, setUserId] = useState("")
-  const [wpSiteUrl, setWpSiteUrl] = useState("")
-  const [wpUsername, setWpUsername] = useState("")
-  const [wpAppPassword, setWpAppPassword] = useState("")
-  const [saving, setSaving] = useState(false)
-  const [message, setMessage] = useState("")
+import Link from 'next/link'
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
 
-  useEffect(() => {
-    const load = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
-      setUserId(user.id)
-      const { data } = await supabase
-        .from("business_profiles")
-        .select("wp_site_url, wp_username, wp_app_password")
-        .eq("user_id", user.id)
-        .single()
-      if (data) {
-        setWpSiteUrl(data.wp_site_url || "")
-        setWpUsername(data.wp_username || "")
-        setWpAppPassword(data.wp_app_password || "")
-      }
-    }
-    load()
-  }, [])
-
-  const save = async () => {
-    setSaving(true)
-    setMessage("")
-    const { error } = await supabase
-      .from("business_profiles")
-      .update({ wp_site_url: wpSiteUrl, wp_username: wpUsername, wp_app_password: wpAppPassword })
-      .eq("user_id", userId)
-    setSaving(false)
-    setMessage(error ? "Error saving. Try again." : "Settings saved!")
-  }
-
+export default function DashboardSettings() {
   return (
-    <div style={{ maxWidth: "600px", margin: "0 auto", padding: "24px" }}>
-      <h1 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "8px" }}>Settings</h1>
-      <p style={{ color: "#6b7280", marginBottom: "32px" }}>Manage your integrations and account settings.</p>
+    <>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+      <Nav />
 
-      <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: "12px", padding: "24px" }}>
-        <h2 style={{ fontSize: "18px", fontWeight: "600", marginBottom: "4px", color: "#111827" }}>WordPress Integration</h2>
-        <p style={{ fontSize: "14px", color: "#6b7280", marginBottom: "20px" }}>Connect your WordPress site to publish blog posts with one click.</p>
+      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Step 4 of 4</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Tell Us About Your Business</h1>
+        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto' }}>This helps Traffikora create content that matches your brand, industry, and customers.</p>
+      </section>
 
-        <div style={{ marginBottom: "16px" }}>
-          <label style={{ display: "block", fontSize: "14px", fontWeight: "500", color: "#374151", marginBottom: "6px" }}>WordPress Site URL</label>
-          <input
-            type="text"
-            placeholder="https://yourclientsite.com"
-            value={wpSiteUrl}
-            onChange={(e) => setWpSiteUrl(e.target.value)}
-            style={{ width: "100%", border: "1px solid #d1d5db", borderRadius: "8px", padding: "10px 12px", fontSize: "14px", color: "#111827", background: "#fff", boxSizing: "border-box" }}
-          />
+      <section style={{ background: '#fff', padding: '80px 32px', maxWidth: '720px', margin: '0 auto' }}>
+        <div style={{ marginBottom: '32px' }}>
+          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Business Name</label>
+          <input type="text" placeholder="e.g. Randy’s Auto Repair" style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
         </div>
 
-        <div style={{ marginBottom: "16px" }}>
-          <label style={{ display: "block", fontSize: "14px", fontWeight: "500", color: "#374151", marginBottom: "6px" }}>WordPress Username</label>
-          <input
-            type="text"
-            placeholder="admin"
-            value={wpUsername}
-            onChange={(e) => setWpUsername(e.target.value)}
-            style={{ width: "100%", border: "1px solid #d1d5db", borderRadius: "8px", padding: "10px 12px", fontSize: "14px", color: "#111827", background: "#fff", boxSizing: "border-box" }}
-          />
+        <div style={{ marginBottom: '32px' }}>
+          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Business Category</label>
+          <select style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box', background: '#fff' }}>
+            <option value="">Select your category...</option>
+            <option>Restaurant</option>
+            <option>Dental Practice</option>
+            <option>Real Estate</option>
+            <option>Salon or Spa</option>
+            <option>HVAC</option>
+            <option>Plumbing</option>
+            <option>Auto Repair</option>
+            <option>Law Firm</option>
+            <option>Chiropractic</option>
+            <option>Marketing Agency</option>
+            <option>Other</option>
+          </select>
         </div>
 
-        <div style={{ marginBottom: "24px" }}>
-          <label style={{ display: "block", fontSize: "14px", fontWeight: "500", color: "#374151", marginBottom: "6px" }}>WordPress Application Password</label>
-          <input
-            type="password"
-            placeholder="xxxx xxxx xxxx xxxx xxxx xxxx"
-            value={wpAppPassword}
-            onChange={(e) => setWpAppPassword(e.target.value)}
-            style={{ width: "100%", border: "1px solid #d1d5db", borderRadius: "8px", padding: "10px 12px", fontSize: "14px", color: "#111827", background: "#fff", boxSizing: "border-box" }}
-          />
-          <p style={{ fontSize: "12px", color: "#9ca3af", marginTop: "4px" }}>Generate this in WordPress under Users - Profile - Application Passwords.</p>
+        <div style={{ marginBottom: '32px' }}>
+          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>City and State</label>
+          <input type="text" placeholder="e.g. Tampa, FL" style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
         </div>
 
-        <button
-          onClick={save}
-          disabled={saving}
-          style={{ background: saving ? "#93c5fd" : "#2563eb", color: "#fff", padding: "10px 20px", borderRadius: "8px", fontSize: "14px", fontWeight: "500", border: "none", cursor: "pointer" }}
-        >
-          {saving ? "Saving..." : "Save Settings"}
-        </button>
+        <div style={{ marginBottom: '48px' }}>
+          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Website URL (optional)</label>
+          <input type="text" placeholder="e.g. https://www.yourbusiness.com" style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+        </div>
 
-        {message && (
-          <p style={{ marginTop: "12px", fontSize: "14px", color: message.includes("Error") ? "#ef4444" : "#16a34a" }}>
-            {message}
-          </p>
-        )}
-      </div>
-    </div>
+        <Link href="/dashboard" style={{ display: 'block', width: '100%', background: '#E8610A', color: '#fff', padding: '20px', fontSize: '18px', fontWeight: 700, border: '2.5px solid #E8610A', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', textAlign: 'center', textDecoration: 'none', boxSizing: 'border-box' }}>
+          Finish Setup →
+        </Link>
+      </section>
+
+      <Footer />
+    </>
   )
 }
