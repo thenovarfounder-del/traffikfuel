@@ -1,33 +1,100 @@
-﻿import { NextRequest, NextResponse } from 'next/server'
+// @ts-nocheck
+import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+import Stripe from 'stripe'
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url)
-  const code = searchParams.get('code')
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
-  if (!code) {
-    return NextResponse.redirect(new URL('/login?error=no_code', req.url))
-  }
+export async function POST(req: NextRequest) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  )
 
+  const body = await req.text()
+  const sig = req.headers.get('stripe-signature')
+
+  let event
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-    const response = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=pkce`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': supabaseAnonKey,
-      },
-      body: JSON.stringify({ auth_code: code }),
-    })
-
-    if (!response.ok) {
-      return NextResponse.redirect(new URL('/login?error=auth_failed', req.url))
-    }
-
-    return NextResponse.redirect(new URL('/dashboard', req.url))
+    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET)
   } catch (err) {
-    console.error('Auth callback error:', err)
-    return NextResponse.redirect(new URL('/login?error=unexpected', req.url))
+    return NextResponse.json({ error: 'Webhook signature verification failed' }, { status: 400 })
   }
+
+  const data = event.data.object
+
+  if (event.type === 'checkout.session.completed') {
+    const customerId = data.customer
+    const customerEmail = data.customer_details?.email
+    await supabase.from('users').update({ status: 'active', stripe_customer_id: customerId }).eq('email', customerEmail)
+  }
+
+  if (event.type === 'customer.subscription.trial_will_end') {
+    const customerId = data.customer
+    const { data: user } = await supabase.from('users').select('email').eq('stripe_customer_id', customerId).single()
+    if (user?.email) {
+      await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: 'support@traffikora.com',
+          to: user.email,
+          subject: 'Your Traffikora trial ends tomorrow',
+          html: '<p>Your 7-day free trial ends tomorrow. Add a payment method to keep access: <a href="https://www.traffikora.com/pricing">View Plans</a></p>'
+        })
+      })
+    }
+  }
+
+  if (event.type === 'customer.subscription.updated') {
+    const customerId = data.customer
+    const status = data.status
+    const supaStatus = status === 'active' ? 'active' : status === 'past_due' ? 'past_due' : 'inactive'
+    await supabase.from('users').update({ status: supaStatus }).eq('stripe_customer_id', customerId)
+    if (status === 'past_due') {
+      const { data: user } = await supabase.from('users').select('email').eq('stripe_customer_id', customerId).single()
+      if (user?.email) {
+        await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            from: 'support@traffikora.com',
+            to: user.email,
+            subject: 'Payment failed — action required',
+            html: '<p>Your payment failed. Please update your billing info to keep access to Traffikora.</p>'
+          })
+        })
+      }
+    }
+  }
+
+  if (event.type === 'customer.subscription.deleted') {
+    const customerId = data.customer
+    await supabase.from('users').update({ status: 'cancelled' }).eq('stripe_customer_id', customerId)
+    const { data: user } = await supabase.from('users').select('email').eq('stripe_customer_id', customerId).single()
+    if (user?.email) {
+      await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: 'support@traffikora.com',
+          to: user.email,
+          subject: 'Your Traffikora subscription has been cancelled',
+          html: '<p>Your subscription has been cancelled. Your data will be retained for 30 days. <a href="https://www.traffikora.com/pricing">Reactivate anytime</a>.</p>'
+        })
+      })
+    }
+  }
+
+  if (event.type === 'invoice.payment_succeeded') {
+    const customerId = data.customer
+    await supabase.from('users').update({ status: 'active' }).eq('stripe_customer_id', customerId)
+  }
+
+  if (event.type === 'invoice.payment_failed') {
+    const customerId = data.customer
+    await supabase.from('users').update({ status: 'past_due' }).eq('stripe_customer_id', customerId)
+  }
+
+  return NextResponse.json({ received: true })
 }
