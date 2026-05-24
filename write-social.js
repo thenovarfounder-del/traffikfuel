@@ -1,106 +1,94 @@
 const fs = require('fs');
 
 const content = `// @ts-nocheck
-import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-import Stripe from 'stripe'
+'use client'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+import { useState } from 'react'
+import Link from 'next/link'
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
 
-export async function POST(req: NextRequest) {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  )
+export default function LoginPage() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const body = await req.text()
-  const sig = req.headers.get('stripe-signature')
-
-  let event
-  try {
-    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET)
-  } catch (err) {
-    return NextResponse.json({ error: 'Webhook signature verification failed' }, { status: 400 })
-  }
-
-  const data = event.data.object
-
-  if (event.type === 'checkout.session.completed') {
-    const customerId = data.customer
-    const customerEmail = data.customer_details?.email
-    await supabase.from('users').update({ status: 'active', stripe_customer_id: customerId }).eq('email', customerEmail)
-  }
-
-  if (event.type === 'customer.subscription.trial_will_end') {
-    const customerId = data.customer
-    const { data: user } = await supabase.from('users').select('email').eq('stripe_customer_id', customerId).single()
-    if (user?.email) {
-      await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: { 'Authorization': \`Bearer \${process.env.RESEND_API_KEY}\`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          from: 'support@traffikora.com',
-          to: user.email,
-          subject: 'Your Traffikora trial ends tomorrow',
-          html: '<p>Your 7-day free trial ends tomorrow. Add a payment method to keep access: <a href="https://www.traffikora.com/pricing">View Plans</a></p>'
-        })
-      })
-    }
-  }
-
-  if (event.type === 'customer.subscription.updated') {
-    const customerId = data.customer
-    const status = data.status
-    const supaStatus = status === 'active' ? 'active' : status === 'past_due' ? 'past_due' : 'inactive'
-    await supabase.from('users').update({ status: supaStatus }).eq('stripe_customer_id', customerId)
-    if (status === 'past_due') {
-      const { data: user } = await supabase.from('users').select('email').eq('stripe_customer_id', customerId).single()
-      if (user?.email) {
-        await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: { 'Authorization': \`Bearer \${process.env.RESEND_API_KEY}\`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            from: 'support@traffikora.com',
-            to: user.email,
-            subject: 'Payment failed \u2014 action required',
-            html: '<p>Your payment failed. Please update your billing info to keep access to Traffikora.</p>'
-          })
-        })
+  async function handleLogin() {
+    setLoading(true)
+    setError('')
+    try {
+      const { supabase } = await import('@/lib/supabase')
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) {
+        setError('Invalid email or password. Please try again.')
+      } else {
+        window.location.href = '/dashboard'
       }
+    } catch (e) {
+      setError('Something went wrong. Please try again.')
     }
+    setLoading(false)
   }
 
-  if (event.type === 'customer.subscription.deleted') {
-    const customerId = data.customer
-    await supabase.from('users').update({ status: 'cancelled' }).eq('stripe_customer_id', customerId)
-    const { data: user } = await supabase.from('users').select('email').eq('stripe_customer_id', customerId).single()
-    if (user?.email) {
-      await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: { 'Authorization': \`Bearer \${process.env.RESEND_API_KEY}\`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          from: 'support@traffikora.com',
-          to: user.email,
-          subject: 'Your Traffikora subscription has been cancelled',
-          html: '<p>Your subscription has been cancelled. Your data will be retained for 30 days. <a href="https://www.traffikora.com/pricing">Reactivate anytime</a>.</p>'
-        })
-      })
-    }
-  }
+  return (
+    <>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+      <Nav />
 
-  if (event.type === 'invoice.payment_succeeded') {
-    const customerId = data.customer
-    await supabase.from('users').update({ status: 'active' }).eq('stripe_customer_id', customerId)
-  }
+      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px 60px' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Welcome Back</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, marginBottom: '16px' }}>Log in to Traffikora</h1>
+        <p style={{ fontSize: '18px', color: '#ccc', marginBottom: '0' }}>Pick up right where you left off.</p>
+      </section>
 
-  if (event.type === 'invoice.payment_failed') {
-    const customerId = data.customer
-    await supabase.from('users').update({ status: 'past_due' }).eq('stripe_customer_id', customerId)
-  }
+      <section style={{ background: '#fff', padding: '60px 32px', display: 'flex', justifyContent: 'center' }}>
+        <div style={{ width: '100%', maxWidth: '460px' }}>
+          {error && (
+            <div style={{ background: '#fff0f0', border: '2px solid #e00', color: '#c00', padding: '14px 18px', marginBottom: '24px', fontFamily: 'DM Sans, sans-serif', fontSize: '15px' }}>
+              {error}
+            </div>
+          )}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Email address</label>
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }}
+            />
+          </div>
+          <div style={{ marginBottom: '28px' }}>
+            <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              placeholder="Your password"
+              style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }}
+            />
+          </div>
+          <button
+            onClick={handleLogin}
+            disabled={loading}
+            style={{ width: '100%', background: '#E8610A', color: '#fff', padding: '16px', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', opacity: loading ? 0.7 : 1 }}
+          >
+            {loading ? 'Logging in...' : 'Log In'}
+          </button>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#666', textAlign: 'center', marginTop: '24px' }}>
+            Don\u2019t have an account? <Link href="/signup" style={{ color: '#E8610A', fontWeight: 600, textDecoration: 'none' }}>Start free trial</Link>
+          </p>
+        </div>
+      </section>
 
-  return NextResponse.json({ received: true })
+      <Footer />
+    </>
+  )
 }
 `;
 
-fs.writeFileSync('src/app/api/webhooks/stripe/route.ts', content);
-console.log('Written: src/app/api/webhooks/stripe/route.ts');
+fs.writeFileSync('src/app/login/page.tsx', content);
+console.log('Written: src/app/login/page.tsx');
