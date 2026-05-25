@@ -11,7 +11,7 @@ export default function Nav() {
     <>
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
       <nav style={{ position: 'sticky', top: 0, zIndex: 50, background: '#fff', borderBottom: '2.5px solid #111', padding: '0 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '64px' }}>
-        <Link href="/" style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', textDecoration: 'none' }}>Traffikora</Link>
+        <Link href="/" style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', textDecoration: 'none' }}>Traffik<span style={{ color: '#E8610A' }}>ora</span></Link>
         <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
           <Link href="/" style={{ color: '#111', textDecoration: 'none', fontSize: '15px', fontWeight: 500 }}>Home</Link>
           <Link href="/features" style={{ color: '#111', textDecoration: 'none', fontSize: '15px', fontWeight: 500 }}>Features</Link>
