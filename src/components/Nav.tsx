@@ -13,6 +13,7 @@ export default function Nav() {
       <nav style={{ position: 'sticky', top: 0, zIndex: 50, background: '#fff', borderBottom: '2.5px solid #111', padding: '0 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '64px' }}>
         <Link href="/" style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', textDecoration: 'none' }}>Traffikora</Link>
         <div style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
+          <Link href="/" style={{ color: '#111', textDecoration: 'none', fontSize: '15px' }}>Home</Link>
           <Link href="/features/ai-engine-optimization" style={{ color: '#111', textDecoration: 'none', fontSize: '15px' }}>Features</Link>
           <Link href="/solutions/small-businesses" style={{ color: '#111', textDecoration: 'none', fontSize: '15px' }}>Solutions</Link>
           <Link href="/pricing" style={{ color: '#111', textDecoration: 'none', fontSize: '15px' }}>Pricing</Link>
