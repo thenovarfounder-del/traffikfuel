@@ -3,8 +3,8 @@ const fs = require('fs');
 const content = `import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'The Small Business Marketing Problem Nobody Is Solving | Traffikora',
-  description: 'Small businesses need consistent marketing but have no time or budget to do it. Traffikora is the automated solution that handles everything \u2014 social, SEO, reviews, and AI search \u2014 for $97/month.',
+  title: 'What Is AI Engine Optimization (AEO) and Why It Matters | Traffikora',
+  description: 'AI Engine Optimization (AEO) gets your business recommended by ChatGPT, Claude, Gemini, and Perplexity. Learn what AEO is and how Traffikora handles it automatically.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -16,11 +16,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "BlogPosting",
-            "headline": "The Small Business Marketing Problem Nobody Is Solving",
-            "description": "Small businesses need consistent marketing more than anyone but have the least time and budget to do it. Traffikora solves this with full automation starting at $97/month.",
-            "url": "https://www.traffikora.com/blog/small-business-marketing-problem",
+            "headline": "What Is AI Engine Optimization (AEO) and Why It Matters for Your Business",
+            "description": "AEO is the practice of optimizing your business to be recommended by AI engines like ChatGPT, Claude, and Gemini. Learn how it works and why it matters.",
+            "url": "https://www.traffikora.com/blog/what-is-aeo",
             "publisher": { "@type": "Organization", "name": "Traffikora", "url": "https://www.traffikora.com" },
-            "mainEntityOfPage": "https://www.traffikora.com/blog/small-business-marketing-problem"
+            "mainEntityOfPage": "https://www.traffikora.com/blog/what-is-aeo"
           })
         }}
       />
@@ -30,5 +30,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 `;
 
-fs.writeFileSync('src/app/blog/small-business-marketing-problem/layout.tsx', content);
-console.log('Written: src/app/blog/small-business-marketing-problem/layout.tsx');
+fs.writeFileSync('src/app/blog/what-is-aeo/layout.tsx', content);
+console.log('Written: src/app/blog/what-is-aeo/layout.tsx');
