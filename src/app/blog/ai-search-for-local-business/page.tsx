@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
-export default function BlogPost3() {
+export default function BlogPost() {
   return (
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -14,32 +14,37 @@ export default function BlogPost3() {
       <Nav />
 
       <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>AI Search</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>How AI Search Is Changing Local Business Marketing Forever</h1>
-        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto 40px' }}>ChatGPT, Gemini, and Claude are now recommending local businesses. If you are not optimized for AI search, you are missing the next wave of customers.</p>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Blog</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>How AI Search Is Changing Local Business Marketing</h1>
+        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto' }}>ChatGPT, Claude, and Gemini are now answering “where should I go” questions. Is your business showing up?</p>
       </section>
 
       <section style={{ background: '#fff', padding: '80px 32px' }}>
-        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}>Something fundamental has changed in how people find local businesses. Millions of consumers now ask AI assistants like ChatGPT, Google Gemini, and Claude for recommendations instead of typing into a search bar. They ask questions like "What is the best HVAC company near me?" or "Find me a reliable plumber in Austin." And AI engines answer with specific business recommendations.</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', marginBottom: '20px' }}>Why This Changes Everything</h2>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}>Traditional SEO gets you found on Google. AI engine optimization gets you recommended by AI. These are two different systems with two different signals. A business can rank on page one of Google and still be completely invisible to AI engines. The businesses that win the next decade will optimize for both.</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', marginBottom: '20px' }}>How AI Engines Choose Who to Recommend</h2>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '16px' }}>AI engines pull from publicly available information about your business. They look at your Google Business Profile, your reviews, your website content, and how consistently your information appears across the web. Businesses with strong, consistent, and frequently updated digital footprints get recommended more often.</p>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}>This is why Traffikora built AI engine optimization into its core platform from day one. While every other marketing tool focuses only on Google, Traffikora optimizes your business to be recommended by every major AI engine simultaneously.</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', marginBottom: '20px' }}>What You Can Do Right Now</h2>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '16px' }}>Keep your Google Business Profile updated with fresh posts and photos every week. Make sure your business information is consistent across every directory online. Generate a steady stream of new reviews. Publish helpful content that answers questions your customers are asking.</p>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}>Or connect to Traffikora and let the platform do all of it automatically. The businesses that start optimizing for AI search today will have an enormous advantage over those that wait.</p>
-          <div style={{ background: '#f9f9f9', border: '2.5px solid #111', padding: '40px', marginTop: '48px', textAlign: 'center' }}>
-            <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 900, marginBottom: '16px' }}>Get Found on Google AND Every AI Engine</h3>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', marginBottom: '28px' }}>Traffikora is the only platform that optimizes your business for Google and AI engines simultaneously. Start your free 7-day trial today.</p>
-            <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free Trial</Link>
+        <div style={{ maxWidth: '780px', margin: '0 auto' }}>
+          <div style={{ marginBottom: '48px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, color: '#111', marginBottom: '16px' }}>The shift is already happening</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.8 }}>Millions of people now ask AI engines like ChatGPT, Claude, and Gemini for local business recommendations. “Best dentist near me.” “Top-rated HVAC company in Dallas.” “Where should I get my car fixed?” These aren’t Google searches anymore. They’re AI conversations.</p>
+          </div>
+          <div style={{ marginBottom: '48px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, color: '#111', marginBottom: '16px' }}>Why most businesses are invisible to AI</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.8 }}>AI engines pull data from across the web — reviews, directories, websites, and content. Businesses with thin online presence, few reviews, or outdated information simply don’t get mentioned. Most businesses don’t even know this is happening.</p>
+          </div>
+          <div style={{ marginBottom: '48px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, color: '#111', marginBottom: '16px' }}>How to get found in AI search</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.8 }}>The key is consistent, structured information across every platform. Strong Google Business Profile. Lots of recent reviews. Content that answers the questions your customers are asking. Traffikora automates all of this — so you show up everywhere AI looks.</p>
+          </div>
+          <div style={{ marginBottom: '48px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, color: '#111', marginBottom: '16px' }}>The businesses winning right now</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.8 }}>Early movers who have optimized for AI search are already seeing results. More calls. More website visits. More customers who say “I found you on ChatGPT.” This window won’t stay open forever.</p>
+          </div>
+          <div style={{ borderTop: '2.5px solid #111', paddingTop: '40px', marginTop: '40px' }}>
+            <Link href="/blog" style={{ color: '#E8610A', fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, textDecoration: 'none' }}>← Back to Blog</Link>
           </div>
         </div>
       </section>
 
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Set It Once. It Markets Forever.</h2>
+        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Ready to automate your marketing?</h2>
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
         <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Trial</Link>
       </section>

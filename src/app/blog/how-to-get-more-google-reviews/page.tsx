@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
-export default function BlogPost1() {
+export default function BlogPost() {
   return (
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -14,32 +14,37 @@ export default function BlogPost1() {
       <Nav />
 
       <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Local Marketing</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>How to Get More Google Reviews for Your Local Business</h1>
-        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto 40px' }}>Google reviews are the single most powerful trust signal for local businesses. Here is exactly how to get more of them.</p>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Blog</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>How to Get More Google Reviews (Without Asking Awkwardly)</h1>
+        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto' }}>Google reviews are the single biggest driver of local search rankings. Here’s how to get them on autopilot.</p>
       </section>
 
       <section style={{ background: '#fff', padding: '80px 32px' }}>
-        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}>If you run a local business, Google reviews are not optional. They determine whether a potential customer calls you or calls your competitor. Businesses with more reviews consistently outrank those with fewer.</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', marginBottom: '20px' }}>1. Ask Immediately After the Service</h2>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}>The best time to ask for a review is right after you complete a job. The customer is happy, the experience is fresh, and they are most likely to follow through. A simple script: "If you are happy with the work today, would you mind leaving us a quick Google review? It helps our small business more than you know."</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', marginBottom: '20px' }}>2. Send a Follow-Up Text or Email</h2>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}>Most people mean to leave a review but forget. A follow-up text or email sent within 24 hours dramatically increases your conversion rate. Keep it short, include a direct link to your Google review page, and make it easy to complete in under 60 seconds.</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', marginBottom: '20px' }}>3. Respond to Every Review You Already Have</h2>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}>When potential customers see that you respond to every review, they trust you more. Respond within 24 hours, thank positive reviewers by name, and address complaints professionally.</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', marginBottom: '20px' }}>4. Automate the Entire Process</h2>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}>Traffikora monitors your reviews across Google and Yelp and responds to every one automatically. Your reputation grows on autopilot while you focus on running your business.</p>
-          <div style={{ background: '#f9f9f9', border: '2.5px solid #111', padding: '40px', marginTop: '48px', textAlign: 'center' }}>
-            <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 900, marginBottom: '16px' }}>Want Your Reviews Managed Automatically?</h3>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', marginBottom: '28px' }}>Traffikora monitors and responds to every review on Google and Yelp automatically. Start your free 7-day trial today.</p>
-            <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free Trial</Link>
+        <div style={{ maxWidth: '780px', margin: '0 auto' }}>
+          <div style={{ marginBottom: '48px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, color: '#111', marginBottom: '16px' }}>Why Google reviews matter so much</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.8 }}>Google uses review quantity, recency, and rating as major ranking factors for local search. A business with 200 reviews almost always outranks one with 20 — even if the product is identical. Reviews also build trust instantly with new customers.</p>
+          </div>
+          <div style={{ marginBottom: '48px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, color: '#111', marginBottom: '16px' }}>The problem with asking manually</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.8 }}>Most businesses know they should ask for reviews. But it’s awkward to ask in person, easy to forget to follow up, and impossible to do at scale. The businesses with the most reviews have a system — not just good intentions.</p>
+          </div>
+          <div style={{ marginBottom: '48px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, color: '#111', marginBottom: '16px' }}>The right time to ask</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.8 }}>Timing is everything. The best moment to request a review is right after a positive experience — when the customer is still happy. A text message sent within an hour of a completed service converts dramatically better than an email sent days later.</p>
+          </div>
+          <div style={{ marginBottom: '48px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, color: '#111', marginBottom: '16px' }}>How Traffikora automates review generation</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.8 }}>Traffikora automatically sends review requests to your customers at exactly the right moment. No awkward asking. No manual follow-up. Just a steady stream of new 5-star reviews building your reputation on autopilot.</p>
+          </div>
+          <div style={{ borderTop: '2.5px solid #111', paddingTop: '40px', marginTop: '40px' }}>
+            <Link href="/blog" style={{ color: '#E8610A', fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, textDecoration: 'none' }}>← Back to Blog</Link>
           </div>
         </div>
       </section>
 
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Set It Once. It Markets Forever.</h2>
+        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Ready to automate your marketing?</h2>
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
         <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Trial</Link>
       </section>
