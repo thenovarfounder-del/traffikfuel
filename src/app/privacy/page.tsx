@@ -21,27 +21,47 @@ export default function PrivacyPage() {
         <div style={{ maxWidth: '780px', margin: '0 auto' }}>
           <div style={{ marginBottom: '40px' }}>
             <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>1. Information We Collect</h2>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>We collect information you provide when creating an account including name, email, phone number, and business information. We also collect data from third-party platforms you connect such as Google Business Profile and social media accounts.</p>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>We collect information you provide directly to us when you create an account, including your name, email address, phone number, and business information. We also collect information automatically when you use the Service, including log data, device information, and usage data. When you connect third-party platforms such as Google Business Profile, Facebook, or Instagram, we collect data from those platforms as necessary to provide the Service.</p>
           </div>
           <div style={{ marginBottom: '40px' }}>
             <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>2. How We Use Your Information</h2>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>We use your information to provide and improve the Service, send transactional and marketing emails, connect to third-party platforms on your behalf, and communicate with you about your account.</p>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>We use the information we collect to provide, maintain, and improve the Service; process transactions and send related information including confirmations and receipts; send transactional and promotional communications; respond to comments and questions; monitor and analyze usage patterns and trends; detect and prevent fraudulent transactions and abuse; and comply with legal obligations. We do not use your information for any purpose not described in this policy without your consent.</p>
           </div>
           <div style={{ marginBottom: '40px' }}>
-            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>3. Information Sharing</h2>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>We do not sell your personal information. We share data only with service providers who help us operate the Service such as Stripe, Twilio, and Resend, and only as necessary.</p>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>3. Information Sharing and Disclosure</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>We do not sell, trade, or rent your personal information to third parties. We may share your information with trusted third-party service providers who assist us in operating our platform, including Stripe for payment processing, Twilio for SMS verification, Resend for email delivery, and Supabase for data storage. These providers are contractually obligated to keep your information confidential and use it only to provide services to us. We may also disclose your information if required by law or to protect the rights and safety of Traffikora and its users.</p>
           </div>
           <div style={{ marginBottom: '40px' }}>
-            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>4. Data Security</h2>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>We implement industry-standard security measures including encryption in transit and at rest. No method of internet transmission is 100% secure.</p>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>4. Third-Party Platform Integrations</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>When you connect Google, Facebook, Instagram, or other third-party platforms to your Traffikora account, we access only the data and permissions necessary to provide the Service on your behalf. We act as an authorized agent for your accounts and store access tokens securely. Your use of those third-party platforms is governed by their respective privacy policies and terms of service. We are not responsible for the privacy practices of third-party platforms.</p>
           </div>
           <div style={{ marginBottom: '40px' }}>
-            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>5. Your Rights</h2>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>You have the right to access, correct, or delete your personal information at any time. Contact us at support@traffikora.com to exercise these rights.</p>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>5. Data Security</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>We take the security of your data seriously and implement industry-standard measures to protect it, including encryption of data in transit using TLS, encryption of sensitive data at rest, secure access controls and authentication, regular security audits, and monitoring for unauthorized access. While we strive to protect your information, no method of transmission over the internet or electronic storage is 100% secure. We cannot guarantee absolute security but will notify you promptly in the event of a data breach affecting your information.</p>
           </div>
           <div style={{ marginBottom: '40px' }}>
-            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>6. Contact</h2>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>For questions about this Privacy Policy contact us at support@traffikora.com.</p>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>6. Data Retention</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>We retain your personal information for as long as your account is active or as needed to provide the Service. If you cancel your account, we will delete your personal data within 90 days, except where we are required by law to retain it longer or where it is necessary to resolve disputes, enforce agreements, or protect our legal rights. Anonymized and aggregated data may be retained indefinitely for analytics purposes.</p>
+          </div>
+          <div style={{ marginBottom: '40px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>7. Cookies and Tracking Technologies</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>We use cookies and similar tracking technologies to operate and improve the Service, remember your preferences, analyze usage patterns, and deliver relevant content. We also use Google Analytics (GA4) to understand how users interact with our platform. You can control cookies through your browser settings, but disabling cookies may affect the functionality of the Service. By using Traffikora, you consent to our use of cookies as described in this policy.</p>
+          </div>
+          <div style={{ marginBottom: '40px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>8. Your Rights and Choices</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>You have the right to access the personal information we hold about you; correct inaccurate or incomplete information; request deletion of your personal information; opt out of marketing communications at any time by clicking the unsubscribe link in any email; and data portability where technically feasible. To exercise any of these rights, contact us at support@traffikora.com. We will respond to all requests within 30 days.</p>
+          </div>
+          <div style={{ marginBottom: '40px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>9. Children’s Privacy</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>The Service is not directed to individuals under the age of 13. We do not knowingly collect personal information from children under 13. If we become aware that a child under 13 has provided us with personal information, we will take steps to delete such information promptly. If you believe we may have collected information from a child under 13, please contact us at support@traffikora.com.</p>
+          </div>
+          <div style={{ marginBottom: '40px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>10. Changes to This Privacy Policy</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>We may update this Privacy Policy from time to time to reflect changes in our practices, technology, legal requirements, or other factors. When we make material changes, we will notify you by email and by posting a notice on our website at least 14 days before the changes take effect. Your continued use of the Service after the effective date of the revised policy constitutes your acceptance of the changes.</p>
+          </div>
+          <div style={{ marginBottom: '40px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>11. Contact Us</h2>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at support@traffikora.com. We are committed to resolving any privacy concerns you may have and will respond to all inquiries within 2 business days.</p>
           </div>
           <div style={{ borderTop: '2.5px solid #111', paddingTop: '40px', display: 'flex', gap: '24px' }}>
             <Link href="/terms" style={{ color: '#E8610A', fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600 }}>Terms of Service</Link>
