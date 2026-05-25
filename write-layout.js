@@ -3,8 +3,8 @@ const fs = require('fs');
 const content = `import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'What Is AI Engine Optimization (AEO) and Why It Matters | Traffikora',
-  description: 'AI Engine Optimization (AEO) gets your business recommended by ChatGPT, Claude, Gemini, and Perplexity. Learn what AEO is and how Traffikora handles it automatically.',
+  title: 'Set It Once: How Traffikora\u2019s Automation Actually Works | Traffikora',
+  description: 'Here is exactly how Traffikora works \u2014 from signup to fully automated marketing. Connect your accounts once and Traffikora handles social media, SEO, reviews, and AI engine optimization forever.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -16,11 +16,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "BlogPosting",
-            "headline": "What Is AI Engine Optimization (AEO) and Why It Matters for Your Business",
-            "description": "AEO is the practice of optimizing your business to be recommended by AI engines like ChatGPT, Claude, and Gemini. Learn how it works and why it matters.",
-            "url": "https://www.traffikora.com/blog/what-is-aeo",
+            "headline": "Set It Once: How Traffikora\u2019s Automation Actually Works",
+            "description": "A step-by-step breakdown of how Traffikora automates your marketing from day one \u2014 social media, local SEO, Google Business Profile, reviews, and AI engine optimization.",
+            "url": "https://www.traffikora.com/blog/set-it-once-how-traffikora-works",
             "publisher": { "@type": "Organization", "name": "Traffikora", "url": "https://www.traffikora.com" },
-            "mainEntityOfPage": "https://www.traffikora.com/blog/what-is-aeo"
+            "mainEntityOfPage": "https://www.traffikora.com/blog/set-it-once-how-traffikora-works"
           })
         }}
       />
@@ -30,5 +30,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 `;
 
-fs.writeFileSync('src/app/blog/what-is-aeo/layout.tsx', content);
-console.log('Written: src/app/blog/what-is-aeo/layout.tsx');
+fs.writeFileSync('src/app/blog/set-it-once-how-traffikora-works/layout.tsx', content);
+console.log('Written: src/app/blog/set-it-once-how-traffikora-works/layout.tsx');
