@@ -19,6 +19,7 @@ export default function Nav() {
           <Link href="/how-it-works" style={{ color: '#111', textDecoration: 'none', fontSize: '15px' }}>How It Works</Link>
           <Link href="/why-traffikora" style={{ color: '#111', textDecoration: 'none', fontSize: '15px' }}>Why Traffikora</Link>
           <Link href="/faq" style={{ color: '#111', textDecoration: 'none', fontSize: '15px' }}>FAQ</Link>
+          <Link href="/blog" style={{ color: '#111', textDecoration: 'none', fontSize: '15px' }}>Blog</Link>
           <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '10px 22px', textDecoration: 'none', fontSize: '15px', fontWeight: 600, border: '2.5px solid #111' }}>Start Free Trial</Link>
         </div>
       </nav>
