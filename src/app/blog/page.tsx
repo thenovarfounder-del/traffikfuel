@@ -5,34 +5,103 @@ import Link from 'next/link'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
-export default function BlogPage() {
-  const posts = [
-    {
-      slug: 'what-is-ai-engine-optimization',
-      category: 'AI Marketing',
-      title: 'What Is AI Engine Optimization and Why Every Local Business Needs It Now',
-      excerpt: 'Over 100 million people now ask ChatGPT, Gemini, and Perplexity for business recommendations instead of typing into Google. Here is what AI engine optimization is and how to make sure your business shows up.',
-      date: 'May 20, 2026',
-      readTime: '6 min read',
-    },
-    {
-      slug: 'local-seo-tips-for-small-businesses',
-      category: 'Local SEO',
-      title: '7 Local SEO Tips That Actually Move the Needle for Small Businesses in 2026',
-      excerpt: 'Most local SEO advice is outdated or written for enterprise companies. These 7 tactics are specifically for small business owners who want to rank higher on Google without hiring an agency.',
-      date: 'May 15, 2026',
-      readTime: '8 min read',
-    },
-    {
-      slug: 'why-google-business-profile-matters',
-      category: 'Google Business Profile',
-      title: 'Why Your Google Business Profile Is the Most Valuable Marketing Asset You Own',
-      excerpt: 'Most small business owners set up their Google Business Profile once and forget about it. That is a massive mistake. Here is why an active GBP is the single highest-ROI marketing channel for local businesses.',
-      date: 'May 10, 2026',
-      readTime: '7 min read',
-    },
-  ]
+const posts = [
+  {
+    category: 'Platform',
+    title: 'What Is Traffikora? The Marketing Platform That Never Stops Working.',
+    excerpt: 'Most marketing tools make you work. Traffikora works for you — automatically, every single day.',
+    slug: 'what-is-traffikora',
+    read: '5 min read',
+  },
+  {
+    category: 'AI Search',
+    title: 'Why We Optimize for AI Engines, Not Just Google.',
+    excerpt: 'Google is still important. But the businesses that win the next decade will be the ones showing up in AI engines.',
+    slug: 'why-ai-engine-optimization',
+    read: '6 min read',
+  },
+  {
+    category: 'Platform',
+    title: 'How Traffikora Is Different From Every Other Marketing Tool.',
+    excerpt: 'Most marketing tools give you more work. Traffikora eliminates the work entirely.',
+    slug: 'how-traffikora-is-different',
+    read: '6 min read',
+  },
+  {
+    category: 'Small Business',
+    title: 'The Small Business Marketing Problem Nobody Is Solving.',
+    excerpt: 'Small businesses need consistent marketing more than anyone. They have the least time and budget to do it.',
+    slug: 'small-business-marketing-problem',
+    read: '6 min read',
+  },
+  {
+    category: 'AI Search',
+    title: 'What Is AI Engine Optimization (AEO) and Why It Matters for Your Business.',
+    excerpt: 'SEO got your business on Google. AEO gets your business recommended by ChatGPT, Claude, Gemini, and every major AI engine.',
+    slug: 'what-is-aeo',
+    read: '7 min read',
+  },
+  {
+    category: 'Platform',
+    title: 'Set It Once: How Traffikora’s Automation Actually Works.',
+    excerpt: 'Not magic. Not vague. Here is exactly what happens after you connect your accounts — step by step.',
+    slug: 'set-it-once-how-traffikora-works',
+    read: '6 min read',
+  },
+  {
+    category: 'AI Search',
+    title: 'What Is AI Engine Optimization?',
+    excerpt: 'A deep dive into AEO — the new discipline that gets your business recommended by AI-powered search engines.',
+    slug: 'what-is-ai-engine-optimization',
+    read: '5 min read',
+  },
+  {
+    category: 'Local SEO',
+    title: 'Local SEO Tips for Small Businesses.',
+    excerpt: 'Practical, actionable local SEO strategies any small business can implement to rank higher and get found faster.',
+    slug: 'local-seo-tips-for-small-businesses',
+    read: '5 min read',
+  },
+  {
+    category: 'Google',
+    title: 'Why Your Google Business Profile Matters More Than Ever.',
+    excerpt: 'Your Google Business Profile is your most powerful free marketing tool. Here’s how to use it right.',
+    slug: 'why-google-business-profile-matters',
+    read: '5 min read',
+  },
+  {
+    category: 'Reviews',
+    title: 'How to Get More Google Reviews for Your Business.',
+    excerpt: 'Reviews are the single biggest trust signal for local businesses. Here’s how to get more of them systematically.',
+    slug: 'how-to-get-more-google-reviews',
+    read: '5 min read',
+  },
+  {
+    category: 'Local SEO',
+    title: 'What Is Local SEO?',
+    excerpt: 'Everything you need to know about local SEO — what it is, why it matters, and how to win it for your business.',
+    slug: 'what-is-local-seo',
+    read: '5 min read',
+  },
+  {
+    category: 'AI Search',
+    title: 'AI Search for Local Business: What You Need to Know.',
+    excerpt: 'AI search is changing how customers find local businesses. Here’s what that means for you and how to stay ahead.',
+    slug: 'ai-search-for-local-business',
+    read: '5 min read',
+  },
+]
 
+const categoryColors = {
+  'Platform': '#E8610A',
+  'AI Search': '#111',
+  'Small Business': '#2563eb',
+  'Local SEO': '#16a34a',
+  'Google': '#dc2626',
+  'Reviews': '#7c3aed',
+}
+
+export default function Blog() {
   return (
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -41,37 +110,29 @@ export default function BlogPage() {
       <Nav />
 
       <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>The Traffikora Blog</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Marketing insights for local businesses that want to grow.</h1>
-        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '580px', margin: '0 auto' }}>Local SEO, AI engine optimization, Google Business Profile tips, and more — written for business owners, not marketers.</p>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Traffikora Blog</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Marketing insights for small businesses that want to grow.</h1>
+        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '580px', margin: '0 auto' }}>Practical guides on local SEO, AI engine optimization, social media, and automated marketing.</p>
       </section>
 
       <section style={{ background: '#fff', padding: '80px 32px' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' }}>
-            {posts.map((post) => (
-              <Link key={post.slug} href={'/blog/' + post.slug} style={{ textDecoration: 'none', color: 'inherit', display: 'block', border: '2.5px solid #111', padding: '36px', background: '#fff', transition: 'background 0.2s' }}>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', fontWeight: 700, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>{post.category}</p>
-                <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px', fontWeight: 900, color: '#111', lineHeight: 1.3, marginBottom: '16px' }}>{post.title}</h2>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7, marginBottom: '24px' }}>{post.excerpt}</p>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1.5px solid #eee', paddingTop: '16px' }}>
-                  <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888' }}>{post.date}</span>
-                  <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888' }}>{post.readTime}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
+        <div style={{ maxWidth: '1060px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '32px' }}>
+          {posts.map((post) => (
+            <Link key={post.slug} href={'/blog/' + post.slug} style={{ textDecoration: 'none', display: 'block', border: '2.5px solid #111', padding: '36px', background: '#fff', transition: 'box-shadow 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.boxShadow = '6px 6px 0px #111'}
+              onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
+            >
+              <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: '#fff', background: categoryColors[post.category] || '#111', padding: '4px 10px', display: 'inline-block', marginBottom: '16px' }}>{post.category}</span>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', lineHeight: 1.3, marginBottom: '14px' }}>{post.title}</h2>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7, marginBottom: '20px' }}>{post.excerpt}</p>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888' }}>{post.read} · Traffikora Team</p>
+            </Link>
+          ))}
         </div>
       </section>
 
-      <section style={{ background: '#f9f9f9', padding: '64px 32px', textAlign: 'center', borderTop: '2.5px solid #111' }}>
-        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', marginBottom: '16px' }}>Want Traffikora doing this for your business automatically?</h2>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', maxWidth: '520px', margin: '0 auto 32px' }}>Stop reading about marketing. Let Traffikora run it for you.</p>
-        <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free 7-Day Trial</Link>
-      </section>
-
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Set it once. It markets forever.</h2>
+        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Ready to put your marketing on autopilot?</h2>
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
         <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Trial</Link>
       </section>
