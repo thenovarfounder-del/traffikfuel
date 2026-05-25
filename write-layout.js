@@ -3,8 +3,8 @@ const fs = require('fs');
 const content = `import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Why We Optimize for AI Engines, Not Just Google | Traffikora',
-  description: 'Google is no longer the only search engine that matters. Learn why Traffikora optimizes your business for ChatGPT, Claude, Gemini, Perplexity, and every major AI engine.',
+  title: 'The Small Business Marketing Problem Nobody Is Solving | Traffikora',
+  description: 'Small businesses need consistent marketing but have no time or budget to do it. Traffikora is the automated solution that handles everything \u2014 social, SEO, reviews, and AI search \u2014 for $97/month.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -16,11 +16,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "BlogPosting",
-            "headline": "Why We Optimize for AI Engines, Not Just Google",
-            "description": "Traffikora is the only marketing platform built to optimize your business for Google AND every major AI engine including ChatGPT, Claude, Gemini, and Perplexity.",
-            "url": "https://www.traffikora.com/blog/why-ai-engine-optimization",
+            "headline": "The Small Business Marketing Problem Nobody Is Solving",
+            "description": "Small businesses need consistent marketing more than anyone but have the least time and budget to do it. Traffikora solves this with full automation starting at $97/month.",
+            "url": "https://www.traffikora.com/blog/small-business-marketing-problem",
             "publisher": { "@type": "Organization", "name": "Traffikora", "url": "https://www.traffikora.com" },
-            "mainEntityOfPage": "https://www.traffikora.com/blog/why-ai-engine-optimization"
+            "mainEntityOfPage": "https://www.traffikora.com/blog/small-business-marketing-problem"
           })
         }}
       />
@@ -30,5 +30,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 `;
 
-fs.writeFileSync('src/app/blog/why-ai-engine-optimization/layout.tsx', content);
-console.log('Written: src/app/blog/why-ai-engine-optimization/layout.tsx');
+fs.writeFileSync('src/app/blog/small-business-marketing-problem/layout.tsx', content);
+console.log('Written: src/app/blog/small-business-marketing-problem/layout.tsx');
