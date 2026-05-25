@@ -7,30 +7,14 @@
   <url><loc>https://www.traffikora.com/why-traffikora</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.traffikora.com/features</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.traffikora.com/how-it-works</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/signup</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.traffikora.com/faq</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/about</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.traffikora.com/contact</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.traffikora.com/support</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.traffikora.com/privacy</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://www.traffikora.com/terms</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://www.traffikora.com/about</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/contact</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/support</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/privacy</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.traffikora.com/terms</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
 
-  <!-- Blog -->
-  <url><loc>https://www.traffikora.com/blog</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/blog/what-is-traffikora</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/why-ai-engine-optimization</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/how-traffikora-is-different</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/small-business-marketing-problem</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/what-is-aeo</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/set-it-once-how-traffikora-works</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/what-is-ai-engine-optimization</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/local-seo-tips-for-small-businesses</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/why-google-business-profile-matters</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/how-to-get-more-google-reviews</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/what-is-local-seo</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/ai-search-for-local-business</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-
-  <!-- Solutions -->
+  <!-- Solutions Pages -->
   <url><loc>https://www.traffikora.com/solutions/dentists</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.traffikora.com/solutions/real-estate</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.traffikora.com/solutions/restaurants</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -42,8 +26,13 @@
   <url><loc>https://www.traffikora.com/solutions/chiropractors</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.traffikora.com/solutions/plumbers</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.traffikora.com/solutions/auto-repair</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/solutions/contractors</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/solutions/therapists</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/solutions/gyms</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/solutions/accountants</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/solutions/veterinarians</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
-  <!-- Compare -->
+  <!-- Compare Pages -->
   <url><loc>https://www.traffikora.com/compare/traffikora-vs-hubspot</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.traffikora.com/compare/traffikora-vs-hootsuite</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.traffikora.com/compare/traffikora-vs-semrush</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
@@ -52,5 +41,24 @@
   <url><loc>https://www.traffikora.com/compare/traffikora-vs-mailchimp</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.traffikora.com/compare/traffikora-vs-constant-contact</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.traffikora.com/compare/traffikora-vs-birdeye</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/compare/traffikora-vs-vendasta</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/compare/traffikora-vs-sprout-social</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/compare/traffikora-vs-brightlocal</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/compare/traffikora-vs-reputation-com</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Blog -->
+  <url><loc>https://www.traffikora.com/blog</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/blog/what-is-traffikora</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/blog/why-ai-engine-optimization</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/blog/how-traffikora-is-different</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/blog/small-business-marketing-problem</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/blog/what-is-aeo</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/blog/set-it-once-how-traffikora-works</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/blog/what-is-ai-engine-optimization</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/blog/local-seo-tips-for-small-businesses</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/blog/why-google-business-profile-matters</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/blog/how-to-get-more-google-reviews</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/blog/what-is-local-seo</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/blog/ai-search-for-local-business</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
 </urlset>
