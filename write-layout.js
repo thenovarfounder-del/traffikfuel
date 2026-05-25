@@ -1,47 +1,33 @@
 const fs = require('fs');
-
 const content = `import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
-import CrispChat from '@/components/CrispChat'
-import Script from 'next/script'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Traffikora — AI-Powered Marketing Automation',
-  description: 'Set it once. It markets forever. Traffikora automates SEO, social media, Google Business Profile, and AI engine optimization for small businesses.',
+  title: 'Traffikora vs Reputation.com: Which Is Better for Small Businesses? | Traffikora',
+  description: 'Compare Traffikora vs Reputation.com. Get enterprise-level marketing automation at a small business price with AI search optimization included.',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <head>
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-Z6THVW5RJ1"
-          strategy="afterInteractive"
-        />
-        <Script id="ga4-init" strategy="afterInteractive">
-          {\`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-Z6THVW5RJ1');
-          \`}
-        </Script>
-      </head>
-      <body className="antialiased">
-        {children}
-        <CrispChat />
-      </body>
-    </html>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "Traffikora",
+            "url": "https://www.traffikora.com",
+            "applicationCategory": "BusinessApplication",
+            "offers": { "@type": "Offer", "price": "97", "priceCurrency": "USD" },
+            "operatingSystem": "Web",
+            "provider": { "@type": "Organization", "name": "Traffikora", "url": "https://www.traffikora.com" }
+          })
+        }}
+      />
+      {children}
+    </>
   )
 }
 `;
-
-fs.writeFileSync('src/app/layout.tsx', content, 'utf8');
-console.log('Written: src/app/layout.tsx');
+fs.writeFileSync('src/app/compare/traffikora-vs-reputation-com/layout.tsx', content);
+console.log('Written: src/app/compare/traffikora-vs-reputation-com/layout.tsx');
