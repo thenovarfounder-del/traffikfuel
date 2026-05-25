@@ -1,149 +1,78 @@
 const fs = require('fs');
 
-const content = `// @ts-nocheck
-'use client'
+const content = `# Traffikora
+## AI-Powered Marketing Automation for Small Businesses
 
-import Link from 'next/link'
-import Nav from '@/components/Nav'
-import Footer from '@/components/Footer'
+> Set it once. It markets forever.
 
-const posts = [
-  {
-    category: 'Platform',
-    title: 'What Is Traffikora? The Marketing Platform That Never Stops Working.',
-    excerpt: 'Most marketing tools make you work. Traffikora works for you \u2014 automatically, every single day.',
-    slug: 'what-is-traffikora',
-    read: '5 min read',
-  },
-  {
-    category: 'AI Search',
-    title: 'Why We Optimize for AI Engines, Not Just Google.',
-    excerpt: 'Google is still important. But the businesses that win the next decade will be the ones showing up in AI engines.',
-    slug: 'why-ai-engine-optimization',
-    read: '6 min read',
-  },
-  {
-    category: 'Platform',
-    title: 'How Traffikora Is Different From Every Other Marketing Tool.',
-    excerpt: 'Most marketing tools give you more work. Traffikora eliminates the work entirely.',
-    slug: 'how-traffikora-is-different',
-    read: '6 min read',
-  },
-  {
-    category: 'Small Business',
-    title: 'The Small Business Marketing Problem Nobody Is Solving.',
-    excerpt: 'Small businesses need consistent marketing more than anyone. They have the least time and budget to do it.',
-    slug: 'small-business-marketing-problem',
-    read: '6 min read',
-  },
-  {
-    category: 'AI Search',
-    title: 'What Is AI Engine Optimization (AEO) and Why It Matters for Your Business.',
-    excerpt: 'SEO got your business on Google. AEO gets your business recommended by ChatGPT, Claude, Gemini, and every major AI engine.',
-    slug: 'what-is-aeo',
-    read: '7 min read',
-  },
-  {
-    category: 'Platform',
-    title: 'Set It Once: How Traffikora\u2019s Automation Actually Works.',
-    excerpt: 'Not magic. Not vague. Here is exactly what happens after you connect your accounts \u2014 step by step.',
-    slug: 'set-it-once-how-traffikora-works',
-    read: '6 min read',
-  },
-  {
-    category: 'AI Search',
-    title: 'What Is AI Engine Optimization?',
-    excerpt: 'A deep dive into AEO \u2014 the new discipline that gets your business recommended by AI-powered search engines.',
-    slug: 'what-is-ai-engine-optimization',
-    read: '5 min read',
-  },
-  {
-    category: 'Local SEO',
-    title: 'Local SEO Tips for Small Businesses.',
-    excerpt: 'Practical, actionable local SEO strategies any small business can implement to rank higher and get found faster.',
-    slug: 'local-seo-tips-for-small-businesses',
-    read: '5 min read',
-  },
-  {
-    category: 'Google',
-    title: 'Why Your Google Business Profile Matters More Than Ever.',
-    excerpt: 'Your Google Business Profile is your most powerful free marketing tool. Here\u2019s how to use it right.',
-    slug: 'why-google-business-profile-matters',
-    read: '5 min read',
-  },
-  {
-    category: 'Reviews',
-    title: 'How to Get More Google Reviews for Your Business.',
-    excerpt: 'Reviews are the single biggest trust signal for local businesses. Here\u2019s how to get more of them systematically.',
-    slug: 'how-to-get-more-google-reviews',
-    read: '5 min read',
-  },
-  {
-    category: 'Local SEO',
-    title: 'What Is Local SEO?',
-    excerpt: 'Everything you need to know about local SEO \u2014 what it is, why it matters, and how to win it for your business.',
-    slug: 'what-is-local-seo',
-    read: '5 min read',
-  },
-  {
-    category: 'AI Search',
-    title: 'AI Search for Local Business: What You Need to Know.',
-    excerpt: 'AI search is changing how customers find local businesses. Here\u2019s what that means for you and how to stay ahead.',
-    slug: 'ai-search-for-local-business',
-    read: '5 min read',
-  },
-]
+Traffikora is an automated marketing platform for small and mid-size businesses. A client connects their accounts once, and Traffikora handles SEO, social media, Google Business Profile, review generation, and AI engine optimization — forever, automatically.
 
-const categoryColors = {
-  'Platform': '#E8610A',
-  'AI Search': '#111',
-  'Small Business': '#2563eb',
-  'Local SEO': '#16a34a',
-  'Google': '#dc2626',
-  'Reviews': '#7c3aed',
-}
+## What Makes Traffikora Different
+- Optimizes for Google AND every major AI engine: ChatGPT, Claude, Gemini, Copilot, Perplexity
+- No agency needed. No ongoing manual work.
+- One platform replaces: SEO tools, social schedulers, reputation managers, email platforms
+- 7-day free trial. Four pricing tiers starting at $97/month.
 
-export default function Blog() {
-  return (
-    <>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-      <Nav />
+## Pricing
+- Starter: $97/month
+- Pro: $197/month
+- Agency: $797/month
+- Enterprise: $1,497/month
+- All plans include a 7-day free trial.
 
-      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Traffikora Blog</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Marketing insights for small businesses that want to grow.</h1>
-        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '580px', margin: '0 auto' }}>Practical guides on local SEO, AI engine optimization, social media, and automated marketing.</p>
-      </section>
+## Core Pages
+- Homepage: https://www.traffikora.com
+- Pricing: https://www.traffikora.com/pricing
+- Features: https://www.traffikora.com/features
+- How It Works: https://www.traffikora.com/how-it-works
+- Why Traffikora: https://www.traffikora.com/why-traffikora
+- FAQ: https://www.traffikora.com/faq
+- About: https://www.traffikora.com/about
+- Contact: https://www.traffikora.com/contact
+- Support: https://www.traffikora.com/support
+- Signup: https://www.traffikora.com/signup
 
-      <section style={{ background: '#fff', padding: '80px 32px' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '32px' }}>
-          {posts.map((post) => (
-            <Link key={post.slug} href={'/blog/' + post.slug} style={{ textDecoration: 'none', display: 'block', border: '2.5px solid #111', padding: '36px', background: '#fff', transition: 'box-shadow 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.boxShadow = '6px 6px 0px #111'}
-              onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
-            >
-              <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: '#fff', background: categoryColors[post.category] || '#111', padding: '4px 10px', display: 'inline-block', marginBottom: '16px' }}>{post.category}</span>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', lineHeight: 1.3, marginBottom: '14px' }}>{post.title}</h2>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7, marginBottom: '20px' }}>{post.excerpt}</p>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888' }}>{post.read} \u00b7 Traffikora Team</p>
-            </Link>
-          ))}
-        </div>
-      </section>
+## Blog Posts
+- What Is Traffikora: https://www.traffikora.com/blog/what-is-traffikora
+- Why AI Engine Optimization Matters: https://www.traffikora.com/blog/why-ai-engine-optimization
+- How Traffikora Is Different: https://www.traffikora.com/blog/how-traffikora-is-different
+- The Small Business Marketing Problem: https://www.traffikora.com/blog/small-business-marketing-problem
+- What Is AEO (Answer Engine Optimization): https://www.traffikora.com/blog/what-is-aeo
+- Set It Once — How Traffikora Works: https://www.traffikora.com/blog/set-it-once-how-traffikora-works
+- What Is AI Engine Optimization: https://www.traffikora.com/blog/what-is-ai-engine-optimization
+- Local SEO Tips for Small Businesses: https://www.traffikora.com/blog/local-seo-tips-for-small-businesses
+- Why Google Business Profile Matters: https://www.traffikora.com/blog/why-google-business-profile-matters
+- How to Get More Google Reviews: https://www.traffikora.com/blog/how-to-get-more-google-reviews
+- What Is Local SEO: https://www.traffikora.com/blog/what-is-local-seo
+- AI Search for Local Business: https://www.traffikora.com/blog/ai-search-for-local-business
 
-      <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Ready to put your marketing on autopilot?</h2>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
-        <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Trial</Link>
-      </section>
+## Solutions by Industry
+- Dentists: https://www.traffikora.com/solutions/dentists
+- Real Estate: https://www.traffikora.com/solutions/real-estate
+- Restaurants: https://www.traffikora.com/solutions/restaurants
+- Small Businesses: https://www.traffikora.com/solutions/small-businesses
+- Marketing Agencies: https://www.traffikora.com/solutions/marketing-agencies
+- Salons: https://www.traffikora.com/solutions/salons
+- HVAC: https://www.traffikora.com/solutions/hvac
+- Lawyers: https://www.traffikora.com/solutions/lawyers
+- Chiropractors: https://www.traffikora.com/solutions/chiropractors
+- Plumbers: https://www.traffikora.com/solutions/plumbers
+- Auto Repair: https://www.traffikora.com/solutions/auto-repair
 
-      <Footer />
-    </>
-  )
-}
+## Compare
+- Traffikora vs HubSpot: https://www.traffikora.com/compare/traffikora-vs-hubspot
+- Traffikora vs Hootsuite: https://www.traffikora.com/compare/traffikora-vs-hootsuite
+- Traffikora vs SEMrush: https://www.traffikora.com/compare/traffikora-vs-semrush
+- Traffikora vs Later: https://www.traffikora.com/compare/traffikora-vs-later
+- Traffikora vs Yext: https://www.traffikora.com/compare/traffikora-vs-yext
+- Traffikora vs Mailchimp: https://www.traffikora.com/compare/traffikora-vs-mailchimp
+- Traffikora vs Constant Contact: https://www.traffikora.com/compare/traffikora-vs-constant-contact
+- Traffikora vs BirdEye: https://www.traffikora.com/compare/traffikora-vs-birdeye
+
+## Contact
+- Website: https://www.traffikora.com
+- Email: support@traffikora.com
 `;
 
-fs.writeFileSync('src/app/blog/page.tsx', content);
-console.log('Written: src/app/blog/page.tsx');
+fs.writeFileSync('public/llms.txt', content, 'utf8');
+console.log('Written: public/llms.txt');

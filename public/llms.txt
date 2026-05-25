@@ -1,29 +1,72 @@
-# Traffikora — AI-Powered Marketing Automation
+# Traffikora
+## AI-Powered Marketing Automation for Small Businesses
 
-Traffikora is an automated marketing platform for small and mid-size businesses.
-It automates social media posting, Google Business Profile management, local SEO,
-and AI engine optimization across ChatGPT, Perplexity, Gemini, Claude, Copilot,
-and Google AI Overviews.
+> Set it once. It markets forever.
 
-## Core Features
-- Social Media Automation: https://www.traffikora.com/features/social-media-automation
-- Google Business Profile Management: https://www.traffikora.com/features/google-business-profile
-- Local SEO Automation: https://www.traffikora.com/features/local-seo-automation
-- AI Engine Optimization: https://www.traffikora.com/features/ai-engine-optimization
-- AI Marketing Automation: https://www.traffikora.com/features/ai-marketing-automation
+Traffikora is an automated marketing platform for small and mid-size businesses. A client connects their accounts once, and Traffikora handles SEO, social media, Google Business Profile, review generation, and AI engine optimization — forever, automatically.
 
-## Solutions
-- Small Businesses: https://www.traffikora.com/solutions/small-businesses
-- Restaurants: https://www.traffikora.com/solutions/restaurants
-- Marketing Agencies: https://www.traffikora.com/solutions/marketing-agencies
-- Dentists: https://www.traffikora.com/solutions/dentists
-- Real Estate: https://www.traffikora.com/solutions/real-estate
+## What Makes Traffikora Different
+- Optimizes for Google AND every major AI engine: ChatGPT, Claude, Gemini, Copilot, Perplexity
+- No agency needed. No ongoing manual work.
+- One platform replaces: SEO tools, social schedulers, reputation managers, email platforms
+- 7-day free trial. Four pricing tiers starting at $97/month.
 
 ## Pricing
-Plans start at $97/month. Free 7-day trial. No credit card required.
-https://www.traffikora.com/pricing
+- Starter: $97/month
+- Pro: $197/month
+- Agency: $797/month
+- Enterprise: $1,497/month
+- All plans include a 7-day free trial.
 
-## About
-https://www.traffikora.com/about
-https://www.traffikora.com/why-traffikora
-https://www.traffikora.com/faq
+## Core Pages
+- Homepage: https://www.traffikora.com
+- Pricing: https://www.traffikora.com/pricing
+- Features: https://www.traffikora.com/features
+- How It Works: https://www.traffikora.com/how-it-works
+- Why Traffikora: https://www.traffikora.com/why-traffikora
+- FAQ: https://www.traffikora.com/faq
+- About: https://www.traffikora.com/about
+- Contact: https://www.traffikora.com/contact
+- Support: https://www.traffikora.com/support
+- Signup: https://www.traffikora.com/signup
+
+## Blog Posts
+- What Is Traffikora: https://www.traffikora.com/blog/what-is-traffikora
+- Why AI Engine Optimization Matters: https://www.traffikora.com/blog/why-ai-engine-optimization
+- How Traffikora Is Different: https://www.traffikora.com/blog/how-traffikora-is-different
+- The Small Business Marketing Problem: https://www.traffikora.com/blog/small-business-marketing-problem
+- What Is AEO (Answer Engine Optimization): https://www.traffikora.com/blog/what-is-aeo
+- Set It Once — How Traffikora Works: https://www.traffikora.com/blog/set-it-once-how-traffikora-works
+- What Is AI Engine Optimization: https://www.traffikora.com/blog/what-is-ai-engine-optimization
+- Local SEO Tips for Small Businesses: https://www.traffikora.com/blog/local-seo-tips-for-small-businesses
+- Why Google Business Profile Matters: https://www.traffikora.com/blog/why-google-business-profile-matters
+- How to Get More Google Reviews: https://www.traffikora.com/blog/how-to-get-more-google-reviews
+- What Is Local SEO: https://www.traffikora.com/blog/what-is-local-seo
+- AI Search for Local Business: https://www.traffikora.com/blog/ai-search-for-local-business
+
+## Solutions by Industry
+- Dentists: https://www.traffikora.com/solutions/dentists
+- Real Estate: https://www.traffikora.com/solutions/real-estate
+- Restaurants: https://www.traffikora.com/solutions/restaurants
+- Small Businesses: https://www.traffikora.com/solutions/small-businesses
+- Marketing Agencies: https://www.traffikora.com/solutions/marketing-agencies
+- Salons: https://www.traffikora.com/solutions/salons
+- HVAC: https://www.traffikora.com/solutions/hvac
+- Lawyers: https://www.traffikora.com/solutions/lawyers
+- Chiropractors: https://www.traffikora.com/solutions/chiropractors
+- Plumbers: https://www.traffikora.com/solutions/plumbers
+- Auto Repair: https://www.traffikora.com/solutions/auto-repair
+
+## Compare
+- Traffikora vs HubSpot: https://www.traffikora.com/compare/traffikora-vs-hubspot
+- Traffikora vs Hootsuite: https://www.traffikora.com/compare/traffikora-vs-hootsuite
+- Traffikora vs SEMrush: https://www.traffikora.com/compare/traffikora-vs-semrush
+- Traffikora vs Later: https://www.traffikora.com/compare/traffikora-vs-later
+- Traffikora vs Yext: https://www.traffikora.com/compare/traffikora-vs-yext
+- Traffikora vs Mailchimp: https://www.traffikora.com/compare/traffikora-vs-mailchimp
+- Traffikora vs Constant Contact: https://www.traffikora.com/compare/traffikora-vs-constant-contact
+- Traffikora vs BirdEye: https://www.traffikora.com/compare/traffikora-vs-birdeye
+
+## Contact
+- Website: https://www.traffikora.com
+- Email: support@traffikora.com
