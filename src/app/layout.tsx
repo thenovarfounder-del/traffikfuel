@@ -1,42 +1,14 @@
-// @ts-nocheck
 import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
 import './globals.css'
 import CrispChat from '@/components/CrispChat'
+import Script from 'next/script'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Traffikora — Automated Marketing for Small Business | AI + Google Visibility',
-  description: 'Set it once. It markets forever. Traffikora automates your Google, ChatGPT, Gemini, and social media presence — no marketing team needed. Start free for 7 days.',
-  icons: {
-    icon: '/favicon.svg',
-    apple: '/favicon.svg',
-  },
-}
-
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: 'Traffikora',
-  url: 'https://www.traffikora.com',
-  description: 'Automated marketing platform for small businesses. Optimizes for Google, ChatGPT, Gemini, Claude, Perplexity, and all major AI engines.',
-  applicationCategory: 'BusinessApplication',
-  operatingSystem: 'Web',
-  offers: {
-    '@type': 'AggregateOffer',
-    lowPrice: '97',
-    highPrice: '1497',
-    priceCurrency: 'USD',
-  },
-  publisher: {
-    '@type': 'Organization',
-    name: 'Traffikora',
-    url: 'https://www.traffikora.com',
-    logo: 'https://www.traffikora.com/favicon.svg',
-    contactPoint: {
-      '@type': 'ContactPoint',
-      email: 'support@traffikora.com',
-      contactType: 'customer support',
-    },
-  },
+  title: 'Traffikora — AI-Powered Marketing Automation',
+  description: 'Set it once. It markets forever. Traffikora automates SEO, social media, Google Business Profile, and AI engine optimization for small businesses.',
 }
 
 export default function RootLayout({
@@ -47,10 +19,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-Z6THVW5RJ1"
+          strategy="afterInteractive"
         />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-Z6THVW5RJ1');
+          `}
+        </Script>
       </head>
       <body className="antialiased">
         {children}
