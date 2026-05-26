@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Traffikora vs Vendasta: Which Is Better for Small Businesses? | Traffikora',
-  description: 'Compare Traffikora vs Vendasta. See why small businesses choose Traffikora for automated marketing, AI search optimization, and simple flat-rate pricing.',
+  title: 'Traffikora vs Vendasta: The Better Alternative for Small Businesses',
+  description: 'Compare Traffikora vs Vendasta. See why small businesses choose Traffikora for AI-powered marketing automation at a fraction of the cost.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {

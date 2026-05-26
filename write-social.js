@@ -1,60 +1,33 @@
 const fs = require('fs');
-const content = `// @ts-nocheck
-import './globals.css'
-import CrispChat from '@/components/CrispChat'
-import CookieBanner from '@/components/CookieBanner'
-import Script from 'next/script'
+const content = `import type { Metadata } from 'next'
 
-export const metadata = {
-  title: 'Traffikora \u2014 AI Marketing Automation for Small Businesses',
-  description: 'Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine.',
+export const metadata: Metadata = {
+  title: 'Traffikora vs Vendasta: The Better Alternative for Small Businesses',
+  description: 'Compare Traffikora vs Vendasta. See why small businesses choose Traffikora for AI-powered marketing automation at a fraction of the cost.',
 }
 
-export default function RootLayout({ children }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <head>
-        <meta name="google-site-verification" content="tDnX1kzbibOZ52zeV6oAH35iohkvNI-4BpV7lz1Yga0" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          rel="preload"
-          as="style"
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap"
-          media="print"
-          onload="this.media='all'"
-        />
-        <noscript>
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap"
-          />
-        </noscript>
-      </head>
-      <body className="antialiased">
-        {children}
-        <CrispChat />
-        <CookieBanner />
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-Z6THVW5RJ1"
-          strategy="afterInteractive"
-        />
-        <Script id="ga4-init" strategy="afterInteractive">
-          {\`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-Z6THVW5RJ1');
-          \`}
-        </Script>
-      </body>
-    </html>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "Traffikora",
+            "url": "https://www.traffikora.com",
+            "applicationCategory": "BusinessApplication",
+            "offers": { "@type": "Offer", "price": "97", "priceCurrency": "USD" },
+            "operatingSystem": "Web",
+            "provider": { "@type": "Organization", "name": "Traffikora", "url": "https://www.traffikora.com" }
+          })
+        }}
+      />
+      {children}
+    </>
   )
 }
 `;
-fs.writeFileSync('src/app/layout.tsx', content);
-console.log('Written: src/app/layout.tsx');
+fs.writeFileSync('src/app/compare/traffikora-vs-vendasta/layout.tsx', content);
+console.log('Written: traffikora-vs-vendasta/layout.tsx');
