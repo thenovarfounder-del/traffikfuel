@@ -15,7 +15,7 @@ export default function TermsPage() {
       <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Legal</p>
         <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Terms of Service</h1>
-        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto' }}>Last updated: May 25, 2026</p>
+        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto' }}>Last updated: May 26, 2026</p>
       </section>
       <section style={{ background: '#fff', padding: '80px 32px' }}>
         <div style={{ maxWidth: '780px', margin: '0 auto' }}>
@@ -43,9 +43,18 @@ export default function TermsPage() {
             <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>6. Acceptable Use Policy</h2>
             <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>You agree to use the Service only for lawful purposes and in accordance with these Terms. You agree not to use the Service to send spam or unsolicited communications; violate any third-party platform terms of service; engage in deceptive or fraudulent marketing practices; attempt to gain unauthorized access to any part of the Service or its infrastructure; reverse engineer, copy, or create derivative works of the Service; or use the Service in any way that could damage, disable, or impair it.</p>
           </div>
-          <div style={{ marginBottom: '40px' }}>
+          <div style={{ marginBottom: '40px', background: '#f9f9f9', border: '2.5px solid #111', padding: '32px' }}>
             <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>7. Third-Party Platform Integrations</h2>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>Traffikora integrates with Google, Facebook, Instagram, and other third-party platforms. By connecting these platforms, you authorize Traffikora to access and manage your accounts on your behalf within the scope of the permissions you grant. Your use of third-party platforms remains subject to their own terms of service and policies. Traffikora is not responsible for changes to third-party APIs, platform policies, or any resulting impact on the Service. We will make reasonable efforts to maintain integrations but cannot guarantee uninterrupted access to third-party platforms.</p>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8, marginBottom: '20px' }}>Traffikora integrates with Google, Facebook, Instagram, and other third-party platforms. By connecting these platforms, you authorize Traffikora to access and manage your accounts on your behalf within the scope of the permissions you grant. Your use of third-party platforms remains subject to their own terms of service and policies.</p>
+
+            <h3 style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 700, color: '#111', marginBottom: '8px' }}>Connected Account Data Upon Cancellation</h3>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#444', lineHeight: 1.8, marginBottom: '20px' }}>When you cancel your Traffikora account or disconnect a connected platform, Traffikora will revoke its access to that platform and delete your stored OAuth tokens within 30 days. Any data retrieved from connected platforms — such as Google Business Profile statistics, Facebook Page insights, or Instagram engagement data — that has been stored in your Traffikora account will also be deleted within 90 days of account termination. You are responsible for exporting any data you wish to retain before cancelling. Traffikora is not liable for any loss of data following cancellation.</p>
+
+            <h3 style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 700, color: '#111', marginBottom: '8px' }}>Third-Party API Changes and Deprecation</h3>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#444', lineHeight: 1.8, marginBottom: '20px' }}>Traffikora’s integrations depend on APIs and developer programs operated by Google, Facebook, Instagram, and other third-party platforms. These platforms may change, restrict, deprecate, or discontinue their APIs at any time without notice to Traffikora. Traffikora is not responsible for any interruption, degradation, or loss of functionality caused by third-party platform changes, API deprecation, policy updates, or access revocation by those platforms. We will make commercially reasonable efforts to maintain integrations and notify users of material disruptions, but we cannot guarantee uninterrupted access to any third-party platform feature.</p>
+
+            <h3 style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 700, color: '#111', marginBottom: '8px' }}>Data Use and Permissions</h3>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#444', lineHeight: 1.8 }}>For a full description of every permission Traffikora requests from connected platforms and how that data is used, see our <Link href="/data-use" style={{ color: '#E8610A', fontWeight: 600, textDecoration: 'none' }}>Data Use page</Link>. We request only the minimum permissions necessary to provide the features you use. We do not sell data obtained from connected platforms to any third party.</p>
           </div>
           <div style={{ marginBottom: '40px' }}>
             <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>8. Intellectual Property</h2>
@@ -71,9 +80,11 @@ export default function TermsPage() {
             <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>13. Contact Us</h2>
             <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>If you have any questions about these Terms of Service, please contact us at support@traffikora.com. We are committed to resolving any concerns promptly and will respond to all inquiries within 2 business days.</p>
           </div>
-          <div style={{ borderTop: '2.5px solid #111', paddingTop: '40px', display: 'flex', gap: '24px' }}>
-            <Link href="/privacy" style={{ color: '#E8610A', fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600 }}>Privacy Policy</Link>
-            <Link href="/contact" style={{ color: '#E8610A', fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600 }}>Contact Us</Link>
+          <div style={{ borderTop: '2.5px solid #111', paddingTop: '40px', display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+            <Link href="/privacy" style={{ color: '#E8610A', fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, textDecoration: 'none' }}>Privacy Policy</Link>
+            <Link href="/data-use" style={{ color: '#E8610A', fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, textDecoration: 'none' }}>Data Use</Link>
+            <Link href="/security" style={{ color: '#E8610A', fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, textDecoration: 'none' }}>Security</Link>
+            <Link href="/contact" style={{ color: '#E8610A', fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, textDecoration: 'none' }}>Contact Us</Link>
           </div>
         </div>
       </section>
