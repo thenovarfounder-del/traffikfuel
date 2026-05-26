@@ -1,5 +1,7 @@
 const fs = require('fs');
 const content = `// @ts-nocheck
+'use client'
+
 import Link from 'next/link'
 
 export default function Footer() {
@@ -43,8 +45,8 @@ export default function Footer() {
             <div style={{ marginBottom: '10px' }}><Link href="/faq" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>FAQ</Link></div>
             <div style={{ marginBottom: '10px' }}><Link href="/about" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>About</Link></div>
             <div style={{ marginBottom: '10px' }}><Link href="/contact" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Contact Us</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/privacy" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Privacy Policy</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/terms" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Terms of Service</Link></div>
+            <div style={{ marginBottom: '10px' }}><a href="/privacy" onClick={() => window.scrollTo(0,0)} style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Privacy Policy</a></div>
+            <div style={{ marginBottom: '10px' }}><a href="/terms" onClick={() => window.scrollTo(0,0)} style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Terms of Service</a></div>
             <div style={{ marginBottom: '10px' }}><Link href="/security" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Security</Link></div>
             <div style={{ marginBottom: '10px' }}><Link href="/data-use" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Data Use</Link></div>
           </div>
@@ -52,7 +54,7 @@ export default function Footer() {
         <div style={{ borderTop: '1px solid #333', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
           <span style={{ fontFamily: 'DM Sans, sans-serif', color: '#666', fontSize: '13px' }}>\u00a9 2026 Traffikora.com \u2014 All rights reserved.</span>
           <div style={{ display: 'flex', gap: '24px', alignItems: 'center', flexWrap: 'wrap' }}>
-            <Link href="/privacy#ccpa" style={{ fontFamily: 'DM Sans, sans-serif', color: '#666', fontSize: '13px', textDecoration: 'underline' }}>Do Not Sell My Personal Information</Link>
+            <a href="/privacy#ccpa" onClick={() => window.scrollTo(0,0)} style={{ fontFamily: 'DM Sans, sans-serif', color: '#666', fontSize: '13px', textDecoration: 'underline' }}>Do Not Sell My Personal Information</a>
             <span style={{ fontFamily: 'DM Sans, sans-serif', color: '#666', fontSize: '13px' }}>Set it once. It markets forever.</span>
           </div>
         </div>
