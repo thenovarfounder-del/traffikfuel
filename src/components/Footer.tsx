@@ -42,13 +42,18 @@ export default function Footer() {
             <div style={{ marginBottom: '10px' }}><Link href="/faq" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>FAQ</Link></div>
             <div style={{ marginBottom: '10px' }}><Link href="/about" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>About</Link></div>
             <div style={{ marginBottom: '10px' }}><Link href="/contact" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Contact Us</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/privacy-policy" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Privacy Policy</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/terms-of-service" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Terms of Service</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/privacy" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Privacy Policy</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/terms" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Terms of Service</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/security" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Security</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/data-use" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Data Use</Link></div>
           </div>
         </div>
         <div style={{ borderTop: '1px solid #333', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
           <span style={{ fontFamily: 'DM Sans, sans-serif', color: '#666', fontSize: '13px' }}>© 2026 Traffikora.com — All rights reserved.</span>
-          <span style={{ fontFamily: 'DM Sans, sans-serif', color: '#666', fontSize: '13px' }}>Set it once. It markets forever.</span>
+          <div style={{ display: 'flex', gap: '24px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <Link href="/privacy#ccpa" style={{ fontFamily: 'DM Sans, sans-serif', color: '#666', fontSize: '13px', textDecoration: 'underline' }}>Do Not Sell My Personal Information</Link>
+            <span style={{ fontFamily: 'DM Sans, sans-serif', color: '#666', fontSize: '13px' }}>Set it once. It markets forever.</span>
+          </div>
         </div>
       </div>
     </footer>
