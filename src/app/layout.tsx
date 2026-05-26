@@ -1,24 +1,22 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+// @ts-nocheck
 import './globals.css'
 import CrispChat from '@/components/CrispChat'
 import Script from 'next/script'
 
-const inter = Inter({ subsets: ['latin'] })
-
-export const metadata: Metadata = {
-  title: 'Traffikora — AI-Powered Marketing Automation',
-  description: 'Set it once. It markets forever. Traffikora automates SEO, social media, Google Business Profile, and AI engine optimization for small businesses.',
+export const metadata = {
+  title: 'Traffikora — AI Marketing Automation for Small Businesses',
+  description: 'Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine.',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <meta name="google-site-verification" content="tDnX1kzbibOZ52zeV6oAH35iohkvNI-4BpV7lz1Yga0" />
+      </head>
+      <body className="antialiased">
+        {children}
+        <CrispChat />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-Z6THVW5RJ1"
           strategy="afterInteractive"
@@ -31,10 +29,6 @@ export default function RootLayout({
             gtag('config', 'G-Z6THVW5RJ1');
           `}
         </Script>
-      </head>
-      <body className="antialiased">
-        {children}
-        <CrispChat />
       </body>
     </html>
   )

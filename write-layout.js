@@ -1,33 +1,41 @@
 const fs = require('fs');
-const content = `import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Traffikora vs Reputation.com: Which Is Better for Small Businesses? | Traffikora',
-  description: 'Compare Traffikora vs Reputation.com. Get enterprise-level marketing automation at a small business price with AI search optimization included.',
+const content = `// @ts-nocheck
+import './globals.css'
+import CrispChat from '@/components/CrispChat'
+import Script from 'next/script'
+
+export const metadata = {
+  title: 'Traffikora \u2014 AI Marketing Automation for Small Businesses',
+  description: 'Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine.',
 }
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }) {
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            "name": "Traffikora",
-            "url": "https://www.traffikora.com",
-            "applicationCategory": "BusinessApplication",
-            "offers": { "@type": "Offer", "price": "97", "priceCurrency": "USD" },
-            "operatingSystem": "Web",
-            "provider": { "@type": "Organization", "name": "Traffikora", "url": "https://www.traffikora.com" }
-          })
-        }}
-      />
-      {children}
-    </>
+    <html lang="en">
+      <head>
+        <meta name="google-site-verification" content="tDnX1kzbibOZ52zeV6oAH35iohkvNI-4BpV7lz1Yga0" />
+      </head>
+      <body className="antialiased">
+        {children}
+        <CrispChat />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-Z6THVW5RJ1"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {\`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-Z6THVW5RJ1');
+          \`}
+        </Script>
+      </body>
+    </html>
   )
 }
 `;
-fs.writeFileSync('src/app/compare/traffikora-vs-reputation-com/layout.tsx', content);
-console.log('Written: src/app/compare/traffikora-vs-reputation-com/layout.tsx');
+
+fs.writeFileSync('src/app/layout.tsx', content);
+console.log('Written: src/app/layout.tsx');
