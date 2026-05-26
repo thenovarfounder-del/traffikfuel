@@ -1,68 +1,60 @@
 const fs = require('fs');
 const content = `// @ts-nocheck
-'use client'
+import './globals.css'
+import CrispChat from '@/components/CrispChat'
+import CookieBanner from '@/components/CookieBanner'
+import Script from 'next/script'
 
-import Link from 'next/link'
+export const metadata = {
+  title: 'Traffikora \u2014 AI Marketing Automation for Small Businesses',
+  description: 'Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine.',
+}
 
-export default function Footer() {
+export default function RootLayout({ children }) {
   return (
-    <footer style={{ background: '#111', color: '#fff', padding: '64px 32px 32px', borderTop: '2.5px solid #333' }}>
-      <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '40px', marginBottom: '56px' }}>
-          <div>
-            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 900, color: '#fff', marginBottom: '12px' }}>Traffikora</p>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#888', lineHeight: 1.7, marginBottom: '20px' }}>Set it once. It markets forever. AI-powered marketing automation for small businesses.</p>
-            <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '10px 22px', textDecoration: 'none', fontSize: '13px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free Trial</Link>
-          </div>
-          <div>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', fontWeight: 700, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Features</p>
-            <div style={{ marginBottom: '10px' }}><Link href="/features/social-media-automation" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Social Media Automation</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/features/google-business-profile" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Google Business Profile</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/features/local-seo-automation" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Local SEO Automation</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/features/ai-engine-optimization" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>AI Engine Optimization</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/features/ai-marketing-automation" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>AI Marketing Automation</Link></div>
-          </div>
-          <div>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', fontWeight: 700, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Solutions</p>
-            <div style={{ marginBottom: '10px' }}><Link href="/solutions/small-businesses" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Small Businesses</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/solutions/restaurants" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Restaurants</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/solutions/marketing-agencies" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Marketing Agencies</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/solutions/dentists" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Dentists</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/solutions/real-estate" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Real Estate</Link></div>
-          </div>
-          <div>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', fontWeight: 700, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Compare</p>
-            <div style={{ marginBottom: '10px' }}><Link href="/compare/traffikora-vs-hubspot" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>vs HubSpot</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/compare/traffikora-vs-hootsuite" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>vs Hootsuite</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/compare/traffikora-vs-semrush" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>vs Semrush</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/compare/traffikora-vs-later" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>vs Later</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/compare/traffikora-vs-yext" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>vs Yext</Link></div>
-          </div>
-          <div>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', fontWeight: 700, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Company</p>
-            <div style={{ marginBottom: '10px' }}><Link href="/pricing" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Pricing</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/why-traffikora" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Why Traffikora</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/faq" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>FAQ</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/about" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>About</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/contact" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Contact Us</Link></div>
-            <div style={{ marginBottom: '10px' }}><a href="/privacy" onClick={() => window.scrollTo(0,0)} style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Privacy Policy</a></div>
-            <div style={{ marginBottom: '10px' }}><a href="/terms" onClick={() => window.scrollTo(0,0)} style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Terms of Service</a></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/security" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Security</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/data-use" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Data Use</Link></div>
-          </div>
-        </div>
-        <div style={{ borderTop: '1px solid #333', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-          <span style={{ fontFamily: 'DM Sans, sans-serif', color: '#666', fontSize: '13px' }}>\u00a9 2026 Traffikora.com \u2014 All rights reserved.</span>
-          <div style={{ display: 'flex', gap: '24px', alignItems: 'center', flexWrap: 'wrap' }}>
-            <a href="/privacy#ccpa" onClick={() => window.scrollTo(0,0)} style={{ fontFamily: 'DM Sans, sans-serif', color: '#666', fontSize: '13px', textDecoration: 'underline' }}>Do Not Sell My Personal Information</a>
-            <span style={{ fontFamily: 'DM Sans, sans-serif', color: '#666', fontSize: '13px' }}>Set it once. It markets forever.</span>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <html lang="en">
+      <head>
+        <meta name="google-site-verification" content="tDnX1kzbibOZ52zeV6oAH35iohkvNI-4BpV7lz1Yga0" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preload"
+          as="style"
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+        />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+          media="print"
+          onload="this.media='all'"
+        />
+        <noscript>
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+          />
+        </noscript>
+      </head>
+      <body className="antialiased">
+        {children}
+        <CrispChat />
+        <CookieBanner />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-Z6THVW5RJ1"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {\`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-Z6THVW5RJ1');
+          \`}
+        </Script>
+      </body>
+    </html>
   )
 }
 `;
-
-fs.writeFileSync('src/components/Footer.tsx', content);
-console.log('Written: src/components/Footer.tsx');
+fs.writeFileSync('src/app/layout.tsx', content);
+console.log('Written: src/app/layout.tsx');
