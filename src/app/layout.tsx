@@ -1,6 +1,7 @@
 // @ts-nocheck
 import './globals.css'
 import CrispChat from '@/components/CrispChat'
+import CookieBanner from '@/components/CookieBanner'
 import Script from 'next/script'
 
 export const metadata = {
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
       <body className="antialiased">
         {children}
         <CrispChat />
+        <CookieBanner />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-Z6THVW5RJ1"
           strategy="afterInteractive"

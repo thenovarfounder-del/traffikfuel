@@ -1,12 +1,10 @@
-const fs = require('fs');
-const content = `// @ts-nocheck
+// @ts-nocheck
 import './globals.css'
 import CrispChat from '@/components/CrispChat'
-import CookieBanner from '@/components/CookieBanner'
 import Script from 'next/script'
 
 export const metadata = {
-  title: 'Traffikora \u2014 AI Marketing Automation for Small Businesses',
+  title: 'Traffikora — AI Marketing Automation for Small Businesses',
   description: 'Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine.',
 }
 
@@ -19,24 +17,19 @@ export default function RootLayout({ children }) {
       <body className="antialiased">
         {children}
         <CrispChat />
-        <CookieBanner />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-Z6THVW5RJ1"
           strategy="afterInteractive"
         />
         <Script id="ga4-init" strategy="afterInteractive">
-          {\`
+          {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-Z6THVW5RJ1');
-          \`}
+          `}
         </Script>
       </body>
     </html>
   )
 }
-`;
-
-fs.writeFileSync('src/app/layout.tsx', content);
-console.log('Written: src/app/layout.tsx');
