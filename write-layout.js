@@ -2,8 +2,8 @@ const fs = require('fs');
 const content = `import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'How We Use Your Data | Traffikora',
-  description: 'A plain-English explanation of every permission Traffikora requests from Google, Facebook, and Instagram \u2014 and exactly what we do with your data.',
+  title: 'Security | Traffikora',
+  description: 'How Traffikora protects your data, connected accounts, and business information. Encrypted storage, HTTPS everywhere, SOC2-grade infrastructure.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -30,5 +30,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 `;
 
-fs.writeFileSync('src/app/data-use/layout.tsx', content);
-console.log('Written: src/app/data-use/layout.tsx');
+fs.writeFileSync('src/app/security/layout.tsx', content);
+console.log('Written: src/app/security/layout.tsx');
