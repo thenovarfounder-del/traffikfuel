@@ -9,7 +9,7 @@ export default function Nav() {
     <>
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
       <style>{\`
-        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links { display: flex; gap: 20px; align-items: center; }
         .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
         .nav-cta-btn { display: block; }
         .nav-login-btn { display: block; }
@@ -18,7 +18,7 @@ export default function Nav() {
         .mobile-menu a { display: block; color: #111; text-decoration: none; font-size: 22px; font-weight: 600; padding: 18px 0; border-bottom: 1px solid #f0f0f0; font-family: 'DM Sans', sans-serif; }
         .mobile-menu a.orange { color: #E8610A; }
         .mobile-menu a.cta-mobile { background: linear-gradient(135deg,#E8610A,#c94e08); color: #fff !important; padding: 16px 22px; font-size: 18px; border-radius: 8px; text-align: center; margin-top: 24px; border-bottom: none; }
-        .mobile-menu a.login-mobile { background: #fff; color: #111 !important; padding: 16px 22px; font-size: 18px; border-radius: 8px; text-align: center; margin-top: 12px; border: 1.5px solid #111 !important; }
+        .mobile-menu a.login-mobile { color: #111 !important; padding: 16px 22px; font-size: 18px; border-radius: 8px; text-align: center; margin-top: 12px; border: 1.5px solid #111 !important; border-bottom: 1.5px solid #111 !important; }
         @media (max-width: 900px) {
           .nav-links { display: none; }
           .nav-hamburger { display: block; }
@@ -30,7 +30,7 @@ export default function Nav() {
       <nav style={{ position: 'sticky', top: 0, zIndex: 50, background: '#fff', borderBottom: '2.5px solid #111', padding: '0 32px', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', height: '64px', fontFamily: "'DM Sans', sans-serif" }}>
 
         <Link href="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: '22px', fontWeight: 700, color: '#111', textDecoration: 'none' }}>
-          Traffik<span style={{ color: '#E8610A' }}>ora</span><sup style={{ fontSize: '10px', fontFamily: "'DM Sans', sans-serif", fontWeight: 400, color: '#111', verticalAlign: 'super', marginLeft: '1px' }}>™</sup>
+          Traffik<span style={{ color: '#E8610A' }}>ora</span><sup style={{ fontSize: '10px', fontFamily: "'DM Sans', sans-serif", fontWeight: 400, color: '#111', verticalAlign: 'super', marginLeft: '1px' }}>&trade;</sup>
         </Link>
 
         <div className="nav-links">
@@ -46,16 +46,9 @@ export default function Nav() {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '8px' }}>
-          <Link href="/login" className="nav-login-btn" style={{ background: '#fff', color: '#111', padding: '9px 18px', textDecoration: 'none', fontSize: '14px', fontWeight: 600, borderRadius: '6px', border: '1.5px solid #222' }}>Login</Link>
-          <Link href="/signup" className="nav-cta-btn" style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', padding: '10px 18px', textDecoration: 'none', fontSize: '14px', fontWeight: 700, borderRadius: '8px', border: '2.5px solid #111' }}>Start Free Trial</Link>
-          <button
-            className="nav-hamburger"
-            aria-label="Toggle menu"
-            onClick={() => {
-              const menu = document.getElementById('mobile-nav-menu')
-              if (menu) menu.classList.toggle('is-open')
-            }}
-          >
+          <Link href="/login" className="nav-login-btn" style={{ background: '#fff', color: '#111', padding: '9px 16px', textDecoration: 'none', fontSize: '13px', fontWeight: 600, borderRadius: '6px', border: '1.5px solid #222' }}>Login</Link>
+          <Link href="/signup" className="nav-cta-btn" style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', padding: '9px 16px', textDecoration: 'none', fontSize: '13px', fontWeight: 700, borderRadius: '8px', border: '2.5px solid #111' }}>Start Free Trial</Link>
+          <button className="nav-hamburger" aria-label="Toggle menu" onClick={() => { const menu = document.getElementById('mobile-nav-menu'); if (menu) menu.classList.toggle('is-open'); }}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round">
               <line x1="3" y1="6" x2="21" y2="6" />
               <line x1="3" y1="12" x2="21" y2="12" />
