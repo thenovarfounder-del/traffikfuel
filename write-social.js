@@ -3,24 +3,17 @@ const fs = require('fs');
 fs.writeFileSync('src/components/Nav.tsx', `// @ts-nocheck
 'use client'
 import Link from 'next/link'
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 
 export default function Nav() {
   const [open, setOpen] = useState(false)
-
-  const toggleMenu = (e) => {
-    e.stopPropagation()
-    setOpen(prev => !prev)
-  }
-
-  const closeMenu = () => setOpen(false)
 
   return (
     <>
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
       <style>{\`
         .nav-links { display: flex; gap: 24px; align-items: center; }
-        .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; z-index: 100; }
+        .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; z-index: 100; position: relative; }
         .nav-cta-btn { display: block; }
         @media (max-width: 900px) {
           .nav-links { display: none; }
@@ -28,7 +21,6 @@ export default function Nav() {
           .nav-cta-btn { display: none; }
         }
         .mobile-menu a { display: block; color: #111; text-decoration: none; font-size: 20px; font-weight: 600; padding: 16px 0; border-bottom: 1px solid #f0f0f0; font-family: 'DM Sans', sans-serif; }
-        .mobile-menu a:last-child { border-bottom: none; }
         .mobile-menu a.orange { color: #E8610A; }
       \`}</style>
 
@@ -52,7 +44,12 @@ export default function Nav() {
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '16px' }}>
           <Link href="/signup" className="nav-cta-btn" style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', padding: '10px 22px', textDecoration: 'none', fontSize: '14px', fontWeight: 700, borderRadius: '8px', border: '2.5px solid #111' }}>Start Free Trial</Link>
-          <button className="nav-hamburger" onClick={toggleMenu} aria-label="Toggle menu">
+          <button
+            className="nav-hamburger"
+            aria-label="Toggle menu"
+            onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(prev => !prev); }}
+            onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(prev => !prev); }}
+          >
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round">
               {open ? (
                 <>
@@ -73,18 +70,18 @@ export default function Nav() {
 
       {open && (
         <div className="mobile-menu" style={{ position: 'fixed', top: '64px', left: 0, right: 0, bottom: 0, background: '#fff', zIndex: 49, padding: '24px 32px', overflowY: 'auto' }}>
-          <Link href="/" onClick={closeMenu}>Home</Link>
-          <Link href="/features" onClick={closeMenu}>Features</Link>
-          <Link href="/solutions" onClick={closeMenu}>Solutions</Link>
-          <Link href="/pricing" onClick={closeMenu}>Pricing</Link>
-          <Link href="/how-it-works" onClick={closeMenu}>How It Works</Link>
-          <Link href="/why-traffikora" onClick={closeMenu}>Why Traffikora</Link>
-          <Link href="/faq" onClick={closeMenu}>FAQ</Link>
-          <Link href="/blog" onClick={closeMenu} className="orange">Blog</Link>
-          <Link href="/contact" onClick={closeMenu}>Contact</Link>
-          <Link href="/about" onClick={closeMenu}>About Us</Link>
+          <Link href="/" onClick={() => setOpen(false)}>Home</Link>
+          <Link href="/features" onClick={() => setOpen(false)}>Features</Link>
+          <Link href="/solutions" onClick={() => setOpen(false)}>Solutions</Link>
+          <Link href="/pricing" onClick={() => setOpen(false)}>Pricing</Link>
+          <Link href="/how-it-works" onClick={() => setOpen(false)}>How It Works</Link>
+          <Link href="/why-traffikora" onClick={() => setOpen(false)}>Why Traffikora</Link>
+          <Link href="/faq" onClick={() => setOpen(false)}>FAQ</Link>
+          <Link href="/blog" onClick={() => setOpen(false)} className="orange">Blog</Link>
+          <Link href="/contact" onClick={() => setOpen(false)}>Contact</Link>
+          <Link href="/about" onClick={() => setOpen(false)}>About Us</Link>
           <div style={{ marginTop: '24px' }}>
-            <Link href="/signup" onClick={closeMenu} style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', padding: '16px 22px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, borderRadius: '8px', textAlign: 'center', display: 'block' }}>Start Free Trial</Link>
+            <Link href="/signup" onClick={() => setOpen(false)} style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', padding: '16px 22px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, borderRadius: '8px', textAlign: 'center', display: 'block' }}>Start Free Trial</Link>
           </div>
         </div>
       )}
