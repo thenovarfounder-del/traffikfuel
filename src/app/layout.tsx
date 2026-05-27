@@ -2,10 +2,11 @@
 import './globals.css'
 import CrispChat from '@/components/CrispChat'
 import CookieBanner from '@/components/CookieBanner'
+import ScrollToTop from '@/components/ScrollToTop'
 import Script from 'next/script'
 
 export const metadata = {
-  title: 'Traffikora — AI Marketing Automation for Small Businesses',
+  title: 'Traffikora - AI Marketing Automation for Small Businesses',
   description: 'Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine.',
 }
 
@@ -16,32 +17,18 @@ export default function RootLayout({ children }) {
         <meta name="google-site-verification" content="tDnX1kzbibOZ52zeV6oAH35iohkvNI-4BpV7lz1Yga0" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          rel="preload"
-          as="style"
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap"
-          media="print"
-          onload="this.media='all'"
-        />
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'" />
         <noscript>
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap"
-          />
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" />
         </noscript>
       </head>
       <body className="antialiased">
+        <ScrollToTop />
         {children}
         <CrispChat />
         <CookieBanner />
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-Z6THVW5RJ1"
-          strategy="afterInteractive"
-        />
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-Z6THVW5RJ1" strategy="afterInteractive" />
         <Script id="ga4-init" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
