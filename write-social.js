@@ -1,59 +1,201 @@
 const fs = require('fs');
-const path = require('path');
 
-const dir = path.join('src', 'app', 'demo');
-if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+const content = `// @ts-nocheck
+'use client'
 
-const lines = [];
-lines.push("// @ts-nocheck");
-lines.push("'use client';");
-lines.push("import Nav from '@/components/Nav';");
-lines.push("import Footer from '@/components/Footer';");
-lines.push("");
-lines.push("export default function Demo() {");
-lines.push("  const html = `");
-lines.push("    <style>");
-lines.push("      .demo-page { background: #111; min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 120px 24px; }");
-lines.push("      .demo-card { max-width: 640px; width: 100%; text-align: center; }");
-lines.push("      .demo-icon { width: 80px; height: 80px; background: rgba(232,97,10,0.12); border: 2px solid rgba(232,97,10,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 32px; font-size: 32px; }");
-lines.push("      .demo-eyebrow { font-family: DM Sans, sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #E8610A; margin-bottom: 20px; }");
-lines.push("      .demo-card h1 { font-family: Playfair Display, serif; font-size: clamp(32px,5vw,56px); font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 20px; }");
-lines.push("      .demo-card p { font-family: DM Sans, sans-serif; font-size: 18px; color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 40px; }");
-lines.push("      .demo-form { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }");
-lines.push("      .demo-input { font-family: DM Sans, sans-serif; font-size: 15px; padding: 14px 20px; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff; width: 280px; outline: none; }");
-lines.push("      .demo-input::placeholder { color: #555; }");
-lines.push("      .demo-btn { font-family: DM Sans, sans-serif; font-size: 15px; font-weight: 600; padding: 14px 28px; border-radius: 8px; background: #E8610A; color: #fff; border: none; cursor: pointer; }");
-lines.push("      .demo-note { font-family: DM Sans, sans-serif; font-size: 13px; color: #555; }");
-lines.push("      .demo-note a { color: #E8610A; text-decoration: underline; }");
-lines.push("      .demo-divider { margin: 48px auto; width: 60px; height: 2px; background: #222; }");
-lines.push("      .demo-alt { font-family: DM Sans, sans-serif; font-size: 15px; color: rgba(255,255,255,0.5); margin-bottom: 20px; }");
-lines.push("      .demo-trial { display: inline-block; font-family: DM Sans, sans-serif; font-size: 15px; font-weight: 600; padding: 14px 32px; border-radius: 8px; border: 1.5px solid #E8610A; color: #E8610A; text-decoration: none; }");
-lines.push("    </style>");
-lines.push("    <section class='demo-page'>");
-lines.push("      <div class='demo-card'>");
-lines.push("        <div class='demo-icon'>&#9654;</div>");
-lines.push("        <p class='demo-eyebrow'>2-Minute Demo</p>");
-lines.push("        <h1>See Traffikora in Action</h1>");
-lines.push("        <p>Our demo video is being produced right now. Drop your email and we will send it to you the moment it goes live -- plus early access to the platform.</p>");
-lines.push("        <div class='demo-form'>");
-lines.push("          <input class='demo-input' type='email' placeholder='Enter your email address' />");
-lines.push("          <button class='demo-btn' onclick=\"this.textContent='Got it!';this.style.background='#2E7D32';\">Notify Me</button>");
-lines.push("        </div>");
-lines.push("        <p class='demo-note'>No spam. Just the demo. <a href='/contact'>Questions? Contact us.</a></p>");
-lines.push("        <div class='demo-divider'></div>");
-lines.push("        <p class='demo-alt'>Ready to get started without the video?</p>");
-lines.push("        <a href='/' class='demo-trial'>Start Your Free 7-Day Trial</a>");
-lines.push("      </div>");
-lines.push("    </section>");
-lines.push("  `;");
-lines.push("  return (");
-lines.push("    <>");
-lines.push("      <Nav />");
-lines.push("      <div dangerouslySetInnerHTML={{ __html: html }} />");
-lines.push("      <Footer />");
-lines.push("    </>");
-lines.push("  );");
-lines.push("}");
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
 
-fs.writeFileSync(path.join(dir, 'page.tsx'), lines.join('\n'), 'utf8');
-console.log('Done! demo/page.tsx written.');
+const plans = [
+  { name: 'Starter', price: '$97/mo', priceId: 'price_1TUvcsHuRIVTwN2fMNH7SjRh', features: ['1 Location', 'Google + Facebook', 'AI Content', 'Monthly Reports'] },
+  { name: 'Pro', price: '$197/mo', priceId: 'price_1TUve7HuRIVTwN2fYvrd1UgG', features: ['3 Locations', 'All Platforms', 'AI Content', 'Weekly Reports', 'Priority Support'] },
+  { name: 'Agency', price: '$797/mo', priceId: 'price_1TUvfKHuRIVTwN2fzlinyhei', features: ['25 Locations', 'All Platforms', 'AI Content', 'Daily Reports', 'Dedicated Manager'] },
+  { name: 'Enterprise', price: '$1,497/mo', priceId: 'price_1TUvgSHuRIVTwN2fhUwmR6Kb', features: ['Unlimited Locations', 'All Platforms', 'Custom AI', 'Real-time Reports', 'White Glove Service'] },
+]
+
+export default function SignupPage() {
+  const [step, setStep] = useState(1)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [strength, setStrength] = useState(0)
+  const [phone, setPhone] = useState('')
+  const [business, setBusiness] = useState('')
+  const [selectedPlan, setSelectedPlan] = useState(plans[1])
+  const [verifyCode, setVerifyCode] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const plan = params.get('plan')
+    if (plan) {
+      const found = plans.find(p => p.name.toLowerCase() === plan.toLowerCase())
+      if (found) setSelectedPlan(found)
+    }
+  }, [])
+
+  function getStrength(val) {
+    if (!val) return 0;
+    let s = 0;
+    if (val.length >= 8) s++;
+    if (val.length >= 12) s++;
+    if (/[A-Z]/.test(val)) s++;
+    if (/[0-9]/.test(val)) s++;
+    if (/[^A-Za-z0-9]/.test(val)) s++;
+    return s;
+  }
+
+  const strengthLabel = ['', 'Weak', 'Fair', 'Good', 'Strong', 'Strong'];
+  const strengthColor = ['', '#e53935', '#FB8C00', '#43A047', '#2E7D32', '#2E7D32'];
+  const strengthPct = ['0%', '25%', '50%', '75%', '100%', '100%'];
+
+  async function handleStep1() {
+    setError('')
+    if (!name || !email || !password || !phone || !business) { setError('Please fill in all fields.'); return }
+    if (password.length < 6) { setError('Password must be at least 6 characters.'); return }
+    setLoading(true)
+    const res = await fetch('/api/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password, business })
+    })
+    if (!res.ok) {
+      const d = await res.json()
+      setError(d.error || 'Signup failed. Please try again.')
+      setLoading(false)
+      return
+    }
+    setStep(2)
+    setLoading(false)
+  }
+
+  async function handleStep2() {
+    setError('')
+    setLoading(true)
+    const sendRes = await fetch('/api/verify/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone })
+    })
+    if (!sendRes.ok) {
+      setError('Failed to send code. Check your phone number and try again.')
+      setLoading(false)
+      return
+    }
+    setStep(3)
+    setLoading(false)
+  }
+
+  async function handleVerify() {
+    setError('')
+    setLoading(true)
+    const checkRes = await fetch('/api/verify/check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, code: verifyCode })
+    })
+    if (!checkRes.ok) {
+      setError('Invalid code. Please try again.')
+      setLoading(false)
+      return
+    }
+    const stripeRes = await fetch('/api/stripe/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ priceId: selectedPlan.priceId, email })
+    })
+    const stripeData = await stripeRes.json()
+    if (stripeData.url) {
+      window.location.href = stripeData.url
+    } else {
+      setError('Payment setup failed. Please try again.')
+      setLoading(false)
+    }
+  }
+
+  const inputStyle = { width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box', marginBottom: '16px' }
+  const btnStyle = { width: '100%', background: '#E8610A', color: '#fff', padding: '16px', fontSize: '17px', fontWeight: 700, border: 'none', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', opacity: loading ? 0.7 : 1 }
+
+  return (
+    <>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+      <Nav />
+
+      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '70px 32px 50px' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Get Started</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, marginBottom: '16px' }}>Start Your Free 7-Day Trial</h1>
+        <p style={{ fontSize: '18px', color: '#ccc' }}>No credit card charged today. Cancel anytime.</p>
+      </section>
+
+      <section style={{ background: '#fff', padding: '60px 32px', display: 'flex', justifyContent: 'center' }}>
+        <div style={{ width: '100%', maxWidth: '500px' }}>
+
+          {error && <div style={{ background: '#fff0f0', border: '2px solid #e00', color: '#c00', padding: '14px 18px', marginBottom: '24px', fontFamily: 'DM Sans, sans-serif', fontSize: '15px' }}>{error}</div>}
+
+          {step === 1 && (
+            <div>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, marginBottom: '28px' }}>Step 1 - Your Info</h2>
+              <input style={inputStyle} placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} />
+              <input style={inputStyle} placeholder="Email Address" type="email" value={email} onChange={e => setEmail(e.target.value)} />
+              <input style={{...inputStyle, marginBottom: '8px'}} placeholder="Password (min 6 characters)" type="password" value={password} onChange={e => { setPassword(e.target.value); setStrength(getStrength(e.target.value)); }} />
+              {password.length > 0 && (
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ height: '5px', background: '#e0e0e0', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: strengthPct[strength], background: strengthColor[strength], borderRadius: '4px', transition: 'width 0.3s ease' }} />
+                  </div>
+                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', color: strengthColor[strength], marginTop: '4px', fontWeight: 600 }}>{strengthLabel[strength]} password</p>
+                </div>
+              )}
+              <input style={inputStyle} placeholder="Phone Number (e.g. +13055551234)" value={phone} onChange={e => setPhone(e.target.value)} />
+              <input style={inputStyle} placeholder="Business Name" value={business} onChange={e => setBusiness(e.target.value)} />
+              <button style={btnStyle} onClick={handleStep1} disabled={loading}>{loading ? 'Please wait...' : 'Continue'}</button>
+            </div>
+          )}
+
+          {step === 2 && (
+            <div>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, marginBottom: '28px' }}>Step 2 - Choose Your Plan</h2>
+              {plans.map(plan => (
+                <div key={plan.name} onClick={() => setSelectedPlan(plan)} style={{ border: selectedPlan.name === plan.name ? '2.5px solid #E8610A' : '2.5px solid #111', padding: '20px 24px', marginBottom: '16px', cursor: 'pointer', background: selectedPlan.name === plan.name ? '#fff8f4' : '#fff' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <span style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700 }}>{plan.name}</span>
+                    <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', fontWeight: 700, color: '#E8610A' }}>{plan.price}</span>
+                  </div>
+                  <ul style={{ margin: 0, padding: '0 0 0 18px' }}>
+                    {plan.features.map(f => <li key={f} style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#555', marginBottom: '4px' }}>{f}</li>)}
+                  </ul>
+                </div>
+              ))}
+              <button style={btnStyle} onClick={handleStep2} disabled={loading}>{loading ? 'Sending code...' : 'Continue - Verify Phone'}</button>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, marginBottom: '16px' }}>Step 3 - Verify Your Phone</h2>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', marginBottom: '28px' }}>We sent a 6-digit code to {phone}. Enter it below.</p>
+              <input style={inputStyle} placeholder="6-digit code" value={verifyCode} onChange={e => setVerifyCode(e.target.value)} />
+              <button style={btnStyle} onClick={handleVerify} disabled={loading}>{loading ? 'Verifying...' : 'Verify & Go to Payment'}</button>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#999', textAlign: 'center', marginTop: '16px', cursor: 'pointer' }} onClick={handleStep2}>Resend code</p>
+            </div>
+          )}
+
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#999', textAlign: 'center', marginTop: '24px' }}>
+            Already have an account? <Link href="/login" style={{ color: '#E8610A', fontWeight: 600, textDecoration: 'none' }}>Log in</Link>
+          </p>
+        </div>
+      </section>
+
+      <Footer />
+    </>
+  )
+}
+`;
+
+fs.writeFileSync('src/app/signup/page.tsx', content, 'utf8');
+console.log('Done! Signup page with strength meter written.');

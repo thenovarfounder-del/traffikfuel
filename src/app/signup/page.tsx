@@ -18,6 +18,7 @@ export default function SignupPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [strength, setStrength] = useState(0)
   const [phone, setPhone] = useState('')
   const [business, setBusiness] = useState('')
   const [selectedPlan, setSelectedPlan] = useState(plans[1])
@@ -33,6 +34,21 @@ export default function SignupPage() {
       if (found) setSelectedPlan(found)
     }
   }, [])
+
+  function getStrength(val) {
+    if (!val) return 0;
+    let s = 0;
+    if (val.length >= 8) s++;
+    if (val.length >= 12) s++;
+    if (/[A-Z]/.test(val)) s++;
+    if (/[0-9]/.test(val)) s++;
+    if (/[^A-Za-z0-9]/.test(val)) s++;
+    return s;
+  }
+
+  const strengthLabel = ['', 'Weak', 'Fair', 'Good', 'Strong', 'Strong'];
+  const strengthColor = ['', '#e53935', '#FB8C00', '#43A047', '#2E7D32', '#2E7D32'];
+  const strengthPct = ['0%', '25%', '50%', '75%', '100%', '100%'];
 
   async function handleStep1() {
     setError('')
@@ -121,10 +137,18 @@ export default function SignupPage() {
 
           {step === 1 && (
             <div>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, marginBottom: '28px' }}>Step 1 — Your Info</h2>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, marginBottom: '28px' }}>Step 1 - Your Info</h2>
               <input style={inputStyle} placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} />
               <input style={inputStyle} placeholder="Email Address" type="email" value={email} onChange={e => setEmail(e.target.value)} />
-              <input style={inputStyle} placeholder="Password (min 6 characters)" type="password" value={password} onChange={e => setPassword(e.target.value)} />
+              <input style={{...inputStyle, marginBottom: '8px'}} placeholder="Password (min 6 characters)" type="password" value={password} onChange={e => { setPassword(e.target.value); setStrength(getStrength(e.target.value)); }} />
+              {password.length > 0 && (
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ height: '5px', background: '#e0e0e0', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: strengthPct[strength], background: strengthColor[strength], borderRadius: '4px', transition: 'width 0.3s ease' }} />
+                  </div>
+                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', color: strengthColor[strength], marginTop: '4px', fontWeight: 600 }}>{strengthLabel[strength]} password</p>
+                </div>
+              )}
               <input style={inputStyle} placeholder="Phone Number (e.g. +13055551234)" value={phone} onChange={e => setPhone(e.target.value)} />
               <input style={inputStyle} placeholder="Business Name" value={business} onChange={e => setBusiness(e.target.value)} />
               <button style={btnStyle} onClick={handleStep1} disabled={loading}>{loading ? 'Please wait...' : 'Continue'}</button>
@@ -133,7 +157,7 @@ export default function SignupPage() {
 
           {step === 2 && (
             <div>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, marginBottom: '28px' }}>Step 2 — Choose Your Plan</h2>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, marginBottom: '28px' }}>Step 2 - Choose Your Plan</h2>
               {plans.map(plan => (
                 <div key={plan.name} onClick={() => setSelectedPlan(plan)} style={{ border: selectedPlan.name === plan.name ? '2.5px solid #E8610A' : '2.5px solid #111', padding: '20px 24px', marginBottom: '16px', cursor: 'pointer', background: selectedPlan.name === plan.name ? '#fff8f4' : '#fff' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
@@ -145,13 +169,13 @@ export default function SignupPage() {
                   </ul>
                 </div>
               ))}
-              <button style={btnStyle} onClick={handleStep2} disabled={loading}>{loading ? 'Sending code...' : 'Continue — Verify Phone'}</button>
+              <button style={btnStyle} onClick={handleStep2} disabled={loading}>{loading ? 'Sending code...' : 'Continue - Verify Phone'}</button>
             </div>
           )}
 
           {step === 3 && (
             <div>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, marginBottom: '16px' }}>Step 3 — Verify Your Phone</h2>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, marginBottom: '16px' }}>Step 3 - Verify Your Phone</h2>
               <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', marginBottom: '28px' }}>We sent a 6-digit code to {phone}. Enter it below.</p>
               <input style={inputStyle} placeholder="6-digit code" value={verifyCode} onChange={e => setVerifyCode(e.target.value)} />
               <button style={btnStyle} onClick={handleVerify} disabled={loading}>{loading ? 'Verifying...' : 'Verify & Go to Payment'}</button>
