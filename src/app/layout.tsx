@@ -15,6 +15,18 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <meta name="google-site-verification" content="tDnX1kzbibOZ52zeV6oAH35iohkvNI-4BpV7lz1Yga0" />
+        <meta property="og:title" content="Traffikora - AI Marketing Automation for Small Businesses" />
+        <meta property="og:description" content="Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine." />
+        <meta property="og:image" content="https://www.traffikora.com/og-image.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:url" content="https://www.traffikora.com" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Traffikora" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Traffikora - AI Marketing Automation for Small Businesses" />
+        <meta name="twitter:description" content="Set it once. It markets forever." />
+        <meta name="twitter:image" content="https://www.traffikora.com/og-image.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" />
