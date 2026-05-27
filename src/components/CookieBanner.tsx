@@ -1,88 +1,83 @@
 // @ts-nocheck
-'use client'
-
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
+'use client';
+import { useState, useEffect } from 'react';
 
 export default function CookieBanner() {
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const consent = localStorage.getItem('traffikora_cookie_consent')
-    if (!consent) setVisible(true)
-  }, [])
+    const consent = localStorage.getItem('traffikora_cookie_consent');
+    if (!consent) setVisible(true);
+  }, []);
 
-  const accept = () => {
-    localStorage.setItem('traffikora_cookie_consent', 'accepted')
-    setVisible(false)
+  function acceptAll() {
+    localStorage.setItem('traffikora_cookie_consent', 'accepted');
+    setVisible(false);
   }
 
-  const decline = () => {
-    localStorage.setItem('traffikora_cookie_consent', 'declined')
-    setVisible(false)
+  function declineAll() {
+    localStorage.setItem('traffikora_cookie_consent', 'declined');
+    setVisible(false);
   }
 
-  if (!visible) return null
+  if (!visible) return null;
 
   return (
     <div style={{
       position: 'fixed',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      background: '#111',
-      borderTop: '2.5px solid #E8610A',
-      padding: '20px 32px',
+      bottom: '24px',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      width: '90%',
+      maxWidth: '720px',
+      background: '#1a1a1a',
+      border: '1px solid #333',
+      borderRadius: '14px',
+      padding: '24px 28px',
       zIndex: 9999,
+      boxShadow: '0 8px 40px rgba(0,0,0,0.5)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
       gap: '24px',
       flexWrap: 'wrap',
     }}>
-      <p style={{
-        fontFamily: 'DM Sans, sans-serif',
-        fontSize: '14px',
-        color: '#ccc',
-        margin: 0,
-        lineHeight: 1.7,
-        maxWidth: '680px',
-      }}>
-        We use cookies to improve your experience, analyze site traffic, and provide marketing features. By continuing to use Traffikora, you agree to our use of cookies.{' '}
-        <Link href="/privacy" style={{ color: '#E8610A', fontWeight: 600, textDecoration: 'none' }}>Privacy Policy</Link>
-      </p>
+      <div style={{ flex: 1, minWidth: '240px' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#fff', lineHeight: 1.6, margin: 0 }}>
+          We use cookies to improve your experience, analyze traffic, and power our live chat and ads.
+          <a href='/cookie-policy' style={{ color: '#E8610A', marginLeft: '6px', textDecoration: 'underline' }}>
+            Learn more
+          </a>
+        </p>
+      </div>
       <div style={{ display: 'flex', gap: '12px', flexShrink: 0 }}>
-        <button
-          onClick={decline}
-          style={{
-            fontFamily: 'DM Sans, sans-serif',
-            fontSize: '14px',
-            fontWeight: 600,
-            color: '#ccc',
-            background: 'transparent',
-            border: '1.5px solid #555',
-            padding: '10px 24px',
-            cursor: 'pointer',
-          }}
-        >
+        <button onClick={declineAll} style={{
+          fontFamily: 'DM Sans, sans-serif',
+          fontSize: '14px',
+          fontWeight: 600,
+          color: '#aaa',
+          background: 'transparent',
+          border: '1px solid #444',
+          borderRadius: '8px',
+          padding: '10px 20px',
+          cursor: 'pointer',
+        }}>
           Decline
         </button>
-        <button
-          onClick={accept}
-          style={{
-            fontFamily: 'DM Sans, sans-serif',
-            fontSize: '14px',
-            fontWeight: 700,
-            color: '#fff',
-            background: '#E8610A',
-            border: '1.5px solid #E8610A',
-            padding: '10px 24px',
-            cursor: 'pointer',
-          }}
-        >
+        <button onClick={acceptAll} style={{
+          fontFamily: 'DM Sans, sans-serif',
+          fontSize: '14px',
+          fontWeight: 600,
+          color: '#fff',
+          background: '#E8610A',
+          border: 'none',
+          borderRadius: '8px',
+          padding: '10px 20px',
+          cursor: 'pointer',
+        }}>
           Accept All
         </button>
       </div>
     </div>
-  )
+  );
 }
