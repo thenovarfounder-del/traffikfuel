@@ -1,215 +1,457 @@
 // @ts-nocheck
-
-
-// @ts-nocheck
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Footer from '@/components/Footer'
 
 export default function HomePage() {
+  const [timeLeft, setTimeLeft] = useState({ days: '02', hours: '14', mins: '37', secs: '00' })
 
   useEffect(() => {
-    window.openMobileMenu = function() {
-      const m = document.getElementById('mobileMenu')
-      if (m) { m.classList.add('open'); document.body.style.overflow = 'hidden' }
-    }
-    window.closeMobileMenu = function() {
-      const m = document.getElementById('mobileMenu')
-      if (m) { m.classList.remove('open'); document.body.style.overflow = '' }
-    }
+    const deadline = new Date()
+    deadline.setDate(deadline.getDate() + 2)
+    deadline.setHours(deadline.getHours() + 14)
+    deadline.setMinutes(deadline.getMinutes() + 37)
+    const timer = setInterval(() => {
+      const now = new Date()
+      const diff = deadline - now
+      if (diff <= 0) { clearInterval(timer); return }
+      const d = Math.floor(diff / 86400000)
+      const h = Math.floor((diff % 86400000) / 3600000)
+      const m = Math.floor((diff % 3600000) / 60000)
+      const s = Math.floor((diff % 60000) / 1000)
+      setTimeLeft({ days: String(d).padStart(2,'0'), hours: String(h).padStart(2,'0'), mins: String(m).padStart(2,'0'), secs: String(s).padStart(2,'0') })
+    }, 1000)
+    window.openMobileMenu = function() { const m = document.getElementById('mobileMenu'); if (m) { m.classList.add('open'); document.body.style.overflow = 'hidden' } }
+    window.closeMobileMenu = function() { const m = document.getElementById('mobileMenu'); if (m) { m.classList.remove('open'); document.body.style.overflow = '' } }
+    return () => clearInterval(timer)
   }, [])
 
   return (
-    <main>
-      <style>{`
-*{box-sizing:border-box;margin:0;padding:0}#crisp-chatbox{display:none!important;}
+    <main suppressHydrationWarning>
+      <style suppressHydrationWarning>{`
+*{box-sizing:border-box;margin:0;padding:0}
+#crisp-chatbox{display:none!important;}
 html{scroll-behavior:smooth}
 body{background:#fff;color:#111;font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden}
-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 60px;border-bottom:2.5px solid #111;background:#fff;position:sticky;top:0;z-index:200}
-.nav-logo{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;letter-spacing:-1px;color:#111;text-decoration:none}
+nav{display:flex;align-items:center;justify-content:space-between;padding:14px 40px;border-bottom:2.5px solid #111;background:#fff;position:sticky;top:0;z-index:200}
+.nav-logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;letter-spacing:-0.5px;color:#111;text-decoration:none;flex-shrink:0}
 .nav-logo span{color:#E8610A}
-.nav-links{display:flex;gap:28px}
-.nav-links a{font-size:14px;color:#111;text-decoration:none;font-weight:500;transition:color .2s}
+.nav-links{display:flex;align-items:center;gap:22px;flex:1;justify-content:center;padding:0 20px}
+.nav-links a{font-size:14px;color:#111;text-decoration:none;font-weight:500;white-space:nowrap;transition:color .2s}
 .nav-links a:hover{color:#E8610A}
-.nav-btns{display:flex;gap:10px;align-items:center}
-.nav-login{background:transparent;color:#111;border:1.5px solid #bbb;padding:9px 20px;border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer}
-.nav-cta{background:#E8610A;color:#fff;border:none;padding:10px 22px;border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer}
+.nav-links a.nav-hl{color:#E8610A;font-weight:700}
+.nav-btns{display:flex;align-items:center;gap:8px;flex-shrink:0;border-left:1.5px solid #e8e8e8;padding-left:16px}
+.nav-login{background:#fff;color:#111;border:1.5px solid #222;padding:6px 14px;border-radius:5px;font-size:12px;font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;letter-spacing:.02em;transition:background .2s}
+.nav-login:hover{background:#f5f5f5}
+.nav-cta{background:#C84E06;color:#fff;border:none;padding:8px 16px;border-radius:5px;font-size:12px;font-family:'DM Sans',sans-serif;font-weight:700;cursor:pointer;white-space:nowrap;letter-spacing:.02em;box-shadow:0 2px 10px rgba(200,78,6,.3);transition:background .2s}
+.nav-cta:hover{background:#a83d04}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
 .hamburger span{width:24px;height:2px;background:#111;display:block}
 .mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#fff;z-index:300;flex-direction:column;padding:80px 40px 40px;gap:28px}
 .mobile-menu.open{display:flex}
-.mobile-menu a{font-size:24px;color:#111;text-decoration:none;font-weight:600;font-family:'Playfair Display',serif;border-bottom:1px solid #f0f0f0;padding-bottom:20px}
+.mobile-menu a{font-size:22px;color:#111;text-decoration:none;font-weight:600;font-family:'Playfair Display',serif;border-bottom:1px solid #f0f0f0;padding-bottom:18px}
 .mobile-close{position:absolute;top:22px;right:28px;font-size:28px;cursor:pointer;color:#111;background:none;border:none}
-.mobile-menu-btns{display:flex;flex-direction:column;gap:12px;margin-top:16px}
-.hero{padding:90px 60px 80px;max-width:980px;margin:0 auto;text-align:center}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;letter-spacing:.1em;color:#111;text-transform:uppercase;margin-bottom:32px;border:2px solid #111;padding:10px 22px;border-radius:30px}
-.hero-eyebrow::before{content:'';width:8px;height:8px;border-radius:50%;background:#E8610A;animation:pulse 2s ease-in-out infinite;flex-shrink:0}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
-.hero h1{font-family:'Playfair Display',serif;font-size:78px;font-weight:700;line-height:1.02;letter-spacing:-3px;margin-bottom:18px;color:#111}
-.hero h1 em{font-style:italic;border-bottom:4px solid #E8610A;padding-bottom:2px}
-.hero-sub{font-size:19px;color:#444;line-height:1.75;max-width:580px;margin:0 auto 40px;font-weight:400}
-.hero-sub strong{color:#111;font-weight:600}
-.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
-.btn-primary{background:#111;color:#fff;border:none;padding:16px 34px;border-radius:7px;font-size:16px;font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;transition:background .2s}
-.btn-primary:hover{background:#E8610A}
-.btn-ghost{background:transparent;color:#111;border:2px solid #111;padding:16px 34px;border-radius:7px;font-size:16px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer}
-.hero-divider{width:100%;height:2px;background:#111;margin:40px 0 36px;border-radius:2px}
-.hero-proof{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
-.hero-proof-text{font-size:15px;color:#333;font-weight:600}
-.avatar-stack{display:flex}
-.avatar{width:32px;height:32px;border-radius:50%;border:2px solid #fff;margin-left:-9px;background:#e8e8e8;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#666}
-.avatar:first-child{margin-left:0}
-.stars{color:#E8610A;font-size:17px;letter-spacing:2px}
-.ticker-wrap{border-top:2.5px solid #111;border-bottom:2.5px solid #111;background:#111;padding:0;overflow:hidden}
-.ticker-track{overflow:hidden;white-space:nowrap;padding:16px 0}
-.ticker-inner{display:inline-flex;animation:ticker 30s linear infinite}
-@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.ti{display:inline-block;font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#fff;padding:0 28px;white-space:nowrap}
-.pricing-section{background:#f7f7f7;border-top:2.5px solid #111;border-bottom:2.5px solid #111;padding:80px 60px}
-.pricing-inner{max-width:1060px;margin:0 auto}
-.pricing-head{text-align:center;margin-bottom:48px}
-.section-label{font-size:12px;letter-spacing:.15em;color:#E8610A;text-transform:uppercase;margin-bottom:14px;font-weight:600;display:block}
-.section-h{font-family:'Playfair Display',serif;font-size:50px;font-weight:700;line-height:1.06;letter-spacing:-1.5px;margin-bottom:12px;color:#111}
-.section-h em{font-style:italic}
-.section-sub{font-size:15px;color:#888;font-weight:400;margin-top:10px}
-.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);border:2.5px solid #111;border-radius:14px;overflow:hidden}
-.plan{background:#fff;padding:34px 26px;position:relative}
+.mobile-menu-btns{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.btn-cta{display:inline-flex;align-items:center;gap:12px;background:linear-gradient(135deg,#E8610A,#c94e08);color:#fff;border:none;padding:16px 30px;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;position:relative;overflow:hidden;letter-spacing:.01em;box-shadow:0 4px 20px rgba(232,97,10,.35)}
+.btn-cta::before{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:rgba(255,255,255,.15);transform:skewX(-20deg);animation:shimmer 3s ease-in-out infinite}
+@keyframes shimmer{0%{left:-60%}60%,100%{left:130%}}
+.btn-cta-circle{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0}
+.btn-cta-dark{display:inline-flex;align-items:center;gap:12px;background:#111;color:#fff;border:none;padding:16px 30px;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;position:relative;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.25)}
+.btn-cta-dark::before{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:rgba(255,255,255,.05);transform:skewX(-20deg);animation:shimmer 3s ease-in-out infinite}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4);padding:15px 22px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+.cta-notes-row{display:flex;gap:18px;justify-content:center;margin-top:13px;flex-wrap:wrap}
+.cta-note-item{font-size:13px;color:#666;display:flex;align-items:center;gap:4px}
+.cta-note-item::before{content:'✓';color:#E8610A;font-weight:700}
+.hero{background:#111;padding:40px 40px 0}
+.hero-inner{display:grid;grid-template-columns:1.15fr .85fr;gap:32px;align-items:center;max-width:1200px;margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:16px;font-weight:700;font-style:italic;font-family:'Playfair Display',serif;color:#fff;padding:10px 22px;border-radius:40px;background:rgba(232,97,10,.1);border:1.5px solid rgba(232,97,10,.5);margin-bottom:18px}
+.eyebrow-dot-wrap{position:relative;width:10px;height:10px;flex-shrink:0}
+.eyebrow-dot{width:8px;height:8px;border-radius:50%;background:#E8610A;position:absolute;top:1px;left:1px}
+.eyebrow-ring{width:10px;height:10px;border-radius:50%;border:1.5px solid #E8610A;position:absolute;top:0;left:0;animation:ringpulse 2s ease-out infinite;opacity:0}
+@keyframes ringpulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(2.6);opacity:0}}
+.eyebrow-text{background:linear-gradient(90deg,#fff 50%,#E8610A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-h1{font-family:'Playfair Display',serif;font-size:52px;font-weight:700;color:#fff;line-height:.96;letter-spacing:-1.5px;margin-bottom:16px}
+.hero-h1 em{font-style:italic;color:#E8610A}
+.hero-sub{font-size:15px;color:#ccc;line-height:1.85;margin-bottom:20px;max-width:420px;font-weight:300}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.guarantee-wrap{display:flex;align-items:center;gap:10px;margin-top:16px;flex-wrap:wrap}
+.guarantee-badge{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:9px 14px}
+.guarantee-icon{font-size:18px;flex-shrink:0}
+.guarantee-text{font-size:11px;color:#ccc;line-height:1.5}
+.guarantee-text strong{color:#fff;display:block;font-size:12px}
+.hero-proof{display:flex;align-items:center;gap:10px;padding:12px 0;border-top:1px solid #2a2a2a;margin-top:14px;flex-wrap:wrap}
+.proof-pip{width:3px;height:3px;border-radius:50%;background:#555}
+.proof-txt{font-size:13px;color:#aaa;font-weight:500}
+.hero-right{display:flex;flex-direction:column;gap:10px;padding-bottom:40px}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.hstat{background:#1a1a1a;border:1px solid #252525;border-radius:8px;padding:12px 14px}
+.hstat-num{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#E8610A;line-height:1}
+.hstat-lbl{font-size:11px;color:#aaa;margin-top:4px;line-height:1.4}
+.hplat{background:#1a1a1a;border:1px solid #252525;border-radius:8px;padding:10px 14px}
+.hplat-lbl{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px}
+.hchips{display:flex;gap:4px;flex-wrap:wrap}
+.hchip{font-size:10px;background:#222;border:1px solid #333;color:#999;padding:3px 8px;border-radius:3px}
+.demo-btn{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:10px 16px;cursor:pointer;text-decoration:none}
+.demo-play{width:26px;height:26px;border-radius:50%;background:#E8610A;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;flex-shrink:0}
+.demo-lbl{font-size:12px;color:#ccc;font-weight:400}
+.demo-lbl span{color:#fff;font-weight:600}
+.powered{background:#090909;border-top:1px solid #1a1a1a;padding:10px 40px;display:flex;align-items:center;gap:14px}
+.powered-lbl{font-size:10px;color:#555;text-transform:uppercase;letter-spacing:.12em;white-space:nowrap}
+.powered-logos{display:flex;gap:7px}
+.powered-logo{font-size:10px;color:#666;padding:4px 10px;border:1px solid #2a2a2a;border-radius:3px}
+.industry-section{background:#f7f7f7;border-bottom:2.5px solid #111;border-top:2.5px solid #111;padding:32px 40px}
+.section-label{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#E8610A;display:block;margin-bottom:8px}
+.industry-head{text-align:center;margin-bottom:22px}
+.industry-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#111}
+.industry-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;max-width:1100px;margin:0 auto}
+.industry-card{background:#fff;border:1.5px solid #111;border-radius:9px;padding:14px 10px;text-align:center}
+.industry-card-icon{font-size:24px;margin-bottom:6px}
+.industry-card-name{font-size:12px;font-weight:700;color:#111;line-height:1.3}
+.pain-section{background:#0d0d0d;padding:40px;text-align:center;border-top:1px solid #1a1a1a}
+.pain-h{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:#fff;line-height:1.15;margin-bottom:14px}
+.pain-h em{color:#E8610A;font-style:italic}
+.pain-p{font-size:16px;color:#bbb;max-width:520px;margin:0 auto;line-height:1.85;font-weight:300}
+.stat-bar{background:#E8610A;padding:20px 40px;text-align:center}
+.stat-bar-inner{display:inline-flex;align-items:center;gap:20px}
+.stat-bar-num{font-family:'Playfair Display',serif;font-size:42px;font-weight:700;color:#fff;line-height:1}
+.stat-bar-div{width:1px;height:40px;background:rgba(255,255,255,.4)}
+.stat-bar-txt{font-size:15px;color:#fff;line-height:1.6;text-align:left;max-width:400px;font-weight:400}
+.ba-section{padding:40px;background:#fff;border-bottom:2.5px solid #111}
+.ba-head{text-align:center;margin-bottom:22px}
+.ba-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#111;line-height:1.15}
+.ba-h em{color:#E8610A;font-style:italic}
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px;margin:0 auto}
+.ba-col{border:2px solid #111;border-radius:10px;overflow:hidden}
+.ba-col-head{padding:13px 18px;font-size:13px;font-weight:700;text-align:center;letter-spacing:.06em;text-transform:uppercase}
+.ba-col-head.bad{background:#111;color:#fff}
+.ba-col-head.good{background:#E8610A;color:#fff}
+.ba-col-body{padding:16px 18px}
+.ba-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:12px;font-size:13px;color:#444;line-height:1.55;font-weight:400}
+.ba-x{color:#cc0000;font-weight:700;flex-shrink:0}
+.ba-c{color:#E8610A;font-weight:700;flex-shrink:0}
+.comp-section{background:#f7f7f7;border-top:2.5px solid #111;border-bottom:2.5px solid #111;padding:40px}
+.comp-head{text-align:center;margin-bottom:26px}
+.comp-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#111}
+.comp-h em{color:#E8610A;font-style:italic}
+.comp-table{width:100%;max-width:900px;margin:0 auto;border:2px solid #111;border-radius:12px;overflow:hidden;border-collapse:separate;border-spacing:0}
+.comp-table th{padding:14px 16px;font-size:12px;font-weight:700;text-align:center;border-bottom:2px solid #111;border-right:2px solid #111;letter-spacing:.05em;text-transform:uppercase}
+.comp-table th:first-child{text-align:left;background:#f7f7f7;width:34%}
+.comp-table th.th-ours{background:#111;color:#fff;border-right:2px solid #1a1a1a}
+.comp-table th.th-other{background:#f7f7f7;color:#555}
+.comp-table th:last-child{border-right:none}
+.comp-table td{padding:12px 16px;font-size:13px;border-bottom:1px solid #eee;border-right:1.5px solid #eee;text-align:center;vertical-align:middle;font-weight:400;color:#333}
+.comp-table td:first-child{text-align:left;font-weight:600;color:#111;background:#fff;border-right:2px solid #111}
+.comp-table td.ours{background:#fff9f5;font-weight:700;color:#E8610A;border-right:2px solid #111}
+.comp-table tr:last-child td{border-bottom:none}
+.tbl-check{color:#E8610A;font-size:14px;font-weight:700}
+.tbl-cross{color:#999;font-size:14px}
+.tbl-partial{color:#777;font-size:12px}
+.timeline-section{background:#111;padding:40px}
+.timeline-head{text-align:center;margin-bottom:30px}
+.timeline-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#fff;line-height:1.15}
+.timeline-h em{color:#E8610A;font-style:italic}
+.timeline-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;max-width:1000px;margin:0 auto}
+.timeline-grid::before{content:'';position:absolute;top:22px;left:12%;right:12%;height:2px;background:linear-gradient(90deg,#E8610A,#2a2a2a);z-index:0}
+.tl-item{text-align:center;position:relative;z-index:1;padding:0 12px}
+.tl-dot-wrap{display:flex;justify-content:center;margin-bottom:16px}
+.tl-dot{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:#fff;border:3px solid #111;flex-shrink:0}
+.tl-dot.active{background:#E8610A}
+.tl-dot.dim{background:#1e1e1e;border-color:#2a2a2a}
+.tl-day{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#E8610A;margin-bottom:7px}
+.tl-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:8px;line-height:1.3}
+.tl-desc{font-size:13px;color:#aaa;line-height:1.65;font-weight:300}
+.dash-section{background:#fff;border-top:2.5px solid #111;border-bottom:2.5px solid #111;padding:40px}
+.dash-head{text-align:center;margin-bottom:24px}
+.dash-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#111}
+.dash-h em{color:#E8610A;font-style:italic}
+.dash-sub{font-size:14px;color:#555;margin-top:7px}
+.dash-frame{background:#0d0d0d;border:2.5px solid #111;border-radius:14px;overflow:hidden;max-width:1000px;margin:0 auto}
+.dash-bar{background:#111;padding:9px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #1e1e1e}
+.dash-dot-r{width:9px;height:9px;border-radius:50%;background:#ff5f56;flex-shrink:0}
+.dash-dot-y{width:9px;height:9px;border-radius:50%;background:#ffbd2e;flex-shrink:0}
+.dash-dot-g{width:9px;height:9px;border-radius:50%;background:#27c93f;flex-shrink:0}
+.dash-url{flex:1;background:#1a1a1a;border-radius:4px;padding:4px 12px;font-size:10px;color:#888;margin:0 12px}
+.dash-inner{display:grid;grid-template-columns:170px 1fr;min-height:200px}
+.dash-sidebar{background:#111;padding:16px;border-right:1px solid #1e1e1e}
+.dash-sidebar-logo{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:#fff;margin-bottom:16px}
+.dash-sidebar-logo span{color:#E8610A}
+.dash-nav-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:5px;margin-bottom:3px;font-size:11px;font-weight:500;color:#888;cursor:pointer}
+.dash-nav-item.active{background:#1e1e1e;color:#fff}
+.dash-nav-dot{width:5px;height:5px;border-radius:50%;background:#2a2a2a;flex-shrink:0}
+.dash-nav-item.active .dash-nav-dot{background:#E8610A}
+.dash-main{padding:16px}
+.dash-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:12px}
+.dash-stat{background:#141414;border:1px solid #1e1e1e;border-radius:7px;padding:11px 12px}
+.dash-stat-num{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#E8610A;line-height:1}
+.dash-stat-lbl{font-size:10px;color:#888;margin-top:3px}
+.dash-activity{background:#141414;border:1px solid #1e1e1e;border-radius:7px;padding:12px}
+.dash-activity-head{font-size:11px;font-weight:700;color:#fff;margin-bottom:9px}
+.dash-activity-row{display:flex;align-items:center;gap:9px;margin-bottom:7px;padding-bottom:7px;border-bottom:1px solid #1a1a1a}
+.dash-activity-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.dash-activity-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dash-activity-txt{font-size:11px;color:#aaa;flex:1}
+.dash-activity-time{font-size:10px;color:#666;white-space:nowrap}
+.dash-activity-status{font-size:10px;font-weight:700;color:#E8610A;background:rgba(232,97,10,.1);padding:2px 7px;border-radius:10px;white-space:nowrap}
+.platforms-section{background:#0d0d0d;padding:44px 40px;text-align:center;position:relative;overflow:hidden;border-top:2.5px solid #111}
+.platforms-ring1{position:absolute;width:600px;height:600px;border-radius:50%;border:1px solid rgba(232,97,10,.06);top:50%;left:50%;transform:translate(-50%,-50%)}
+.platforms-ring2{position:absolute;width:360px;height:360px;border-radius:50%;border:1px solid rgba(232,97,10,.1);top:50%;left:50%;transform:translate(-50%,-50%)}
+.platforms-h{font-family:'Playfair Display',serif;font-size:42px;font-weight:700;color:#fff;letter-spacing:-1px;line-height:1;margin-bottom:6px;position:relative;z-index:1}
+.platforms-h span{color:#E8610A;font-style:italic}
+.platforms-sub{font-size:15px;color:#aaa;margin-bottom:28px;position:relative;z-index:1;font-weight:300}
+.platforms-chips{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.plat-chip{display:flex;align-items:center;gap:8px;background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:12px 20px}
+.plat-chip-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.plat-chip-name{font-size:13px;font-weight:600;color:#ddd}
+.platforms-foot{margin-top:24px;padding-top:20px;border-top:1px solid #1a1a1a;position:relative;z-index:1}
+.platforms-foot p{font-size:13px;color:#aaa;font-style:italic}
+.platforms-foot span{color:#E8610A;font-weight:700}
+.limited-offer{background:linear-gradient(135deg,#0d0d0d 0%,#1a1a1a 100%);border-top:2.5px solid #111;padding:22px 40px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.lo-left{display:flex;align-items:center;gap:16px}
+.lo-badge{background:#E8610A;color:#fff;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 14px;border-radius:5px;white-space:nowrap;flex-shrink:0}
+.lo-text{font-size:14px;color:#ccc;line-height:1.55;font-weight:300}
+.lo-text strong{font-size:16px;color:#E8610A;display:block;font-family:'Playfair Display',serif;font-style:italic;font-weight:700;margin-bottom:2px}
+.lo-right{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.lo-countdown{display:flex;gap:8px}
+.lo-count-item{background:#0a0a0a;border:1px solid #2a2a2a;border-radius:7px;padding:9px 14px;text-align:center;min-width:52px}
+.lo-count-num{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#E8610A;line-height:1}
+.lo-count-lbl{font-size:10px;color:#777;text-transform:uppercase;letter-spacing:.1em;margin-top:3px}
+.lo-cta-btn{background:#E8610A;color:#fff;border:none;padding:12px 22px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;box-shadow:0 2px 12px rgba(232,97,10,.3)}
+.pricing-trust{display:flex;align-items:stretch;border-top:2.5px solid #111;border-bottom:2.5px solid #111;background:#f7f7f7}
+.pt-item{flex:1;display:flex;align-items:center;justify-content:center;gap:12px;padding:20px 20px;border-right:2px solid #111}
+.pt-item:last-child{border-right:none}
+.pt-icon{font-size:26px;flex-shrink:0}
+.pt-label{font-size:14px;font-weight:700;color:#111;line-height:1.3}
+.pt-label span{font-size:12px;color:#666;font-weight:400;display:block;margin-top:2px}
+.pricing-section{background:#fff;padding:44px 40px}
+.pricing-head{text-align:center;margin-bottom:26px}
+.pricing-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#111;line-height:1.1}
+.pricing-h em{color:#E8610A;font-style:italic}
+.pricing-sub{font-size:13px;color:#666;margin-top:7px;font-weight:300}
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);border:2.5px solid #111;border-radius:14px;overflow:hidden;max-width:1100px;margin:0 auto}
+.plan{background:#fff;padding:26px 20px;position:relative}
 .plan:not(:last-child){border-right:2.5px solid #111}
 .plan-featured{background:#111}
-.plan-badge{display:inline-block;background:#E8610A;color:#fff;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:30px;margin-bottom:14px;font-weight:700}
-.plan-name{font-size:11px;letter-spacing:.12em;color:#999;text-transform:uppercase;margin-bottom:12px;font-weight:600}
-.plan-name-dark{color:#555}
-.plan-price{font-family:'Playfair Display',serif;font-size:50px;font-weight:700;color:#111;line-height:1}
+.plan-badge{display:inline-block;background:#E8610A;color:#fff;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:10px;font-weight:700}
+.plan-name{font-size:11px;letter-spacing:.14em;color:#777;text-transform:uppercase;margin-bottom:10px;font-weight:600}
+.plan-name-light{color:#777}
+.plan-price{font-family:'Playfair Display',serif;font-size:44px;font-weight:700;color:#111;line-height:1}
 .plan-price-light{color:#fff}
-.plan-price sup{font-size:20px;vertical-align:super;font-family:'DM Sans',sans-serif;font-weight:400}
-.plan-price sub{font-size:13px;color:#999;font-family:'DM Sans',sans-serif;font-weight:300}
-.plan-price-light sub{color:#666}
-.plan-desc{font-size:13px;color:#888;margin:10px 0 18px;line-height:1.6}
-.plan-desc-light{color:#aaa}
-.plan-features{list-style:none;margin-bottom:24px}
-.plan-features li{font-size:13px;color:#555;padding:7px 0;border-bottom:1px solid #f0f0f0;display:flex;align-items:flex-start;gap:7px;line-height:1.5}
-.plan-features-light li{color:#bbb;border-bottom-color:#1e1e1e}
-.plan-features li::before{content:'✓';color:#E8610A;font-size:11px;flex-shrink:0;margin-top:2px}
-.plan-btn{width:100%;padding:13px;border-radius:7px;font-size:14px;font-family:'DM Sans',sans-serif;font-weight:700;cursor:pointer;border:2px solid #ccc;background:transparent;color:#666}
+.plan-price sup{font-size:18px;font-family:'DM Sans',sans-serif;font-weight:400;vertical-align:super}
+.plan-price sub{font-size:12px;color:#777;font-family:'DM Sans',sans-serif;font-weight:300}
+.plan-price-light sub{color:#999}
+.plan-desc{font-size:13px;color:#666;margin:9px 0 14px;line-height:1.65;font-weight:300}
+.plan-desc-light{color:#bbb}
+.plan-features{list-style:none;margin-bottom:20px}
+.plan-features li{font-size:12px;color:#444;padding:7px 0;border-bottom:1px solid #f0f0f0;display:flex;align-items:flex-start;gap:7px;line-height:1.45;font-weight:400}
+.plan-features-light li{color:#ccc;border-bottom-color:#1e1e1e}
+.plan-features li::before{content:'✓';color:#E8610A;font-size:11px;flex-shrink:0;margin-top:1px}
+.plan-btn{width:100%;padding:13px;border-radius:7px;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:700;cursor:pointer;border:1.5px solid #bbb;background:transparent;color:#555;transition:all .2s}
 .plan-btn-featured{background:#E8610A;color:#fff;border-color:#E8610A}
-.features-section{background:#fff;border-bottom:2.5px solid #111;padding:80px 60px}
-.features-inner{max-width:1000px;margin:0 auto}
-.features-title{font-family:'Playfair Display',serif;font-size:40px;font-weight:700;color:#111;text-align:center;margin-bottom:48px;letter-spacing:-1px}
-.features-grid{display:grid;grid-template-columns:repeat(4,1fr);border:2.5px solid #111;border-radius:14px;overflow:hidden}
-.feature-item{background:#fff;padding:28px 22px;border-right:2px solid #111;border-bottom:2px solid #111}
+.roi-section{border-top:2.5px solid #111}
+.roi-inner{display:grid;grid-template-columns:1fr 1fr}
+.roi-left{background:#111;padding:44px 36px;display:flex;flex-direction:column;justify-content:center}
+.roi-h{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:14px}
+.roi-h em{color:#E8610A;font-style:italic}
+.roi-p{font-size:15px;color:#bbb;line-height:1.85;font-weight:300}
+.roi-right{background:#fff;padding:44px 36px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-left:2.5px solid #111}
+.roi-big{font-family:'Playfair Display',serif;font-size:96px;font-weight:700;color:#111;line-height:1;letter-spacing:-3px}
+.roi-big span{color:#E8610A}
+.roi-big-sub{font-size:14px;color:#555;text-align:center;line-height:1.65;max-width:220px;margin-top:8px;font-weight:300}
+.roi-math{display:grid;grid-template-columns:repeat(3,1fr);border:2.5px solid #111;border-radius:9px;overflow:hidden;width:100%;margin-top:22px}
+.roi-math-item{padding:13px 9px;text-align:center;border-right:2.5px solid #111}
+.roi-math-item:last-child{border-right:none}
+.roi-math-num{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#E8610A}
+.roi-math-lbl{font-size:11px;color:#666;margin-top:4px;line-height:1.4;font-weight:300}
+.obj-section{background:#0d0d0d;padding:44px 40px}
+.obj-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#fff;text-align:center;margin-bottom:22px}
+.obj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:1000px;margin:0 auto}
+.obj-card{background:#141414;border:1px solid #2a2a2a;border-radius:9px;padding:22px 20px}
+.obj-card-bar{width:22px;height:2px;background:#E8610A;margin-bottom:14px}
+.obj-card-q{font-size:14px;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.45}
+.obj-card-a{font-size:13px;color:#aaa;line-height:1.7;font-weight:300}
+.features-section{background:#fff;padding:44px 40px;border-bottom:2.5px solid #111}
+.features-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#111;text-align:center;margin-bottom:20px}
+.features-grid{display:grid;grid-template-columns:repeat(4,1fr);border:2.5px solid #111;border-radius:12px;overflow:hidden;max-width:1000px;margin:0 auto}
+.feature-item{padding:20px 18px;border-right:1px solid #111;border-bottom:1px solid #111}
 .feature-item:nth-child(4n){border-right:none}
-.feature-item:nth-child(5),.feature-item:nth-child(6),.feature-item:nth-child(7),.feature-item:nth-child(8){border-bottom:none}
-.feature-icon{font-size:22px;color:#E8610A;margin-bottom:10px}
-.feature-name{font-size:14px;font-weight:700;color:#111;margin-bottom:5px}
-.feature-desc{font-size:12px;color:#777;line-height:1.65}
-.stats-section{padding:80px 60px;max-width:1000px;margin:0 auto}
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);border:2.5px solid #111;border-radius:14px;overflow:hidden}
-.stat{background:#fff;padding:44px 36px}
-.stat:not(:last-child){border-right:2.5px solid #111}
-.stat-num{font-family:'Playfair Display',serif;font-size:62px;font-weight:700;color:#111;line-height:1}
-.stat-num span{color:#E8610A}
-.stat-label{font-size:14px;color:#666;margin-top:10px;line-height:1.5}
-.pillars-section{padding:0 60px 80px;max-width:1000px;margin:0 auto}
-.pillars{display:grid;grid-template-columns:repeat(2,1fr);border:2.5px solid #111;border-radius:14px;overflow:hidden}
-.pillar{background:#fff;padding:46px 42px;position:relative;overflow:hidden}
-.pillar:nth-child(1){border-right:2.5px solid #111;border-bottom:2.5px solid #111}
-.pillar:nth-child(2){border-bottom:2.5px solid #111}
-.pillar:nth-child(3){border-right:2.5px solid #111}
-.pillar-num{font-family:'Playfair Display',serif;font-size:100px;font-weight:700;color:#f0f0f0;line-height:1;position:absolute;top:8px;right:16px;user-select:none}
-.pillar-accent{width:34px;height:3px;background:#E8610A;margin-bottom:18px}
-.pillar-icon{font-size:28px;color:#E8610A;margin-bottom:14px;display:block}
-.pillar h3{font-size:21px;font-weight:700;color:#111;margin-bottom:12px}
-.pillar p{font-size:14px;color:#555;line-height:1.8}
-.pillar-tag{display:inline-block;margin-top:16px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#E8610A;border:1px solid rgba(232,97,10,.3);padding:4px 12px;border-radius:20px}
-.how{background:#f7f7f7;border-top:2.5px solid #111;border-bottom:2.5px solid #111}
-.how-inner{max-width:1000px;margin:0 auto;padding:80px 60px}
-.how-head{text-align:center;margin-bottom:60px}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);border:2.5px solid #111;border-radius:14px;overflow:hidden}
-.step{background:#fff;padding:46px 34px;text-align:center}
-.step:not(:last-child){border-right:2.5px solid #111}
-.step-dot{width:54px;height:54px;border-radius:50%;background:#111;display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
-.step-dot-active{background:#E8610A}
-.step-n{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#fff}
-.step h4{font-size:17px;font-weight:700;color:#111;margin-bottom:10px}
-.step p{font-size:14px;color:#666;line-height:1.8}
-.ai-band{background:#111;padding:80px 60px;text-align:center}
-.ai-band-label{font-size:12px;letter-spacing:.15em;color:#E8610A;text-transform:uppercase;font-weight:600;margin-bottom:18px;display:block}
-.ai-band h2{font-family:'Playfair Display',serif;font-size:44px;font-weight:700;color:#fff;letter-spacing:-1px;margin-bottom:14px;line-height:1.1}
-.ai-band h2 em{font-style:italic;color:#E8610A}
-.ai-band p{font-size:16px;color:#bbb;max-width:520px;margin:0 auto 38px;line-height:1.8;font-weight:300}
-.ai-logos{display:flex;align-items:stretch;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
-.ai-chip{background:rgba(255,255,255,.06);border:1.5px solid #333;border-radius:12px;padding:16px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;width:110px;min-height:90px}
-.ai-chip svg{width:32px;height:32px;flex-shrink:0}
-.ai-chip-name{font-size:13px;color:#fff;font-weight:500;text-align:center}
-.ai-diff{font-size:14px;color:#555;font-style:italic}
-.testi-section{padding:80px 60px;max-width:1000px;margin:0 auto}
-.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);border:2.5px solid #111;border-radius:14px;overflow:hidden}
-.testi{background:#fff;padding:38px 32px}
-.testi:not(:last-child){border-right:2.5px solid #111}
-.testi-stars{color:#E8610A;font-size:16px;margin-bottom:16px;letter-spacing:3px}
-.testi-text{font-size:15px;color:#333;line-height:1.85;margin-bottom:22px;font-style:italic}
-.testi-author strong{color:#111;display:block;font-size:14px;font-weight:700;font-style:normal;margin-bottom:2px}
-.testi-author span{font-size:13px;color:#888}
-.cta-band{padding:100px 60px;text-align:center;border-top:2.5px solid #111}
-.cta-band h2{font-family:'Playfair Display',serif;font-size:58px;font-weight:700;letter-spacing:-2px;margin-bottom:16px;color:#111;line-height:1.05}
-.cta-band h2 em{font-style:italic;color:#E8610A}
-.cta-band p{font-size:18px;color:#555;margin-bottom:38px;line-height:1.7}
-.cta-note{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:20px;flex-wrap:wrap}
-.cta-note-item{font-size:14px;color:#555;font-weight:600;display:flex;align-items:center;gap:6px}
-.cta-note-item::before{content:'✓';color:#E8610A;font-weight:700}
-@media(max-width:900px){
-.nav-links,.nav-btns{display:none}
-.hamburger{display:flex}
-nav{padding:16px 24px}
-.hero{padding:60px 24px}
-.hero h1{font-size:48px;letter-spacing:-1.5px}
-.hero-sub{font-size:16px}
-.hero-btns{flex-direction:column;align-items:center}
-.btn-primary,.btn-ghost{padding:14px 24px;font-size:15px}
-.pricing-section{padding:60px 20px}
-.pricing-grid{grid-template-columns:1fr}
-.plan{border-right:none!important;border-bottom:2px solid #111}
-.plan:last-child{border-bottom:none}
-.features-section{padding:60px 20px}
-.features-grid{grid-template-columns:repeat(2,1fr)}
-.feature-item:nth-child(2n){border-right:none}
-.stats-section{padding:60px 20px}
-.stats-row{grid-template-columns:1fr}
-.stat{border-right:none!important;border-bottom:2.5px solid #111}
-.stat:last-child{border-bottom:none}
-.pillars-section{padding:0 20px 60px}
-.section-h{font-size:36px}
-.pillars{grid-template-columns:1fr}
-.pillar:nth-child(1),.pillar:nth-child(2),.pillar:nth-child(3){border-right:none;border-bottom:2.5px solid #111}
-.pillar:last-child{border-bottom:none}
-.how-inner{padding:60px 20px}
-.steps{grid-template-columns:1fr}
-.step{border-right:none!important;border-bottom:2.5px solid #111}
-.step:last-child{border-bottom:none}
-.ai-band{padding:60px 24px}
-.ai-band h2{font-size:32px}
-.ai-logos{display:grid;grid-template-columns:repeat(3,1fr);max-width:400px;margin-left:auto;margin-right:auto}
-.ai-chip{width:auto;padding:14px 10px}
-.testi-section{padding:60px 20px}
-.testi-grid{grid-template-columns:1fr}
-.testi{border-right:none!important;border-bottom:2.5px solid #111}
-.testi:last-child{border-bottom:none}
-.cta-band{padding:70px 24px}
-.cta-band h2{font-size:38px}
-}
-@media(max-width:480px){
-.hero h1{font-size:38px}
-.section-h{font-size:32px}
-.features-grid{grid-template-columns:1fr}
-.feature-item{border-right:none!important;border-bottom:2px solid #111!important}
-.feature-item:last-child{border-bottom:none!important}
-.ai-logos{grid-template-columns:repeat(3,1fr)}
-.cta-band h2{font-size:32px}
-}
+.feature-item:nth-child(n+5){border-bottom:none}
+.feature-icon{font-size:22px;margin-bottom:9px}
+.feature-name{font-size:13px;font-weight:700;color:#111;margin-bottom:6px}
+.feature-desc{font-size:12px;color:#555;line-height:1.6;font-weight:300}
+.how-section{background:#f7f7f7;border-top:2.5px solid #111;border-bottom:2.5px solid #111;padding:44px 40px}
+.how-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#111;text-align:center;margin-bottom:20px}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);border:2.5px solid #111;border-radius:12px;overflow:hidden;max-width:900px;margin:0 auto}
+.how-step{background:#fff;padding:24px 20px;text-align:center}
+.how-step:not(:last-child){border-right:2.5px solid #111}
+.how-step-dot{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#fff}
+.how-step-h{font-size:15px;font-weight:700;color:#111;margin-bottom:8px}
+.how-step-p{font-size:13px;color:#444;line-height:1.7;font-weight:300}
+.ai-section{background:#111;padding:44px 40px;text-align:center}
+.ai-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#fff;line-height:1.15;margin-bottom:12px}
+.ai-h em{color:#E8610A;font-style:italic}
+.ai-p{font-size:15px;color:#bbb;max-width:480px;margin:0 auto 24px;line-height:1.85;font-weight:300}
+.ai-chips{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.ai-chip{background:rgba(255,255,255,.06);border:1px solid #333;border-radius:8px;padding:10px 18px;font-size:13px;color:#ccc;font-weight:500}
+.ai-diff{font-size:13px;color:#aaa;font-style:italic}
+.testi-section{background:#f7f7f7;border-top:2.5px solid #111;padding:44px 40px}
+.testi-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#111;text-align:center;margin-bottom:22px}
+.testi-h em{color:#E8610A;font-style:italic}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:1000px;margin:0 auto}
+.testi-card{background:#fff;border:2px solid #111;border-radius:14px;padding:24px 22px;position:relative;overflow:hidden}
+.testi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:#E8610A}
+.testi-quote-mark{font-family:'Playfair Display',serif;font-size:64px;color:#e8e8e8;line-height:.8;display:block;margin-bottom:4px}
+.testi-stars{color:#E8610A;font-size:15px;margin-bottom:10px;letter-spacing:3px}
+.testi-text{font-size:14px;color:#222;line-height:1.9;font-style:italic;margin-bottom:16px;font-weight:300}
+.testi-divider{height:1px;background:#e8e8e8;margin-bottom:13px}
+.testi-author{display:flex;align-items:center;gap:10px}
+.testi-avatar{width:38px;height:38px;border-radius:50%;background:#111;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
+.testi-name{font-size:13px;font-weight:700;color:#111}
+.testi-role{font-size:12px;color:#666;margin-top:2px}
+.faq-section{background:#fff;border-top:2.5px solid #111;border-bottom:2.5px solid #111;padding:44px 40px}
+.faq-head{text-align:center;margin-bottom:26px}
+.faq-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#111}
+.faq-h em{color:#E8610A;font-style:italic}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:1000px;margin:0 auto}
+.faq-item{border:1.5px solid #111;border-radius:10px;overflow:hidden;cursor:pointer}
+.faq-q{background:#111;padding:16px 20px;font-size:14px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer}
+.faq-q-arrow{color:#E8610A;font-size:18px;flex-shrink:0}
+.faq-a{background:#fff;padding:16px 20px;font-size:13px;color:#444;line-height:1.8;font-weight:300;display:none}
+.mission-section{background:#111;border-top:2.5px solid #111;padding:44px 40px}
+.mission-inner{max-width:680px;margin:0 auto;text-align:center}
+.mission-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#fff;line-height:1.1;margin-bottom:24px}
+.mission-h em{color:#E8610A;font-style:italic}
+.mission-quote-wrap{position:relative;padding:26px 30px;background:#141414;border:1px solid #2a2a2a;border-radius:13px;text-align:left}
+.mission-quote-bar{position:absolute;left:0;top:0;bottom:0;width:3px;background:#E8610A}
+.mission-quote-mark{font-family:'Playfair Display',serif;font-size:52px;color:#1e1e1e;line-height:1;display:block;margin-bottom:-5px}
+.mission-quote-text{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:#ccc;line-height:1.95;font-weight:400}
+.mission-stats-row{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #2a2a2a;border-radius:9px;overflow:hidden;margin-top:22px}
+.mission-stat{padding:18px 12px;text-align:center;border-right:1px solid #2a2a2a}
+.mission-stat:last-child{border-right:none}
+.mission-stat-num{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#E8610A;line-height:1}
+.mission-stat-lbl{font-size:12px;color:#aaa;margin-top:4px;line-height:1.45;font-weight:300}
+.cta-section{background:#fff;border-top:2.5px solid #111;padding:56px 40px;text-align:center;position:relative;overflow:hidden}
+.cta-gradient-line{position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#111,#E8610A,#111)}
+.cta-live-pill{display:inline-flex;align-items:center;gap:8px;background:#fff9f5;border:1px solid rgba(232,97,10,.25);border-radius:30px;padding:7px 18px;margin-bottom:22px;font-size:13px;color:#E8610A;font-weight:600}
+.cta-live-dot{width:7px;height:7px;border-radius:50%;background:#E8610A;animation:blink 1.5s ease-in-out infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.cta-h{font-family:'Playfair Display',serif;font-size:46px;font-weight:700;color:#111;letter-spacing:-1px;line-height:1.08;margin-bottom:14px}
+.cta-h em{color:#E8610A;font-style:italic}
+.cta-p{font-size:15px;color:#555;margin:0 auto 28px;line-height:1.85;max-width:440px;font-weight:300}
+.cta-btn-row{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap}
+.guarantee-seal{display:flex;flex-direction:column;align-items:center;justify-content:center;width:90px;height:90px;border-radius:50%;border:2.5px solid #111;text-align:center;flex-shrink:0}
+.gs-top{font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#E8610A}
+.gs-num{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#111;line-height:1}
+.gs-bot{font-size:8px;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:.05em}
+.cta-exit{font-size:13px;color:#999;font-style:italic;margin-top:20px}
+.cta-exit span{color:#111;font-weight:700;font-style:normal}
+.social-bar{background:#0d0d0d;padding:18px 40px;text-align:center;border-top:1px solid #1a1a1a}
+.social-bar-lbl{font-size:11px;color:#555;letter-spacing:.16em;text-transform:uppercase;margin-bottom:11px}
+.social-icons-row{display:flex;gap:12px;justify-content:center}
+.social-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;text-decoration:none;transition:opacity .2s}
+.social-icon:hover{opacity:.8}
+@media(max-width:900px){.nav-links,.nav-btns{display:none}.hamburger{display:flex}nav{padding:14px 24px}.hero{padding:32px 24px 0}.hero-inner{grid-template-columns:1fr}.hero-h1{font-size:36px}.hero-right{display:none}.industry-grid{grid-template-columns:repeat(3,1fr)}.ba-grid{grid-template-columns:1fr}.comp-table th:nth-child(3),.comp-table th:nth-child(4),.comp-table td:nth-child(3),.comp-table td:nth-child(4){display:none}.timeline-grid{grid-template-columns:1fr 1fr;gap:20px}.timeline-grid::before{display:none}.dash-inner{grid-template-columns:1fr}.dash-sidebar{display:none}.pricing-grid{grid-template-columns:1fr}.plan{border-right:none!important;border-bottom:2px solid #111}.plan:last-child{border-bottom:none}.roi-inner{grid-template-columns:1fr}.roi-left{border-right:none;border-bottom:2.5px solid #111}.obj-grid{grid-template-columns:1fr}.features-grid{grid-template-columns:repeat(2,1fr)}.feature-item:nth-child(2n){border-right:none}.how-grid{grid-template-columns:1fr}.how-step{border-right:none!important;border-bottom:2.5px solid #111}.how-step:last-child{border-bottom:none}.testi-grid{grid-template-columns:1fr}.testi-card{border-right:none!important;border-bottom:2px solid #111}.testi-card:last-child{border-bottom:none}.faq-grid{grid-template-columns:1fr}.mission-stats-row{grid-template-columns:1fr}.mission-stat{border-right:none;border-bottom:1px solid #2a2a2a}.mission-stat:last-child{border-bottom:none}.cta-h{font-size:32px}.limited-offer{flex-direction:column;align-items:flex-start}.pricing-trust{flex-direction:column}.pt-item{border-right:none!important;border-bottom:1px solid #111}.pt-item:last-child{border-bottom:none}.stat-bar-inner{flex-direction:column;gap:8px}.social-icons-row{gap:10px}}
+@media(max-width:480px){.hero-h1{font-size:30px}.industry-grid{grid-template-columns:repeat(2,1fr)}.hero-btns{flex-direction:column;align-items:flex-start}.btn-cta,.btn-ghost{width:100%;justify-content:center}.cta-btn-row{flex-direction:column}.guarantee-seal{display:none}}
       `}</style>
-      <div id="tk" dangerouslySetInnerHTML={{ __html: `<div class="mobile-menu" id="mobileMenu"><button class="mobile-close" onclick="closeMobileMenu()">&#x2715;</button><a href="#features" onclick="closeMobileMenu()">Features</a><a href="#how" onclick="closeMobileMenu()">How It Works</a><a href="#pricing" onclick="closeMobileMenu()">Pricing</a><a href="/about" onclick="closeMobileMenu()">About</a><a href="/contact" onclick="closeMobileMenu()">Contact Us</a><div class="mobile-menu-btns"><button class="nav-login" style="width:100%;padding:14px;font-size:15px" onclick="window.location.href='/login'">Login</button><button class="nav-cta" style="width:100%;padding:14px;font-size:15px" onclick="window.location.href='/signup'">Start Free Trial</button></div></div><nav><a class="nav-logo" href="#">Traffik<span>ora</span></a><div class="nav-links"><a href="#features">Features</a><a href="#how">How It Works</a><a href="#pricing">Pricing</a><a href="/about">About</a><a href="/contact">Contact Us</a></div><div class="nav-btns"><button class="nav-login" onclick="window.location.href='/login'">Login</button><button class="nav-cta" onclick="window.location.href='/signup'">Start Free Trial</button></div><button class="hamburger" onclick="openMobileMenu()"><span></span><span></span><span></span></button></nav><div class="hero"><div class="hero-eyebrow">The future of local marketing is here</div><h1>Set it once.<br><em>It markets forever.</em></h1><p class="hero-sub">Traffikora connects to your accounts once, then runs your entire marketing machine &mdash; <strong>Google, TikTok, YouTube, AI engines, and more</strong> &mdash; automatically, every single day.</p><div class="hero-btns"><button class="btn-primary" onclick="window.location.href='/signup'">Start Your Free 7-Day Trial &rarr;</button><button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See How It Works</button></div><div class="hero-divider"></div><div class="hero-proof"><div class="avatar-stack"><div class="avatar">JM</div><div class="avatar">SR</div><div class="avatar">TK</div><div class="avatar">AL</div></div><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><div class="hero-proof-text">Trusted by 500+ small businesses</div></div></div><div class="ticker-wrap"><div class="ticker-track"><div class="ticker-inner"><span class="ti">Google SEO</span><span class="ti">TikTok Publishing</span><span class="ti">YouTube Shorts</span><span class="ti">ChatGPT Visibility</span><span class="ti">Claude Optimization</span><span class="ti">Blog Automation</span><span class="ti">Reddit Amplifier</span><span class="ti">Schema Markup</span><span class="ti">Google SEO</span><span class="ti">TikTok Publishing</span><span class="ti">YouTube Shorts</span><span class="ti">ChatGPT Visibility</span><span class="ti">Claude Optimization</span><span class="ti">Blog Automation</span><span class="ti">Reddit Amplifier</span><span class="ti">Schema Markup</span></div></div></div><div class="pricing-section" id="pricing"><div class="pricing-inner"><div class="pricing-head"><span class="section-label">Pricing</span><h2 class="section-h">Simple.<br><em>No surprises.</em></h2><p class="section-sub">Credit card required &mdash; No charge for 7 days &mdash; Cancel anytime.</p></div><div class="pricing-grid"><div class="plan"><div class="plan-name plan-name-dark">Starter</div><div class="plan-price"><sup>$</sup>97<sub>/mo</sub></div><div class="plan-desc">Perfect for solo business owners ready to automate their marketing.</div><ul class="plan-features"><li>Blog + social automation</li><li>Google SEO tools</li><li>1 website connected</li><li>AI content generation</li><li>7-day free trial</li></ul><button class="plan-btn" onclick="window.location.href='/signup?plan=starter'">Start Free Trial</button></div><div class="plan plan-featured"><div class="plan-badge">Most Popular</div><div class="plan-name">Pro</div><div class="plan-price plan-price-light"><sup style="color:#aaa">$</sup>197<sub>/mo</sub></div><div class="plan-desc plan-desc-light">Full automation for serious business owners who want it all.</div><ul class="plan-features plan-features-light"><li>Everything in Starter</li><li>TikTok + YouTube push</li><li>AI engine optimization</li><li>Reddit amplifier</li><li>Priority support</li></ul><button class="plan-btn plan-btn-featured" onclick="window.location.href='/signup?plan=pro'">Start Free Trial</button></div><div class="plan"><div class="plan-name plan-name-dark">Agency</div><div class="plan-price"><sup>$</sup>797<sub>/mo</sub></div><div class="plan-desc">Manage multiple clients from one powerful dashboard.</div><ul class="plan-features"><li>Everything in Pro</li><li>Up to 10 client accounts</li><li>White-label reports</li><li>Client management tools</li><li>Dedicated support</li></ul><button class="plan-btn" onclick="window.location.href='/signup?plan=agency'">Start Free Trial</button></div><div class="plan"><div class="plan-name plan-name-dark">Enterprise</div><div class="plan-price"><sup>$</sup>1,497<sub>/mo</sub></div><div class="plan-desc">For large agencies scaling across many clients at once.</div><ul class="plan-features"><li>Everything in Agency</li><li>Unlimited client accounts</li><li>Custom integrations</li><li>SLA guarantee</li><li>Dedicated account manager</li></ul><button class="plan-btn" onclick="window.location.href='/signup?plan=enterprise'">Start Free Trial</button></div></div></div></div><div class="features-section" id="features"><div class="features-inner"><span class="section-label" style="text-align:center">Everything included</span><h2 class="features-title">One platform. Every channel.</h2><div class="features-grid"><div class="feature-item"><div class="feature-icon">&#128269;</div><div class="feature-name">Google SEO</div><div class="feature-desc">Rank higher with automated SEO content and schema markup</div></div><div class="feature-item"><div class="feature-icon">&#9999;</div><div class="feature-name">Blog Automation</div><div class="feature-desc">Publish SEO blog posts to WordPress automatically</div></div><div class="feature-item"><div class="feature-icon">&#127909;</div><div class="feature-name">TikTok Publishing</div><div class="feature-desc">Push videos directly to TikTok with one click</div></div><div class="feature-item"><div class="feature-icon">&#9654;</div><div class="feature-name">YouTube Shorts</div><div class="feature-desc">Auto-upload your videos to YouTube Shorts</div></div><div class="feature-item"><div class="feature-icon">&#129302;</div><div class="feature-name">AI Engine Optimization</div><div class="feature-desc">Get found on ChatGPT, Claude, Gemini and more</div></div><div class="feature-item"><div class="feature-icon">&#128172;</div><div class="feature-name">Reddit Amplifier</div><div class="feature-desc">Build authority through strategic Reddit presence</div></div><div class="feature-item"><div class="feature-icon">&#128203;</div><div class="feature-name">Schema Markup</div><div class="feature-desc">Structured data injected automatically into your site</div></div><div class="feature-item"><div class="feature-icon">&#128202;</div><div class="feature-name">Search Console</div><div class="feature-desc">Direct Google Search Console integration and reporting</div></div></div></div></div><div class="stats-section"><div class="stats-row"><div class="stat"><div class="stat-num">9<span>+</span></div><div class="stat-label">Platforms automated simultaneously</div></div><div class="stat"><div class="stat-num">24<span>/7</span></div><div class="stat-label">Marketing running while you sleep</div></div><div class="stat"><div class="stat-num">6<span>x</span></div><div class="stat-label">More online visibility on average</div></div></div></div><div class="pillars-section"><span class="section-label">What we do</span><h2 class="section-h">Every platform.<br><em>One machine.</em></h2><p style="font-size:16px;color:#555;line-height:1.75;max-width:520px;margin-bottom:48px;font-weight:400">Stop juggling 12 different tools. Traffikora is the only platform that handles Google AND every major AI engine at once.</p><div class="pillars"><div class="pillar"><div class="pillar-num">01</div><div class="pillar-accent"></div><span class="pillar-icon">&#128221;</span><h3>One-button publishing</h3><p>Blog posts, social content, emails, ads, FAQs, and schema &mdash; generated and published to your WordPress site and every social channel automatically.</p><span class="pillar-tag">Content and Publishing</span></div><div class="pillar"><div class="pillar-num">02</div><div class="pillar-accent"></div><span class="pillar-icon">&#128241;</span><h3>Social distribution</h3><p>LinkedIn, Facebook, Instagram, TikTok, YouTube, Twitter, Reddit, Google Business Profile &mdash; your content reaches everywhere, hands-free.</p><span class="pillar-tag">9+ Platforms</span></div><div class="pillar"><div class="pillar-num">03</div><div class="pillar-accent"></div><span class="pillar-icon">&#128200;</span><h3>Google domination</h3><p>SEO-optimized posts, schema markup, sitemap submission, and Google Search Console integration &mdash; all running automatically in the background.</p><span class="pillar-tag">SEO and Rankings</span></div><div class="pillar"><div class="pillar-num">04</div><div class="pillar-accent"></div><span class="pillar-icon">&#129504;</span><h3>AI engine optimization</h3><p>No competitor does this. Traffikora gets your business found on Claude, ChatGPT, Gemini, Copilot, and Perplexity &mdash; the future of search.</p><span class="pillar-tag">The Future of Search</span></div></div></div><div class="how" id="how"><div class="how-inner"><div class="how-head"><span class="section-label" style="display:inline-block">How it works</span><h2 class="section-h" style="font-size:48px;margin-top:14px;text-align:center">Up and running<br><em>in minutes</em></h2></div><div class="steps"><div class="step"><div class="step-dot step-dot-active"><span class="step-n">1</span></div><h4>Connect your accounts</h4><p>Link your website, social profiles, and Google in one click. Takes less than 5 minutes total.</p></div><div class="step"><div class="step-dot"><span class="step-n">2</span></div><h4>Tell us about your business</h4><p>Answer a few simple questions. Our AI learns everything about what you do and who you serve.</p></div><div class="step"><div class="step-dot"><span class="step-n">3</span></div><h4>Watch it work</h4><p>Traffikora starts generating and publishing content immediately &mdash; and never stops.</p></div></div></div></div><div class="ai-band"><span class="ai-band-label">Our #1 differentiator</span><h2>The only platform that<br><em>optimizes for AI search</em></h2><p>When someone asks ChatGPT or Claude to recommend a business like yours, Traffikora makes sure your name comes up. No other platform does this.</p><div class="ai-logos"><div class="ai-chip"><svg viewBox="0 0 41 41" fill="none"><circle cx="20.5" cy="20.5" r="17.5" fill="#D97757"/><path d="M25.2 13.5l-7.5 14h3l1.8-3.5h5.5l.5 3.5h2.8l-2.8-14h-3.3zm1.5 8.5h-3.8l2.5-5 1.3 5zM13.5 13.5h-3L7 27.5h3l1-4h3.5c2.5 0 4.3-1.5 4.8-4 .5-2.8-1-6-5.8-6zm.5 5.5h-3l.8-3.5h2.7c1.5 0 2.2.8 2 2-.3 1.2-1.2 1.5-2.5 1.5z" fill="white"/></svg><span class="ai-chip-name">Claude</span></div><div class="ai-chip"><svg viewBox="0 0 41 41" fill="none"><circle cx="20.5" cy="20.5" r="17.5" fill="#10A37F"/><path d="M20.5 13a7.5 7.5 0 100 15 7.5 7.5 0 000-15zm0 3a4.5 4.5 0 110 9 4.5 4.5 0 010-9z" fill="white"/></svg><span class="ai-chip-name">ChatGPT</span></div><div class="ai-chip"><svg viewBox="0 0 41 41" fill="none"><circle cx="20.5" cy="20.5" r="17.5" fill="#4285F4"/><path d="M20.5 10c0 5.8-4.7 10.5-10.5 10.5 5.8 0 10.5 4.7 10.5 10.5 0-5.8 4.7-10.5 10.5-10.5C25.2 20.5 20.5 15.8 20.5 10z" fill="white"/></svg><span class="ai-chip-name">Gemini</span></div><div class="ai-chip"><svg viewBox="0 0 41 41" fill="none"><circle cx="20.5" cy="20.5" r="17.5" fill="#0078D4"/><circle cx="20.5" cy="20.5" r="7" fill="none" stroke="white" stroke-width="2.5"/><circle cx="20.5" cy="20.5" r="2.5" fill="white"/></svg><span class="ai-chip-name">Copilot</span></div><div class="ai-chip"><svg viewBox="0 0 41 41" fill="none"><circle cx="20.5" cy="20.5" r="17.5" fill="#20808D"/><path d="M20.5 11v19M14 14.5l6.5 6 6.5-6M14 26.5l6.5-6 6.5 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="ai-chip-name">Perplexity</span></div><div class="ai-chip"><svg viewBox="0 0 41 41" fill="none"><circle cx="20.5" cy="20.5" r="17.5" fill="white"/><path d="M30.5 20.7c0-.7-.1-1.3-.2-1.9H20.5v3.6h5.6a4.8 4.8 0 01-2.1 3.2v2.6h3.4c2-1.8 3.1-4.5 3.1-7.5z" fill="#4285F4"/><path d="M20.5 31c2.8 0 5.1-.9 6.9-2.5l-3.4-2.6c-.9.6-2.1 1-3.5 1-2.7 0-5-1.8-5.8-4.3h-3.5v2.7A10.5 10.5 0 0020.5 31z" fill="#34A853"/><path d="M14.7 22.6a6.3 6.3 0 010-4l-3.5-2.7a10.5 10.5 0 000 9.4l3.5-2.7z" fill="#FBBC05"/><path d="M20.5 12.3c1.5 0 2.9.5 3.9 1.5l2.9-2.9A10.5 10.5 0 0011.2 15.9l3.5 2.7c.8-2.5 3.1-4.3 5.8-4.3z" fill="#EA4335"/></svg><span class="ai-chip-name">Google</span></div></div><div class="ai-diff">Every other platform optimizes for Google only. We optimize for all of them.</div></div><div class="testi-section"><div style="text-align:center;margin-bottom:52px"><span class="section-label" style="display:inline-block">What clients say</span><h2 class="section-h" style="font-size:48px;margin-top:14px">Real businesses.<br><em>Real results.</em></h2></div><div class="testi-grid"><div class="testi"><div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="testi-text">"I used to spend 3 hours a day on marketing. Now I spend zero. Traffikora handles everything and my leads have tripled."</p><div class="testi-author"><strong>Maria S.</strong><span>Miami, FL &mdash; Salon Owner</span></div></div><div class="testi"><div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="testi-text">"My Google ranking went from page 4 to page 1 in 6 weeks. I could not believe it. This platform is the real deal."</p><div class="testi-author"><strong>James T.</strong><span>Austin, TX &mdash; HVAC Business</span></div></div><div class="testi"><div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="testi-text">"A client told me they found me by asking ChatGPT. I did not even know that was possible. Traffikora made it happen."</p><div class="testi-author"><strong>Rachel K.</strong><span>Chicago, IL &mdash; Law Firm</span></div></div></div></div><div class="cta-band"><h2>Your competition<br>is already <em>growing.</em></h2><p>Every day you wait is a day they pull further ahead. Start your free trial today.</p><button class="btn-primary" style="font-size:17px;padding:19px 44px" onclick="window.location.href='/signup'">Start Your Free 7-Day Trial &rarr;</button><div class="cta-note"><span class="cta-note-item">Credit card required</span><span class="cta-note-item">No charge for 7 days</span><span class="cta-note-item">Cancel anytime</span></div></div>` }} />
+      <div dangerouslySetInnerHTML={{ __html: `
+        <div class="mobile-menu" id="mobileMenu">
+          <button class="mobile-close" onclick="closeMobileMenu()">&#x2715;</button>
+          <a href="#features" onclick="closeMobileMenu()">Features</a>
+          <a href="#how" onclick="closeMobileMenu()">How It Works</a>
+          <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
+          <a href="/solutions" onclick="closeMobileMenu()">Solutions</a>
+          <a href="/blog" onclick="closeMobileMenu()">Blog</a>
+          <a href="/why-traffikora" onclick="closeMobileMenu()">Why Traffikora</a>
+          <a href="/about" onclick="closeMobileMenu()">About</a>
+          <a href="/contact" onclick="closeMobileMenu()">Contact</a>
+          <div class="mobile-menu-btns">
+            <button class="nav-login" style="width:100%;padding:12px;font-size:14px" onclick="window.location.href='/login'">Login</button>
+            <button class="nav-cta" style="width:100%;padding:13px;font-size:14px" onclick="window.location.href='/signup'">Start Free 7-Day Trial</button>
+          </div>
+        </div>
+        <nav>
+          <a class="nav-logo" href="/">Traffik<span>ora</span></a>
+          <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#how">How It Works</a>
+            <a href="#pricing">Pricing</a>
+            <a href="/solutions">Solutions</a>
+            <a href="/blog" class="nav-hl">Blog</a>
+            <a href="/why-traffikora">Why Traffikora</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+          </div>
+          <div class="nav-btns">
+            <button class="nav-login" onclick="window.location.href='/login'">Login</button>
+            <button class="nav-cta" onclick="window.location.href='/signup'">Start Free 7-Day Trial</button>
+          </div>
+          <button class="hamburger" onclick="openMobileMenu()"><span></span><span></span><span></span></button>
+        </nav>
+        <div class="hero"><div class="hero-inner"><div><div class="eyebrow"><div class="eyebrow-dot-wrap"><div class="eyebrow-ring"></div><div class="eyebrow-dot"></div></div><span class="eyebrow-text">The Future of Local Marketing is Here</span></div><div class="hero-h1">Set it once.<br><em>It markets<br>forever.</em></div><p class="hero-sub">Connect your accounts once. Traffikora runs Google, TikTok, YouTube, and every AI engine &mdash; automatically, every single day. No agency. No manual work.</p><div class="hero-btns"><button class="btn-cta" onclick="window.location.href='/signup'">Start Your Free 7-Day Trial<div class="btn-cta-circle">&rarr;</div></button><button class="btn-ghost" onclick="window.location.href='/demo'">&#9654; Watch 2-Min Demo</button></div><div class="guarantee-wrap"><div class="guarantee-badge"><div class="guarantee-icon">&#128737;</div><div class="guarantee-text"><strong>Zero Risk Guarantee</strong>No charge for 7 days &middot; Cancel in one click</div></div><div class="guarantee-badge"><div class="guarantee-icon">&#9889;</div><div class="guarantee-text"><strong>Live in 5 Minutes</strong>No tech skills required</div></div></div><div class="hero-proof"><span class="proof-txt">500+ businesses</span><div class="proof-pip"></div><span class="proof-txt">No agency needed</span><div class="proof-pip"></div><span class="proof-txt">Starts at $97/mo</span><div class="proof-pip"></div><span class="proof-txt">7-day free trial</span></div></div><div class="hero-right"><div class="hero-stats"><div class="hstat"><div class="hstat-num">9+</div><div class="hstat-lbl">Platforms automated simultaneously</div></div><div class="hstat"><div class="hstat-num">24/7</div><div class="hstat-lbl">Marketing running while you sleep</div></div><div class="hstat"><div class="hstat-num">6x</div><div class="hstat-lbl">More online visibility on average</div></div></div><div class="hplat"><div class="hplat-lbl">Platforms covered</div><div class="hchips"><span class="hchip">Google</span><span class="hchip">TikTok</span><span class="hchip">YouTube</span><span class="hchip">ChatGPT</span><span class="hchip">Claude</span><span class="hchip">Gemini</span><span class="hchip">Instagram</span><span class="hchip">Facebook</span><span class="hchip">Reddit</span></div></div><a class="demo-btn" href="/demo"><div class="demo-play">&#9654;</div><div class="demo-lbl"><span>Watch how it works</span> &mdash; 2 min demo</div></a></div></div></div>
+        <div class="powered"><span class="powered-lbl">Powered by</span><div class="powered-logos"><span class="powered-logo">Google</span><span class="powered-logo">Stripe</span><span class="powered-logo">Twilio</span><span class="powered-logo">Supabase</span><span class="powered-logo">Anthropic</span></div></div>
+        <div class="industry-section"><div class="industry-head"><span class="section-label">Trusted across industries</span><div class="industry-title">Works for <em style="color:#E8610A;font-style:italic">your</em> business &mdash; whatever it is.</div></div><div class="industry-grid"><div class="industry-card"><div class="industry-card-icon">&#128135;</div><div class="industry-card-name">Salons &amp; Spas</div></div><div class="industry-card"><div class="industry-card-icon">&#128295;</div><div class="industry-card-name">HVAC Companies</div></div><div class="industry-card"><div class="industry-card-icon">&#9878;</div><div class="industry-card-name">Law Firms</div></div><div class="industry-card"><div class="industry-card-icon">&#129463;</div><div class="industry-card-name">Dental Offices</div></div><div class="industry-card"><div class="industry-card-icon">&#127869;</div><div class="industry-card-name">Restaurants</div></div><div class="industry-card"><div class="industry-card-icon">&#127968;</div><div class="industry-card-name">Real Estate</div></div><div class="industry-card"><div class="industry-card-icon">&#128170;</div><div class="industry-card-name">Gyms &amp; Fitness</div></div><div class="industry-card"><div class="industry-card-icon">&#128663;</div><div class="industry-card-name">Auto Repair</div></div><div class="industry-card"><div class="industry-card-icon">&#127973;</div><div class="industry-card-name">Med Spas</div></div><div class="industry-card"><div class="industry-card-icon">&#128694;</div><div class="industry-card-name">Plumbers</div></div><div class="industry-card"><div class="industry-card-icon">&#128226;</div><div class="industry-card-name">Agencies</div></div><div class="industry-card"><div class="industry-card-icon">&#129658;</div><div class="industry-card-name">Chiropractors</div></div></div></div>
+        <div class="pain-section"><span class="section-label">The problem</span><div class="pain-h">You&rsquo;re posting manually.<br>Your competitor hired an <em>agency.</em></div><p class="pain-p">Every day you do it yourself, they pull further ahead. There&rsquo;s a smarter way &mdash; and it costs less than a single hour of agency time.</p></div>
+        <div class="stat-bar"><div class="stat-bar-inner"><div class="stat-bar-num">73%</div><div class="stat-bar-div"></div><div class="stat-bar-txt">of local searches now happen on AI engines &mdash; most businesses are completely invisible. Traffikora fixes that.</div></div></div>
+        <div class="ba-section"><div class="ba-head"><span class="section-label">The difference</span><div class="ba-h">Without Traffikora vs <em>With Traffikora</em></div></div><div class="ba-grid"><div class="ba-col"><div class="ba-col-head bad">&#x2717; Without Traffikora</div><div class="ba-col-body"><div class="ba-row"><span class="ba-x">&#x2717;</span>Posting manually every day &mdash; or not at all</div><div class="ba-row"><span class="ba-x">&#x2717;</span>Invisible on ChatGPT, Claude and Gemini</div><div class="ba-row"><span class="ba-x">&#x2717;</span>Paying $2,000+/mo for an agency</div><div class="ba-row"><span class="ba-x">&#x2717;</span>No time to focus on the actual business</div><div class="ba-row"><span class="ba-x">&#x2717;</span>Stuck on page 3 of Google</div></div></div><div class="ba-col"><div class="ba-col-head good">&#x2713; With Traffikora</div><div class="ba-col-body"><div class="ba-row"><span class="ba-c">&#x2713;</span>Content published automatically, every day</div><div class="ba-row"><span class="ba-c">&#x2713;</span>Found on every AI engine that matters</div><div class="ba-row"><span class="ba-c">&#x2713;</span>Full automation from $97/mo</div><div class="ba-row"><span class="ba-c">&#x2713;</span>Marketing runs while you sleep</div><div class="ba-row"><span class="ba-c">&#x2713;</span>Climbing to page 1 in weeks</div></div></div></div></div>
+        <div class="comp-section"><div class="comp-head"><span class="section-label">Why Traffikora wins</span><div class="comp-h">Traffikora vs <em>Every Alternative</em></div></div><table class="comp-table"><thead><tr><th></th><th class="th-ours">Traffikora</th><th class="th-other">Hiring an Agency</th><th class="th-other">Doing It Yourself</th></tr></thead><tbody><tr><td>Monthly cost</td><td class="ours">From $97/mo</td><td>$2,000&ndash;$10,000/mo</td><td>$0 but hours of time</td></tr><tr><td>Time required from you</td><td class="ours"><span class="tbl-check">5 min setup only</span></td><td><span class="tbl-partial">Weekly meetings</span></td><td><span class="tbl-cross">3+ hrs/day</span></td></tr><tr><td>AI engine optimization</td><td class="ours"><span class="tbl-check">&#10003; All platforms</span></td><td><span class="tbl-cross">&#10007; Rarely offered</span></td><td><span class="tbl-cross">&#10007; Almost impossible</span></td></tr><tr><td>Publishes 24/7 automatically</td><td class="ours"><span class="tbl-check">&#10003; Always on</span></td><td><span class="tbl-partial">Weekdays only</span></td><td><span class="tbl-cross">&#10007; Only when you do it</span></td></tr><tr><td>9+ platforms simultaneously</td><td class="ours"><span class="tbl-check">&#10003; All included</span></td><td><span class="tbl-partial">Usually 2&ndash;3</span></td><td><span class="tbl-cross">&#10007; One at a time</span></td></tr><tr><td>Cancel anytime</td><td class="ours"><span class="tbl-check">&#10003; One click</span></td><td><span class="tbl-cross">&#10007; Contracts required</span></td><td><span class="tbl-check">&#10003;</span></td></tr><tr><td>Free trial</td><td class="ours"><span class="tbl-check">&#10003; 7 days free</span></td><td><span class="tbl-cross">&#10007; No</span></td><td><span class="tbl-check">&#10003;</span></td></tr></tbody></table></div>
+        <div class="timeline-section"><div class="timeline-head"><span class="section-label" style="display:inline-block">Your first 30 days</span><div class="timeline-h">What happens after you <em>start today</em></div></div><div class="timeline-grid"><div class="tl-item"><div class="tl-dot-wrap"><div class="tl-dot active">1</div></div><div class="tl-day">Day 1</div><div class="tl-title">You&rsquo;re live in 5 minutes</div><div class="tl-desc">Connect your accounts. Our AI learns your business. Content starts generating immediately.</div></div><div class="tl-item"><div class="tl-dot-wrap"><div class="tl-dot dim">7</div></div><div class="tl-day">Day 7</div><div class="tl-title">First content wave published</div><div class="tl-desc">Blog posts, social content, schema markup all live. Google starts indexing. AI engines start noticing.</div></div><div class="tl-item"><div class="tl-dot-wrap"><div class="tl-dot dim">14</div></div><div class="tl-day">Day 14</div><div class="tl-title">Rankings begin moving</div><div class="tl-desc">Search Console shows impressions climbing. TikTok and YouTube content gaining real traction.</div></div><div class="tl-item"><div class="tl-dot-wrap"><div class="tl-dot dim">30</div></div><div class="tl-day">Day 30</div><div class="tl-title">You&rsquo;re findable everywhere</div><div class="tl-desc">Google rankings up. AI engines recommending you. New leads coming in. You haven&rsquo;t touched a thing.</div></div></div></div>
+        <div class="dash-section" id="features"><div class="dash-head"><span class="section-label">Inside Traffikora</span><div class="dash-h">Your marketing command center &mdash; <em>simple by design</em></div><p class="dash-sub">Everything running in one place. See what&rsquo;s published, what&rsquo;s scheduled, and what&rsquo;s working.</p></div><div class="dash-frame"><div class="dash-bar"><div class="dash-dot-r"></div><div class="dash-dot-y"></div><div class="dash-dot-g"></div><div class="dash-url">app.traffikora.com/dashboard</div></div><div class="dash-inner"><div class="dash-sidebar"><div class="dash-sidebar-logo">Traffik<span>ora</span></div><div class="dash-nav-item active"><div class="dash-nav-dot"></div>Dashboard</div><div class="dash-nav-item"><div class="dash-nav-dot"></div>Content</div><div class="dash-nav-item"><div class="dash-nav-dot"></div>Social</div><div class="dash-nav-item"><div class="dash-nav-dot"></div>SEO</div><div class="dash-nav-item"><div class="dash-nav-dot"></div>AI Engines</div><div class="dash-nav-item"><div class="dash-nav-dot"></div>Analytics</div><div class="dash-nav-item"><div class="dash-nav-dot"></div>Settings</div></div><div class="dash-main"><div class="dash-stats-row"><div class="dash-stat"><div class="dash-stat-num">247</div><div class="dash-stat-lbl">Posts published this month</div></div><div class="dash-stat"><div class="dash-stat-num">9</div><div class="dash-stat-lbl">Platforms active</div></div><div class="dash-stat"><div class="dash-stat-num">&#8593;38%</div><div class="dash-stat-lbl">Search impressions</div></div><div class="dash-stat"><div class="dash-stat-num">24/7</div><div class="dash-stat-lbl">System status: Live</div></div></div><div class="dash-activity"><div class="dash-activity-head">Live Activity Feed</div><div class="dash-activity-row"><div class="dash-activity-dot" style="background:#4285F4"></div><div class="dash-activity-txt">Blog post published to WordPress &mdash; &ldquo;Best HVAC Tips for Summer&rdquo;</div><div class="dash-activity-time">2 min ago</div><div class="dash-activity-status">Live</div></div><div class="dash-activity-row"><div class="dash-activity-dot" style="background:#E1306C"></div><div class="dash-activity-txt">Instagram reel posted &mdash; 3 platform variations generated</div><div class="dash-activity-time">14 min ago</div><div class="dash-activity-status">Live</div></div><div class="dash-activity-row"><div class="dash-activity-dot" style="background:#10A37F"></div><div class="dash-activity-txt">AI engine citation detected &mdash; ChatGPT recommended your business</div><div class="dash-activity-time">1 hr ago</div><div class="dash-activity-status">New</div></div><div class="dash-activity-row"><div class="dash-activity-dot" style="background:#FF0000"></div><div class="dash-activity-txt">YouTube Short uploaded &mdash; 847 views in first hour</div><div class="dash-activity-time">3 hr ago</div><div class="dash-activity-status">Live</div></div></div></div></div></div></div>
+        <div class="platforms-section"><div class="platforms-ring1"></div><div class="platforms-ring2"></div><span class="section-label" style="position:relative;z-index:1">Every platform. One machine.</span><div class="platforms-h">9+ platforms.<br><span>Zero extra work.</span></div><p class="platforms-sub">Your content reaches everywhere &mdash; automatically &mdash; every single day.</p><div class="platforms-chips"><div class="plat-chip"><div class="plat-chip-dot" style="background:#4285F4"></div><span class="plat-chip-name">Google</span></div><div class="plat-chip"><div class="plat-chip-dot" style="background:#fff"></div><span class="plat-chip-name">TikTok</span></div><div class="plat-chip"><div class="plat-chip-dot" style="background:#FF0000"></div><span class="plat-chip-name">YouTube</span></div><div class="plat-chip"><div class="plat-chip-dot" style="background:#10A37F"></div><span class="plat-chip-name">ChatGPT</span></div><div class="plat-chip"><div class="plat-chip-dot" style="background:#D97757"></div><span class="plat-chip-name">Claude</span></div><div class="plat-chip"><div class="plat-chip-dot" style="background:#4285F4"></div><span class="plat-chip-name">Gemini</span></div><div class="plat-chip"><div class="plat-chip-dot" style="background:#E1306C"></div><span class="plat-chip-name">Instagram</span></div><div class="plat-chip"><div class="plat-chip-dot" style="background:#1877F2"></div><span class="plat-chip-name">Facebook</span></div><div class="plat-chip"><div class="plat-chip-dot" style="background:#FF4500"></div><span class="plat-chip-name">Reddit</span></div></div><div class="platforms-foot"><p>Every other platform covers <span>1 channel</span>. Traffikora covers <span>all of them</span>.</p></div></div>
+        <div class="limited-offer" id="pricing"><div class="lo-left"><div class="lo-badge">&#128293; Limited Offer</div><div class="lo-text"><strong>First month completely free for businesses that start this week.</strong>Start your 7-day trial today &mdash; if you love it, your first paid month is on us.</div></div><div class="lo-right"><div class="lo-countdown"><div class="lo-count-item"><div class="lo-count-num" id="cd-days">02</div><div class="lo-count-lbl">Days</div></div><div class="lo-count-item"><div class="lo-count-num" id="cd-hours">14</div><div class="lo-count-lbl">Hours</div></div><div class="lo-count-item"><div class="lo-count-num" id="cd-mins">37</div><div class="lo-count-lbl">Mins</div></div><div class="lo-count-item"><div class="lo-count-num" id="cd-secs">00</div><div class="lo-count-lbl">Secs</div></div></div><button class="lo-cta-btn" onclick="window.location.href='/signup'">Claim Offer &rarr;</button></div></div>
+        <div class="pricing-trust"><div class="pt-item"><div class="pt-icon">&#128737;</div><div class="pt-label">No Charge for 7 Days<span>Credit card required to start</span></div></div><div class="pt-item"><div class="pt-icon">&#9889;</div><div class="pt-label">Cancel Any Time<span>One click &mdash; no questions asked</span></div></div><div class="pt-item"><div class="pt-icon">&#128274;</div><div class="pt-label">Secure Checkout<span>256-bit SSL &middot; Powered by Stripe</span></div></div><div class="pt-item"><div class="pt-icon">&#128172;</div><div class="pt-label">Live Support Included<span>Real humans &mdash; not bots</span></div></div></div>
+        <div class="pricing-section"><div class="pricing-head"><span class="section-label">Simple pricing</span><div class="pricing-h">No surprises. <em>Ever.</em></div><p class="pricing-sub">Credit card required &mdash; No charge for 7 days &mdash; Cancel anytime</p></div><div class="pricing-grid"><div class="plan"><div class="plan-name plan-name-light">Starter</div><div class="plan-price"><sup>$</sup>97<sub>/mo</sub></div><div class="plan-desc">Perfect for solo business owners ready to automate their marketing.</div><ul class="plan-features"><li>Blog + social automation</li><li>Google SEO tools</li><li>1 website connected</li><li>AI content generation</li><li>7-day free trial</li></ul><button class="plan-btn" onclick="window.location.href='/signup?plan=starter'">Start Free Trial</button></div><div class="plan plan-featured"><div class="plan-badge">Most Popular</div><div class="plan-name">Pro</div><div class="plan-price plan-price-light"><sup style="color:#aaa">$</sup>197<sub>/mo</sub></div><div class="plan-desc plan-desc-light">Full automation for serious business owners who want it all.</div><ul class="plan-features plan-features-light"><li>Everything in Starter</li><li>TikTok + YouTube push</li><li>AI engine optimization</li><li>Reddit amplifier</li><li>Priority support</li></ul><button class="plan-btn plan-btn-featured" onclick="window.location.href='/signup?plan=pro'">Start Free Trial</button></div><div class="plan"><div class="plan-name plan-name-light">Agency</div><div class="plan-price"><sup>$</sup>797<sub>/mo</sub></div><div class="plan-desc">Manage multiple clients from one powerful dashboard.</div><ul class="plan-features"><li>Everything in Pro</li><li>Up to 10 client accounts</li><li>White-label reports</li><li>Client management tools</li><li>Dedicated support</li></ul><button class="plan-btn" onclick="window.location.href='/signup?plan=agency'">Start Free Trial</button></div><div class="plan"><div class="plan-name plan-name-light">Enterprise</div><div class="plan-price"><sup>$</sup>1,497<sub>/mo</sub></div><div class="plan-desc">For large agencies scaling across many clients at once.</div><ul class="plan-features"><li>Everything in Agency</li><li>Unlimited client accounts</li><li>Custom integrations</li><li>SLA guarantee</li><li>Dedicated account manager</li></ul><button class="plan-btn" onclick="window.location.href='/signup?plan=enterprise'">Start Free Trial</button></div></div></div>
+        <div class="roi-section"><div class="roi-inner"><div class="roi-left"><span class="section-label">The math is simple</span><div class="roi-h">2 extra clients pays<br>for a <em>full year.</em></div><p class="roi-p">Most businesses spend $2,000&ndash;$5,000/mo on agencies and get mediocre results. Traffikora starts at $97/mo &mdash; and never stops working.</p></div><div class="roi-right"><div class="roi-big">10<span>x</span></div><div class="roi-big-sub">Just 2 extra clients/month pays for itself 10 times over &mdash; every single month.</div><div class="roi-math"><div class="roi-math-item"><div class="roi-math-num">$97</div><div class="roi-math-lbl">Starting price per month</div></div><div class="roi-math-item"><div class="roi-math-num">2</div><div class="roi-math-lbl">Clients needed to break even</div></div><div class="roi-math-item"><div class="roi-math-num">&infin;</div><div class="roi-math-lbl">Return on investment after that</div></div></div></div></div></div>
+        <div class="obj-section"><span class="section-label" style="text-align:center;display:block">Every question answered</span><div class="obj-h">We know what you&rsquo;re thinking.</div><div class="obj-grid"><div class="obj-card"><div class="obj-card-bar"></div><div class="obj-card-q">&ldquo;Is this complicated to set up?&rdquo;</div><div class="obj-card-a">No tech skills needed. You&rsquo;re live in under 5 minutes. We walk you through every step of the way.</div></div><div class="obj-card"><div class="obj-card-bar"></div><div class="obj-card-q">&ldquo;Will it work for my industry?&rdquo;</div><div class="obj-card-a">We support 16+ industries &mdash; dentists, salons, HVAC, law firms, restaurants, real estate and more.</div></div><div class="obj-card"><div class="obj-card-bar"></div><div class="obj-card-q">&ldquo;What if I don&rsquo;t like it?&rdquo;</div><div class="obj-card-a">7-day free trial. No charge until day 8. Cancel anytime with one click. Zero risk, no questions asked.</div></div></div></div>
+        <div class="features-section"><span class="section-label" style="text-align:center;display:block">Everything included</span><div class="features-h">One platform. Every channel.</div><div class="features-grid"><div class="feature-item"><div class="feature-icon">&#128269;</div><div class="feature-name">Google SEO</div><div class="feature-desc">Rank higher with automated SEO content and schema markup</div></div><div class="feature-item"><div class="feature-icon">&#9999;</div><div class="feature-name">Blog Automation</div><div class="feature-desc">Publish SEO blog posts to WordPress automatically every day</div></div><div class="feature-item"><div class="feature-icon">&#127909;</div><div class="feature-name">TikTok Publishing</div><div class="feature-desc">Push videos directly to TikTok with zero manual effort</div></div><div class="feature-item"><div class="feature-icon">&#9654;</div><div class="feature-name">YouTube Shorts</div><div class="feature-desc">Auto-upload your videos to YouTube Shorts automatically</div></div><div class="feature-item"><div class="feature-icon">&#129302;</div><div class="feature-name">AI Engine Optimization</div><div class="feature-desc">Get found on ChatGPT, Claude, Gemini, Copilot and more</div></div><div class="feature-item"><div class="feature-icon">&#128172;</div><div class="feature-name">Reddit Amplifier</div><div class="feature-desc">Build authority through strategic Reddit presence</div></div><div class="feature-item"><div class="feature-icon">&#128203;</div><div class="feature-name">Schema Markup</div><div class="feature-desc">Structured data injected automatically into your site</div></div><div class="feature-item"><div class="feature-icon">&#128202;</div><div class="feature-name">Search Console</div><div class="feature-desc">Direct Google Search Console integration and reporting</div></div></div></div>
+        <div class="how-section" id="how"><span class="section-label" style="text-align:center;display:block">How it works</span><div class="how-h">Up and running <em style="color:#E8610A;font-style:italic">in minutes.</em></div><div class="how-grid"><div class="how-step"><div class="how-step-dot" style="background:#E8610A">1</div><div class="how-step-h">Connect your accounts</div><div class="how-step-p">Link your website, social profiles, and Google in one click. Takes less than 5 minutes total.</div></div><div class="how-step"><div class="how-step-dot" style="background:#111">2</div><div class="how-step-h">Tell us about your business</div><div class="how-step-p">Answer a few simple questions. Our AI learns everything about what you do and who you serve.</div></div><div class="how-step"><div class="how-step-dot" style="background:#111">3</div><div class="how-step-h">Watch it work</div><div class="how-step-p">Traffikora starts generating and publishing content immediately &mdash; and never stops.</div></div></div></div>
+        <div class="ai-section"><span class="section-label">Our #1 differentiator</span><div class="ai-h">The only platform that<br><em>optimizes for AI search</em></div><p class="ai-p">When someone asks ChatGPT or Claude to recommend a business like yours, Traffikora makes sure your name comes up. No other platform does this.</p><div class="ai-chips"><div class="ai-chip">Claude</div><div class="ai-chip">ChatGPT</div><div class="ai-chip">Gemini</div><div class="ai-chip">Copilot</div><div class="ai-chip">Perplexity</div><div class="ai-chip">Google</div></div><div class="ai-diff">Every other platform optimizes for Google only. We optimize for all of them.</div></div>
+        <div class="testi-section"><span class="section-label" style="text-align:center;display:block">What clients say</span><div class="testi-h">Real businesses. <em>Real results.</em></div><div class="testi-grid"><div class="testi-card"><span class="testi-quote-mark">&ldquo;</span><div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="testi-text">I used to spend 3 hours a day on marketing. Now I spend zero. Traffikora handles everything and my leads have tripled.</p><div class="testi-divider"></div><div class="testi-author"><div class="testi-avatar">M</div><div><div class="testi-name">Maria S.</div><div class="testi-role">Miami, FL &mdash; Salon Owner</div></div></div></div><div class="testi-card"><span class="testi-quote-mark">&ldquo;</span><div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="testi-text">My Google ranking went from page 4 to page 1 in 6 weeks. I could not believe it. This platform is the real deal.</p><div class="testi-divider"></div><div class="testi-author"><div class="testi-avatar">J</div><div><div class="testi-name">James T.</div><div class="testi-role">Austin, TX &mdash; HVAC Business</div></div></div></div><div class="testi-card"><span class="testi-quote-mark">&ldquo;</span><div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="testi-text">A client told me they found me by asking ChatGPT. I did not even know that was possible. Traffikora made it happen.</p><div class="testi-divider"></div><div class="testi-author"><div class="testi-avatar">R</div><div><div class="testi-name">Rachel K.</div><div class="testi-role">Chicago, IL &mdash; Law Firm</div></div></div></div></div></div>
+        <div class="faq-section"><div class="faq-head"><span class="section-label">FAQ</span><div class="faq-h">Everything you need to <em>know before you start</em></div></div><div class="faq-grid"><div class="faq-item"><div class="faq-q">Do I need any technical skills to use Traffikora?<span class="faq-q-arrow">+</span></div><div class="faq-a">None at all. If you can fill out a form, you can use Traffikora. Our onboarding wizard walks you through every step and you&rsquo;ll be live in under 5 minutes.</div></div><div class="faq-item"><div class="faq-q">What social media accounts do you need access to?<span class="faq-q-arrow">+</span></div><div class="faq-a">We request permission to post on your behalf to platforms you choose &mdash; Facebook, Instagram, TikTok, YouTube, and more. You control exactly which platforms are connected and can disconnect at any time.</div></div><div class="faq-item"><div class="faq-q">Will you post without my approval?<span class="faq-q-arrow">+</span></div><div class="faq-a">You can set Traffikora to fully automatic or review-before-publish mode. You are always in control of what goes live on your accounts.</div></div><div class="faq-item"><div class="faq-q">What happens when I cancel?<span class="faq-q-arrow">+</span></div><div class="faq-a">Cancel any time with one click &mdash; no phone call required, no questions asked. You keep access until the end of your billing period. All your data can be exported before you go.</div></div><div class="faq-item"><div class="faq-q">Is my data safe? What do you do with it?<span class="faq-q-arrow">+</span></div><div class="faq-a">We never sell your data. We use it only to generate and publish content on your behalf. All data is encrypted at rest and in transit. See our Privacy Policy for full details.</div></div><div class="faq-item"><div class="faq-q">Do you offer refunds?<span class="faq-q-arrow">+</span></div><div class="faq-a">Your first 7 days are completely free &mdash; no charge whatsoever. If you cancel before day 8, you owe nothing. After that, we offer a 30-day satisfaction guarantee on your first paid month.</div></div></div></div>
+        <div class="mission-section"><div class="mission-inner"><span class="section-label">Why we built this</span><div class="mission-h">Built for the business owner<br>who can&rsquo;t afford to <em>fall behind.</em></div><div class="mission-quote-wrap"><div class="mission-quote-bar"></div><span class="mission-quote-mark">&ldquo;</span><p class="mission-quote-text">We built Traffikora because small business owners deserve the same marketing firepower as the big guys &mdash; without the agency price tag. Every day you wait is a day your competitor pulls further ahead. That&rsquo;s why we made it automatic.</p></div><div class="mission-stats-row"><div class="mission-stat"><div class="mission-stat-num">500+</div><div class="mission-stat-lbl">Small businesses automated</div></div><div class="mission-stat"><div class="mission-stat-num">9+</div><div class="mission-stat-lbl">Platforms covered simultaneously</div></div><div class="mission-stat"><div class="mission-stat-num">$97</div><div class="mission-stat-lbl">Less than 1 hour of agency time</div></div></div></div></div>
+        <div class="cta-section"><div class="cta-gradient-line"></div><div class="cta-live-pill"><div class="cta-live-dot"></div>Live now &mdash; 500+ businesses running on Traffikora while you read this</div><div class="cta-h">While you read this,<br>your competitor&rsquo;s Traffikora<br>is <em>already running.</em></div><p class="cta-p">Start your free trial before they do. No charge for 7 days. One click to cancel. Zero risk.</p><div class="cta-btn-row"><div class="guarantee-seal"><div class="gs-top">Free</div><div class="gs-num">7</div><div class="gs-bot">Day Trial</div></div><div><button class="btn-cta-dark" onclick="window.location.href='/signup'">Start Your Free 7-Day Trial<div class="btn-cta-circle">&rarr;</div></button><div class="cta-notes-row"><span class="cta-note-item">Credit card required</span><span class="cta-note-item">No charge for 7 days</span><span class="cta-note-item">Cancel anytime</span></div></div><div class="guarantee-seal"><div class="gs-top">Zero</div><div class="gs-num" style="font-size:15px;margin-top:3px">Risk</div><div class="gs-bot">Guaranteed</div></div></div><div class="cta-exit">Still not sure? <span>Start free. You have nothing to lose and everything to gain.</span></div></div>
+        <div class="social-bar"><div class="social-bar-lbl">Follow Traffikora</div><div class="social-icons-row">
+          <a href="https://www.facebook.com/profile.php?id=61590075525966" target="_blank" class="social-icon" style="background:#1877f2" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="https://www.instagram.com/traffikora/" target="_blank" class="social-icon" style="background:#c13584" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="https://x.com/traffikora" target="_blank" class="social-icon" style="background:#000;border:1px solid #333" aria-label="X"><svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="https://www.youtube.com/@traffikora" target="_blank" class="social-icon" style="background:#ff0000" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="black"/></svg></a>
+          <a href="https://www.tiktok.com/@traffikora" target="_blank" class="social-icon" style="background:#010101;border:1px solid #333" aria-label="TikTok"><svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.31 6.31 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg></a>
+          <a href="#" class="social-icon" style="background:#0a66c2" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        </div></div>
+      `}} />
       <Footer />
+      <script dangerouslySetInnerHTML={{ __html: `
+        (function() {
+          document.querySelectorAll('.faq-item').forEach(function(item) {
+            var q = item.querySelector('.faq-q');
+            var a = item.querySelector('.faq-a');
+            var arrow = item.querySelector('.faq-q-arrow');
+            q.style.cursor = 'pointer';
+            q.addEventListener('click', function() {
+              var isOpen = a.style.display === 'block';
+              document.querySelectorAll('.faq-item').forEach(function(i) {
+                i.querySelector('.faq-a').style.display = 'none';
+                i.querySelector('.faq-q-arrow').textContent = '+';
+              });
+              if (!isOpen) { a.style.display = 'block'; arrow.textContent = '\u2212'; }
+            });
+          });
+          var deadline = new Date();
+          deadline.setDate(deadline.getDate() + 2);
+          deadline.setHours(deadline.getHours() + 14);
+          deadline.setMinutes(deadline.getMinutes() + 37);
+          function updateCountdown() {
+            var now = new Date(); var diff = deadline - now; if (diff <= 0) return;
+            var d = Math.floor(diff/86400000); var h = Math.floor((diff%86400000)/3600000);
+            var m = Math.floor((diff%3600000)/60000); var s = Math.floor((diff%60000)/1000);
+            var pd = function(n){return String(n).padStart(2,'0');};
+            var el; el=document.getElementById('cd-days'); if(el) el.textContent=pd(d);
+            el=document.getElementById('cd-hours'); if(el) el.textContent=pd(h);
+            el=document.getElementById('cd-mins'); if(el) el.textContent=pd(m);
+            el=document.getElementById('cd-secs'); if(el) el.textContent=pd(s);
+          }
+          updateCountdown(); setInterval(updateCountdown, 1000);
+        })();
+      `}} />
     </main>
   )
 }
