@@ -3,20 +3,8 @@ const fs = require('fs');
 fs.writeFileSync('src/components/Nav.tsx', `// @ts-nocheck
 'use client'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
 
 export default function Nav() {
-  const [open, setOpen] = useState(false)
-
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-    return () => { document.body.style.overflow = '' }
-  }, [open])
-
   return (
     <>
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -24,15 +12,16 @@ export default function Nav() {
         .nav-links { display: flex; gap: 24px; align-items: center; }
         .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
         .nav-cta-btn { display: block; }
+        .mobile-menu { display: none; position: fixed; top: 64px; left: 0; right: 0; bottom: 0; background: #fff; z-index: 999; padding: 24px 32px; overflow-y: auto; flex-direction: column; }
+        .mobile-menu.is-open { display: flex; }
+        .mobile-menu a { display: block; color: #111; text-decoration: none; font-size: 22px; font-weight: 600; padding: 18px 0; border-bottom: 1px solid #f0f0f0; font-family: 'DM Sans', sans-serif; }
+        .mobile-menu a.orange { color: #E8610A; }
+        .mobile-menu a.cta-mobile { background: linear-gradient(135deg,#E8610A,#c94e08); color: #fff !important; padding: 16px 22px; font-size: 18px; border-radius: 8px; text-align: center; margin-top: 24px; border-bottom: none; }
         @media (max-width: 900px) {
           .nav-links { display: none; }
           .nav-hamburger { display: block; }
           .nav-cta-btn { display: none; }
         }
-        .mobile-menu { position: fixed; top: 64px; left: 0; right: 0; bottom: 0; background: #fff; z-index: 999; padding: 24px 32px; overflow-y: auto; }
-        .mobile-menu a { display: block; color: #111; text-decoration: none; font-size: 22px; font-weight: 600; padding: 18px 0; border-bottom: 1px solid #f0f0f0; font-family: 'DM Sans', sans-serif; }
-        .mobile-menu a.orange { color: #E8610A; }
-        .mobile-menu .cta-mobile { background: linear-gradient(135deg,#E8610A,#c94e08); color: #fff !important; padding: 16px 22px; font-size: 18px; font-weight: 700; border-radius: 8px; text-align: center; display: block; margin-top: 24px; border-bottom: none !important; }
       \`}</style>
 
       <nav style={{ position: 'sticky', top: 0, zIndex: 50, background: '#fff', borderBottom: '2.5px solid #111', padding: '0 32px', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', height: '64px', fontFamily: "'DM Sans', sans-serif" }}>
@@ -55,40 +44,36 @@ export default function Nav() {
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '16px' }}>
           <Link href="/signup" className="nav-cta-btn" style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', padding: '10px 22px', textDecoration: 'none', fontSize: '14px', fontWeight: 700, borderRadius: '8px', border: '2.5px solid #111' }}>Start Free Trial</Link>
-          <button className="nav-hamburger" aria-label="Toggle menu" onClick={() => setOpen(prev => !prev)}>
+          <button
+            className="nav-hamburger"
+            aria-label="Toggle menu"
+            onClick={() => {
+              const menu = document.getElementById('mobile-nav-menu')
+              if (menu) menu.classList.toggle('is-open')
+            }}
+          >
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round">
-              {open ? (
-                <>
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </>
-              ) : (
-                <>
-                  <line x1="3" y1="6" x2="21" y2="6" />
-                  <line x1="3" y1="12" x2="21" y2="12" />
-                  <line x1="3" y1="18" x2="21" y2="18" />
-                </>
-              )}
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
             </svg>
           </button>
         </div>
       </nav>
 
-      {open && (
-        <div className="mobile-menu">
-          <Link href="/" onClick={() => setOpen(false)}>Home</Link>
-          <Link href="/features" onClick={() => setOpen(false)}>Features</Link>
-          <Link href="/solutions" onClick={() => setOpen(false)}>Solutions</Link>
-          <Link href="/pricing" onClick={() => setOpen(false)}>Pricing</Link>
-          <Link href="/how-it-works" onClick={() => setOpen(false)}>How It Works</Link>
-          <Link href="/why-traffikora" onClick={() => setOpen(false)}>Why Traffikora</Link>
-          <Link href="/faq" onClick={() => setOpen(false)}>FAQ</Link>
-          <Link href="/blog" onClick={() => setOpen(false)} className="orange">Blog</Link>
-          <Link href="/contact" onClick={() => setOpen(false)}>Contact</Link>
-          <Link href="/about" onClick={() => setOpen(false)}>About Us</Link>
-          <Link href="/signup" onClick={() => setOpen(false)} className="cta-mobile">Start Free Trial</Link>
-        </div>
-      )}
+      <div id="mobile-nav-menu" className="mobile-menu">
+        <a href="/">Home</a>
+        <a href="/features">Features</a>
+        <a href="/solutions">Solutions</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/how-it-works">How It Works</a>
+        <a href="/why-traffikora">Why Traffikora</a>
+        <a href="/faq">FAQ</a>
+        <a href="/blog" className="orange">Blog</a>
+        <a href="/contact">Contact</a>
+        <a href="/about">About Us</a>
+        <a href="/signup" className="cta-mobile">Start Free Trial</a>
+      </div>
     </>
   )
 }
