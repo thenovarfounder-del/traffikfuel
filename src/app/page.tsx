@@ -51,7 +51,7 @@ body{background:#fff;color:#111;font-family:'DM Sans',sans-serif;font-weight:300
 .eyebrow-dot{width:8px;height:8px;border-radius:50%;background:#E8610A;position:absolute;top:1px;left:1px}
 .eyebrow-ring{width:10px;height:10px;border-radius:50%;border:1.5px solid #E8610A;position:absolute;top:0;left:0;animation:ringpulse 2s ease-out infinite;opacity:0}
 @keyframes ringpulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(2.6);opacity:0}}
-.eyebrow-text{background:linear-gradient(90deg,#fff 50%,#E8610A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.eyebrow-text{background:linear-gradient(90deg,#fff 70%,rgba(232,97,10,0.5));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero-h1{font-family:'Playfair Display',serif;font-size:52px;font-weight:700;color:#fff;line-height:.96;letter-spacing:-1.5px;margin-bottom:16px}
 .hero-h1 em{font-style:italic;color:#E8610A}
 .hero-sub{font-size:15px;color:#ccc;line-height:1.85;margin-bottom:20px;max-width:420px;font-weight:300}
