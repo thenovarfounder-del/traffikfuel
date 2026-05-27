@@ -5,9 +5,46 @@ import Link from 'next/link'
 export default function Footer() {
   return (
     <footer style={{ background: '#111', color: '#fff', padding: '64px 32px 32px', borderTop: '2.5px solid #333' }}>
+      <style>{`
+        .footer-grid {
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 40px;
+          margin-bottom: 56px;
+        }
+        @media (max-width: 768px) {
+          .footer-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+          }
+          .footer-brand {
+            grid-column: 1 / -1;
+          }
+        }
+        @media (max-width: 480px) {
+          .footer-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+        .footer-bottom {
+          border-top: 1px solid #333;
+          padding-top: 24px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+        @media (max-width: 768px) {
+          .footer-bottom {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+        }
+      `}</style>
       <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '40px', marginBottom: '56px' }}>
-          <div>
+        <div className="footer-grid">
+          <div className="footer-brand">
             <p style={{ fontFamily: "'Playfair Display', serif", fontSize: '22px', fontWeight: 900, color: '#fff', marginBottom: '12px' }}>Traffikora</p>
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#888', lineHeight: 1.7, marginBottom: '20px' }}>Set it once. It markets forever. AI-powered marketing automation for small businesses.</p>
             <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '10px 22px', textDecoration: 'none', fontSize: '13px', fontWeight: 700, border: '2.5px solid #E8610A', borderRadius: '6px', display: 'inline-block' }}>Start Free Trial</Link>
@@ -48,7 +85,7 @@ export default function Footer() {
             <div style={{ marginBottom: '10px' }}><Link href="/data-use" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Data Use</Link></div>
           </div>
         </div>
-        <div style={{ borderTop: '1px solid #333', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+        <div className="footer-bottom">
           <span style={{ fontFamily: "'DM Sans', sans-serif", color: '#666', fontSize: '13px' }}>&copy; 2026 Traffikora.com - All rights reserved.</span>
           <div style={{ display: 'flex', gap: '24px', alignItems: 'center', flexWrap: 'wrap' }}>
             <Link href="/privacy" style={{ fontFamily: "'DM Sans', sans-serif", color: '#666', fontSize: '13px', textDecoration: 'underline' }}>Do Not Sell My Personal Information</Link>
