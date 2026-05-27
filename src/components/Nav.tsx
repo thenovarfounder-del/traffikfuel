@@ -25,7 +25,7 @@ export default function Nav() {
       <nav style={{ position: 'sticky', top: 0, zIndex: 50, background: '#fff', borderBottom: '2.5px solid #111', padding: '0 32px', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', height: '64px', fontFamily: "'DM Sans', sans-serif" }}>
 
         <Link href="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: '22px', fontWeight: 700, color: '#111', textDecoration: 'none' }}>
-          Traffik<span style={{ color: '#E8610A' }}>ora</span>
+          Traffik<span style={{ color: '#E8610A' }}>ora</span><sup style={{ fontSize: '10px', fontFamily: "'DM Sans', sans-serif", fontWeight: 400, color: '#111', verticalAlign: 'super', marginLeft: '1px' }}>™</sup>
         </Link>
 
         <div className="nav-links">
@@ -60,6 +60,7 @@ export default function Nav() {
       </nav>
 
       <div id="mobile-nav-menu" className="mobile-menu">
+        <a href="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: '24px', fontWeight: 700, color: '#111', marginBottom: '8px', display: 'block', borderBottom: '2.5px solid #111', paddingBottom: '16px' }}>Traffik<span style={{ color: '#E8610A' }}>ora</span><sup style={{ fontSize: '10px', fontWeight: 400, verticalAlign: 'super' }}>™</sup></a>
         <a href="/">Home</a>
         <a href="/features">Features</a>
         <a href="/solutions">Solutions</a>
@@ -67,10 +68,10 @@ export default function Nav() {
         <a href="/how-it-works">How It Works</a>
         <a href="/why-traffikora">Why Traffikora</a>
         <a href="/faq">FAQ</a>
-        <a href="/blog" className="orange">Blog</a>
+        <a href="/blog" class="orange">Blog</a>
         <a href="/contact">Contact</a>
         <a href="/about">About Us</a>
-        <a href="/signup" className="cta-mobile">Start Free Trial</a>
+        <a href="/signup" class="cta-mobile">Start Free Trial</a>
       </div>
     </>
   )
