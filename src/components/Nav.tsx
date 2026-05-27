@@ -1,31 +1,35 @@
 // @ts-nocheck
 'use client'
 import Link from 'next/link'
-import { useState } from 'react'
-import { usePathname } from 'next/navigation'
-import { useEffect } from 'react'
+import { useState, useRef } from 'react'
 
 export default function Nav() {
   const [open, setOpen] = useState(false)
-  const pathname = usePathname()
 
-  useEffect(() => {
-    setOpen(false)
-  }, [pathname])
+  const toggleMenu = (e) => {
+    e.stopPropagation()
+    setOpen(prev => !prev)
+  }
+
+  const closeMenu = () => setOpen(false)
 
   return (
     <>
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
       <style>{`
         .nav-links { display: flex; gap: 24px; align-items: center; }
-        .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
-        .nav-cta { display: flex; justify-content: flex-end; }
+        .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; z-index: 100; }
+        .nav-cta-btn { display: block; }
         @media (max-width: 900px) {
           .nav-links { display: none; }
           .nav-hamburger { display: block; }
-          .nav-cta { display: none; }
+          .nav-cta-btn { display: none; }
         }
+        .mobile-menu a { display: block; color: #111; text-decoration: none; font-size: 20px; font-weight: 600; padding: 16px 0; border-bottom: 1px solid #f0f0f0; font-family: 'DM Sans', sans-serif; }
+        .mobile-menu a:last-child { border-bottom: none; }
+        .mobile-menu a.orange { color: #E8610A; }
       `}</style>
+
       <nav style={{ position: 'sticky', top: 0, zIndex: 50, background: '#fff', borderBottom: '2.5px solid #111', padding: '0 32px', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', height: '64px', fontFamily: "'DM Sans', sans-serif" }}>
 
         <Link href="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: '22px', fontWeight: 700, color: '#111', textDecoration: 'none' }}>
@@ -45,9 +49,9 @@ export default function Nav() {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '16px' }}>
-          <Link href="/signup" className="nav-cta" style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', padding: '10px 22px', textDecoration: 'none', fontSize: '14px', fontWeight: 700, borderRadius: '8px', border: '2.5px solid #111' }}>Start Free Trial</Link>
-          <button className="nav-hamburger" onClick={() => setOpen(!open)}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round">
+          <Link href="/signup" className="nav-cta-btn" style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', padding: '10px 22px', textDecoration: 'none', fontSize: '14px', fontWeight: 700, borderRadius: '8px', border: '2.5px solid #111' }}>Start Free Trial</Link>
+          <button className="nav-hamburger" onClick={toggleMenu} aria-label="Toggle menu">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round">
               {open ? (
                 <>
                   <line x1="18" y1="6" x2="6" y2="18" />
@@ -66,17 +70,20 @@ export default function Nav() {
       </nav>
 
       {open && (
-        <div style={{ position: 'fixed', top: '64px', left: 0, right: 0, bottom: 0, background: '#fff', zIndex: 49, padding: '32px', display: 'flex', flexDirection: 'column', gap: '24px', fontFamily: "'DM Sans', sans-serif", overflowY: 'auto' }}>
-          <Link href="/" style={{ color: '#111', textDecoration: 'none', fontSize: '20px', fontWeight: 600, borderBottom: '1px solid #f0f0f0', paddingBottom: '16px' }}>Home</Link>
-          <Link href="/features" style={{ color: '#111', textDecoration: 'none', fontSize: '20px', fontWeight: 600, borderBottom: '1px solid #f0f0f0', paddingBottom: '16px' }}>Features</Link>
-          <Link href="/solutions" style={{ color: '#111', textDecoration: 'none', fontSize: '20px', fontWeight: 600, borderBottom: '1px solid #f0f0f0', paddingBottom: '16px' }}>Solutions</Link>
-          <Link href="/pricing" style={{ color: '#111', textDecoration: 'none', fontSize: '20px', fontWeight: 600, borderBottom: '1px solid #f0f0f0', paddingBottom: '16px' }}>Pricing</Link>
-          <Link href="/how-it-works" style={{ color: '#111', textDecoration: 'none', fontSize: '20px', fontWeight: 600, borderBottom: '1px solid #f0f0f0', paddingBottom: '16px' }}>How It Works</Link>
-          <Link href="/why-traffikora" style={{ color: '#111', textDecoration: 'none', fontSize: '20px', fontWeight: 600, borderBottom: '1px solid #f0f0f0', paddingBottom: '16px' }}>Why Traffikora</Link>
-          <Link href="/faq" style={{ color: '#111', textDecoration: 'none', fontSize: '20px', fontWeight: 600, borderBottom: '1px solid #f0f0f0', paddingBottom: '16px' }}>FAQ</Link>
-          <Link href="/blog" style={{ color: '#E8610A', textDecoration: 'none', fontSize: '20px', fontWeight: 600, borderBottom: '1px solid #f0f0f0', paddingBottom: '16px' }}>Blog</Link>
-          <Link href="/contact" style={{ color: '#111', textDecoration: 'none', fontSize: '20px', fontWeight: 600, borderBottom: '1px solid #f0f0f0', paddingBottom: '16px' }}>Contact</Link>
-          <Link href="/signup" style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', padding: '16px 22px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, borderRadius: '8px', textAlign: 'center', marginTop: '8px' }}>Start Free Trial</Link>
+        <div className="mobile-menu" style={{ position: 'fixed', top: '64px', left: 0, right: 0, bottom: 0, background: '#fff', zIndex: 49, padding: '24px 32px', overflowY: 'auto' }}>
+          <Link href="/" onClick={closeMenu}>Home</Link>
+          <Link href="/features" onClick={closeMenu}>Features</Link>
+          <Link href="/solutions" onClick={closeMenu}>Solutions</Link>
+          <Link href="/pricing" onClick={closeMenu}>Pricing</Link>
+          <Link href="/how-it-works" onClick={closeMenu}>How It Works</Link>
+          <Link href="/why-traffikora" onClick={closeMenu}>Why Traffikora</Link>
+          <Link href="/faq" onClick={closeMenu}>FAQ</Link>
+          <Link href="/blog" onClick={closeMenu} className="orange">Blog</Link>
+          <Link href="/contact" onClick={closeMenu}>Contact</Link>
+          <Link href="/about" onClick={closeMenu}>About Us</Link>
+          <div style={{ marginTop: '24px' }}>
+            <Link href="/signup" onClick={closeMenu} style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', padding: '16px 22px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, borderRadius: '8px', textAlign: 'center', display: 'block' }}>Start Free Trial</Link>
+          </div>
         </div>
       )}
     </>
