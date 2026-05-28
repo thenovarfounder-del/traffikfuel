@@ -1,155 +1,106 @@
-// @ts-nocheck
-'use client'
+import Link from "next/link";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 
-import Link from 'next/link'
-import Nav from '@/components/Nav'
-import Footer from '@/components/Footer'
+export const metadata = {
+  title: "Automated Social Media for Small Business | Traffikora",
+  description: "Traffikora creates and publishes branded social media content daily across 9+ platforms -- automatically. No writing, no scheduling, no agency required.",
+};
 
-export default function SocialPage() {
+export default function SocialMediaAutomationPage() {
   return (
     <>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
       <Nav />
-
-      {/* HERO */}
-      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Social Media Automation</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, marginBottom: '24px', maxWidth: '820px', margin: '0 auto 24px' }}>Social media that runs itself. Every platform. Every week.</h1>
-        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto 40px' }}>Traffikora creates and publishes content to your social media accounts on a consistent schedule — without you writing a single post.</p>
-        <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free 7-Day Trial</Link>
-          <Link href="/how-it-works" style={{ background: 'transparent', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>See How It Works</Link>
-        </div>
-      </section>
-
-      {/* STATS */}
-      <section style={{ background: '#111', padding: '0 32px 80px' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
-          <div style={{ textAlign: 'center', padding: '40px 24px', border: '2.5px solid #333' }}>
-            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '56px', fontWeight: 900, color: '#E8610A', lineHeight: 1, marginBottom: '12px' }}>5B+</p>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#ccc', lineHeight: 1.6 }}>people use social media worldwide in 2026</p>
+      <main suppressHydrationWarning>
+        <section style={{ background: "#111111", padding: "80px 24px 60px", textAlign: "center" }} suppressHydrationWarning>
+          <h1 style={{ fontFamily: "Playfair Display, serif", fontSize: "clamp(2rem, 5vw, 3.2rem)", color: "#ffffff", marginBottom: "20px" }}>Automated Social Media for Small Business</h1>
+          <p style={{ color: "#cccccc", fontSize: "1.15rem", maxWidth: "640px", margin: "0 auto 32px" }}>Most small business owners post 0 to 2 times per week manually and fall behind. Traffikora publishes branded content every day across 9+ platforms -- automatically, without you writing a word.</p>
+          <Link href="/signup" style={{ background: "#E8610A", color: "#ffffff", padding: "14px 32px", borderRadius: "6px", fontWeight: "700", textDecoration: "none", fontSize: "1rem" }}>Start Your Free 7-Day Trial</Link>
+        </section>
+        <section style={{ background: "#1a1a1a", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "1.5rem", marginBottom: "16px" }}>What Traffikora Does For Your Social Media</h2>
+            <ul style={{ color: "#cccccc", lineHeight: "2", paddingLeft: "20px" }}>
+              <li>Generates branded social content daily in your voice and style</li>
+              <li>Publishes automatically to Facebook, Instagram, TikTok, YouTube, Reddit, and more</li>
+              <li>Tailors content to your industry, location, and target audience</li>
+              <li>Keeps your profiles active and consistent across every platform</li>
+              <li>Adjusts content based on what performs best for your audience</li>
+              <li>Runs 24/7 with zero input required from you or your team</li>
+            </ul>
           </div>
-          <div style={{ textAlign: 'center', padding: '40px 24px', border: '2.5px solid #333' }}>
-            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '56px', fontWeight: 900, color: '#E8610A', lineHeight: 1, marginBottom: '12px' }}>54%</p>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#ccc', lineHeight: 1.6 }}>of consumers research businesses on social before buying</p>
+        </section>
+        <section style={{ background: "#111111", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "24px" }}>Why Small Business Social Media Always Falls Apart</h2>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Social media consistency is one of the hardest things for small business owners to maintain. You know it matters. You start strong -- posting a few times a week, getting some engagement, building a small following. Then a busy period hits, a staff member calls out, or a supplier crisis eats your week -- and the posting stops. Two weeks go by. Then a month. When you look at your Instagram again, the last post is from six weeks ago and it shows.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>The inconsistency is not a motivation problem. It is a time and system problem. Creating social content requires ideas, writing, image selection, caption formatting, and scheduling -- for every platform, every week. Without a dedicated person or system handling this, it always gets deprioritized in favor of the urgent work that runs your business. Social media falls behind because it is always important but rarely urgent -- until the moment you realize your competitors are showing up daily and you have gone silent.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Automated social media marketing for small businesses solves this at the root. When content creation and publishing are handled by a system rather than a person, consistency is guaranteed -- not dependent on your schedule or energy level. Your social presence stays active whether you are on vacation, in your busiest season, or dealing with the hundred other things that demand your attention.</p>
           </div>
-          <div style={{ textAlign: 'center', padding: '40px 24px', border: '2.5px solid #333' }}>
-            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '56px', fontWeight: 900, color: '#E8610A', lineHeight: 1, marginBottom: '12px' }}>6hrs</p>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#ccc', lineHeight: 1.6 }}>per week saved by businesses using social automation</p>
+        </section>
+        <section style={{ background: "#1a1a1a", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "2rem", marginBottom: "24px" }}>How Traffikora Automates Your Social Media Marketing</h2>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Traffikora connects to your social accounts and starts generating and publishing content immediately. The platform creates posts based on your business type, industry, location, and brand voice -- then publishes them automatically to Facebook, Instagram, TikTok, YouTube, Reddit, and more on a daily schedule. You do not write anything. You do not approve anything. It runs in the background while you run your business.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>The content is not generic filler. Traffikora generates industry-relevant posts -- for a restaurant that means food content, specials, and dining culture; for an auto shop that means maintenance tips, seasonal reminders, and shop highlights; for a chiropractor that means wellness content and patient education. Each post is branded to your business and relevant to your audience. Over time the platform learns what performs best and optimizes accordingly.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Across 9+ platforms, Traffikora maintains the kind of consistent presence that builds brand recognition, trust, and discovery over time. Consistent social activity also contributes to your local SEO -- Google factors in social signals when ranking local businesses, and an active social presence reinforces the entity authority that drives both Google rankings and AI engine visibility.</p>
           </div>
-        </div>
-      </section>
-
-      {/* PLATFORMS */}
-      <section style={{ background: '#fff', padding: '80px 32px', borderBottom: '2.5px solid #111' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px', textAlign: 'center' }}>Platforms</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 700, color: '#111', textAlign: 'center', marginBottom: '16px' }}>Every platform your customers use.</h2>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.8, maxWidth: '600px', margin: '0 auto 48px', textAlign: 'center' }}>Traffikora publishes to all major social platforms simultaneously.</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
-            {['Facebook', 'Instagram', 'TikTok', 'LinkedIn', 'Twitter / X', 'Google Business Profile'].map((platform, i) => (
-              <div key={i} style={{ border: '2.5px solid #111', padding: '28px 32px', textAlign: 'center' }}>
-                <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111' }}>{platform}</p>
+        </section>
+        <section style={{ background: "#111111", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "32px" }}>What You Get With Traffikora Social Media Automation</h2>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "20px" }}>
+              {[
+                ["Daily Content Creation", "Branded posts generated every day based on your business type, industry, and brand voice -- no writing, no brainstorming, no content calendar required from you."],
+                ["Multi-Platform Publishing", "Content published automatically to Facebook, Instagram, TikTok, YouTube, Reddit, and more -- maintaining a consistent presence everywhere your customers spend time."],
+                ["Industry-Relevant Content", "Posts tailored to your specific business category -- not generic content but industry-appropriate material that resonates with your target audience."],
+                ["Zero Input Required", "Once set up, Traffikora runs completely autonomously. No approvals, no scheduling, no content decisions required from you or your team."],
+                ["Consistent Posting Schedule", "Your social profiles stay active on a reliable daily schedule regardless of how busy your business gets -- no more gaps of silence that signal inactivity to followers and algorithms."],
+                ["Performance Optimization", "Traffikora tracks what content performs best for your audience and adjusts its content generation over time to maximize engagement and reach."],
+                ["Brand Voice Consistency", "Every post generated in your brand tone and style -- maintaining the consistent voice that builds recognition and trust with your audience over time."],
+                ["Local Audience Targeting", "Content written for your specific location and community -- referencing local context, seasonal relevance, and the specific audience in your market."]
+              ].map(([title, desc]) => (
+                <div key={title} style={{ background: "#1a1a1a", borderRadius: "8px", padding: "24px", borderLeft: "3px solid #E8610A" }}>
+                  <h3 style={{ color: "#E8610A", fontFamily: "Playfair Display, serif", fontSize: "1.1rem", marginBottom: "10px" }}>{title}</h3>
+                  <p style={{ color: "#cccccc", lineHeight: "1.7", fontSize: "0.95rem" }}>{desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        <section style={{ background: "#1a1a1a", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "2rem", marginBottom: "24px" }}>Why Social Media Automation Matters More in 2026</h2>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Social media platforms have become primary discovery channels for local businesses -- particularly among younger demographics. TikTok drives 30% of restaurant discovery for diners under 40. Instagram is the first place many customers go to evaluate a local business before visiting. YouTube builds long-term brand authority. Reddit surfaces local business recommendations in community discussions. Being absent from these channels is not neutral -- it is a competitive disadvantage that compounds over time.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Small businesses that maintain consistent social presence across multiple platforms build a compounding visibility and trust advantage over those that post sporadically or not at all. Traffikora makes that consistency automatic -- so the advantage builds every day without requiring your attention. While your competitors are deciding whether they have time to post this week, your profiles are already live and active.</p>
+          </div>
+        </section>
+        <section style={{ background: "#111111", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "32px" }}>Frequently Asked Questions</h2>
+            {[
+              ["What is automated social media for small business?", "Automated social media for small business means using software to handle the creation and publishing of social media content automatically -- without the business owner or their team writing posts, selecting images, or scheduling content manually. Traffikora generates branded, industry-relevant content and publishes it daily across 9+ platforms so your social presence stays active and consistent without taking any of your time."],
+              ["What platforms does Traffikora publish to?", "Traffikora publishes to Facebook, Instagram, TikTok, YouTube, Reddit, and additional platforms -- 9+ total. Each platform gets content formatted appropriately for that channel. You do not need separate tools for each platform. Traffikora handles the cross-platform publishing from a single automated system."],
+              ["Will the content actually sound like my business?", "Yes. Traffikora generates content based on your business profile, industry, location, and brand voice. The posts are relevant to your specific business type -- a dental practice gets oral health and patient education content, a restaurant gets food and dining content, an auto shop gets automotive tips and service highlights. The tone and style are consistent with your brand. Over time the platform learns what resonates with your specific audience and improves."],
+              ["Do I need to approve every post before it goes live?", "No. Traffikora is designed for full automation -- content is generated and published without requiring your approval for each post. This is what makes the system work for busy small business owners. If you prefer to review content before publishing, that option is available -- but most users choose full automation because the review step defeats the time-saving purpose."],
+              ["How is this different from just using a social media scheduler?", "A social media scheduler like Hootsuite or Later helps you organize content you have already written and publish it on a schedule. You still create all the content. Traffikora creates the content for you -- generating the posts, writing the captions, and publishing them automatically. You have no involvement in the content creation process unless you choose to. That is the fundamental difference between a scheduling tool and a true automation platform."],
+              ["How does consistent social media help my local SEO?", "Consistent social media activity reinforces your business entity across the web -- a signal Google and AI engines use to rank local businesses. An active social presence also drives direct discovery from platform search features and algorithm-driven feeds. Businesses that show up consistently on social platforms are more likely to be cited by AI engines when users ask for local business recommendations."]
+            ].map(([q, a]) => (
+              <div key={q} style={{ borderBottom: "1px solid #2a2a2a", paddingBottom: "24px", marginBottom: "24px" }}>
+                <h3 style={{ color: "#E8610A", fontFamily: "Playfair Display, serif", fontSize: "1.1rem", marginBottom: "10px" }}>{q}</h3>
+                <p style={{ color: "#cccccc", lineHeight: "1.8" }}>{a}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* FEATURES GRID */}
-      <section style={{ background: '#f9f9f9', padding: '80px 32px', borderBottom: '2.5px solid #111' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px', textAlign: 'center' }}>What Traffikora Does</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 700, color: '#111', textAlign: 'center', marginBottom: '48px' }}>Everything social. Nothing manual.</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Automated Content Creation</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Traffikora generates on-brand posts for your business tailored to your industry and audience.</p>
-            </div>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Scheduled Publishing</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Posts go live at the optimal time for your audience on every platform automatically.</p>
-            </div>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Multi-Platform Publishing</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Content adapted and published across all platforms formatted correctly for each one automatically.</p>
-            </div>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Hashtag Optimization</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Every post includes researched hashtags that maximize organic reach without any manual work.</p>
-            </div>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Performance Reporting</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Monthly reports show reach, engagement, and follower growth so you always know what is working.</p>
-            </div>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Brand Voice Consistency</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7 }}>Traffikora maintains your brand voice consistently across every post and every platform.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* BEFORE/AFTER */}
-      <section style={{ background: '#fff', padding: '80px 32px', borderBottom: '2.5px solid #111' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
-          <div style={{ background: '#f9f9f9', border: '2.5px solid #111', padding: '40px' }}>
-            <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px', fontWeight: 700, color: '#111', marginBottom: '24px' }}>Without Traffikora</h3>
-            {['Spending hours every week creating content', 'Posting inconsistently or not at all', 'Missing the best times to post for reach', 'Managing 5 different platform dashboards', 'Losing followers to competitors who post regularly', 'No idea what content is actually working'].map((item, i) => (
-              <div key={i} style={{ display: 'flex', gap: '12px', marginBottom: '14px', alignItems: 'flex-start' }}>
-                <span style={{ color: '#cc0000', fontSize: '16px', marginTop: '2px' }}>X</span>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555' }}>{item}</p>
-              </div>
-            ))}
-          </div>
-          <div style={{ background: '#111', border: '2.5px solid #111', padding: '40px' }}>
-            <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px', fontWeight: 700, color: '#E8610A', marginBottom: '24px' }}>With Traffikora</h3>
-            {['Content created and published automatically every week', 'Consistent posting schedule across all platforms', 'Posts go live at peak engagement times', 'One dashboard for all platforms', 'Your profiles stay active and grow organically', 'Monthly reports show exactly what is working'].map((item, i) => (
-              <div key={i} style={{ display: 'flex', gap: '12px', marginBottom: '14px', alignItems: 'flex-start' }}>
-                <span style={{ color: '#E8610A', fontSize: '16px', marginTop: '2px' }}>O</span>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#ccc' }}>{item}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section style={{ background: '#f9f9f9', padding: '80px 32px', borderBottom: '2.5px solid #111' }}>
-        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px', textAlign: 'center' }}>FAQ</p>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 700, color: '#111', textAlign: 'center', marginBottom: '48px' }}>Common questions about social media automation.</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
-            <div style={{ borderBottom: '2px solid #eee', paddingBottom: '28px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Does Traffikora create the content or do I have to write it?</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.7 }}>Traffikora creates the content automatically. You provide basic information about your business during setup and Traffikora generates on-brand posts tailored to your industry and audience.</p>
-            </div>
-            <div style={{ borderBottom: '2px solid #eee', paddingBottom: '28px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>How many posts does Traffikora publish per week?</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.7 }}>Posting frequency depends on your plan. All plans include regular posting across your connected platforms. Higher plans include more frequent posting and more platforms.</p>
-            </div>
-            <div style={{ borderBottom: '2px solid #eee', paddingBottom: '28px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Can I review posts before they go live?</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.7 }}>Yes. You can review and approve posts before they publish, or let Traffikora publish automatically on your behalf. Full automation or approval-first — the choice is yours.</p>
-            </div>
-            <div style={{ borderBottom: '2px solid #eee', paddingBottom: '28px' }}>
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>Which social media platforms does Traffikora support?</h3>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#555', lineHeight: 1.7 }}>Traffikora currently supports Facebook, Instagram, TikTok, LinkedIn, Twitter/X, and Google Business Profile. Additional platforms are added regularly.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Stop doing social media manually.</h2>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
-        <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Trial</Link>
-      </section>
-
+        </section>
+        <section style={{ background: "#E8610A", padding: "60px 24px", textAlign: "center" }}>
+          <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "16px" }}>Your Social Media Should Run Without You</h2>
+          <p style={{ color: "#ffffff", fontSize: "1.1rem", maxWidth: "560px", margin: "0 auto 32px" }}>Traffikora creates and publishes branded content every day across 9+ platforms -- automatically, while you focus on running your business.</p>
+          <Link href="/signup" style={{ background: "#ffffff", color: "#E8610A", padding: "16px 36px", borderRadius: "6px", fontWeight: "700", textDecoration: "none", fontSize: "1.05rem" }}>Start Your Free 7-Day Trial</Link>
+          <p style={{ color: "#ffffff", marginTop: "16px", fontSize: "0.9rem", opacity: 0.85 }}>No credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.</p>
+        </section>
+      </main>
       <Footer />
     </>
-  )
+  );
 }
