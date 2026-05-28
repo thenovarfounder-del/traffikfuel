@@ -1,79 +1,119 @@
-// @ts-nocheck
-'use client'
+import Link from "next/link";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 
-import Link from 'next/link'
-import Nav from '@/components/Nav'
-import Footer from '@/components/Footer'
+export const metadata = {
+  title: "Traffikora vs Semrush for Small Business | Traffikora",
+  description: "Semrush tells you what to fix. Traffikora fixes it automatically. Compare Traffikora vs Semrush for local small business SEO and marketing automation.",
+};
 
-export default function VsPage() {
-  const rows = [
-    { feature: 'AI Engine Optimization (ChatGPT, Claude, Gemini)', traffikora: true, competitor: false },
-    { feature: 'Google Business Profile Automation', traffikora: true, competitor: false },
-    { feature: 'Automated Review Generation', traffikora: true, competitor: false },
-    { feature: 'Social Media Automation', traffikora: true, competitor: true },
-    { feature: 'Local SEO', traffikora: true, competitor: false },
-    { feature: 'Set It Once — Runs Forever', traffikora: true, competitor: false },
-    { feature: 'Built for Small Business', traffikora: true, competitor: false },
-    { feature: '7-Day Free Trial', traffikora: true, competitor: false },
-    { feature: 'No Monthly Contract', traffikora: true, competitor: false },
-  ]
-
+export default function VsSemrushPage() {
   return (
     <>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
       <Nav />
-
-      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Comparison</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Traffikora vs SEMrush</h1>
-        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto 40px' }}>See why small businesses choose Traffikora over SEMrush for automated, AI-powered marketing.</p>
-        <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free 7-Day Trial</Link>
-      </section>
-
-      <section style={{ background: '#fff', padding: '80px 32px' }}>
-        <div style={{ maxWidth: '860px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0', border: '2.5px solid #111', marginBottom: '64px' }}>
-            <div style={{ padding: '20px 24px', borderRight: '2.5px solid #111', background: '#f8f8f8' }}>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, color: '#555' }}>Feature</p>
+      <main suppressHydrationWarning>
+        <section style={{ background: "#111111", padding: "80px 24px 60px", textAlign: "center" }} suppressHydrationWarning>
+          <h1 style={{ fontFamily: "Playfair Display, serif", fontSize: "clamp(2rem, 5vw, 3.2rem)", color: "#ffffff", marginBottom: "20px" }}>Traffikora vs Semrush</h1>
+          <p style={{ color: "#cccccc", fontSize: "1.15rem", maxWidth: "640px", margin: "0 auto 32px" }}>Semrush is a powerful SEO research tool. Traffikora is an automated SEO execution machine. One tells you what to do. The other does it for you.</p>
+          <Link href="/signup" style={{ background: "#E8610A", color: "#ffffff", padding: "14px 32px", borderRadius: "6px", fontWeight: "700", textDecoration: "none", fontSize: "1rem" }}>Start Your Free 7-Day Trial</Link>
+        </section>
+        <section style={{ background: "#1a1a1a", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "1.5rem", marginBottom: "16px" }}>What Traffikora Does For You</h2>
+            <ul style={{ color: "#cccccc", lineHeight: "2", paddingLeft: "20px" }}>
+              <li>Executes local SEO automatically -- citations, schema, keyword content</li>
+              <li>Publishes daily social content across 9+ platforms</li>
+              <li>Manages your Google Business Profile automatically</li>
+              <li>Publishes weekly SEO blog posts to your website</li>
+              <li>Optimizes for AI engine visibility on ChatGPT, Perplexity, and Gemini</li>
+              <li>Sends automated review requests to grow your star rating</li>
+            </ul>
+          </div>
+        </section>
+        <section style={{ background: "#111111", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "24px" }}>Semrush Is a Tool. Traffikora Is a Machine.</h2>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Semrush is one of the most respected SEO research platforms in the industry. It gives you keyword data, backlink analysis, site audits, competitive intelligence, and rank tracking. For SEO professionals and marketing teams, it is an essential toolkit. But it is exactly that -- a toolkit. Every insight Semrush gives you still requires a human to act on it.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Semrush will tell you that your local citations are inconsistent, that your page is missing schema markup, that you should be targeting a specific keyword, and that your competitors are outranking you for a valuable search term. What it will not do is fix any of those things. That work still falls on you -- or on an SEO agency you are paying separately to execute the strategy Semrush revealed.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>For a local small business owner without an in-house SEO team, Semrush at $120 to $450 per month is an expensive dashboard full of insights you do not have time to act on. The information is valuable. The execution gap is the problem. Traffikora closes that gap by automating the execution entirely.</p>
+          </div>
+        </section>
+        <section style={{ background: "#1a1a1a", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "2rem", marginBottom: "24px" }}>Traffikora vs Semrush -- Feature Comparison</h2>
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", color: "#cccccc", fontSize: "0.95rem" }}>
+                <thead>
+                  <tr style={{ borderBottom: "2px solid #E8610A" }}>
+                    <th style={{ textAlign: "left", padding: "12px 16px", color: "#ffffff", fontFamily: "Playfair Display, serif" }}>Feature</th>
+                    <th style={{ textAlign: "center", padding: "12px 16px", color: "#E8610A", fontFamily: "Playfair Display, serif" }}>Traffikora</th>
+                    <th style={{ textAlign: "center", padding: "12px 16px", color: "#ffffff", fontFamily: "Playfair Display, serif" }}>Semrush</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ["Starting Price", "$97/mo", "$120/mo"],
+                    ["Executes SEO Automatically", "Yes", "No -- research only"],
+                    ["Local Citation Building", "Yes -- automated", "Reports issues, you fix them"],
+                    ["Content Creation", "Yes -- daily social and weekly blog", "No"],
+                    ["Google Business Profile Management", "Yes -- automated", "No"],
+                    ["AI Engine Optimization", "Yes -- built in", "No"],
+                    ["Social Media Automation", "Yes -- 9+ platforms", "No"],
+                    ["Review Request Automation", "Yes", "No"],
+                    ["Requires SEO Expertise to Use", "No", "Yes"],
+                    ["Built for Local Business Execution", "Yes", "No -- built for SEO research"]
+                  ].map(([feature, traffikora, semrush], i) => (
+                    <tr key={feature} style={{ borderBottom: "1px solid #2a2a2a", background: i % 2 === 0 ? "#111111" : "#1a1a1a" }}>
+                      <td style={{ padding: "12px 16px", color: "#ffffff" }}>{feature}</td>
+                      <td style={{ padding: "12px 16px", textAlign: "center", color: "#E8610A" }}>{traffikora}</td>
+                      <td style={{ padding: "12px 16px", textAlign: "center" }}>{semrush}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            <div style={{ padding: '20px 24px', borderRight: '2.5px solid #111', background: '#E8610A', textAlign: 'center' }}>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 700, color: '#fff' }}>Traffikora</p>
-            </div>
-            <div style={{ padding: '20px 24px', textAlign: 'center', background: '#f8f8f8' }}>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, color: '#555' }}>SEMrush</p>
-            </div>
-            {rows.map((row, i) => (
-              <>
-                <div key={'a'+i} style={{ padding: '18px 24px', borderTop: '2.5px solid #111', borderRight: '2.5px solid #111' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#111' }}>{row.feature}</p>
-                </div>
-                <div key={'b'+i} style={{ padding: '18px 24px', borderTop: '2.5px solid #111', borderRight: '2.5px solid #111', textAlign: 'center', background: '#fff9f6' }}>
-                  <p style={{ fontSize: '18px' }}>{row.traffikora ? '✅' : '❌'}</p>
-                </div>
-                <div key={'c'+i} style={{ padding: '18px 24px', borderTop: '2.5px solid #111', textAlign: 'center' }}>
-                  <p style={{ fontSize: '18px' }}>{row.competitor ? '✅' : '❌'}</p>
-                </div>
-              </>
+          </div>
+        </section>
+        <section style={{ background: "#111111", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "24px" }}>SEO Automation vs SEO Research -- Know the Difference</h2>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Semrush and Traffikora are in different categories. Semrush is an SEO intelligence platform -- it is exceptional at research, analysis, and surfacing opportunities. If you have an SEO team or agency that can act on those insights, Semrush is a worthwhile investment. The data is genuinely valuable for professionals who know how to use it.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Traffikora is an SEO execution platform. It does not give you a dashboard of keyword opportunities to manually pursue. It builds your local citations, publishes your keyword content, structures your schema markup, and keeps your Google Business Profile active -- automatically, every week, without you touching it. The results compound over time without requiring your ongoing attention.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>For a local business owner who does not have an SEO background and does not have time to learn one, Traffikora is the right choice. You do not need to understand keyword research or citation audits -- Traffikora handles the execution that produces rankings, and it does it without requiring your expertise or your time.</p>
+          </div>
+        </section>
+        <section style={{ background: "#1a1a1a", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "2rem", marginBottom: "24px" }}>Why This Comparison Matters More in 2026</h2>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>SEO is expanding beyond Google. AI engines like ChatGPT, Perplexity, and Gemini now handle a significant share of local search queries -- and they use different signals than traditional Google SEO. Semrush has no AI engine optimization features. Its product is built around Google search data, which remains important but is no longer the complete picture for local businesses.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Traffikora builds your visibility across both traditional local SEO and AI engine optimization simultaneously. Every piece of content, every citation, and every structured data signal strengthens your presence on Google and increases your likelihood of appearing in AI-generated local recommendations. Local businesses that cover both channels now are building a durable visibility advantage that pure SEO research tools cannot replicate.</p>
+          </div>
+        </section>
+        <section style={{ background: "#111111", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "32px" }}>Frequently Asked Questions</h2>
+            {[
+              ["Is Traffikora a Semrush alternative for small business?", "For local small businesses that need SEO execution rather than SEO research, yes. Semrush is a research and intelligence platform that requires expertise to use and a team to act on its recommendations. Traffikora is an automation platform that executes local SEO for you -- building citations, publishing content, and managing your Google presence automatically without requiring SEO knowledge or ongoing effort."],
+              ["Can I use both Semrush and Traffikora together?", "Yes, and some businesses do. Semrush for research and competitive intelligence, Traffikora for automated execution. If you have the budget and an SEO-informed team, using both can be effective. For most local small businesses without dedicated SEO resources, Traffikora alone covers the execution that produces local rankings."],
+              ["Does Traffikora do keyword research like Semrush?", "Traffikora does not provide a keyword research dashboard. It uses keyword intelligence internally to produce the right content for your business type and location -- but you do not need to interact with keyword data yourself. The SEO execution happens automatically based on your business profile. If you want granular keyword research tools, Semrush remains the stronger option for that specific function."],
+              ["How does Traffikora improve my local SEO rankings?", "Traffikora improves local SEO rankings by building consistent local citations across directories, publishing keyword-optimized blog content to your website weekly, adding structured schema markup, keeping your Google Business Profile active, and building the entity signals that Google uses to rank local businesses. These are the core local SEO ranking factors -- Traffikora executes all of them automatically."],
+              ["How long before I see SEO results with Traffikora?", "Local SEO improvements typically show meaningful results within 60 to 90 days as Google indexes the content, citations, and structured data Traffikora builds on your behalf. Google Business Profile visibility and social media consistency improve immediately from day one."]
+            ].map(([q, a]) => (
+              <div key={q} style={{ borderBottom: "1px solid #2a2a2a", paddingBottom: "24px", marginBottom: "24px" }}>
+                <h3 style={{ color: "#E8610A", fontFamily: "Playfair Display, serif", fontSize: "1.1rem", marginBottom: "10px" }}>{q}</h3>
+                <p style={{ color: "#cccccc", lineHeight: "1.8" }}>{a}</p>
+              </div>
             ))}
           </div>
-
-          <div style={{ textAlign: 'center' }}>
-            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '36px', fontWeight: 900, color: '#111', marginBottom: '16px' }}>The bottom line</h2>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', maxWidth: '640px', margin: '0 auto 40px', lineHeight: 1.8 }}>SEMrush does some things well. But it wasn’t built for small businesses who need everything automated in one place — including AI engine optimization. Traffikora was.</p>
-            <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #111', display: 'inline-block' }}>Try Traffikora Free for 7 Days</Link>
-          </div>
-        </div>
-      </section>
-
-      <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Ready to make the switch?</h2>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
-        <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Trial</Link>
-      </section>
-
+        </section>
+        <section style={{ background: "#E8610A", padding: "60px 24px", textAlign: "center" }}>
+          <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "16px" }}>Stop Researching. Start Ranking.</h2>
+          <p style={{ color: "#ffffff", fontSize: "1.1rem", maxWidth: "560px", margin: "0 auto 32px" }}>Traffikora executes your local SEO automatically -- citations, content, Google profile, and AI engine optimization -- every week without you touching it.</p>
+          <Link href="/signup" style={{ background: "#ffffff", color: "#E8610A", padding: "16px 36px", borderRadius: "6px", fontWeight: "700", textDecoration: "none", fontSize: "1.05rem" }}>Start Your Free 7-Day Trial</Link>
+          <p style={{ color: "#ffffff", marginTop: "16px", fontSize: "0.9rem", opacity: 0.85 }}>No credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.</p>
+        </section>
+      </main>
       <Footer />
     </>
-  )
+  );
 }
