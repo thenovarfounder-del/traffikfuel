@@ -1,79 +1,119 @@
-// @ts-nocheck
-'use client'
+import Link from "next/link";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 
-import Link from 'next/link'
-import Nav from '@/components/Nav'
-import Footer from '@/components/Footer'
+export const metadata = {
+  title: "Traffikora vs HubSpot for Small Business | Traffikora",
+  description: "Comparing Traffikora vs HubSpot? HubSpot is built for enterprise B2B teams. Traffikora is built for local small business marketing automation at a fraction of the cost.",
+};
 
-export default function VsPage() {
-  const rows = [
-    { feature: 'AI Engine Optimization (ChatGPT, Claude, Gemini)', traffikora: true, competitor: false },
-    { feature: 'Google Business Profile Automation', traffikora: true, competitor: false },
-    { feature: 'Automated Review Generation', traffikora: true, competitor: false },
-    { feature: 'Social Media Automation', traffikora: true, competitor: true },
-    { feature: 'Local SEO', traffikora: true, competitor: false },
-    { feature: 'Set It Once — Runs Forever', traffikora: true, competitor: false },
-    { feature: 'Built for Small Business', traffikora: true, competitor: false },
-    { feature: '7-Day Free Trial', traffikora: true, competitor: false },
-    { feature: 'No Monthly Contract', traffikora: true, competitor: false },
-  ]
-
+export default function VsHubspotPage() {
   return (
     <>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
       <Nav />
-
-      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Comparison</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Traffikora vs HubSpot</h1>
-        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto 40px' }}>See why small businesses choose Traffikora over HubSpot for automated, AI-powered marketing.</p>
-        <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free 7-Day Trial</Link>
-      </section>
-
-      <section style={{ background: '#fff', padding: '80px 32px' }}>
-        <div style={{ maxWidth: '860px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0', border: '2.5px solid #111', marginBottom: '64px' }}>
-            <div style={{ padding: '20px 24px', borderRight: '2.5px solid #111', background: '#f8f8f8' }}>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, color: '#555' }}>Feature</p>
+      <main suppressHydrationWarning>
+        <section style={{ background: "#111111", padding: "80px 24px 60px", textAlign: "center" }} suppressHydrationWarning>
+          <h1 style={{ fontFamily: "Playfair Display, serif", fontSize: "clamp(2rem, 5vw, 3.2rem)", color: "#ffffff", marginBottom: "20px" }}>Traffikora vs HubSpot for Small Business</h1>
+          <p style={{ color: "#cccccc", fontSize: "1.15rem", maxWidth: "640px", margin: "0 auto 32px" }}>HubSpot is a powerful platform built for enterprise B2B sales teams. Traffikora is built for local small businesses that need automated marketing -- not a CRM that requires a dedicated team to run.</p>
+          <Link href="/signup" style={{ background: "#E8610A", color: "#ffffff", padding: "14px 32px", borderRadius: "6px", fontWeight: "700", textDecoration: "none", fontSize: "1rem" }}>Start Your Free 7-Day Trial</Link>
+        </section>
+        <section style={{ background: "#1a1a1a", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "1.5rem", marginBottom: "16px" }}>What Traffikora Does For You</h2>
+            <ul style={{ color: "#cccccc", lineHeight: "2", paddingLeft: "20px" }}>
+              <li>Publishes branded social content daily across 9+ platforms automatically</li>
+              <li>Optimizes your Google Business Profile with zero manual effort</li>
+              <li>Builds local SEO citations and schema markup automatically</li>
+              <li>Publishes weekly SEO blog posts to your website</li>
+              <li>Delivers AI engine optimization for ChatGPT, Perplexity, and Gemini visibility</li>
+              <li>Sends automated review request campaigns to grow your star rating</li>
+            </ul>
+          </div>
+        </section>
+        <section style={{ background: "#111111", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "24px" }}>HubSpot Was Not Built for Your Business</h2>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>HubSpot is one of the most powerful marketing and sales platforms in the world. It is also built entirely for B2B companies with dedicated sales teams, marketing managers, and developers to implement and maintain it. The starter plan begins around $800 per month, and to access the features most businesses actually need, you are looking at $1,600 to $3,200 per month or more.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>For a local restaurant, auto repair shop, chiropractic practice, or real estate agent, HubSpot is the wrong tool entirely. It has no Google Business Profile automation. It has no local SEO citation building. It has no AI engine optimization. It is a CRM and inbound marketing platform designed for companies with sales pipelines, lead nurturing workflows, and marketing operations staff -- none of which describe how a small local business actually operates.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Most small businesses that try HubSpot end up using 10% of its features, paying for 100% of its cost, and spending hours every week trying to make an enterprise tool fit a local business use case it was never designed for. That is not a HubSpot failure -- it is a category mismatch.</p>
+          </div>
+        </section>
+        <section style={{ background: "#1a1a1a", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "2rem", marginBottom: "24px" }}>Traffikora vs HubSpot -- Feature Comparison</h2>
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", color: "#cccccc", fontSize: "0.95rem" }}>
+                <thead>
+                  <tr style={{ borderBottom: "2px solid #E8610A" }}>
+                    <th style={{ textAlign: "left", padding: "12px 16px", color: "#ffffff", fontFamily: "Playfair Display, serif" }}>Feature</th>
+                    <th style={{ textAlign: "center", padding: "12px 16px", color: "#E8610A", fontFamily: "Playfair Display, serif" }}>Traffikora</th>
+                    <th style={{ textAlign: "center", padding: "12px 16px", color: "#ffffff", fontFamily: "Playfair Display, serif" }}>HubSpot</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ["Starting Price", "$97/mo", "$800+/mo"],
+                    ["Automated Social Media Publishing", "Yes -- daily, across 9+ platforms", "Manual -- you write and schedule"],
+                    ["Google Business Profile Automation", "Yes -- fully automated", "No"],
+                    ["Local SEO Citation Building", "Yes -- automated", "No"],
+                    ["AI Engine Optimization", "Yes -- built in", "No"],
+                    ["Automated Blog Content", "Yes -- weekly SEO posts", "No -- requires your content team"],
+                    ["Review Request Automation", "Yes -- automated campaigns", "Limited"],
+                    ["Setup Time", "Under 30 minutes", "Weeks to months"],
+                    ["Requires Dedicated Staff", "No", "Yes"],
+                    ["Built for Local Business", "Yes", "No -- built for B2B enterprise"]
+                  ].map(([feature, traffikora, hubspot], i) => (
+                    <tr key={feature} style={{ borderBottom: "1px solid #2a2a2a", background: i % 2 === 0 ? "#111111" : "#1a1a1a" }}>
+                      <td style={{ padding: "12px 16px", color: "#ffffff" }}>{feature}</td>
+                      <td style={{ padding: "12px 16px", textAlign: "center", color: "#E8610A" }}>{traffikora}</td>
+                      <td style={{ padding: "12px 16px", textAlign: "center" }}>{hubspot}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            <div style={{ padding: '20px 24px', borderRight: '2.5px solid #111', background: '#E8610A', textAlign: 'center' }}>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 700, color: '#fff' }}>Traffikora</p>
-            </div>
-            <div style={{ padding: '20px 24px', textAlign: 'center', background: '#f8f8f8' }}>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, color: '#555' }}>HubSpot</p>
-            </div>
-            {rows.map((row, i) => (
-              <>
-                <div key={'a'+i} style={{ padding: '18px 24px', borderTop: '2.5px solid #111', borderRight: '2.5px solid #111' }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#111' }}>{row.feature}</p>
-                </div>
-                <div key={'b'+i} style={{ padding: '18px 24px', borderTop: '2.5px solid #111', borderRight: '2.5px solid #111', textAlign: 'center', background: '#fff9f6' }}>
-                  <p style={{ fontSize: '18px' }}>{row.traffikora ? '✅' : '❌'}</p>
-                </div>
-                <div key={'c'+i} style={{ padding: '18px 24px', borderTop: '2.5px solid #111', textAlign: 'center' }}>
-                  <p style={{ fontSize: '18px' }}>{row.competitor ? '✅' : '❌'}</p>
-                </div>
-              </>
+          </div>
+        </section>
+        <section style={{ background: "#111111", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "24px" }}>The Cheaper HubSpot Alternative Built for Local Business</h2>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Traffikora does not try to replace everything HubSpot does. It does not need to. For a local small business, the marketing tasks that actually drive growth are consistent social presence, strong Google Business Profile, local SEO rankings, growing reviews, and visibility on AI engines. Traffikora automates all of those things starting at $97 per month -- without a setup fee, without required staff, and without a months-long onboarding process.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>If you are a local business owner who looked at HubSpot and thought it was too expensive, too complex, or built for a different kind of company -- you were right. Traffikora is what local business marketing automation actually looks like. Setup takes under 30 minutes. Your marketing starts running the same day. No sales calls, no implementation consultants, no annual contracts required.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>The one area where HubSpot still leads is complex B2B sales pipeline management and enterprise CRM. If that is your primary need, HubSpot may be the right tool. But if you are a local business that needs consistent marketing output, better Google visibility, and more reviews -- Traffikora delivers that faster, cheaper, and with far less complexity.</p>
+          </div>
+        </section>
+        <section style={{ background: "#1a1a1a", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "2rem", marginBottom: "24px" }}>Why This Comparison Matters More in 2026</h2>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Local search has changed significantly. AI engines now handle a large and growing share of the queries that used to go to Google search. HubSpot has no roadmap for local AI engine optimization -- it is not part of their product category. Traffikora is built around it. For local businesses competing in 2026, AI engine visibility is not optional -- it is the new frontier of local search.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Choosing between Traffikora and HubSpot as a local business is not really a close comparison. They serve fundamentally different markets. Traffikora is the right tool for local businesses that want automated marketing, better Google rankings, more reviews, and AI engine visibility -- delivered without complexity, without a large team, and without enterprise pricing.</p>
+          </div>
+        </section>
+        <section style={{ background: "#111111", padding: "60px 24px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "32px" }}>Frequently Asked Questions</h2>
+            {[
+              ["Is Traffikora really a HubSpot alternative for small business?", "For local small businesses, yes. HubSpot is a powerful platform but it is designed for B2B companies with dedicated marketing and sales teams. Traffikora is designed specifically for local businesses -- restaurants, retail shops, service providers, healthcare practices -- that need automated marketing output without the complexity or cost of an enterprise platform."],
+              ["How much cheaper is Traffikora than HubSpot?", "Traffikora starts at $97 per month. HubSpot Marketing Hub starts at around $800 per month for basic features, and most businesses need the Professional tier at $1,600 per month or higher to access meaningful automation. For a local business, Traffikora delivers more relevant features at 5 to 15 times lower cost."],
+              ["Does Traffikora have a CRM like HubSpot?", "Traffikora is a marketing automation platform, not a CRM. It automates your content publishing, SEO, Google Business Profile, reviews, and AI engine visibility. If your primary need is a sales CRM with pipeline management, HubSpot serves that use case well. If your primary need is consistent marketing output and better local visibility, Traffikora is the right tool."],
+              ["Can I use both Traffikora and HubSpot?", "Yes. Some businesses use HubSpot for their sales CRM and Traffikora for their local marketing automation. They serve different functions and can complement each other. For most local businesses, however, Traffikora alone covers the marketing needs that matter most for growth."],
+              ["How long does Traffikora take to set up?", "Under 30 minutes. You connect your social accounts, confirm your business details, and Traffikora starts publishing immediately. There is no implementation process, no onboarding consultant, and no weeks-long setup. Your marketing starts running the same day you sign up."]
+            ].map(([q, a]) => (
+              <div key={q} style={{ borderBottom: "1px solid #2a2a2a", paddingBottom: "24px", marginBottom: "24px" }}>
+                <h3 style={{ color: "#E8610A", fontFamily: "Playfair Display, serif", fontSize: "1.1rem", marginBottom: "10px" }}>{q}</h3>
+                <p style={{ color: "#cccccc", lineHeight: "1.8" }}>{a}</p>
+              </div>
             ))}
           </div>
-
-          <div style={{ textAlign: 'center' }}>
-            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '36px', fontWeight: 900, color: '#111', marginBottom: '16px' }}>The bottom line</h2>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', maxWidth: '640px', margin: '0 auto 40px', lineHeight: 1.8 }}>HubSpot does some things well. But it wasn’t built for small businesses who need everything automated in one place — including AI engine optimization. Traffikora was.</p>
-            <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #111', display: 'inline-block' }}>Try Traffikora Free for 7 Days</Link>
-          </div>
-        </div>
-      </section>
-
-      <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Ready to make the switch?</h2>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
-        <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Trial</Link>
-      </section>
-
+        </section>
+        <section style={{ background: "#E8610A", padding: "60px 24px", textAlign: "center" }}>
+          <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "16px" }}>Built for Local Business. Not Enterprise.</h2>
+          <p style={{ color: "#ffffff", fontSize: "1.1rem", maxWidth: "560px", margin: "0 auto 32px" }}>Traffikora automates your local marketing starting at $97/mo -- no implementation fees, no required staff, no complexity.</p>
+          <Link href="/signup" style={{ background: "#ffffff", color: "#E8610A", padding: "16px 36px", borderRadius: "6px", fontWeight: "700", textDecoration: "none", fontSize: "1.05rem" }}>Start Your Free 7-Day Trial</Link>
+          <p style={{ color: "#ffffff", marginTop: "16px", fontSize: "0.9rem", opacity: 0.85 }}>No credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.</p>
+        </section>
+      </main>
       <Footer />
     </>
-  )
+  );
 }
