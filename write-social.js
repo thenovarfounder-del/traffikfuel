@@ -1,4 +1,8 @@
 const fs = require('fs');
-const content = fs.readFileSync('src/app/demo/page.tsx', 'utf8');
-const lines = content.split('\n');
-lines.forEach((line, i) => console.log(i + 1, line));
+let content = fs.readFileSync('src/app/demo/page.tsx', 'utf8');
+content = content.replaceAll("href='/'", "href='/signup'");
+content = content.replaceAll('href="/"', 'href="/signup"');
+content = content.replaceAll("href='#'", "href='/signup'");
+content = content.replaceAll('href="#"', 'href="/signup"');
+fs.writeFileSync('src/app/demo/page.tsx', content);
+console.log('Done');
