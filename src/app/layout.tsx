@@ -1,5 +1,4 @@
 // @ts-nocheck
-import { Playfair_Display, DM_Sans } from 'next/font/google'
 import './globals.css'
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400','700','900'], display: 'swap', variable: '--font-playfair' })
@@ -16,8 +15,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${dmSans.variable}`}>
+    <html lang="en">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" media="print" onLoad="this.media='all'" />
         <meta name="google-site-verification" content="tDnX1kzbibOZ52zeV6oAH35iohkvNI-4BpV7lz1Yga0" />
         <meta property="og:title" content="Traffikora - AI Marketing Automation for Small Businesses" />
         <meta property="og:description" content="Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine." />

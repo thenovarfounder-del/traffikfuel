@@ -1,34 +1,33 @@
 const fs = require('fs');
 const path = require('path');
 
-// Revert globals.css - remove the @import we just added
-const cssPath = path.join('src', 'app', 'globals.css');
-let css = fs.readFileSync(cssPath, 'utf8');
-css = css.replace(/@import url\('https:\/\/fonts\.googleapis\.com[^']*'\);\n\n?/g, '');
-fs.writeFileSync(cssPath, css, 'utf8');
-console.log('Done: reverted globals.css font import');
-
-// Add fonts back to layout.tsx using next/font/google (truly non-blocking)
 const layoutPath = path.join('src', 'app', 'layout.tsx');
 let layout = fs.readFileSync(layoutPath, 'utf8');
 
-// Add next/font import at the top after // @ts-nocheck
-if (!layout.includes('next/font/google')) {
-  layout = layout.replace(
-    "import './globals.css'",
-    `import { Playfair_Display, DM_Sans } from 'next/font/google'
-import './globals.css'
+// Remove next/font import line
+layout = layout.replace(/import \{ Playfair_Display, DM_Sans \} from 'next\/font\/google'\r?\n/g, '');
 
-const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400','700','900'], display: 'swap', variable: '--font-playfair' })
-const dmSans = DM_Sans({ subsets: ['latin'], weight: ['300','400','500','600','700'], display: 'swap', variable: '--font-dm-sans' })`
-  );
+// Remove const playfair and const dmSans lines
+layout = layout.replace(/const playfair = Playfair_Display\([^)]*\}\)\)\r?\n/g, '');
+layout = layout.replace(/const dmSans = DM_Sans\([^)]*\}\)\)\r?\n/g, '');
 
-  // Add font variables to the html tag
+// Restore clean html tag
+layout = layout.replace(
+  "<html lang=\"en\" className={`${playfair.variable} ${dmSans.variable}`}>",
+  '<html lang="en">'
+);
+
+// Add back the single preload/swap font tags (the 80-score setup)
+if (!layout.includes('fonts.googleapis.com')) {
   layout = layout.replace(
-    '<html lang="en">',
-    '<html lang="en" className={`${playfair.variable} ${dmSans.variable}`}>'
+    '<meta name="google-site-verification"',
+    `<link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" media="print" onLoad="this.media='all'" />
+        <meta name="google-site-verification"`
   );
 }
 
 fs.writeFileSync(layoutPath, layout, 'utf8');
-console.log('Done: added next/font/google to layout.tsx');
+console.log('Done: restored 80-score layout');
