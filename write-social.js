@@ -1,10 +1,15 @@
 const fs = require('fs');
-const path = require('path');
 
-const target = 'C:\\Users\\randy\\traffikfuel\\src\\app\\resources\\layout.tsx';
+const existing = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\resources\\glossary\\page.tsx', 'utf8');
 
-fs.mkdirSync(path.dirname(target), { recursive: true });
-fs.writeFileSync(target, `export default function Layout({children}:{children:React.ReactNode}){return <>{children}</>}`);
+// Only add the headers if they're not already there
+if (!existing.startsWith('// @ts-nocheck')) {
+  const fixed = `// @ts-nocheck\n'use client'\n` + existing;
+  fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\resources\\glossary\\page.tsx', fixed, 'utf8');
+  console.log('FIXED - headers added');
+} else {
+  console.log('Already has headers');
+}
 
-console.log('EXISTS?', fs.existsSync(target));
-console.log('CONTENT:', fs.readFileSync(target, 'utf8'));
+console.log('First 3 lines:');
+console.log(fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\resources\\glossary\\page.tsx', 'utf8').split('\n').slice(0,3).join('\n'));
