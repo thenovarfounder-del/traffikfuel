@@ -1,23 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 
-const layoutPath = path.join('src', 'app', 'layout.tsx');
-let content = fs.readFileSync(layoutPath, 'utf8');
+const cssPath = path.join('src', 'app', 'globals.css');
+let content = fs.readFileSync(cssPath, 'utf8');
 
-// Remove the blocking <link rel="stylesheet"> for Google Fonts (line 35 area)
-// This is the duplicate that blocks rendering - the preload/print swap on lines 32-33 handles loading
-content = content.replace(
-  /[ \t]*<link rel="stylesheet" href="https:\/\/fonts\.googleapis\.com\/css2\?family=Playfair[^"]*" \/>\n?/,
-  ''
-);
+const fontImport = `@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap');\n\n`;
 
-// Make sure the preconnect to fonts.googleapis.com exists
-if (!content.includes('preconnect" href="https://fonts.googleapis.com"')) {
-  content = content.replace(
-    '<link rel="preconnect" href="https://fonts.gstatic.com"',
-    '<link rel="preconnect" href="https://fonts.googleapis.com" />\n        <link rel="preconnect" href="https://fonts.gstatic.com"'
-  );
+if (!content.includes('fonts.googleapis.com')) {
+  content = fontImport + content;
 }
 
-fs.writeFileSync(layoutPath, content, 'utf8');
-console.log('Done: removed blocking Google Fonts stylesheet link');
+fs.writeFileSync(cssPath, content, 'utf8');
+console.log('Done: added font import to globals.css');

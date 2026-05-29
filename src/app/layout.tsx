@@ -27,11 +27,7 @@ export default function RootLayout({ children }) {
         <meta name="twitter:title" content="Traffikora - AI Marketing Automation for Small Businesses" />
         <meta name="twitter:description" content="Set it once. It markets forever." />
         <meta name="twitter:image" content="https://www.traffikora.com/og-image.png" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'" />
-        <noscript>
+                                        <noscript>
         </noscript>
       </head>
       <body className="antialiased">
