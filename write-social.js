@@ -1,10 +1,19 @@
 const fs = require('fs');
 const path = require('path');
 
-const dir = path.join('src', 'app', 'resources');
-fs.mkdirSync(dir, { recursive: true });
+const filePath = path.join(__dirname, 'src', 'app', 'page.tsx');
+let content = fs.readFileSync(filePath, 'utf8');
 
-const layoutContent = `export default function Layout({ children }: { children: React.ReactNode }) { return <>{children}</>; }`;
+const oldCode = `var deadline = new Date();
+      deadline.setDate(deadline.getDate() + 2);`;
 
-fs.writeFileSync(path.join(dir, 'layout.tsx'), layoutContent, 'utf8');
-console.log('Done: created src/app/resources/layout.tsx');
+const newCode = `var deadline = new Date('2026-06-15T23:59:59');`;
+
+if (!content.includes(oldCode)) {
+  console.log('ERROR: Could not find the countdown code to replace. No changes made.');
+  process.exit(1);
+}
+
+content = content.replace(oldCode, newCode);
+fs.writeFileSync(filePath, content, 'utf8');
+console.log('SUCCESS: Countdown timer fixed. Target date: June 15, 2026.');
