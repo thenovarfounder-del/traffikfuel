@@ -384,8 +384,6 @@ body{background:#fff;color:#111;font-family:'DM Sans',sans-serif;font-weight:300
             });
           });
           var deadline = new Date('2026-06-15T23:59:59');
-          deadline.setHours(deadline.getHours() + 14);
-          deadline.setMinutes(deadline.getMinutes() + 37);
           function updateCountdown() {
             var now = new Date(); var diff = deadline - now; if (diff <= 0) return;
             var d = Math.floor(diff/86400000); var h = Math.floor((diff%86400000)/3600000);
