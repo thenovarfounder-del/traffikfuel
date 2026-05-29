@@ -7,76 +7,143 @@ fs.mkdirSync(dir, { recursive: true });
 const layoutDir = path.join('src', 'app', 'resources');
 fs.mkdirSync(layoutDir, { recursive: true });
 
-// Write layout
 const layout = [];
 layout.push("export default function ResourcesLayout({ children }: { children: React.ReactNode }) {");
 layout.push("  return <>{children}</>;");
 layout.push("}");
 fs.writeFileSync(path.join(layoutDir, 'layout.tsx'), layout.join('\n'), 'utf8');
-console.log('Done: layout.tsx');
 
-// Write page
 const lines = [];
-lines.push("import { Metadata } from 'next';");
-lines.push("");
-lines.push("export const metadata: Metadata = {");
-lines.push("  title: 'AI & SEO Marketing Glossary | Traffikora',");
-lines.push("  description: 'Understand every term in AI marketing, local SEO, and generative engine optimization. The definitive glossary for small business owners and marketers.',");
-lines.push("  alternates: { canonical: 'https://www.traffikora.com/resources/glossary' },");
-lines.push("};");
-lines.push("");
-lines.push("const html = `");
-lines.push("<style>");
-lines.push("body{background:#111111;color:#fff;margin:0;font-family:DM Sans,sans-serif;}");
-lines.push(".hero{padding:112px 24px 64px;text-align:center;background:linear-gradient(135deg,#111111 0%,#1a1a1a 50%,#111111 100%);}");
-lines.push(".label{color:#E8610A;font-weight:600;text-transform:uppercase;letter-spacing:.15em;font-size:13px;margin:0 0 16px 0;}");
-lines.push(".h1{font-size:clamp(32px,6vw,56px);font-weight:700;color:#fff;margin:0 0 24px 0;line-height:1.15;}");
-lines.push(".accent{color:#E8610A;}");
-lines.push(".subtitle{color:#d1d5db;font-size:18px;max-width:600px;margin:0 auto 40px;line-height:1.7;}");
-lines.push(".lnav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:720px;margin:0 auto;}");
-lines.push(".lnav a{width:36px;height:36px;border-radius:50%;border:1px solid #E8610A;color:#E8610A;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;text-decoration:none;}");
-lines.push(".lnav a:hover{background:#E8610A;color:#fff;}");
-lines.push(".terms{max-width:800px;margin:0 auto;padding:64px 24px 96px;}");
-lines.push(".group{margin-bottom:56px;}");
-lines.push(".gh{display:flex;align-items:center;gap:16px;margin-bottom:24px;}");
-lines.push(".gl{font-size:48px;font-weight:700;color:#E8610A;}");
-lines.push(".gline{flex:1;height:1px;background:#E8610A;opacity:.3;}");
-lines.push(".card{border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:24px;margin-bottom:16px;}");
-lines.push(".card h2{color:#fff;font-size:17px;font-weight:700;margin:0 0 8px 0;}");
-lines.push(".card p{color:#d1d5db;line-height:1.7;margin:0;}");
-lines.push(".cta{padding:80px 24px;text-align:center;background:linear-gradient(135deg,#E8610A 0%,#C84E06 100%);}");
-lines.push(".cta h2{font-size:clamp(28px,5vw,44px);font-weight:700;color:#fff;margin:0 0 16px 0;}");
-lines.push(".cta p{color:rgba(255,255,255,.9);font-size:18px;margin:0 auto 32px;max-width:500px;}");
-lines.push(".cta a{display:inline-block;background:#fff;color:#E8610A;font-weight:700;font-size:17px;padding:16px 40px;border-radius:50px;text-decoration:none;}");
-lines.push("</style>");
-lines.push("<div class='hero'><p class='label'>Reference Guide</p><h1 class='h1'>AI &amp; SEO Marketing <span class='accent'>Glossary</span></h1><p class='subtitle'>Every term you need to understand AI marketing, local SEO, and generative engine optimization -- explained in plain English.</p><div class='lnav'><a href='#A'>A</a><a href='#B'>B</a><a href='#C'>C</a><a href='#D'>D</a><a href='#E'>E</a><a href='#G'>G</a><a href='#I'>I</a><a href='#K'>K</a><a href='#L'>L</a><a href='#M'>M</a><a href='#N'>N</a><a href='#O'>O</a><a href='#P'>P</a><a href='#R'>R</a><a href='#S'>S</a><a href='#T'>T</a><a href='#U'>U</a><a href='#Z'>Z</a></div></div>");
-lines.push("<div class='terms'>");
-lines.push("<div class='group' id='A'><div class='gh'><span class='gl'>A</span><div class='gline'></div></div><div class='card'><h2>AI Engine Optimization (AEO)</h2><p>The practice of structuring your content so AI-powered answer engines like ChatGPT, Perplexity, and Google AI Overviews surface your business as a cited source. AEO is the evolution of traditional SEO.</p></div><div class='card'><h2>AI Marketing Automation</h2><p>The use of artificial intelligence to plan, create, schedule, and optimize marketing content without constant manual input. Traffikora uses AI marketing automation to run your social, blog, and local SEO simultaneously.</p></div><div class='card'><h2>Algorithm</h2><p>A set of rules used by search engines and social platforms to decide which content to show and in what order. Google, TikTok, and Instagram each use their own algorithms.</p></div><div class='card'><h2>Answer Engine</h2><p>A search tool that returns a direct answer rather than a list of links. Examples include ChatGPT, Perplexity, and Google AI Overviews. Ranking in answer engines requires AEO strategy.</p></div><div class='card'><h2>Authority Score</h2><p>A metric estimating how trustworthy and influential a website is based on backlinks, traffic, and content quality. Higher authority scores typically lead to better organic rankings.</p></div></div>");
-lines.push("<div class='group' id='B'><div class='gh'><span class='gl'>B</span><div class='gline'></div></div><div class='card'><h2>Backlink</h2><p>A link from another website pointing to your site. High-quality backlinks from authoritative sites signal trust to search engines and improve your domain authority.</p></div><div class='card'><h2>Blog Automation</h2><p>The process of using AI to automatically generate, optimize, and publish SEO blog posts on a recurring schedule. Traffikora blog automation publishes keyword-targeted articles without requiring you to write a single word.</p></div><div class='card'><h2>Brand Voice</h2><p>The consistent personality, tone, and style a business uses across all its marketing content. A strong brand voice builds recognition and trust with customers.</p></div><div class='card'><h2>Business Listing</h2><p>A profile of your business on a directory such as Google Business Profile, Yelp, or Bing Places. Consistent listings across platforms improve local SEO rankings.</p></div></div>");
-lines.push("<div class='group' id='C'><div class='gh'><span class='gl'>C</span><div class='gline'></div></div><div class='card'><h2>Citations</h2><p>Online mentions of your business name, address, and phone number across directories and websites. Consistent citations are a key local SEO ranking factor.</p></div><div class='card'><h2>Click-Through Rate (CTR)</h2><p>The percentage of people who click your link after seeing it in search results. Higher CTR signals to search engines that your listing is relevant and attractive.</p></div><div class='card'><h2>Content Calendar</h2><p>A schedule mapping what content will be published, on which platforms, and when. Traffikora automates your content calendar across social media and blog channels.</p></div><div class='card'><h2>Conversion Rate</h2><p>The percentage of visitors who take a desired action such as booking an appointment or submitting a form. Improving conversion rate increases revenue without increasing ad spend.</p></div><div class='card'><h2>Core Web Vitals</h2><p>Performance metrics defined by Google measuring page loading speed, interactivity, and visual stability. Passing Core Web Vitals is required for top search rankings.</p></div></div>");
-lines.push("<div class='group' id='D'><div class='gh'><span class='gl'>D</span><div class='gline'></div></div><div class='card'><h2>Domain Authority (DA)</h2><p>A score from 1 to 100 that predicts how well a website will rank in search engines. DA is built over time through quality content and backlinks.</p></div><div class='card'><h2>Duplicate Content</h2><p>Identical or very similar content appearing on more than one URL. Duplicate content can confuse search engines and reduce your rankings.</p></div></div>");
-lines.push("<div class='group' id='E'><div class='gh'><span class='gl'>E</span><div class='gline'></div></div><div class='card'><h2>E-E-A-T</h2><p>Experience, Expertise, Authoritativeness, and Trustworthiness. Google uses E-E-A-T signals to evaluate content quality and credibility, particularly for health, finance, and legal topics.</p></div><div class='card'><h2>Engagement Rate</h2><p>A social media metric measuring the percentage of your audience who interact with your content through likes, comments, shares, or saves. High engagement rate improves organic reach.</p></div></div>");
-lines.push("<div class='group' id='G'><div class='gh'><span class='gl'>G</span><div class='gline'></div></div><div class='card'><h2>Generative Engine Optimization (GEO)</h2><p>A strategy for making your content readable and citable by AI-powered generative search engines. GEO focuses on structured answers and schema markup so AI models reference your business.</p></div><div class='card'><h2>Google Business Profile (GBP)</h2><p>A free business listing managed through Google that appears in Google Maps and local search results. An optimized GBP is one of the most powerful local SEO assets a small business can have.</p></div><div class='card'><h2>Google AI Overviews</h2><p>The AI-generated summary answers appearing at the top of Google search results. Businesses optimized for AEO and GEO have a higher chance of being cited inside AI Overviews.</p></div></div>");
-lines.push("<div class='group' id='I'><div class='gh'><span class='gl'>I</span><div class='gline'></div></div><div class='card'><h2>Impressions</h2><p>The number of times your content, ad, or listing is displayed to users regardless of whether they clicked. Impressions are a top-of-funnel awareness metric.</p></div><div class='card'><h2>Index</h2><p>The database Google and other search engines maintain of all web pages they have crawled and deemed eligible to appear in search results.</p></div></div>");
-lines.push("<div class='group' id='K'><div class='gh'><span class='gl'>K</span><div class='gline'></div></div><div class='card'><h2>Keyword</h2><p>A word or phrase users type into search engines. Targeting the right keywords in your content and metadata helps search engines match your pages to relevant searches.</p></div><div class='card'><h2>Keyword Clustering</h2><p>The practice of grouping related keywords together to build topic authority. Rather than targeting one keyword per page, clustering covers a full topic comprehensively.</p></div><div class='card'><h2>Knowledge Panel</h2><p>The information box appearing on the right side of Google search results for businesses and places. A well-optimized Google Business Profile increases the likelihood of triggering a knowledge panel.</p></div></div>");
-lines.push("<div class='group' id='L'><div class='gh'><span class='gl'>L</span><div class='gline'></div></div><div class='card'><h2>Large Language Model (LLM)</h2><p>An AI system trained on massive text datasets that generates human-like written content. ChatGPT, Claude, and Gemini are examples of LLMs. Traffikora uses LLMs to create marketing content at scale.</p></div><div class='card'><h2>Local Pack</h2><p>The group of three local business listings appearing at the top of Google search results for location-based queries. Ranking in the Local Pack is one of the highest-impact goals for small business SEO.</p></div><div class='card'><h2>Local SEO</h2><p>The practice of optimizing your online presence to rank higher in location-specific search results. Local SEO includes Google Business Profile optimization, citations, reviews, and locally-targeted content.</p></div><div class='card'><h2>Long-Tail Keyword</h2><p>A specific multi-word search phrase with lower volume but higher purchase intent. Long-tail keywords are easier to rank for and often convert better than broad keywords.</p></div></div>");
-lines.push("<div class='group' id='M'><div class='gh'><span class='gl'>M</span><div class='gline'></div></div><div class='card'><h2>Meta Description</h2><p>A short summary of a web page appearing below the title in search results. A well-written meta description improves click-through rate even though it is not a direct ranking factor.</p></div><div class='card'><h2>Meta Title</h2><p>The clickable headline shown for your page in search engine results and browser tabs. Meta titles are one of the most important on-page SEO elements.</p></div></div>");
-lines.push("<div class='group' id='N'><div class='gh'><span class='gl'>N</span><div class='gline'></div></div><div class='card'><h2>NAP Consistency</h2><p>The practice of ensuring your business Name, Address, and Phone number are identical across every online directory. Inconsistent NAP data confuses search engines and hurts local rankings.</p></div></div>");
-lines.push("<div class='group' id='O'><div class='gh'><span class='gl'>O</span><div class='gline'></div></div><div class='card'><h2>Organic Traffic</h2><p>Website visitors who arrive through unpaid search results rather than ads. Growing organic traffic is the primary goal of SEO and content marketing.</p></div><div class='card'><h2>On-Page SEO</h2><p>Optimization done directly on a web page including titles, headings, content, internal links, and image alt text. On-page SEO helps search engines understand what each page is about.</p></div></div>");
-lines.push("<div class='group' id='P'><div class='gh'><span class='gl'>P</span><div class='gline'></div></div><div class='card'><h2>Perplexity</h2><p>An AI-powered answer engine that retrieves and synthesizes information from the web to answer user questions directly. Ranking in Perplexity results requires AEO and GEO strategy.</p></div><div class='card'><h2>Prompt Engineering</h2><p>The skill of crafting instructions that guide AI models to produce specific, accurate, and useful outputs. Traffikora uses advanced prompt engineering to generate brand-consistent marketing content.</p></div></div>");
-lines.push("<div class='group' id='R'><div class='gh'><span class='gl'>R</span><div class='gline'></div></div><div class='card'><h2>Rank Tracking</h2><p>The ongoing process of monitoring where your website and pages appear in search engine results for target keywords over time.</p></div><div class='card'><h2>Reputation Management</h2><p>The practice of monitoring, responding to, and improving how your business appears across review platforms and search results. Reviews directly influence local SEO rankings.</p></div><div class='card'><h2>Review Velocity</h2><p>The rate at which your business earns new customer reviews. Consistent review velocity signals to Google that your business is active and trusted by real customers.</p></div></div>");
-lines.push("<div class='group' id='S'><div class='gh'><span class='gl'>S</span><div class='gline'></div></div><div class='card'><h2>Schema Markup</h2><p>Structured data added to a web page in JSON-LD format that helps search engines understand your content. Schema markup is essential for appearing in rich results and AI-generated answers.</p></div><div class='card'><h2>Search Engine Optimization (SEO)</h2><p>The practice of improving your website and content so search engines rank it higher in organic results. SEO encompasses on-page, off-page, technical, and local strategies.</p></div><div class='card'><h2>Sitemap</h2><p>An XML file listing all the pages on your website that helps search engines discover and crawl them efficiently.</p></div><div class='card'><h2>Social Media Automation</h2><p>The use of software to automatically create and publish social media posts on a schedule. Traffikora generates platform-specific posts for Facebook, Instagram, X, and more.</p></div><div class='card'><h2>Structured Data</h2><p>Information formatted in a standardized way that machines can easily read. In SEO, structured data is added via schema markup to help search engines and AI tools understand page content.</p></div></div>");
-lines.push("<div class='group' id='T'><div class='gh'><span class='gl'>T</span><div class='gline'></div></div><div class='card'><h2>Technical SEO</h2><p>Optimizations made to the underlying code and infrastructure of a website to improve crawlability, indexability, and page speed. Includes sitemaps, robots.txt, Core Web Vitals, and structured data.</p></div><div class='card'><h2>Topic Authority</h2><p>The level of expertise and coverage a website demonstrates on a specific subject. Building topic authority through consistent, comprehensive content helps you rank for entire categories of keywords.</p></div></div>");
-lines.push("<div class='group' id='U'><div class='gh'><span class='gl'>U</span><div class='gline'></div></div><div class='card'><h2>User Intent</h2><p>The underlying goal a person has when entering a search query. Understanding user intent -- whether informational, navigational, or transactional -- is fundamental to creating content that ranks and converts.</p></div></div>");
-lines.push("<div class='group' id='Z'><div class='gh'><span class='gl'>Z</span><div class='gline'></div></div><div class='card'><h2>Zero-Click Search</h2><p>A search result where the user gets their answer directly on the results page without clicking any link. Zero-click searches are increasing due to AI Overviews and featured snippets, making AEO strategy critical.</p></div></div>");
-lines.push("</div>");
-lines.push("<div class='cta'><h2>Put These Strategies to Work</h2><p>Traffikora handles AEO, local SEO, social media, and blog automation -- all on autopilot.</p><a href='/signup'>Start Free Trial</a></div>");
-lines.push("`;");
+lines.push("// @ts-nocheck");
+lines.push("'use client'");
+lines.push("import Link from 'next/link'");
 lines.push("");
 lines.push("export default function GlossaryPage() {");
 lines.push("  return (");
-lines.push("    <main suppressHydrationWarning dangerouslySetInnerHTML={{ __html: html }} />");
-lines.push("  );");
+lines.push("    <main suppressHydrationWarning style={{ minHeight: '100vh', background: '#111111', color: '#fff', fontFamily: 'DM Sans, sans-serif' }}>");
+lines.push("      <section style={{ padding: '112px 24px 64px', textAlign: 'center', background: 'linear-gradient(135deg, #111111 0%, #1a1a1a 50%, #111111 100%)' }}>");
+lines.push("        <p style={{ color: '#E8610A', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.15em', fontSize: '13px', margin: '0 0 16px 0' }}>Reference Guide</p>");
+lines.push("        <h1 style={{ fontSize: 'clamp(32px, 6vw, 56px)', fontWeight: 700, color: '#fff', margin: '0 0 24px 0', lineHeight: 1.15 }}>AI &amp; SEO Marketing <span style={{ color: '#E8610A' }}>Glossary</span></h1>");
+lines.push("        <p style={{ color: '#d1d5db', fontSize: '18px', maxWidth: '600px', margin: '0 auto 40px', lineHeight: 1.7 }}>Every term you need to understand AI marketing, local SEO, and generative engine optimization -- explained in plain English.</p>");
+lines.push("        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', maxWidth: '720px', margin: '0 auto' }}>");
+lines.push("          {['A','B','C','D','E','G','I','K','L','M','N','O','P','R','S','T','U','Z'].map(l => (");
+lines.push("            <a key={l} href={'#' + l} style={{ width: '36px', height: '36px', borderRadius: '50%', border: '1px solid #E8610A', color: '#E8610A', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 700, textDecoration: 'none' }}>{l}</a>");
+lines.push("          ))}");
+lines.push("        </div>");
+lines.push("      </section>");
+lines.push("      <section style={{ maxWidth: '800px', margin: '0 auto', padding: '64px 24px 96px' }}>");
+
+const groups = [
+  { l: 'A', entries: [
+    ['AI Engine Optimization (AEO)', 'The practice of structuring your content so AI-powered answer engines like ChatGPT, Perplexity, and Google AI Overviews surface your business as a cited source. AEO is the evolution of traditional SEO.'],
+    ['AI Marketing Automation', 'The use of artificial intelligence to plan, create, schedule, and optimize marketing content without constant manual input. Traffikora uses AI marketing automation to run your social, blog, and local SEO simultaneously.'],
+    ['Algorithm', 'A set of rules used by search engines and social platforms to decide which content to show and in what order. Google, TikTok, and Instagram each use their own algorithms.'],
+    ['Answer Engine', 'A search tool that returns a direct answer rather than a list of links. Examples include ChatGPT, Perplexity, and Google AI Overviews. Ranking in answer engines requires AEO strategy.'],
+    ['Authority Score', 'A metric estimating how trustworthy and influential a website is based on backlinks, traffic, and content quality. Higher authority scores typically lead to better organic rankings.'],
+  ]},
+  { l: 'B', entries: [
+    ['Backlink', 'A link from another website pointing to your site. High-quality backlinks from authoritative sites signal trust to search engines and improve your domain authority.'],
+    ['Blog Automation', 'The process of using AI to automatically generate, optimize, and publish SEO blog posts on a recurring schedule. Traffikora blog automation publishes keyword-targeted articles without requiring you to write a single word.'],
+    ['Brand Voice', 'The consistent personality, tone, and style a business uses across all its marketing content. A strong brand voice builds recognition and trust with customers.'],
+    ['Business Listing', 'A profile of your business on a directory such as Google Business Profile, Yelp, or Bing Places. Consistent listings across platforms improve local SEO rankings.'],
+  ]},
+  { l: 'C', entries: [
+    ['Citations', 'Online mentions of your business name, address, and phone number across directories and websites. Consistent citations are a key local SEO ranking factor.'],
+    ['Click-Through Rate (CTR)', 'The percentage of people who click your link after seeing it in search results. Higher CTR signals to search engines that your listing is relevant and attractive.'],
+    ['Content Calendar', 'A schedule mapping what content will be published, on which platforms, and when. Traffikora automates your content calendar across social media and blog channels.'],
+    ['Conversion Rate', 'The percentage of visitors who take a desired action such as booking an appointment or submitting a form. Improving conversion rate increases revenue without increasing ad spend.'],
+    ['Core Web Vitals', 'Performance metrics defined by Google measuring page loading speed, interactivity, and visual stability. Passing Core Web Vitals is required for top search rankings.'],
+  ]},
+  { l: 'D', entries: [
+    ['Domain Authority (DA)', 'A score from 1 to 100 that predicts how well a website will rank in search engines. DA is built over time through quality content and backlinks.'],
+    ['Duplicate Content', 'Identical or very similar content appearing on more than one URL. Duplicate content can confuse search engines and reduce your rankings.'],
+  ]},
+  { l: 'E', entries: [
+    ['E-E-A-T', 'Experience, Expertise, Authoritativeness, and Trustworthiness. Google uses E-E-A-T signals to evaluate content quality and credibility, particularly for health, finance, and legal topics.'],
+    ['Engagement Rate', 'A social media metric measuring the percentage of your audience who interact with your content through likes, comments, shares, or saves. High engagement rate improves organic reach.'],
+  ]},
+  { l: 'G', entries: [
+    ['Generative Engine Optimization (GEO)', 'A strategy for making your content readable and citable by AI-powered generative search engines. GEO focuses on structured answers and schema markup so AI models reference your business.'],
+    ['Google Business Profile (GBP)', 'A free business listing managed through Google that appears in Google Maps and local search results. An optimized GBP is one of the most powerful local SEO assets a small business can have.'],
+    ['Google AI Overviews', 'The AI-generated summary answers appearing at the top of Google search results. Businesses optimized for AEO and GEO have a higher chance of being cited inside AI Overviews.'],
+  ]},
+  { l: 'I', entries: [
+    ['Impressions', 'The number of times your content, ad, or listing is displayed to users regardless of whether they clicked. Impressions are a top-of-funnel awareness metric.'],
+    ['Index', 'The database Google and other search engines maintain of all web pages they have crawled and deemed eligible to appear in search results.'],
+  ]},
+  { l: 'K', entries: [
+    ['Keyword', 'A word or phrase users type into search engines. Targeting the right keywords in your content and metadata helps search engines match your pages to relevant searches.'],
+    ['Keyword Clustering', 'The practice of grouping related keywords together to build topic authority. Rather than targeting one keyword per page, clustering covers a full topic comprehensively.'],
+    ['Knowledge Panel', 'The information box appearing on the right side of Google search results for businesses and places. A well-optimized Google Business Profile increases the likelihood of triggering a knowledge panel.'],
+  ]},
+  { l: 'L', entries: [
+    ['Large Language Model (LLM)', 'An AI system trained on massive text datasets that generates human-like written content. ChatGPT, Claude, and Gemini are examples of LLMs. Traffikora uses LLMs to create marketing content at scale.'],
+    ['Local Pack', 'The group of three local business listings appearing at the top of Google search results for location-based queries. Ranking in the Local Pack is one of the highest-impact goals for small business SEO.'],
+    ['Local SEO', 'The practice of optimizing your online presence to rank higher in location-specific search results. Includes Google Business Profile optimization, citations, reviews, and locally-targeted content.'],
+    ['Long-Tail Keyword', 'A specific multi-word search phrase with lower volume but higher purchase intent. Long-tail keywords are easier to rank for and often convert better than broad keywords.'],
+  ]},
+  { l: 'M', entries: [
+    ['Meta Description', 'A short summary of a web page appearing below the title in search results. A well-written meta description improves click-through rate even though it is not a direct ranking factor.'],
+    ['Meta Title', 'The clickable headline shown for your page in search engine results and browser tabs. Meta titles are one of the most important on-page SEO elements.'],
+  ]},
+  { l: 'N', entries: [
+    ['NAP Consistency', 'The practice of ensuring your business Name, Address, and Phone number are identical across every online directory. Inconsistent NAP data confuses search engines and hurts local rankings.'],
+  ]},
+  { l: 'O', entries: [
+    ['Organic Traffic', 'Website visitors who arrive through unpaid search results rather than ads. Growing organic traffic is the primary goal of SEO and content marketing.'],
+    ['On-Page SEO', 'Optimization done directly on a web page including titles, headings, content, internal links, and image alt text. On-page SEO helps search engines understand what each page is about.'],
+  ]},
+  { l: 'P', entries: [
+    ['Perplexity', 'An AI-powered answer engine that retrieves and synthesizes information from the web to answer user questions directly. Ranking in Perplexity results requires AEO and GEO strategy.'],
+    ['Prompt Engineering', 'The skill of crafting instructions that guide AI models to produce specific, accurate, and useful outputs. Traffikora uses advanced prompt engineering to generate brand-consistent marketing content.'],
+  ]},
+  { l: 'R', entries: [
+    ['Rank Tracking', 'The ongoing process of monitoring where your website and pages appear in search engine results for target keywords over time.'],
+    ['Reputation Management', 'The practice of monitoring, responding to, and improving how your business appears across review platforms and search results. Reviews directly influence local SEO rankings.'],
+    ['Review Velocity', 'The rate at which your business earns new customer reviews. Consistent review velocity signals to Google that your business is active and trusted by real customers.'],
+  ]},
+  { l: 'S', entries: [
+    ['Schema Markup', 'Structured data added to a web page in JSON-LD format that helps search engines understand your content. Schema markup is essential for appearing in rich results and AI-generated answers.'],
+    ['Search Engine Optimization (SEO)', 'The practice of improving your website and content so search engines rank it higher in organic results. SEO encompasses on-page, off-page, technical, and local strategies.'],
+    ['Sitemap', 'An XML file listing all the pages on your website that helps search engines discover and crawl them efficiently.'],
+    ['Social Media Automation', 'The use of software to automatically create and publish social media posts on a schedule. Traffikora generates platform-specific posts for Facebook, Instagram, X, and more.'],
+    ['Structured Data', 'Information formatted in a standardized way that machines can easily read. In SEO, structured data is added via schema markup to help search engines and AI tools understand page content.'],
+  ]},
+  { l: 'T', entries: [
+    ['Technical SEO', 'Optimizations made to the underlying code and infrastructure of a website to improve crawlability, indexability, and page speed. Includes sitemaps, robots.txt, Core Web Vitals, and structured data.'],
+    ['Topic Authority', 'The level of expertise and coverage a website demonstrates on a specific subject. Building topic authority through consistent content helps you rank for entire categories of keywords.'],
+  ]},
+  { l: 'U', entries: [
+    ['User Intent', 'The underlying goal a person has when entering a search query. Understanding user intent -- whether informational, navigational, or transactional -- is fundamental to creating content that ranks and converts.'],
+  ]},
+  { l: 'Z', entries: [
+    ['Zero-Click Search', 'A search result where the user gets their answer directly on the results page without clicking any link. Zero-click searches are increasing due to AI Overviews and featured snippets, making AEO strategy critical.'],
+  ]},
+];
+
+for (const group of groups) {
+  lines.push("        <div id='" + group.l + "' style={{ marginBottom: '56px' }}>");
+  lines.push("          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>");
+  lines.push("            <span style={{ fontSize: '48px', fontWeight: 700, color: '#E8610A' }}>" + group.l + "</span>");
+  lines.push("            <div style={{ flex: 1, height: '1px', background: '#E8610A', opacity: 0.3 }}></div>");
+  lines.push("          </div>");
+  for (const [term, def] of group.entries) {
+    lines.push("          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}>");
+    lines.push("            <h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>" + term + "</h2>");
+    lines.push("            <p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>" + def + "</p>");
+    lines.push("          </div>");
+  }
+  lines.push("        </div>");
+}
+
+lines.push("      </section>");
+lines.push("      <section style={{ padding: '80px 24px', textAlign: 'center', background: 'linear-gradient(135deg, #E8610A 0%, #C84E06 100%)' }}>");
+lines.push("        <h2 style={{ fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 700, color: '#fff', margin: '0 0 16px 0' }}>Put These Strategies to Work</h2>");
+lines.push("        <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '18px', margin: '0 auto 32px', maxWidth: '500px' }}>Traffikora handles AEO, local SEO, social media, and blog automation -- all on autopilot.</p>");
+lines.push("        <Link href='/signup' style={{ display: 'inline-block', background: '#fff', color: '#E8610A', fontWeight: 700, fontSize: '17px', padding: '16px 40px', borderRadius: '50px', textDecoration: 'none' }}>Start Free Trial</Link>");
+lines.push("      </section>");
+lines.push("    </main>");
+lines.push("  )");
 lines.push("}");
 
 const content = lines.join('\n');
