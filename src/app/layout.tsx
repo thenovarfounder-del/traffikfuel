@@ -1,5 +1,9 @@
 // @ts-nocheck
+import { Playfair_Display, DM_Sans } from 'next/font/google'
 import './globals.css'
+
+const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400','700','900'], display: 'swap', variable: '--font-playfair' })
+const dmSans = DM_Sans({ subsets: ['latin'], weight: ['300','400','500','600','700'], display: 'swap', variable: '--font-dm-sans' })
 import CrispChat from '@/components/CrispChat'
 import CookieBanner from '@/components/CookieBanner'
 import ScrollToTop from '@/components/ScrollToTop'
@@ -12,7 +16,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${playfair.variable} ${dmSans.variable}`}>
       <head>
         <meta name="google-site-verification" content="tDnX1kzbibOZ52zeV6oAH35iohkvNI-4BpV7lz1Yga0" />
         <meta property="og:title" content="Traffikora - AI Marketing Automation for Small Businesses" />
