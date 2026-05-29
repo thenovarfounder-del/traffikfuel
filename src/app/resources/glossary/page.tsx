@@ -1,63 +1,100 @@
-// @ts-nocheck
-'use client'
-import Link from 'next/link'
+import { Metadata } from 'next';
+import { Playfair_Display } from 'next/font/google';
+
+const playfair = Playfair_Display({ subsets: ['latin'], weight: ['700'] });
+
+export const metadata: Metadata = {
+  title: 'SEO & AI Marketing Glossary | Traffikora',
+  description: 'Definitions for SEO, AI engine optimization, local marketing, and automation terms every small business owner should know.',
+  alternates: { canonical: 'https://www.traffikora.com/resources/glossary' },
+};
+
+const terms = [
+  { term: 'AI Engine Optimization (AEO)', definition: 'The practice of structuring your business content so AI tools like ChatGPT, Perplexity, and Gemini recommend your business when users ask relevant questions. AEO is the next evolution of traditional SEO.' },
+  { term: 'Generative Engine Optimization (GEO)', definition: 'A branch of AEO focused specifically on getting your content cited and surfaced inside generative AI responses. GEO targets how large language models retrieve and present information.' },
+  { term: 'Local SEO', definition: 'The process of optimizing your online presence so your business ranks in local search results on Google Maps and Google Search for location-based queries like "dentist near me" or "auto repair Houston".' },
+  { term: 'Google Business Profile (GBP)', definition: 'A free Google tool that controls how your business appears in Google Search and Maps. Keeping your GBP updated with accurate hours, photos, posts, and reviews is one of the highest-ROI local SEO actions.' },
+  { term: 'Citations', definition: 'Online mentions of your business name, address, and phone number (NAP) across directories like Yelp, Yellow Pages, and Apple Maps. Consistent citations signal trust to both Google and AI platforms.' },
+  { term: 'NAP Consistency', definition: 'The practice of keeping your business Name, Address, and Phone number identical across every online listing. Inconsistent NAP data confuses search engines and reduces your local rankings.' },
+  { term: 'Social Media Automation', definition: 'Using software to automatically create, schedule, and publish social media posts across platforms like Facebook, Instagram, and TikTok -- saving time while maintaining consistent posting frequency.' },
+  { term: 'Marketing Automation', definition: 'Technology that handles repetitive marketing tasks automatically -- including email follow-ups, review requests, lead nurturing, and social posting -- so business owners can focus on serving customers.' },
+  { term: 'Review Automation', definition: 'A system that automatically sends review request messages to customers via SMS or email after a purchase or appointment, increasing the volume and recency of Google and Yelp reviews.' },
+  { term: 'Keyword', definition: 'A word or phrase that people type into search engines. Targeting the right keywords ensures your business appears when potential customers are actively searching for your services.' },
+  { term: 'Long-Tail Keyword', definition: 'A specific, multi-word search phrase (e.g., "affordable HVAC repair in Dallas") that typically has lower search volume but higher buying intent and less competition than broad keywords.' },
+  { term: 'Search Intent', definition: 'The underlying goal a person has when typing a search query. The four types are informational, navigational, commercial, and transactional. Matching your content to search intent improves rankings and conversions.' },
+  { term: 'On-Page SEO', definition: 'Optimization work done directly on your website pages -- including title tags, meta descriptions, headers, content quality, and internal linking -- to improve search engine rankings.' },
+  { term: 'Off-Page SEO', definition: 'SEO activities that happen outside your website, such as earning backlinks, building citations, managing reviews, and creating social signals that increase your domain authority.' },
+  { term: 'Backlink', definition: 'A link from another website pointing to yours. High-quality backlinks from reputable sites act as votes of confidence and are one of the strongest ranking signals in Google search.' },
+  { term: 'Domain Authority (DA)', definition: 'A score (1-100) developed by Moz that predicts how likely a website is to rank in search results. Higher DA generally correlates with better rankings, though Google uses its own internal metrics.' },
+  { term: 'Meta Title', definition: 'The clickable headline shown in search engine results. It should include your primary keyword and be under 60 characters. A compelling meta title directly impacts your click-through rate.' },
+  { term: 'Meta Description', definition: 'The short summary text displayed below your page title in search results. While not a direct ranking factor, a strong meta description improves click-through rates from the search results page.' },
+  { term: 'Schema Markup', definition: 'Structured data code added to your website that helps search engines understand your content. Schema for local businesses can display your hours, reviews, and address directly in Google results.' },
+  { term: 'Sitemap', definition: 'An XML file listing all pages on your website that you want search engines to index. Submitting your sitemap to Google Search Console and Bing Webmaster Tools speeds up content discovery.' },
+  { term: 'Robots.txt', definition: 'A file that tells search engine crawlers which pages or sections of your website to crawl or ignore. Misconfiguring robots.txt can accidentally block your entire site from being indexed.' },
+  { term: 'Core Web Vitals', definition: 'A set of Google metrics measuring real-world user experience: Largest Contentful Paint (loading speed), First Input Delay (interactivity), and Cumulative Layout Shift (visual stability). These directly impact rankings.' },
+  { term: 'Bounce Rate', definition: 'The percentage of visitors who leave your website after viewing only one page. A high bounce rate can signal that your content does not match what searchers were looking for.' },
+  { term: 'Conversion Rate', definition: 'The percentage of website visitors who complete a desired action -- such as calling your business, filling out a form, or making a purchase. Improving conversion rate is often more cost-effective than driving more traffic.' },
+  { term: 'Call to Action (CTA)', definition: 'A prompt that tells visitors what to do next -- such as "Book a Free Demo", "Get Started", or "Call Now". Every page should have a clear, visible CTA aligned with your business goal.' },
+  { term: 'Landing Page', definition: 'A standalone web page designed for a specific marketing goal, such as capturing leads or promoting a service. Unlike homepage general content, landing pages are focused on one offer and one CTA.' },
+  { term: 'Blog Automation', definition: 'Using AI to automatically generate, optimize, and publish SEO blog articles on a regular schedule. Consistent blogging builds topical authority and drives long-tail organic search traffic.' },
+  { term: 'Content Marketing', definition: 'A strategy of creating and distributing valuable, relevant content -- blog posts, videos, guides -- to attract and retain a clearly defined audience, ultimately driving profitable customer action.' },
+  { term: 'Organic Traffic', definition: 'Visitors who arrive at your website through unpaid search results. Organic traffic is considered the highest-quality source because these users are actively searching for what you offer.' },
+  { term: 'Paid Traffic (PPC)', definition: 'Visitors who arrive at your site via paid advertisements like Google Ads or Meta Ads. Pay-Per-Click campaigns can drive fast results but require ongoing budget and management to remain profitable.' },
+  { term: 'Impressions', definition: 'The number of times your website or content appeared in search results, regardless of whether it was clicked. High impressions with low clicks indicate a strong ranking but a weak meta title or description.' },
+  { term: 'Click-Through Rate (CTR)', definition: 'The percentage of people who clicked on your listing after seeing it in search results. CTR = (Clicks divided by Impressions) x 100. Improving CTR is one of the fastest ways to increase traffic without changing rankings.' },
+  { term: 'Google Search Console (GSC)', definition: 'A free Google tool that shows how your site performs in search -- including which queries trigger your pages, your average position, impressions, and any indexing errors Google has detected.' },
+  { term: 'Google Analytics (GA4)', definition: 'Google\'s web analytics platform that tracks visitor behavior on your site -- including traffic sources, pages visited, session duration, and conversion events. GA4 is the current version as of 2023.' },
+  { term: 'A/B Testing', definition: 'A method of comparing two versions of a page, email, or ad to see which performs better. You split your audience in half, show each group one version, and measure results to pick the winner.' },
+  { term: 'Lead Magnet', definition: 'A free resource -- such as a guide, checklist, or free trial -- offered in exchange for a visitor\'s contact information. Lead magnets grow your email list and start the customer relationship.' },
+  { term: 'Email Marketing', definition: 'Sending targeted messages to a list of subscribers to nurture leads, promote offers, and retain customers. Email marketing consistently delivers the highest ROI of any digital marketing channel.' },
+  { term: 'SMS Marketing', definition: 'Sending promotional or transactional text messages to customers who have opted in. SMS messages have open rates above 90%, making them one of the most effective channels for time-sensitive promotions.' },
+  { term: 'Reputation Management', definition: 'The ongoing process of monitoring, responding to, and improving how your business is perceived online -- primarily through Google reviews, Yelp, and social media mentions.' },
+  { term: 'White-Label Software', definition: 'A product built by one company but rebranded and resold by another. Traffikora\'s agency plan allows marketing agencies to offer the Traffikora platform under their own brand.' },
+  { term: 'SaaS (Software as a Service)', definition: 'A software delivery model where applications are hosted in the cloud and accessed via subscription rather than installed locally. Traffikora is a SaaS platform for local business marketing.' },
+  { term: 'API (Application Programming Interface)', definition: 'A set of rules that allows different software applications to communicate. Marketing APIs -- like Meta\'s Graph API or Google\'s My Business API -- let platforms like Traffikora connect to social and search tools on your behalf.' },
+];
+
+const letters = [...new Set(terms.map(t => t.term[0].toUpperCase()))].sort();
 
 export default function GlossaryPage() {
   return (
-    <main suppressHydrationWarning style={{ minHeight: '100vh', background: '#111111', color: '#fff', fontFamily: 'DM Sans, sans-serif' }}>
-      <section style={{ padding: '112px 24px 64px', textAlign: 'center', background: 'linear-gradient(135deg, #111111 0%, #1a1a1a 50%, #111111 100%)' }}>
-        <p style={{ color: '#E8610A', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.15em', fontSize: '13px', margin: '0 0 16px 0' }}>Reference Guide</p>
-        <h1 style={{ fontSize: 'clamp(32px, 6vw, 56px)', fontWeight: 700, color: '#fff', margin: '0 0 24px 0', lineHeight: 1.15 }}>AI and SEO Marketing <span style={{ color: '#E8610A' }}>Glossary</span></h1>
-        <p style={{ color: '#d1d5db', fontSize: '18px', maxWidth: '600px', margin: '0 auto 40px', lineHeight: 1.7 }}>Every term you need to understand AI marketing, local SEO, and generative engine optimization -- explained in plain English.</p>
-      </section>
-      <section style={{ maxWidth: '800px', margin: '0 auto', padding: '64px 24px 96px' }}>
-        <div style={{ marginBottom: '56px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}><span style={{ fontSize: '48px', fontWeight: 700, color: '#E8610A' }}>A</span><div style={{ flex: 1, height: '1px', background: '#E8610A', opacity: 0.3 }}></div></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>AI Engine Optimization (AEO)</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>The practice of structuring your content so AI-powered answer engines like ChatGPT, Perplexity, and Google AI Overviews surface your business as a cited source. AEO is the evolution of traditional SEO.</p></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>AI Marketing Automation</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>The use of artificial intelligence to plan, create, schedule, and optimize marketing content without constant manual input. Traffikora uses AI marketing automation to run your social, blog, and local SEO simultaneously.</p></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Algorithm</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>A set of rules used by search engines and social platforms to decide which content to show and in what order. Google, TikTok, and Instagram each use their own algorithms.</p></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Answer Engine</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>A search tool that returns a direct answer rather than a list of links. Examples include ChatGPT, Perplexity, and Google AI Overviews. Ranking in answer engines requires AEO strategy.</p></div>
-        </div>
-        <div style={{ marginBottom: '56px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}><span style={{ fontSize: '48px', fontWeight: 700, color: '#E8610A' }}>B</span><div style={{ flex: 1, height: '1px', background: '#E8610A', opacity: 0.3 }}></div></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Backlink</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>A link from another website pointing to your site. High-quality backlinks from authoritative sites signal trust to search engines and improve your domain authority.</p></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Blog Automation</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>The process of using AI to automatically generate, optimize, and publish SEO blog posts on a recurring schedule. Traffikora blog automation publishes keyword-targeted articles without requiring you to write a single word.</p></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Brand Voice</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>The consistent personality, tone, and style a business uses across all its marketing content. A strong brand voice builds recognition and trust with customers.</p></div>
-        </div>
-        <div style={{ marginBottom: '56px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}><span style={{ fontSize: '48px', fontWeight: 700, color: '#E8610A' }}>C</span><div style={{ flex: 1, height: '1px', background: '#E8610A', opacity: 0.3 }}></div></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Citations</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>Online mentions of your business name, address, and phone number across directories and websites. Consistent citations are a key local SEO ranking factor.</p></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Conversion Rate</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>The percentage of visitors who take a desired action such as booking an appointment or submitting a form. Improving conversion rate increases revenue without increasing ad spend.</p></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Core Web Vitals</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>Performance metrics defined by Google measuring page loading speed, interactivity, and visual stability. Passing Core Web Vitals is required for top search rankings.</p></div>
-        </div>
-        <div style={{ marginBottom: '56px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}><span style={{ fontSize: '48px', fontWeight: 700, color: '#E8610A' }}>G</span><div style={{ flex: 1, height: '1px', background: '#E8610A', opacity: 0.3 }}></div></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Generative Engine Optimization (GEO)</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>A strategy for making your content readable and citable by AI-powered generative search engines. GEO focuses on structured answers and schema markup so AI models reference your business.</p></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Google Business Profile (GBP)</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>A free business listing managed through Google that appears in Google Maps and local search results. An optimized GBP is one of the most powerful local SEO assets a small business can have.</p></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Google AI Overviews</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>The AI-generated summary answers appearing at the top of Google search results. Businesses optimized for AEO and GEO have a higher chance of being cited inside AI Overviews.</p></div>
-        </div>
-        <div style={{ marginBottom: '56px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}><span style={{ fontSize: '48px', fontWeight: 700, color: '#E8610A' }}>L</span><div style={{ flex: 1, height: '1px', background: '#E8610A', opacity: 0.3 }}></div></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Local Pack</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>The group of three local business listings appearing at the top of Google search results for location-based queries. Ranking in the Local Pack is one of the highest-impact goals for small business SEO.</p></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Local SEO</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>The practice of optimizing your online presence to rank higher in location-specific search results. Includes Google Business Profile optimization, citations, reviews, and locally-targeted content.</p></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Long-Tail Keyword</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>A specific multi-word search phrase with lower volume but higher purchase intent. Long-tail keywords are easier to rank for and often convert better than broad keywords.</p></div>
-        </div>
-        <div style={{ marginBottom: '56px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}><span style={{ fontSize: '48px', fontWeight: 700, color: '#E8610A' }}>S</span><div style={{ flex: 1, height: '1px', background: '#E8610A', opacity: 0.3 }}></div></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Schema Markup</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>Structured data added to a web page in JSON-LD format that helps search engines understand your content. Essential for appearing in rich results and AI-generated answers.</p></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Search Engine Optimization (SEO)</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>The practice of improving your website and content so search engines rank it higher in organic results. SEO encompasses on-page, off-page, technical, and local strategies.</p></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Social Media Automation</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>The use of software to automatically create and publish social media posts on a schedule. Traffikora generates platform-specific posts for Facebook, Instagram, X, and more.</p></div>
-        </div>
-        <div style={{ marginBottom: '56px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}><span style={{ fontSize: '48px', fontWeight: 700, color: '#E8610A' }}>Z</span><div style={{ flex: 1, height: '1px', background: '#E8610A', opacity: 0.3 }}></div></div>
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}><h2 style={{ color: '#fff', fontSize: '17px', fontWeight: 700, margin: '0 0 8px 0' }}>Zero-Click Search</h2><p style={{ color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>A search result where the user gets their answer directly on the results page without clicking any link. Zero-click searches are increasing due to AI Overviews and featured snippets, making AEO strategy critical.</p></div>
-        </div>
-      </section>
-      <section style={{ padding: '80px 24px', textAlign: 'center', background: 'linear-gradient(135deg, #E8610A 0%, #C84E06 100%)' }}>
-        <h2 style={{ fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 700, color: '#fff', margin: '0 0 16px 0' }}>Put These Strategies to Work</h2>
-        <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '18px', margin: '0 auto 32px', maxWidth: '500px' }}>Traffikora handles AEO, local SEO, social media, and blog automation -- all on autopilot.</p>
-        <Link href='/signup' style={{ display: 'inline-block', background: '#fff', color: '#E8610A', fontWeight: 700, fontSize: '17px', padding: '16px 40px', borderRadius: '50px', textDecoration: 'none' }}>Start Free Trial</Link>
-      </section>
-    </main>
-  )
+    <>
+      <main suppressHydrationWarning className='min-h-screen bg-[#111111] text-white'>
+        <section className='pt-28 pb-16 px-6 text-center max-w-4xl mx-auto'>
+          <p className='text-[#E8610A] uppercase tracking-widest text-sm font-semibold mb-4'>Resource Center</p>
+          <h1 style={playfair.style} className='text-4xl md:text-6xl font-bold leading-tight mb-6'>SEO &amp; AI Marketing<br />Glossary</h1>
+          <p className='text-gray-400 text-lg max-w-2xl mx-auto'>Every term local business owners need to know -- from classic SEO fundamentals to the AI-era concepts shaping search in 2026 and beyond.</p>
+        </section>
+        <section className='px-6 pb-10 max-w-4xl mx-auto'>
+          <div className='flex flex-wrap gap-2 justify-center'>
+            {letters.map(letter => (
+              <a key={letter} href={`#letter-${letter}`} className='w-9 h-9 flex items-center justify-center rounded bg-white/10 hover:bg-[#E8610A] text-white text-sm font-bold transition-colors duration-200'>{letter}</a>
+            ))}
+          </div>
+        </section>
+        <section className='px-6 pb-24 max-w-4xl mx-auto'>
+          {letters.map(letter => (
+            <div key={letter} id={`letter-${letter}`} className='mb-14 scroll-mt-24'>
+              <h2 style={playfair.style} className='text-3xl text-[#E8610A] font-bold mb-6 border-b border-white/10 pb-3'>{letter}</h2>
+              <div className='space-y-6'>
+                {terms.filter(t => t.term[0].toUpperCase() === letter).map(t => (
+                  <div key={t.term} className='bg-white/5 rounded-xl p-6 border border-white/10 hover:border-[#E8610A]/40 transition-colors duration-200'>
+                    <h3 className='text-white font-semibold text-lg mb-2'>{t.term}</h3>
+                    <p className='text-gray-400 leading-relaxed'>{t.definition}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </section>
+        <section className='px-6 pb-24 max-w-3xl mx-auto text-center'>
+          <div className='bg-[#E8610A]/10 border border-[#E8610A]/30 rounded-2xl p-10'>
+            <h2 style={playfair.style} className='text-3xl font-bold mb-4'>Ready to Put These Strategies to Work?</h2>
+            <p className='text-gray-400 mb-8'>Traffikora automates SEO, AI optimization, social media, and review management -- all in one platform built for local businesses.</p>
+            <a href='/demo' className='inline-block bg-[#E8610A] hover:bg-[#C84E06] text-white font-semibold px-8 py-4 rounded-lg text-lg transition-colors duration-200'>Book a Free Demo</a>
+          </div>
+        </section>
+      </main>
+    </>
+  );
 }
