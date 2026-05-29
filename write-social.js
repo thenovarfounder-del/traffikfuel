@@ -1,60 +1,53 @@
 const fs = require('fs');
 const path = require('path');
 
-const lines = [];
-lines.push("// @ts-nocheck");
-lines.push("import './globals.css'");
-lines.push("import { Playfair_Display, DM_Sans } from 'next/font/google'");
-lines.push("");
-lines.push("const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400','700','900'], display: 'swap', variable: '--font-playfair' })");
-lines.push("const dmSans = DM_Sans({ subsets: ['latin'], weight: ['300','400','500','600','700'], display: 'swap', variable: '--font-dm-sans' })");
-lines.push("import CrispChat from '@/components/CrispChat'");
-lines.push("import CookieBanner from '@/components/CookieBanner'");
-lines.push("import ScrollToTop from '@/components/ScrollToTop'");
-lines.push("import Script from 'next/script'");
-lines.push("");
-lines.push("export const metadata = {");
-lines.push("  title: 'Traffikora - AI Marketing Automation for Small Businesses',");
-lines.push("  description: 'Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine.',");
-lines.push("}");
-lines.push("");
-lines.push("export default function RootLayout({ children }) {");
-lines.push("  return (");
-lines.push("    <html lang='en' className={`${playfair.variable} ${dmSans.variable}`}>");
-lines.push("      <head>");
-lines.push("        <meta name='google-site-verification' content='tDnX1kzbibOZ52zeV6oAH35iohkvNI-4BpV7lz1Yga0' />");
-lines.push("        <meta property='og:title' content='Traffikora - AI Marketing Automation for Small Businesses' />");
-lines.push("        <meta property='og:description' content='Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine.' />");
-lines.push("        <meta property='og:image' content='https://www.traffikora.com/og-image.png' />");
-lines.push("        <meta property='og:image:width' content='1200' />");
-lines.push("        <meta property='og:image:height' content='630' />");
-lines.push("        <meta property='og:url' content='https://www.traffikora.com' />");
-lines.push("        <meta property='og:type' content='website' />");
-lines.push("        <meta property='og:site_name' content='Traffikora' />");
-lines.push("        <meta name='twitter:card' content='summary_large_image' />");
-lines.push("        <meta name='twitter:title' content='Traffikora - AI Marketing Automation for Small Businesses' />");
-lines.push("        <meta name='twitter:description' content='Set it once. It markets forever.' />");
-lines.push("        <meta name='twitter:image' content='https://www.traffikora.com/og-image.png' />");
-lines.push("      </head>");
-lines.push("      <body className='antialiased'>");
-lines.push("        <ScrollToTop />");
-lines.push("        {children}");
-lines.push("        <CrispChat />");
-lines.push("        <CookieBanner />");
-lines.push("        <Script src='https://www.googletagmanager.com/gtag/js?id=G-Z6THVW5RJ1' strategy='afterInteractive' />");
-lines.push("        <Script id='ga4-init' strategy='afterInteractive'>");
-lines.push("          {`");
-lines.push("            window.dataLayer = window.dataLayer || [];");
-lines.push("            function gtag(){dataLayer.push(arguments);}");
-lines.push("            gtag('js', new Date());");
-lines.push("            gtag('config', 'G-Z6THVW5RJ1');");
-lines.push("          `}");
-lines.push("        </Script>");
-lines.push("      </body>");
-lines.push("    </html>");
-lines.push("  )");
-lines.push("}");
+const filePath = path.join('src', 'app', 'layout.tsx');
 
-const content = lines.join('\n');
-fs.writeFileSync(path.join('src', 'app', 'layout.tsx'), content);
+const content = `// @ts-nocheck
+import './globals.css'
+import { Playfair_Display, DM_Sans } from 'next/font/google'
+import CrispChat from '@/components/CrispChat'
+import CookieBanner from '@/components/CookieBanner'
+import ScrollToTop from '@/components/ScrollToTop'
+
+const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400','700','900'], display: 'swap', variable: '--font-playfair', preload: true })
+const dmSans = DM_Sans({ subsets: ['latin'], weight: ['300','400','500','600','700'], display: 'swap', variable: '--font-dm-sans', preload: true })
+
+export const metadata = {
+  title: 'Traffikora - AI Marketing Automation for Small Businesses',
+  description: 'Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine.',
+  metadataBase: new URL('https://www.traffikora.com'),
+  openGraph: {
+    title: 'Traffikora - AI Marketing Automation for Small Businesses',
+    description: 'Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine.',
+    url: 'https://www.traffikora.com',
+    siteName: 'Traffikora',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Traffikora - AI Marketing Automation for Small Businesses',
+    description: 'Set it once. It markets forever.',
+  },
+  verification: {
+    google: 'tDnX1kzbib0Z52zeV6oAH35iohkvNI-4BpV7lz1Yga0',
+  },
+}
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang='en' className={\`\${playfair.variable} \${dmSans.variable}\`} suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        {children}
+        <CrispChat />
+        <CookieBanner />
+        <ScrollToTop />
+      </body>
+    </html>
+  )
+}
+`;
+
+fs.writeFileSync(filePath, content);
 console.log('Done');
