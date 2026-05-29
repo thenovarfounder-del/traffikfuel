@@ -15,14 +15,14 @@ const supabase = createClient(
 export default function DashboardSettings() {
   const router = useRouter()
   const [businessName, setBusinessName] = useState('')
-  const [category, setCategory] = useState('')
+  const [industry, setIndustry] = useState('')
   const [city, setCity] = useState('')
   const [website, setWebsite] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   async function handleSubmit() {
-    if (!businessName || !category || !city) {
+    if (!businessName || !industry || !city) {
       setError('Please fill in Business Name, Category, and City.')
       return
     }
@@ -32,14 +32,13 @@ export default function DashboardSettings() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { setError('Not logged in.'); setLoading(false); return }
       const { error: upsertError } = await supabase
-        .from('business_settings')
+        .from('business_profiles')
         .upsert({
           user_id: user.id,
           business_name: businessName,
-          category: category,
-          city: city,
+          industry: industry,
           website: website,
-          updated_at: new Date().toISOString()
+          phone: city
         }, { onConflict: 'user_id' })
       if (upsertError) { setError('Save failed: ' + upsertError.message); setLoading(false); return }
       router.push('/dashboard')
@@ -64,7 +63,7 @@ export default function DashboardSettings() {
         </div>
         <div style={{ marginBottom: '32px' }}>
           <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Business Category</label>
-          <select value={category} onChange={e => setCategory(e.target.value)} style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box', background: '#fff' }}>
+          <select value={industry} onChange={e => setIndustry(e.target.value)} style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box', background: '#fff' }}>
             <option value=''>Select your category...</option>
             <option>Restaurant</option>
             <option>Dental Practice</option>
