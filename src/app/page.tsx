@@ -383,8 +383,7 @@ body{background:#fff;color:#111;font-family:'DM Sans',sans-serif;font-weight:300
               if (!isOpen) { a.style.display = 'block'; arrow.textContent = '\u2212'; }
             });
           });
-          var deadline = new Date();
-          deadline.setDate(deadline.getDate() + 2);
+          var deadline = new Date('2026-06-15T23:59:59');
           deadline.setHours(deadline.getHours() + 14);
           deadline.setMinutes(deadline.getMinutes() + 37);
           function updateCountdown() {
