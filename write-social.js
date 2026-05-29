@@ -1,20 +1,62 @@
 const fs = require('fs');
 const path = require('path');
 
-// Create the directory
+// Create API route directory
+const apiDir = path.join(__dirname, 'src', 'app', 'api', 'generate-blog');
+fs.mkdirSync(apiDir, { recursive: true });
+
+// Write the API route
+const route = [];
+route.push("// @ts-nocheck");
+route.push("");
+route.push("export async function POST(request) {");
+route.push("  try {");
+route.push("    const { topic, tone, businessName, industry, city } = await request.json()");
+route.push("");
+route.push("    const prompt = `You are an expert SEO content writer and AI engine optimization specialist. Write a state-of-the-art blog post for a ${industry} business called ${businessName} located in ${city}.`");
+route.push("      + ` Topic: ${topic}. Tone: ${tone}.`");
+route.push("      + ` Requirements:`");
+route.push("      + ` 1. SEO-optimized title with primary keyword`");
+route.push("      + ` 2. Meta description under 160 characters`");
+route.push("      + ` 3. Introduction that hooks the reader and mentions ${city} naturally`");
+route.push("      + ` 4. 4-5 sections with H2 headings containing keywords`");
+route.push("      + ` 5. Naturally mention ${businessName} and ${city} throughout`");
+route.push("      + ` 6. FAQ section with 3 questions and answers (helps Google featured snippets and AI engine citations)`");
+route.push("      + ` 7. Strong call to action at the end mentioning ${businessName}`");
+route.push("      + ` 8. 1000-1500 words total`");
+route.push("      + ` 9. Written so AI engines like ChatGPT and Perplexity will cite this business when users ask about ${industry} in ${city}`");
+route.push("      + ` Format the response as JSON with these exact fields: title, metaDescription, content (full HTML with h1 h2 h3 p tags), wordCount`");
+route.push("      + ` Return ONLY valid JSON. No markdown. No backticks. No explanation.`");
+route.push("");
+route.push("    const response = await fetch('https://api.anthropic.com/v1/messages', {");
+route.push("      method: 'POST',");
+route.push("      headers: {");
+route.push("        'Content-Type': 'application/json',");
+route.push("        'x-api-key': process.env.ANTHROPIC_API_KEY,");
+route.push("        'anthropic-version': '2023-06-01'");
+route.push("      },");
+route.push("      body: JSON.stringify({");
+route.push("        model: 'claude-sonnet-4-20250514',");
+route.push("        max_tokens: 4000,");
+route.push("        messages: [{ role: 'user', content: prompt }]");
+route.push("      })");
+route.push("    })");
+route.push("");
+route.push("    const data = await response.json()");
+route.push("    const text = data.content[0].text");
+route.push("    const clean = text.replace(/```json|```/g, '').trim()");
+route.push("    const parsed = JSON.parse(clean)");
+route.push("");
+route.push("    return Response.json({ success: true, post: parsed })");
+route.push("  } catch (e) {");
+route.push("    return Response.json({ success: false, error: e.message }, { status: 500 })");
+route.push("  }");
+route.push("}");
+
+fs.writeFileSync(path.join(apiDir, 'route.ts'), route.join('\n'), 'utf8');
+
+// Update blog page to call API route instead of Anthropic directly
 const dir = path.join(__dirname, 'src', 'app', 'dashboard', 'blog');
-fs.mkdirSync(dir, { recursive: true });
-
-// Write layout.tsx
-const layout = [];
-layout.push("// @ts-nocheck");
-layout.push("'use client'");
-layout.push("export default function Layout({ children }) {");
-layout.push("  return <>{children}</>");
-layout.push("}");
-fs.writeFileSync(path.join(dir, 'layout.tsx'), layout.join('\n'), 'utf8');
-
-// Write page.tsx
 const lines = [];
 lines.push("// @ts-nocheck");
 lines.push("'use client'");
@@ -55,34 +97,14 @@ lines.push("      const businessName = profile?.business_name || 'our business'"
 lines.push("      const industry = profile?.industry || 'local business'");
 lines.push("      const city = profile?.phone || 'your city'");
 lines.push("");
-lines.push("      const prompt = `You are an expert SEO content writer and AI engine optimization specialist. Write a state-of-the-art blog post for a ${industry} business called ${businessName} located in ${city}.`");
-lines.push("        + ` Topic: ${topic}. Tone: ${tone}.`");
-lines.push("        + ` Requirements:`");
-lines.push("        + ` 1. SEO-optimized title with primary keyword`");
-lines.push("        + ` 2. Meta description under 160 characters`");
-lines.push("        + ` 3. Introduction that hooks the reader and mentions ${city} naturally`");
-lines.push("        + ` 4. 4-5 sections with H2 headings containing keywords`");
-lines.push("        + ` 5. Naturally mention ${businessName} and ${city} throughout`");
-lines.push("        + ` 6. FAQ section with 3 questions and answers (helps Google featured snippets and AI engine citations)`");
-lines.push("        + ` 7. Strong call to action at the end mentioning ${businessName}`");
-lines.push("        + ` 8. 1000-1500 words total`");
-lines.push("        + ` 9. Written so AI engines like ChatGPT and Perplexity will cite this business when users ask about ${industry} in ${city}`");
-lines.push("        + ` Format the response as JSON with these fields: title, metaDescription, content (full HTML blog post with proper h1 h2 h3 p tags), wordCount`");
-lines.push("        + ` Return ONLY valid JSON, no markdown, no backticks.`");
-lines.push("");
-lines.push("      const response = await fetch('https://api.anthropic.com/v1/messages', {");
+lines.push("      const response = await fetch('/api/generate-blog', {");
 lines.push("        method: 'POST',");
 lines.push("        headers: { 'Content-Type': 'application/json' },");
-lines.push("        body: JSON.stringify({");
-lines.push("          model: 'claude-sonnet-4-20250514',");
-lines.push("          max_tokens: 4000,");
-lines.push("          messages: [{ role: 'user', content: prompt }]");
-lines.push("        })");
+lines.push("        body: JSON.stringify({ topic, tone, businessName, industry, city })");
 lines.push("      })");
 lines.push("      const data = await response.json()");
-lines.push("      const text = data.content[0].text");
-lines.push("      const parsed = JSON.parse(text)");
-lines.push("      setPost(parsed)");
+lines.push("      if (!data.success) { setError('Generation failed. Please try again.'); setLoading(false); return }");
+lines.push("      setPost(data.post)");
 lines.push("    } catch (e) {");
 lines.push("      setError('Generation failed. Please try again.')");
 lines.push("    }");
@@ -189,4 +211,4 @@ lines.push("  )");
 lines.push("}");
 
 fs.writeFileSync(path.join(dir, 'page.tsx'), lines.join('\n'), 'utf8');
-console.log('SUCCESS: Blog generator page created.');
+console.log('SUCCESS: Blog generator updated with server-side API route.');
