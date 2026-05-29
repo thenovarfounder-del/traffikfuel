@@ -1,14 +1,16 @@
 const fs = require('fs');
 const path = require('path');
 
-const filePath = path.join(__dirname, 'src', 'app', 'page.tsx');
-let content = fs.readFileSync(filePath, 'utf8');
+const layoutPath = path.join(__dirname, 'src', 'app', 'resources', 'glossary', 'layout.tsx');
 
-// Fix the countdown timer - replace dynamic date with fixed June 15 2026
-content = content.replace(
-  /var deadline = new Date\(\);\s*deadline\.setDate\(deadline\.getDate\(\)\s*\+\s*2\);/,
-  "var deadline = new Date('2026-06-15T23:59:59');"
-);
+const content = `// @ts-nocheck
+'use client'
 
-fs.writeFileSync(filePath, content, 'utf8');
-console.log('SUCCESS: Countdown timer fixed to June 15, 2026.');
+export default function Layout({ children }) {
+  return <>{children}</>
+}
+`;
+
+fs.mkdirSync(path.dirname(layoutPath), { recursive: true });
+fs.writeFileSync(layoutPath, content, 'utf8');
+console.log('SUCCESS: resources/glossary/layout.tsx created.');

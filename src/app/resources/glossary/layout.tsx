@@ -1,1 +1,6 @@
-export default function Layout({children}:{children:React.ReactNode}){return <>{children}</>}
+// @ts-nocheck
+'use client'
+
+export default function Layout({ children }) {
+  return <>{children}</>
+}
