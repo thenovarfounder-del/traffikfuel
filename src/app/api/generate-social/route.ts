@@ -12,33 +12,61 @@ export async function POST(req: NextRequest) {
       ? ['Facebook', 'Instagram', 'TikTok', 'X', 'LinkedIn']
       : [platform];
 
-    const prompt = `You are a social media expert for ${businessName}, a ${industry} business located in ${city}. Website: ${websiteUrl}.
+    const prompt = `You are an expert social media copywriter for ${businessName}, a ${industry} business in ${city}. Website: ${websiteUrl}.
 
-Create social media posts about: "${topic}"
+Create high-quality, engaging social media posts about: "${topic}"
 Tone: ${tone}
 
-Write one post for each platform: ${platforms.join(', ')}.
+STRICT REQUIREMENTS FOR EACH PLATFORM:
 
-Each post should be platform-optimized:
-- Facebook: 100-150 words, conversational, include a call to action
-- Instagram: 80-100 words, engaging, include relevant hashtags
-- TikTok: 50-80 words, energetic, trendy language, hashtags
-- X: Under 280 characters, punchy and direct
-- LinkedIn: 100-150 words, professional, thought leadership
+Facebook (120-150 words):
+- Strong opening hook
+- 2-3 sentences of valuable content
+- Clear call to action
+- 3-5 relevant hashtags at the end
 
-Return ONLY a valid JSON object with platform names as keys and post content as values. No markdown, no explanation, just the JSON object.
-Example: {"Facebook": "post here", "Instagram": "post here"}`;
+Instagram (100-120 words):
+- Attention-grabbing first line with emoji
+- Engaging story-style content with emojis throughout
+- Strong call to action
+- 10-15 relevant hashtags at the end on a new line
+
+TikTok (60-80 words):
+- Trendy energetic opening
+- Short punchy sentences
+- Call to action
+- 5-8 trending hashtags at the end
+
+X (200-250 characters maximum):
+- Punchy and direct
+- Include 2-3 hashtags within the character limit
+
+LinkedIn (150-200 words):
+- Professional thought leadership tone
+- Share insight or data point
+- Build credibility
+- Clear professional call to action
+- 3-5 professional hashtags at the end
+
+Return ONLY a valid JSON object. No markdown, no code blocks, no explanation. Just the raw JSON:
+{"Facebook": "full post here", "Instagram": "full post here", "TikTok": "full post here", "X": "full post here", "LinkedIn": "full post here"}`;
 
     const message = await client.messages.create({
       model: 'claude-opus-4-5',
-      max_tokens: 2000,
+      max_tokens: 3000,
       messages: [{ role: 'user', content: prompt }],
     });
 
-    const text = message.content[0].text.trim();
-    const clean = text.replace(/```json/g, '').replace(/```/g, '').trim();
-    const posts = JSON.parse(clean);
-
+    let text = message.content[0].text.trim();
+    text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+    
+    const jsonStart = text.indexOf('{');
+    const jsonEnd = text.lastIndexOf('}');
+    if (jsonStart === -1 || jsonEnd === -1) {
+      return NextResponse.json({ success: false, error: 'Invalid response from AI' }, { status: 500 });
+    }
+    
+    const posts = JSON.parse(text.substring(jsonStart, jsonEnd + 1));
     return NextResponse.json({ success: true, posts });
   } catch (err) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });

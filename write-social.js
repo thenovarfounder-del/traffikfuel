@@ -1,58 +1,79 @@
 const fs = require('fs');
 
-let cal = fs.readFileSync('src/app/dashboard/calendar/page.tsx', 'utf8');
+fs.writeFileSync('src/app/api/generate-social/route.ts', `// @ts-nocheck
+import { NextRequest, NextResponse } from 'next/server';
+import Anthropic from '@anthropic-ai/sdk';
 
-// Add viewContent state
-cal = cal.replace(
-  `  const [connectedPlatforms, setConnectedPlatforms] = useState([])`,
-  `  const [connectedPlatforms, setConnectedPlatforms] = useState([])
-  const [viewingContent, setViewingContent] = useState(null)`
-);
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-// Add View button and content modal to each event
-cal = cal.replace(
-  `                      <button onClick={() => deleteEvent(ev.id)} style={{ background: '#fef2f2', color: '#dc2626', border: 'none', borderRadius: '6px', padding: '4px 10px', fontSize: '11px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>Delete</button>`,
-  `                      {ev.content && <button onClick={() => setViewingContent(ev)} style={{ background: '#f0f4ff', color: '#3730a3', border: 'none', borderRadius: '6px', padding: '4px 10px', fontSize: '11px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>View</button>}
-                      <button onClick={() => deleteEvent(ev.id)} style={{ background: '#fef2f2', color: '#dc2626', border: 'none', borderRadius: '6px', padding: '4px 10px', fontSize: '11px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>Delete</button>`
-);
+export async function POST(req: NextRequest) {
+  try {
+    const { topic, platform, tone, businessName, industry, city, websiteUrl } = await req.json();
 
-// Add content viewer modal before closing div
-cal = cal.replace(
-  `      </div>
-    </div>
-  )
-}`,
-  `      </div>
+    const platforms = platform === 'All Platforms'
+      ? ['Facebook', 'Instagram', 'TikTok', 'X', 'LinkedIn']
+      : [platform];
 
-        {viewingContent && (
-          <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '24px' }}>
-            <div style={{ background: '#fff', borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '640px', maxHeight: '80vh', overflowY: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
-                <div>
-                  <p style={{ fontSize: '11px', fontWeight: '700', color: '#888', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>{viewingContent.content_type} {viewingContent.platform ? '-- ' + viewingContent.platform : ''}</p>
-                  <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#111', margin: 0 }}>{viewingContent.title}</h3>
-                </div>
-                <button onClick={() => setViewingContent(null)} style={{ background: '#f5f5f5', border: 'none', borderRadius: '8px', padding: '8px 14px', cursor: 'pointer', fontSize: '14px', fontWeight: '600', color: '#555', fontFamily: 'DM Sans, sans-serif', flexShrink: 0, marginLeft: '16px' }}>Close</button>
-              </div>
-              <div style={{ borderTop: '1px solid #eee', paddingTop: '20px' }}>
-                {viewingContent.content_type === 'blog' ? (
-                  <div style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', lineHeight: 1.8, color: '#333' }} dangerouslySetInnerHTML={{ __html: viewingContent.content }} />
-                ) : (
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', lineHeight: 1.8, color: '#333', whiteSpace: 'pre-wrap' }}>{viewingContent.content}</p>
-                )}
-              </div>
-              <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
-                <button onClick={() => { navigator.clipboard.writeText(viewingContent.content); }} style={{ background: '#111', color: '#fff', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>Copy Content</button>
-                <button onClick={() => setViewingContent(null)} style={{ background: '#f5f5f5', color: '#333', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: '600', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>Close</button>
-              </div>
-            </div>
-          </div>
-        )}
+    const prompt = \`You are an expert social media copywriter for \${businessName}, a \${industry} business in \${city}. Website: \${websiteUrl}.
 
-    </div>
-  )
-}` 
-);
+Create high-quality, engaging social media posts about: "\${topic}"
+Tone: \${tone}
 
-fs.writeFileSync('src/app/dashboard/calendar/page.tsx', cal);
-console.log('DONE -- content viewer added to calendar');
+STRICT REQUIREMENTS FOR EACH PLATFORM:
+
+Facebook (120-150 words):
+- Strong opening hook
+- 2-3 sentences of valuable content
+- Clear call to action
+- 3-5 relevant hashtags at the end
+
+Instagram (100-120 words):
+- Attention-grabbing first line with emoji
+- Engaging story-style content with emojis throughout
+- Strong call to action
+- 10-15 relevant hashtags at the end on a new line
+
+TikTok (60-80 words):
+- Trendy energetic opening
+- Short punchy sentences
+- Call to action
+- 5-8 trending hashtags at the end
+
+X (200-250 characters maximum):
+- Punchy and direct
+- Include 2-3 hashtags within the character limit
+
+LinkedIn (150-200 words):
+- Professional thought leadership tone
+- Share insight or data point
+- Build credibility
+- Clear professional call to action
+- 3-5 professional hashtags at the end
+
+Return ONLY a valid JSON object. No markdown, no code blocks, no explanation. Just the raw JSON:
+{"Facebook": "full post here", "Instagram": "full post here", "TikTok": "full post here", "X": "full post here", "LinkedIn": "full post here"}\`;
+
+    const message = await client.messages.create({
+      model: 'claude-opus-4-5',
+      max_tokens: 3000,
+      messages: [{ role: 'user', content: prompt }],
+    });
+
+    let text = message.content[0].text.trim();
+    text = text.replace(/\`\`\`json/g, '').replace(/\`\`\`/g, '').trim();
+    
+    const jsonStart = text.indexOf('{');
+    const jsonEnd = text.lastIndexOf('}');
+    if (jsonStart === -1 || jsonEnd === -1) {
+      return NextResponse.json({ success: false, error: 'Invalid response from AI' }, { status: 500 });
+    }
+    
+    const posts = JSON.parse(text.substring(jsonStart, jsonEnd + 1));
+    return NextResponse.json({ success: true, posts });
+  } catch (err) {
+    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+  }
+}
+`);
+
+console.log('DONE -- generate-social rewritten with better prompts');
