@@ -17,6 +17,7 @@ export default function DashboardSettings() {
   const [city, setCity] = useState('')
   const [website, setWebsite] = useState('')
   const [autoMode, setAutoMode] = useState(false)
+  const [platforms, setPlatforms] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
@@ -36,6 +37,7 @@ export default function DashboardSettings() {
         setCity(data.phone || '')
         setWebsite(data.website || '')
         setAutoMode(data.auto_mode || false)
+        setPlatforms(data.platforms || [])
       }
     }
     loadProfile()
@@ -61,6 +63,7 @@ export default function DashboardSettings() {
           website: website,
           phone: city,
           auto_mode: autoMode,
+          platforms: platforms,
         }, { onConflict: 'user_id' })
       if (upsertError) { setError('Save failed: ' + upsertError.message); setLoading(false); return }
       setSuccess('Settings saved!')
@@ -110,6 +113,32 @@ export default function DashboardSettings() {
           <div style={{ marginBottom: '32px' }}>
             <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#333', fontSize: '14px' }}>Website URL (optional)</label>
             <input type='text' placeholder='e.g. https://www.yourbusiness.com' value={website} onChange={e => setWebsite(e.target.value)} style={{ width: '100%', padding: '10px 14px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', fontFamily: 'DM Sans, sans-serif' }} />
+          </div>
+
+          <div style={{ borderTop: '1px solid #eee', paddingTop: '24px', marginBottom: '24px' }}>
+            <p style={{ fontWeight: '700', color: '#111', marginBottom: '4px', fontSize: '15px' }}>My Social Platforms</p>
+            <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px' }}>Select the platforms you use so your calendar only shows relevant options.</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '24px' }}>
+              {[
+                { id: 'facebook', label: 'Facebook', color: '#1877F2' },
+                { id: 'instagram', label: 'Instagram', color: '#E1306C' },
+                { id: 'tiktok', label: 'TikTok', color: '#010101' },
+                { id: 'twitter', label: 'X / Twitter', color: '#000000' },
+                { id: 'linkedin', label: 'LinkedIn', color: '#0A66C2' },
+                { id: 'google', label: 'Google Business', color: '#4285F4' },
+                { id: 'wordpress', label: 'WordPress', color: '#21759B' },
+              ].map(p => (
+                <div
+                  key={p.id}
+                  onClick={() => setPlatforms(prev => prev.includes(p.id) ? prev.filter(x => x !== p.id) : [...prev, p.id])}
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 14px', borderRadius: '20px', border: '2px solid ' + (platforms.includes(p.id) ? p.color : '#e5e7eb'), background: platforms.includes(p.id) ? p.color + '15' : '#fff', cursor: 'pointer', transition: 'all 0.15s' }}
+                >
+                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: p.color }} />
+                  <span style={{ fontSize: '13px', fontWeight: '600', color: platforms.includes(p.id) ? p.color : '#666' }}>{p.label}</span>
+                  {platforms.includes(p.id) && <span style={{ fontSize: '12px', color: p.color }}>✓</span>}
+                </div>
+              ))}
+            </div>
           </div>
 
           <div style={{ borderTop: '1px solid #eee', paddingTop: '24px', marginBottom: '24px' }}>

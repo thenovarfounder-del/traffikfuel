@@ -51,17 +51,11 @@ export default function ContentCalendar() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
     const { data } = await supabase
-      .from('social_accounts')
-      .select('platform')
-      .eq('user_id', user.id)
-    const platforms = data ? data.map(d => d.platform.toLowerCase()) : []
-    const { data: wp } = await supabase
-      .from('wordpress_connections')
-      .select('id')
+      .from('business_profiles')
+      .select('platforms')
       .eq('user_id', user.id)
       .single()
-    if (wp) platforms.push('wordpress')
-    setConnectedPlatforms(platforms)
+    setConnectedPlatforms(data?.platforms || [])
   }
 
   async function loadEvents() {
