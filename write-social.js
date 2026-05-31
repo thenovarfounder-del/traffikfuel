@@ -1,20 +1,20 @@
 const fs = require('fs');
 
-let cal = fs.readFileSync('src/app/dashboard/calendar/page.tsx', 'utf8');
+const content = fs.readFileSync('src/app/dashboard/calendar/page.tsx', 'utf8');
 
-// Fix date parsing - handle both MM/DD/YYYY and YYYY-MM-DD formats
-cal = cal.replace(
-  `      const parts = newDate.split('-')
-      const scheduledDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]), 12, 0, 0)`,
-  `      let scheduledDate
-      if (newDate.includes('/')) {
-        const parts = newDate.split('/')
-        scheduledDate = new Date(parseInt(parts[2]), parseInt(parts[0]) - 1, parseInt(parts[1]), 12, 0, 0)
-      } else {
-        const parts = newDate.split('-')
-        scheduledDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]), 12, 0, 0)
-      }`
+// Find the addEvent function and replace just the date line
+const fixed = content.replace(
+  'scheduled_at: new Date(newDate).toISOString(),',
+  `scheduled_at: (() => {
+          const s = newDate.trim()
+          if (s.includes('/')) {
+            const p = s.split('/')
+            return new Date(parseInt(p[2]), parseInt(p[0])-1, parseInt(p[1]), 12, 0, 0).toISOString()
+          }
+          const p = s.split('-')
+          return new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]), 12, 0, 0).toISOString()
+        })(),`
 );
 
-fs.writeFileSync('src/app/dashboard/calendar/page.tsx', cal);
-console.log('DONE -- date parsing fixed');
+fs.writeFileSync('src/app/dashboard/calendar/page.tsx', fixed);
+console.log('DONE -- date fix applied');
