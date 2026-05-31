@@ -1,0 +1,405 @@
+=== src/app/dashboard/connect/google/page.tsx ===
+// @ts-nocheck
+'use client'
+
+import { useState } from 'react'
+import Link from 'next/link'
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
+
+export default function ConnectGoogle() {
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    <>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+      <Nav />
+
+      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Step 1 of 3 — Account Setup</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Connect Google Business Profile</h1>
+        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto' }}>Traffikora reads your Google Business Profile to display your stats, ratings, and reviews in your dashboard.</p>
+      </section>
+
+      <section style={{ background: '#fff', padding: '80px 32px' }}>
+        <div style={{ maxWidth: '640px', margin: '0 auto' }}>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px', padding: '16px 20px', background: '#f5f5f5', border: '2px solid #ddd' }}>
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ccc', flexShrink: 0 }}></div>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#666', margin: 0 }}>Status: <strong style={{ color: '#111' }}>Not connected</strong></p>
+          </div>
+
+          <div style={{ border: '2.5px solid #111', padding: '40px', marginBottom: '24px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '26px', fontWeight: 700, color: '#111', marginBottom: '24px' }}>Permissions Traffikora will request</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
+              <div style={{ padding: '16px 20px', background: '#f9f9f9', borderLeft: '4px solid #E8610A' }}>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#111', margin: '0 0 4px' }}>business.manage</p>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#555', margin: 0, lineHeight: 1.6 }}>Read your business name, location, rating, review count, and profile view statistics</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setExpanded(!expanded)}
+              style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, color: '#E8610A', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: expanded ? '20px' : '0' }}
+            >
+              {expanded ? '▲ Hide details' : '▼ Why we need this'}
+            </button>
+
+            {expanded && (
+              <div style={{ background: '#f9f9f9', border: '2px solid #eee', padding: '24px' }}>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#555', lineHeight: 1.8, marginBottom: '12px' }}>We use the <strong>business.manage</strong> permission to read your Google Business Profile data and display it in your Traffikora dashboard. This includes your star rating, review count, and profile view trends.</p>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#555', lineHeight: 1.8, marginBottom: '12px' }}>We never post to your Google Business Profile without your explicit instruction, and we never sell your data to any third party.</p>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#555', lineHeight: 1.8, margin: 0 }}>You can disconnect at any time from dashboard settings or from <strong>myaccount.google.com</strong>. For the full breakdown, see our <Link href="/data-use" style={{ color: '#E8610A', fontWeight: 600, textDecoration: 'none' }}>Data Use page</Link>.</p>
+              </div>
+            )}
+          </div>
+
+          <button
+            onClick={() => window.location.href = '/dashboard/connect/facebook'}
+            style={{ width: '100%', background: '#E8610A', color: '#fff', padding: '20px', fontSize: '18px', fontWeight: 700, border: '2.5px solid #E8610A', cursor: 'pointer', marginBottom: '16px', fontFamily: 'DM Sans, sans-serif' }}
+          >
+            Connect Google Business Profile →
+          </button>
+
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888', textAlign: 'center', marginBottom: '24px', lineHeight: 1.6 }}>
+            You will be redirected to Google to approve access. Traffikora only receives the permissions listed above.
+          </p>
+
+          <div style={{ borderTop: '2px solid #eee', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Link href="/dashboard" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#888', textDecoration: 'none' }}>← Back to Dashboard</Link>
+            <Link href="/dashboard/connect/facebook" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#666', textDecoration: 'underline' }}>Skip for now</Link>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </>
+  )
+}
+
+
+=== src/app/dashboard/connect/instagram/page.tsx ===
+// @ts-nocheck
+'use client'
+
+import { useState } from 'react'
+import Link from 'next/link'
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
+
+export default function ConnectInstagram() {
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    <>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+      <Nav />
+
+      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Step 3 of 3 — Account Setup</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Connect Instagram Business</h1>
+        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto' }}>Traffikora reads your Instagram account insights to display follower count, reach, and engagement data in your dashboard.</p>
+      </section>
+
+      <section style={{ background: '#fff', padding: '80px 32px' }}>
+        <div style={{ maxWidth: '640px', margin: '0 auto' }}>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px', padding: '16px 20px', background: '#f5f5f5', border: '2px solid #ddd' }}>
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ccc', flexShrink: 0 }}></div>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#666', margin: 0 }}>Status: <strong style={{ color: '#111' }}>Not connected</strong></p>
+          </div>
+
+          <div style={{ border: '2.5px solid #111', padding: '40px', marginBottom: '24px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '26px', fontWeight: 700, color: '#111', marginBottom: '24px' }}>Permissions Traffikora will request</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
+              <div style={{ padding: '16px 20px', background: '#f9f9f9', borderLeft: '4px solid #dc2743' }}>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#111', margin: '0 0 4px' }}>instagram_basic</p>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#555', margin: 0, lineHeight: 1.6 }}>Read basic profile info and media from your Instagram Business account</p>
+              </div>
+              <div style={{ padding: '16px 20px', background: '#f9f9f9', borderLeft: '4px solid #dc2743' }}>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#111', margin: '0 0 4px' }}>instagram_manage_insights</p>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#555', margin: 0, lineHeight: 1.6 }}>Read your Instagram account insights — follower count, post reach, and engagement rate</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setExpanded(!expanded)}
+              style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, color: '#E8610A', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: expanded ? '20px' : '0' }}
+            >
+              {expanded ? '▲ Hide details' : '▼ Why we need this'}
+            </button>
+
+            {expanded && (
+              <div style={{ background: '#f9f9f9', border: '2px solid #eee', padding: '24px' }}>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#555', lineHeight: 1.8, marginBottom: '12px' }}>We use these permissions to read your Instagram account’s follower count, post reach, and engagement rate and display them in your Traffikora dashboard.</p>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#555', lineHeight: 1.8, marginBottom: '12px' }}>We do not access private messages or personal account data. We never post to your Instagram account without your explicit instruction, and we never sell your data.</p>
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#555', lineHeight: 1.8, margin: 0 }}>You can disconnect at any time from dashboard settings or from Instagram’s Apps and Websites settings. For the full breakdown, see our <Link href="/data-use" style={{ color: '#E8610A', fontWeight: 600, textDecoration: 'none' }}>Data Use page</Link>.</p>
+              </div>
+            )}
+          </div>
+
+          <button
+            onClick={() => window.location.href = '/dashboard'}
+            style={{ width: '100%', background: '#E8610A', color: '#fff', padding: '20px', fontSize: '18px', fontWeight: 700, border: '2.5px solid #E8610A', cursor: 'pointer', marginBottom: '16px', fontFamily: 'DM Sans, sans-serif' }}
+          >
+            Connect Instagram Business →
+          </button>
+
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888', textAlign: 'center', marginBottom: '24px', lineHeight: 1.6 }}>
+            You will be redirected to Instagram to approve access. Traffikora only receives the permissions listed above.
+          </p>
+
+          <div style={{ borderTop: '2px solid #eee', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Link href="/dashboard/connect/facebook" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#888', textDecoration: 'none' }}>← Back</Link>
+            <Link href="/dashboard" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#666', textDecoration: 'underline' }}>Skip for now</Link>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </>
+  )
+}
+
+
+=== src/app/dashboard/connect/linkedin/page.tsx ===
+// @ts-nocheck
+'use client'
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
+export default function ConnectLinkedIn() {
+  return (
+    <main suppressHydrationWarning>
+      <Nav />
+      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '80px 32px' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px' }}>Step 6 of 6 — Account Setup</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, margin: '0 auto 16px' }}>Connect LinkedIn</h1>
+        <p style={{ fontSize: '17px', color: '#ccc', maxWidth: '520px', margin: '0 auto' }}>Traffikora publishes content to your LinkedIn company page to grow your professional presence.</p>
+      </section>
+      <section style={{ background: '#fff', padding: '60px 32px', maxWidth: '680px', margin: '0 auto' }}>
+        <div style={{ background: '#f7f7f7', border: '2px solid #eee', padding: '16px 20px', borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '32px' }}>
+          <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ccc', flexShrink: 0 }}></div>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#555', margin: 0 }}>Status: <strong>Not connected</strong></p>
+        </div>
+        <div style={{ border: '2px solid #111', borderRadius: '8px', overflow: 'hidden', marginBottom: '32px' }}>
+          <div style={{ background: '#111', padding: '16px 20px' }}>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#fff', margin: 0 }}>Permissions Traffikora will request</p>
+          </div>
+          <div style={{ padding: '20px' }}>
+            <div style={{ borderLeft: '3px solid #E8610A', paddingLeft: '14px', marginBottom: '16px' }}>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#111', margin: '0 0 4px' }}>w_member_social</p>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#666', margin: 0 }}>Post content to LinkedIn on your behalf</p>
+            </div>
+            <div style={{ borderLeft: '3px solid #E8610A', paddingLeft: '14px' }}>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#111', margin: '0 0 4px' }}>r_organization_social</p>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#666', margin: 0 }}>Read your LinkedIn company page data and analytics</p>
+            </div>
+          </div>
+        </div>
+        <button disabled style={{ display: 'block', width: '100%', background: '#ccc', color: '#fff', padding: '18px', fontSize: '17px', fontWeight: 700, border: 'none', fontFamily: 'DM Sans, sans-serif', marginBottom: '12px', cursor: 'not-allowed' }}>
+          Connect LinkedIn — Coming Soon
+        </button>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', color: '#999', textAlign: 'center', marginBottom: '32px' }}>LinkedIn connection will be available once your company page is established.</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <a href="/dashboard/connect/twitter" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888', textDecoration: 'none' }}>&larr; Back</a>
+          <a href="/dashboard/connect/wordpress" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888', textDecoration: 'none' }}>Skip for now &rarr;</a>
+        </div>
+      </section>
+      <Footer />
+    </main>
+  )
+}
+
+
+=== src/app/dashboard/connect/tiktok/page.tsx ===
+// @ts-nocheck
+'use client'
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
+export default function ConnectTikTok() {
+  return (
+    <main suppressHydrationWarning>
+      <Nav />
+      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '80px 32px' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px' }}>Step 4 of 6 — Account Setup</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, margin: '0 auto 16px' }}>Connect TikTok</h1>
+        <p style={{ fontSize: '17px', color: '#ccc', maxWidth: '520px', margin: '0 auto' }}>Traffikora reads your TikTok account to publish videos and track performance automatically.</p>
+      </section>
+      <section style={{ background: '#fff', padding: '60px 32px', maxWidth: '680px', margin: '0 auto' }}>
+        <div style={{ background: '#f7f7f7', border: '2px solid #eee', padding: '16px 20px', borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '32px' }}>
+          <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ccc', flexShrink: 0 }}></div>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#555', margin: 0 }}>Status: <strong>Not connected</strong></p>
+        </div>
+        <div style={{ border: '2px solid #111', borderRadius: '8px', overflow: 'hidden', marginBottom: '32px' }}>
+          <div style={{ background: '#111', padding: '16px 20px' }}>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#fff', margin: 0 }}>Permissions Traffikora will request</p>
+          </div>
+          <div style={{ padding: '20px' }}>
+            <div style={{ borderLeft: '3px solid #E8610A', paddingLeft: '14px', marginBottom: '16px' }}>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#111', margin: '0 0 4px' }}>video.upload</p>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#666', margin: 0 }}>Post videos to your TikTok account automatically</p>
+            </div>
+            <div style={{ borderLeft: '3px solid #E8610A', paddingLeft: '14px' }}>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#111', margin: '0 0 4px' }}>video.list</p>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#666', margin: 0 }}>Read your TikTok video list and performance data</p>
+            </div>
+          </div>
+        </div>
+        <button disabled style={{ display: 'block', width: '100%', background: '#ccc', color: '#fff', padding: '18px', fontSize: '17px', fontWeight: 700, border: 'none', fontFamily: 'DM Sans, sans-serif', marginBottom: '12px', cursor: 'not-allowed' }}>
+          Connect TikTok Account — Coming Soon
+        </button>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', color: '#999', textAlign: 'center', marginBottom: '32px' }}>TikTok API application is pending approval. You will be notified when this is available.</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <a href="/dashboard/connect/instagram" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888', textDecoration: 'none' }}>&larr; Back</a>
+          <a href="/dashboard/connect/twitter" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888', textDecoration: 'none' }}>Skip for now &rarr;</a>
+        </div>
+      </section>
+      <Footer />
+    </main>
+  )
+}
+
+
+=== src/app/dashboard/connect/twitter/page.tsx ===
+// @ts-nocheck
+'use client'
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
+export default function ConnectTwitter() {
+  return (
+    <main suppressHydrationWarning>
+      <Nav />
+      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '80px 32px' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px' }}>Step 5 of 6 — Account Setup</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, margin: '0 auto 16px' }}>Connect X / Twitter</h1>
+        <p style={{ fontSize: '17px', color: '#ccc', maxWidth: '520px', margin: '0 auto' }}>Traffikora publishes posts to your X account automatically every day.</p>
+      </section>
+      <section style={{ background: '#fff', padding: '60px 32px', maxWidth: '680px', margin: '0 auto' }}>
+        <div style={{ background: '#f7f7f7', border: '2px solid #eee', padding: '16px 20px', borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '32px' }}>
+          <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ccc', flexShrink: 0 }}></div>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#555', margin: 0 }}>Status: <strong>Not connected</strong></p>
+        </div>
+        <div style={{ border: '2px solid #111', borderRadius: '8px', overflow: 'hidden', marginBottom: '32px' }}>
+          <div style={{ background: '#111', padding: '16px 20px' }}>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#fff', margin: 0 }}>Permissions Traffikora will request</p>
+          </div>
+          <div style={{ padding: '20px' }}>
+            <div style={{ borderLeft: '3px solid #E8610A', paddingLeft: '14px', marginBottom: '16px' }}>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#111', margin: '0 0 4px' }}>tweet.read</p>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#666', margin: 0 }}>Read your tweets and engagement data</p>
+            </div>
+            <div style={{ borderLeft: '3px solid #E8610A', paddingLeft: '14px', marginBottom: '16px' }}>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#111', margin: '0 0 4px' }}>tweet.write</p>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#666', margin: 0 }}>Post tweets on your behalf automatically</p>
+            </div>
+            <div style={{ borderLeft: '3px solid #E8610A', paddingLeft: '14px' }}>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#111', margin: '0 0 4px' }}>users.read</p>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#666', margin: 0 }}>Read your profile info and follower count</p>
+            </div>
+          </div>
+        </div>
+        <button disabled style={{ display: 'block', width: '100%', background: '#ccc', color: '#fff', padding: '18px', fontSize: '17px', fontWeight: 700, border: 'none', fontFamily: 'DM Sans, sans-serif', marginBottom: '12px', cursor: 'not-allowed' }}>
+          Connect X Account — Coming Soon
+        </button>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', color: '#999', textAlign: 'center', marginBottom: '32px' }}>X API application is pending approval. You will be notified when this is available.</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <a href="/dashboard/connect/tiktok" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888', textDecoration: 'none' }}>&larr; Back</a>
+          <a href="/dashboard/connect/linkedin" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888', textDecoration: 'none' }}>Skip for now &rarr;</a>
+        </div>
+      </section>
+      <Footer />
+    </main>
+  )
+}
+
+
+=== src/app/dashboard/connect/wordpress/page.tsx ===
+// @ts-nocheck
+'use client'
+import { useState } from 'react'
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
+import { createClient } from '@supabase/supabase-js'
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+export default function ConnectWordPress() {
+  const [siteUrl, setSiteUrl] = useState('')
+  const [username, setUsername] = useState('')
+  const [appPassword, setAppPassword] = useState('')
+  const [testing, setTesting] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [status, setStatus] = useState(null)
+  const [error, setError] = useState('')
+  async function testConnection() {
+    if (!siteUrl || !username || !appPassword) { setError('Please fill in all fields.'); return }
+    setTesting(true); setError(''); setStatus(null)
+    try {
+      const url = siteUrl.replace(/\/$/, '') + '/wp-json/wp/v2/posts?per_page=1'
+      const creds = btoa(username + ':' + appPassword)
+      const res = await fetch(url, { headers: { Authorization: 'Basic ' + creds } })
+      if (res.ok) { setStatus('success') } else { setError('Connection failed. Check your credentials and try again.') }
+    } catch (e) { setError('Could not reach that WordPress site. Check the URL and try again.') }
+    setTesting(false)
+  }
+  async function saveConnection() {
+    setSaving(true); setError('')
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) { setError('Not logged in.'); setSaving(false); return }
+      await supabase.from('wordpress_connections').upsert({ user_id: user.id, site_url: siteUrl, username: username, app_password: appPassword, connected_at: new Date().toISOString() }, { onConflict: 'user_id' })
+      window.location.href = '/dashboard'
+    } catch (e) { setError('Save failed. Please try again.') }
+    setSaving(false)
+  }
+  return (
+    <main suppressHydrationWarning>
+      <Nav />
+      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '80px 32px' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px' }}>WordPress Connection</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, margin: '0 auto 16px' }}>Connect WordPress</h1>
+        <p style={{ fontSize: '17px', color: '#ccc', maxWidth: '520px', margin: '0 auto' }}>Connect your WordPress site so Traffikora can publish blog posts automatically.</p>
+      </section>
+      <section style={{ background: '#fff', padding: '60px 32px', maxWidth: '680px', margin: '0 auto' }}>
+        <div style={{ background: '#fff8f0', border: '2px solid #E8610A', borderRadius: '8px', padding: '20px 24px', marginBottom: '32px' }}>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#E8610A', margin: '0 0 8px' }}>How to get your Application Password</p>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#555', margin: '0 0 6px', lineHeight: 1.7 }}>1. Log into your WordPress admin panel</p>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#555', margin: '0 0 6px', lineHeight: 1.7 }}>2. Go to Users &rarr; Profile</p>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#555', margin: '0 0 6px', lineHeight: 1.7 }}>3. Scroll down to Application Passwords</p>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#555', margin: '0', lineHeight: 1.7 }}>4. Enter a name (e.g. Traffikora) and click Add New Application Password</p>
+        </div>
+        <div style={{ marginBottom: '24px' }}>
+          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>WordPress Site URL</label>
+          <input type='text' placeholder='https://www.yoursite.com' value={siteUrl} onChange={e => setSiteUrl(e.target.value)} style={{ width: '100%', padding: '13px 16px', fontSize: '15px', border: '2px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+        </div>
+        <div style={{ marginBottom: '24px' }}>
+          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>WordPress Username</label>
+          <input type='text' placeholder='Your WordPress admin username' value={username} onChange={e => setUsername(e.target.value)} style={{ width: '100%', padding: '13px 16px', fontSize: '15px', border: '2px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+        </div>
+        <div style={{ marginBottom: '32px' }}>
+          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Application Password</label>
+          <input type='password' placeholder='xxxx xxxx xxxx xxxx xxxx xxxx' value={appPassword} onChange={e => setAppPassword(e.target.value)} style={{ width: '100%', padding: '13px 16px', fontSize: '15px', border: '2px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+        </div>
+        {error && <p style={{ color: 'red', marginBottom: '16px', fontFamily: 'DM Sans, sans-serif', fontSize: '14px' }}>{error}</p>}
+        {status === 'success' && <p style={{ color: '#2d6a2d', marginBottom: '16px', fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700 }}>Connection successful! Click Save to continue.</p>}
+        <button onClick={testConnection} disabled={testing} style={{ display: 'block', width: '100%', background: testing ? '#ccc' : '#111', color: '#fff', padding: '16px', fontSize: '16px', fontWeight: 700, border: 'none', cursor: testing ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', marginBottom: '12px' }}>
+          {testing ? 'Testing connection...' : 'Test Connection'}
+        </button>
+        {status === 'success' && (
+          <button onClick={saveConnection} disabled={saving} style={{ display: 'block', width: '100%', background: saving ? '#ccc' : '#E8610A', color: '#fff', padding: '16px', fontSize: '16px', fontWeight: 700, border: 'none', cursor: saving ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', marginBottom: '32px' }}>
+            {saving ? 'Saving...' : 'Save and Continue'}
+          </button>
+        )}
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px' }}>
+          <a href="/dashboard/connect/linkedin" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888', textDecoration: 'none' }}>&larr; Back</a>
+          <a href="/dashboard" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888', textDecoration: 'none' }}>Skip for now &rarr;</a>
+        </div>
+      </section>
+      <Footer />
+    </main>
+  )
+}
+
+
