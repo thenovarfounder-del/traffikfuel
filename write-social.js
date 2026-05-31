@@ -1,49 +1,55 @@
 const fs = require('fs');
-const path = require('path');
 
-const apiDir = path.join(__dirname, 'src', 'app', 'api', 'generate-social');
-fs.mkdirSync(apiDir, { recursive: true });
+fs.writeFileSync('src/app/api/webhooks/stripe/route.ts', `// @ts-nocheck
+import { NextRequest, NextResponse } from 'next/server';
+import Stripe from 'stripe';
 
-const route = [];
-route.push("// @ts-nocheck");
-route.push("");
-route.push("export async function POST(request) {");
-route.push("  try {");
-route.push("    const { topic, platform, tone, businessName, industry, city, websiteUrl } = await request.json()");
-route.push("");
-route.push("    const platforms = platform === 'All Platforms' ? ['Facebook', 'Instagram', 'TikTok', 'X', 'LinkedIn'] : [platform]");
-route.push("");
-route.push("    const prompt = 'Generate social media posts for a ' + industry + ' business called ' + businessName + ' in ' + city + '.'");
-route.push("      + ' Topic: ' + topic + '. Tone: ' + tone + '.'");
-route.push("      + ' Create one post for each of these platforms: ' + platforms.join(', ') + '.'");
-route.push("      + ' Each post must be optimized for that platform:'");
-route.push("      + ' Facebook: 100-200 words, conversational, 2-3 relevant hashtags, include ' + websiteUrl");
-route.push("      + ' Instagram: 50-100 words, visual language, 8-10 hashtags, include ' + websiteUrl");
-route.push("      + ' TikTok: 50-80 words, punchy and energetic, trending hashtags, hook in first line'");
-route.push("      + ' X: under 280 chars, sharp and direct, 2-3 hashtags'");
-route.push("      + ' LinkedIn: 150-250 words, professional, thought leadership angle, include ' + websiteUrl");
-route.push("      + ' Return ONLY a JSON object where keys are platform names and values are the post text.'");
-route.push("      + ' Example: { \"Facebook\": \"post here\", \"Instagram\": \"post here\" }'");
-route.push("      + ' No markdown. No backticks. No explanation.'");
-route.push("");
-route.push("    const response = await fetch('https://api.anthropic.com/v1/messages', {");
-route.push("      method: 'POST',");
-route.push("      headers: { 'Content-Type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },");
-route.push("      body: JSON.stringify({ model: 'claude-opus-4-5', max_tokens: 2000, messages: [{ role: 'user', content: prompt }] })");
-route.push("    })");
-route.push("");
-route.push("    const data = await response.json()");
-route.push("    if (!response.ok) return Response.json({ success: false, error: JSON.stringify(data) }, { status: 500 })");
-route.push("    if (!data.content || !data.content[0]) return Response.json({ success: false, error: 'No content returned' }, { status: 500 })");
-route.push("");
-route.push("    const text = data.content[0].text");
-route.push("    const clean = text.replace(/```json|```/g, '').trim()");
-route.push("    const parsed = JSON.parse(clean)");
-route.push("    return Response.json({ success: true, posts: parsed })");
-route.push("  } catch (e) {");
-route.push("    return Response.json({ success: false, error: e.message }, { status: 500 })");
-route.push("  }");
-route.push("}");
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: '2023-10-16',
+});
 
-fs.writeFileSync(path.join(apiDir, 'route.ts'), route.join('\n'), 'utf8');
-console.log('SUCCESS: Social API route created.');
+export async function POST(req: NextRequest) {
+  const body = await req.text();
+  const sig = req.headers.get('stripe-signature');
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    console.error('Webhook signature failed:', err.message);
+    return NextResponse.json({ error: 'Webhook error' }, { status: 400 });
+  }
+
+  switch (event.type) {
+    case 'checkout.session.completed':
+      const session = event.data.object;
+      console.log('Checkout complete:', session.id);
+      break;
+    case 'customer.subscription.created':
+    case 'customer.subscription.updated':
+      const subscription = event.data.object;
+      console.log('Subscription event:', event.type, subscription.id);
+      break;
+    case 'customer.subscription.deleted':
+      console.log('Subscription cancelled:', event.data.object.id);
+      break;
+    case 'invoice.payment_succeeded':
+      console.log('Payment succeeded:', event.data.object.id);
+      break;
+    case 'invoice.payment_failed':
+      console.log('Payment failed:', event.data.object.id);
+      break;
+    default:
+      console.log('Unhandled event type:', event.type);
+  }
+
+  return NextResponse.json({ received: true }, { status: 200 });
+}
+`);
+
+console.log('DONE -- webhook route written');
