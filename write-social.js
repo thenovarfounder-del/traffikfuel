@@ -1,6 +1,13 @@
 const fs = require('fs');
 
-const newFile = `// @ts-nocheck
+fs.mkdirSync('src/app/dashboard/publish', { recursive: true });
+
+fs.writeFileSync('src/app/dashboard/publish/layout.tsx', `// @ts-nocheck
+'use client'
+export default function Layout({ children }) { return <>{children}</> }
+`);
+
+fs.writeFileSync('src/app/dashboard/publish/page.tsx', `// @ts-nocheck
 'use client'
 import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
@@ -10,260 +17,269 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
 
-const COLORS = {
-  blog: '#E8610A',
-  facebook: '#1877F2',
-  instagram: '#E1306C',
-  tiktok: '#010101',
-  twitter: '#000000',
-  linkedin: '#0A66C2',
-  google: '#4285F4',
-  social: '#8B5CF6',
-}
+const PLATFORMS = [
+  { id: 'facebook', label: 'Facebook', color: '#1877F2', icon: '📘' },
+  { id: 'instagram', label: 'Instagram', color: '#E1306C', icon: '📸' },
+  { id: 'tiktok', label: 'TikTok', color: '#010101', icon: '🎵' },
+  { id: 'twitter', label: 'X / Twitter', color: '#000000', icon: '🐦' },
+  { id: 'linkedin', label: 'LinkedIn', color: '#0A66C2', icon: '💼' },
+]
 
-const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
-const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+export default function OnePushPublish() {
+  const [topic, setTopic] = useState('')
+  const [tone, setTone] = useState('Professional')
+  const [profile, setProfile] = useState(null)
+  const [userPlatforms, setUserPlatforms] = useState([])
+  const [selectedPlatforms, setSelectedPlatforms] = useState([])
+  const [publishBlog, setPublishBlog] = useState(true)
+  const [step, setStep] = useState('idle')
+  const [results, setResults] = useState(null)
+  const [error, setError] = useState('')
+  const [logs, setLogs] = useState([])
 
-export default function ContentCalendar() {
-  const today = new Date()
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth())
-  const [currentYear, setCurrentYear] = useState(today.getFullYear())
-  const [selected, setSelected] = useState(null)
-  const [events, setEvents] = useState({})
-  const [loading, setLoading] = useState(true)
-  const [showAddModal, setShowAddModal] = useState(false)
-  const [newTitle, setNewTitle] = useState('')
-  const [newType, setNewType] = useState('blog')
-  const [newPlatforms, setNewPlatforms] = useState([])
-  const [newStatus, setNewStatus] = useState('scheduled')
-  const [newDate, setNewDate] = useState('')
-  const [saving, setSaving] = useState(false)
-  const [connectedPlatforms, setConnectedPlatforms] = useState([])
-
-  useEffect(() => { loadConnectedPlatforms() }, [])
-  useEffect(() => { loadEvents() }, [currentMonth, currentYear])
-
-  async function loadConnectedPlatforms() {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
-    const { data } = await supabase.from('business_profiles').select('platforms').eq('user_id', user.id).single()
-    setConnectedPlatforms(data?.platforms || [])
-  }
-
-  async function loadEvents() {
-    setLoading(true)
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { setLoading(false); return }
-    const startDate = new Date(currentYear, currentMonth, 1).toISOString()
-    const endDate = new Date(currentYear, currentMonth + 1, 0, 23, 59, 59).toISOString()
-    const { data } = await supabase.from('content_calendar').select('*').eq('user_id', user.id).gte('scheduled_at', startDate).lte('scheduled_at', endDate).order('scheduled_at', { ascending: true })
-    const grouped = {}
-    if (data) { data.forEach(item => { const day = new Date(item.scheduled_at).getDate(); if (!grouped[day]) grouped[day] = []; grouped[day].push(item) }) }
-    setEvents(grouped)
-    setLoading(false)
-  }
-
-  async function addEvent() {
-    if (!newTitle || !newDate) return
-    setSaving(true)
-    try {
+  useEffect(() => {
+    async function load() {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { setSaving(false); return }
-      const platformValue = newType === 'social' ? newPlatforms.join(',') : newType
-      const dateValue = newDate + 'T12:00:00'
-      const { error } = await supabase.from('content_calendar').insert({
-        user_id: user.id,
-        title: newTitle,
-        content_type: newType,
-        platform: platformValue,
-        status: newStatus,
-        scheduled_at: new Date(dateValue).toISOString(),
+      if (!user) return
+      const { data } = await supabase.from('business_profiles').select('*').eq('user_id', user.id).single()
+      if (data) {
+        setProfile(data)
+        const platforms = (data.platforms || []).filter(p => PLATFORMS.map(x => x.id).includes(p))
+        setUserPlatforms(platforms)
+        setSelectedPlatforms(platforms)
+      }
+    }
+    load()
+  }, [])
+
+  function addLog(msg, status) {
+    setLogs(prev => [...prev, { msg, status, time: new Date().toLocaleTimeString() }])
+  }
+
+  function togglePlatform(id) {
+    setSelectedPlatforms(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
+  }
+
+  async function handlePublish() {
+    if (!topic) { setError('Please enter a topic.'); return }
+    setError('')
+    setStep('generating')
+    setLogs([])
+    setResults(null)
+
+    try {
+      const businessName = profile?.business_name || 'My Business'
+      const industry = profile?.industry || 'Business'
+      const city = profile?.phone || ''
+      const websiteUrl = profile?.website || ''
+
+      addLog('Generating blog post...', 'working')
+      const blogRes = await fetch('/api/generate-blog', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic, tone, businessName, industry, city, websiteUrl })
       })
-      if (error) { console.error(error); setSaving(false); return }
-      setNewTitle(''); setNewType('blog'); setNewPlatforms([]); setNewStatus('scheduled'); setNewDate('')
-      setShowAddModal(false)
-      loadEvents()
-    } catch(e) { console.error(e) }
-    setSaving(false)
+      const blogData = await blogRes.json()
+      if (!blogData.success) { addLog('Blog generation failed', 'error'); setStep('error'); return }
+      addLog('Blog post generated: ' + blogData.post.title, 'done')
+
+      addLog('Generating social media posts...', 'working')
+      const socialRes = await fetch('/api/generate-social', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic, tone, businessName, industry, city, websiteUrl, platform: 'All Platforms' })
+      })
+      const socialData = await socialRes.json()
+      if (!socialData.success) { addLog('Social generation failed', 'error') }
+      else { addLog('Social posts generated for all platforms', 'done') }
+
+      const { data: { user } } = await supabase.auth.getUser()
+
+      let wpUrl = null
+      if (publishBlog) {
+        addLog('Publishing to WordPress...', 'working')
+        const wpCheck = await fetch('/api/wordpress?user_id=' + user.id)
+        const wpData = await wpCheck.json()
+        if (!wpData.connected) {
+          addLog('WordPress not connected -- skipping', 'skip')
+        } else {
+          const wpRes = await fetch('/api/wordpress/publish', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: user.id, title: blogData.post.title, content: blogData.post.content, status: 'publish' })
+          })
+          const wpResult = await wpRes.json()
+          if (wpResult.success) { wpUrl = wpResult.url; addLog('Published to WordPress: ' + wpResult.url, 'done') }
+          else { addLog('WordPress publish failed: ' + wpResult.error, 'error') }
+        }
+      }
+
+      await supabase.from('content_calendar').insert({
+        user_id: user.id,
+        title: blogData.post.title,
+        content_type: 'blog',
+        platform: 'blog',
+        status: publishBlog ? 'published' : 'draft',
+        scheduled_at: new Date().toISOString(),
+        published_at: publishBlog ? new Date().toISOString() : null,
+        post_url: wpUrl,
+        content: blogData.post.content,
+      })
+
+      if (selectedPlatforms.length > 0 && socialData.success) {
+        for (const pid of selectedPlatforms) {
+          addLog('Saving ' + pid + ' post to queue...', 'working')
+          await supabase.from('content_calendar').insert({
+            user_id: user.id,
+            title: topic + ' -- ' + pid,
+            content_type: 'social',
+            platform: pid,
+            status: 'scheduled',
+            scheduled_at: new Date().toISOString(),
+            content: socialData.posts[pid.charAt(0).toUpperCase() + pid.slice(1)] || socialData.posts[Object.keys(socialData.posts)[0]],
+          })
+          addLog(pid + ' post saved to content queue', 'done')
+        }
+      }
+
+      addLog('All done!', 'done')
+      setResults({ blog: blogData.post, social: socialData.posts, wpUrl })
+      setStep('done')
+
+    } catch(e) {
+      addLog('Unexpected error: ' + e.message, 'error')
+      setStep('error')
+    }
   }
 
-  async function deleteEvent(id) {
-    await supabase.from('content_calendar').delete().eq('id', id)
-    loadEvents(); setSelected(null)
-  }
-
-  async function updateStatus(id, status) {
-    await supabase.from('content_calendar').update({ status, published_at: status === 'published' ? new Date().toISOString() : null }).eq('id', id)
-    loadEvents()
-  }
-
-  function prevMonth() {
-    if (currentMonth === 0) { setCurrentMonth(11); setCurrentYear(y => y - 1) } else setCurrentMonth(m => m - 1)
-    setSelected(null)
-  }
-
-  function nextMonth() {
-    if (currentMonth === 11) { setCurrentMonth(0); setCurrentYear(y => y + 1) } else setCurrentMonth(m => m + 1)
-    setSelected(null)
-  }
-
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
-  const firstDay = new Date(currentYear, currentMonth, 1).getDay()
-  const selectedEvents = selected ? (events[selected] || []) : []
-  const totalEvents = Object.values(events).flat().length
-  const publishedCount = Object.values(events).flat().filter(e => e.status === 'published').length
-  const scheduledCount = Object.values(events).flat().filter(e => e.status === 'scheduled').length
+  const isRunning = step === 'generating'
 
   return (
     <div style={{ minHeight: '100vh', background: '#f9fafb', padding: '32px 24px', fontFamily: 'DM Sans, sans-serif' }}>
-      <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '760px', margin: '0 auto' }}>
 
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
-          <div>
-            <h1 style={{ fontSize: '28px', fontWeight: '700', color: '#111', marginBottom: '4px' }}>Content Calendar</h1>
-            <p style={{ color: '#666', fontSize: '15px' }}>Plan, schedule and track all your content in one place.</p>
-          </div>
-          <button onClick={() => setShowAddModal(true)} style={{ background: '#E8610A', color: '#fff', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '14px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>+ Schedule Content</button>
+        <div style={{ marginBottom: '32px' }}>
+          <h1 style={{ fontSize: '28px', fontWeight: '700', color: '#111', marginBottom: '4px' }}>One-Push Publish</h1>
+          <p style={{ color: '#666', fontSize: '15px' }}>Enter one topic. Generate and publish your blog post and social media content in one click.</p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
-          {[{ label: 'Total This Month', value: totalEvents, color: '#111' }, { label: 'Published', value: publishedCount, color: '#166534' }, { label: 'Scheduled', value: scheduledCount, color: '#92400e' }].map((stat, i) => (
-            <div key={i} style={{ background: '#fff', borderRadius: '12px', padding: '20px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-              <p style={{ fontSize: '13px', color: '#888', marginBottom: '8px', fontWeight: '600' }}>{stat.label}</p>
-              <p style={{ fontSize: '32px', fontWeight: '800', color: stat.color, margin: 0 }}>{stat.value}</p>
-            </div>
-          ))}
-        </div>
+        <div style={{ background: '#fff', borderRadius: '16px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', marginBottom: '24px' }}>
 
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
-          {Object.entries(COLORS).filter(([type]) => type === 'blog' || type === 'google' || type === 'social' || connectedPlatforms.includes(type)).map(([type, color]) => (
-            <div key={type} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#fff', padding: '5px 12px', borderRadius: '20px', border: '1px solid #e5e7eb' }}>
-              <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: color }} />
-              <span style={{ fontSize: '11px', fontWeight: '600', color: '#444', textTransform: 'capitalize' }}>{type}</span>
-            </div>
-          ))}
-        </div>
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', fontSize: '14px', color: '#333' }}>Topic or Keyword</label>
+            <input
+              type='text'
+              value={topic}
+              onChange={e => setTopic(e.target.value)}
+              placeholder='e.g. 5 reasons to hire a marketing agency in 2026'
+              disabled={isRunning}
+              style={{ width: '100%', padding: '12px 16px', border: '2px solid #111', borderRadius: '8px', fontSize: '15px', boxSizing: 'border-box', fontFamily: 'DM Sans, sans-serif', outline: 'none' }}
+            />
+          </div>
 
-        <div style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', overflow: 'hidden', marginBottom: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid #f0f0f0' }}>
-            <button onClick={prevMonth} style={{ background: 'none', border: '1px solid #e5e7eb', borderRadius: '8px', padding: '8px 14px', cursor: 'pointer', fontSize: '16px', color: '#555' }}>←</button>
-            <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#111' }}>{MONTHS[currentMonth]} {currentYear}</h2>
-            <button onClick={nextMonth} style={{ background: 'none', border: '1px solid #e5e7eb', borderRadius: '8px', padding: '8px 14px', cursor: 'pointer', fontSize: '16px', color: '#555' }}>→</button>
+          <div style={{ marginBottom: '24px' }}>
+            <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', fontSize: '14px', color: '#333' }}>Tone</label>
+            <select value={tone} onChange={e => setTone(e.target.value)} disabled={isRunning} style={{ width: '100%', padding: '12px 16px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', fontFamily: 'DM Sans, sans-serif', background: '#fff' }}>
+              <option>Professional</option>
+              <option>Friendly</option>
+              <option>Authoritative</option>
+              <option>Conversational</option>
+            </select>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', borderBottom: '1px solid #f0f0f0' }}>
-            {DAYS.map(d => (<div key={d} style={{ padding: '10px', textAlign: 'center', fontSize: '11px', fontWeight: '700', color: '#888', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{d}</div>))}
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}>
-            {Array.from({ length: firstDay }).map((_, i) => (<div key={'empty-' + i} style={{ minHeight: '90px', borderRight: '1px solid #f5f5f5', borderBottom: '1px solid #f5f5f5', background: '#fafafa' }} />))}
-            {Array.from({ length: daysInMonth }).map((_, i) => {
-              const day = i + 1
-              const isToday = day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()
-              const isSelected = selected === day
-              const dayEvents = events[day] || []
-              return (
-                <div key={day} onClick={() => setSelected(isSelected ? null : day)} style={{ minHeight: '90px', borderRight: '1px solid #f5f5f5', borderBottom: '1px solid #f5f5f5', padding: '8px', cursor: 'pointer', background: isSelected ? '#fff8f5' : '#fff', transition: 'background 0.1s' }}>
-                  <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: isToday ? '#E8610A' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '4px' }}>
-                    <span style={{ fontSize: '12px', fontWeight: isToday ? '700' : '400', color: isToday ? '#fff' : '#333' }}>{day}</span>
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                    {dayEvents.slice(0, 2).map((ev, j) => (
-                      <div key={j} style={{ background: COLORS[ev.platform] || COLORS[ev.content_type] || '#888', borderRadius: '3px', padding: '2px 5px', fontSize: '10px', color: '#fff', fontWeight: '600', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', opacity: ev.status === 'scheduled' ? 0.65 : 1 }}>{ev.title}</div>
-                    ))}
-                    {dayEvents.length > 2 && <div style={{ fontSize: '10px', color: '#888', paddingLeft: '2px' }}>+{dayEvents.length - 2} more</div>}
-                  </div>
+
+          <div style={{ borderTop: '1px solid #eee', paddingTop: '24px', marginBottom: '24px' }}>
+            <p style={{ fontWeight: '700', fontSize: '14px', color: '#111', marginBottom: '16px' }}>What to publish:</p>
+
+            <div
+              onClick={() => !isRunning && setPublishBlog(!publishBlog)}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', border: '2px solid ' + (publishBlog ? '#E8610A' : '#e5e7eb'), borderRadius: '10px', marginBottom: '12px', cursor: 'pointer', background: publishBlog ? '#fff8f5' : '#fff' }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <span style={{ fontSize: '20px' }}>✍️</span>
+                <div>
+                  <p style={{ fontWeight: '600', color: '#111', margin: 0, fontSize: '14px' }}>Blog Post</p>
+                  <p style={{ fontSize: '12px', color: '#888', margin: 0 }}>Generate and publish to WordPress</p>
                 </div>
-              )
-            })}
+              </div>
+              <div style={{ width: '20px', height: '20px', borderRadius: '50%', border: '2px solid ' + (publishBlog ? '#E8610A' : '#ddd'), background: publishBlog ? '#E8610A' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {publishBlog && <span style={{ color: '#fff', fontSize: '12px', fontWeight: '700' }}>✓</span>}
+              </div>
+            </div>
+
+            <p style={{ fontWeight: '600', fontSize: '13px', color: '#555', marginBottom: '10px' }}>Social Platforms:</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '8px' }}>
+              {userPlatforms.length === 0 ? (
+                <p style={{ fontSize: '13px', color: '#888' }}>No platforms selected. Go to Business Settings to add your platforms.</p>
+              ) : (
+                userPlatforms.map(pid => {
+                  const p = PLATFORMS.find(x => x.id === pid)
+                  if (!p) return null
+                  const active = selectedPlatforms.includes(pid)
+                  return (
+                    <div key={pid} onClick={() => !isRunning && togglePlatform(pid)} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 14px', borderRadius: '20px', border: '2px solid ' + (active ? p.color : '#e5e7eb'), background: active ? p.color + '15' : '#fff', cursor: 'pointer', transition: 'all 0.15s' }}>
+                      <span style={{ fontSize: '14px' }}>{p.icon}</span>
+                      <span style={{ fontSize: '13px', fontWeight: '600', color: active ? p.color : '#555' }}>{p.label}</span>
+                      {active && <span style={{ fontSize: '11px', color: p.color }}>✓</span>}
+                    </div>
+                  )
+                })
+              )}
+            </div>
           </div>
+
+          {error && <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: '8px', padding: '12px', marginBottom: '16px', color: '#dc2626', fontSize: '14px' }}>{error}</div>}
+
+          <button
+            onClick={handlePublish}
+            disabled={isRunning || !topic}
+            style={{ width: '100%', padding: '16px', background: isRunning ? '#ccc' : '#E8610A', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '16px', fontWeight: '700', cursor: isRunning ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif' }}
+          >
+            {isRunning ? 'Publishing...' : 'One-Push Publish'}
+          </button>
         </div>
 
-        {selected && (
-          <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', color: '#111' }}>{MONTHS[currentMonth]} {selected}, {currentYear}</h3>
-            {selectedEvents.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '32px', color: '#888' }}>
-                <p style={{ fontSize: '15px', marginBottom: '12px' }}>No content scheduled for this day.</p>
-                <button onClick={() => { setNewDate(currentYear + '-' + String(currentMonth + 1).padStart(2,'0') + '-' + String(selected).padStart(2,'0')); setShowAddModal(true) }} style={{ background: '#E8610A', color: '#fff', border: 'none', borderRadius: '8px', padding: '8px 18px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>+ Schedule Content</button>
-              </div>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {selectedEvents.map((ev, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 16px', border: '1px solid #f0f0f0', borderRadius: '10px', borderLeft: '4px solid ' + (COLORS[ev.platform] || COLORS[ev.content_type] || '#888') }}>
-                    <div style={{ flex: 1 }}>
-                      <p style={{ fontWeight: '600', color: '#111', marginBottom: '2px', fontSize: '14px' }}>{ev.title}</p>
-                      <p style={{ fontSize: '12px', color: '#888', textTransform: 'capitalize', margin: 0 }}>{ev.content_type} {ev.platform ? '-- ' + ev.platform : ''}</p>
-                      {ev.post_url && <a href={ev.post_url} target='_blank' style={{ fontSize: '12px', color: '#E8610A', textDecoration: 'none' }}>View post</a>}
-                    </div>
-                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                      {ev.status !== 'published' && (<button onClick={() => updateStatus(ev.id, 'published')} style={{ background: '#f0fff4', color: '#166534', border: '1px solid #86efac', borderRadius: '6px', padding: '4px 10px', fontSize: '11px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>Mark Published</button>)}
-                      <span style={{ background: ev.status === 'published' ? '#f0fff4' : '#fff8f0', color: ev.status === 'published' ? '#166534' : '#92400e', fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '20px', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{ev.status}</span>
-                      <button onClick={() => deleteEvent(ev.id)} style={{ background: '#fef2f2', color: '#dc2626', border: 'none', borderRadius: '6px', padding: '4px 10px', fontSize: '11px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>Delete</button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+        {logs.length > 0 && (
+          <div style={{ background: '#111', borderRadius: '16px', padding: '24px', marginBottom: '24px' }}>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: '700', color: '#E8610A', marginBottom: '16px', letterSpacing: '1px', textTransform: 'uppercase' }}>Live Progress</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {logs.map((log, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span style={{ fontSize: '14px' }}>{log.status === 'done' ? '✅' : log.status === 'error' ? '❌' : log.status === 'skip' ? '⏭️' : '⏳'}</span>
+                  <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: log.status === 'error' ? '#fca5a5' : log.status === 'done' ? '#86efac' : '#ccc' }}>{log.msg}</span>
+                  <span style={{ fontSize: '11px', color: '#555', marginLeft: 'auto' }}>{log.time}</span>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
-        {showAddModal && (
-          <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '24px' }}>
-            <div style={{ background: '#fff', borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '480px', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
-              <h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '24px', color: '#111' }}>Schedule Content</h3>
-              <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', fontSize: '13px', color: '#333' }}>Title</label>
-                <input type='text' value={newTitle} onChange={e => setNewTitle(e.target.value)} placeholder='e.g. Top 10 SEO Tips' style={{ width: '100%', padding: '10px 14px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', fontFamily: 'DM Sans, sans-serif' }} />
-              </div>
-              <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', fontSize: '13px', color: '#333' }}>Content Type</label>
-                <select value={newType} onChange={e => setNewType(e.target.value)} style={{ width: '100%', padding: '10px 14px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', fontFamily: 'DM Sans, sans-serif', background: '#fff' }}>
-                  <option value='blog'>Blog Post</option>
-                  <option value='social'>Social Media</option>
-                  <option value='google'>Google Business Post</option>
-                </select>
-              </div>
-              {newType === 'social' && (
-                <div style={{ marginBottom: '16px' }}>
-                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', fontSize: '13px', color: '#333' }}>Platforms (select all that apply)</label>
-                  {connectedPlatforms.filter(p => p !== 'wordpress' && p !== 'google').length === 0 ? (
-                    <p style={{ fontSize: '13px', color: '#dc2626', padding: '10px', background: '#fef2f2', borderRadius: '8px' }}>No social platforms selected. Go to Business Settings to select your platforms.</p>
-                  ) : (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                      {[
-                        { id: 'facebook', label: 'Facebook', color: '#1877F2' },
-                        { id: 'instagram', label: 'Instagram', color: '#E1306C' },
-                        { id: 'tiktok', label: 'TikTok', color: '#010101' },
-                        { id: 'twitter', label: 'X / Twitter', color: '#000000' },
-                        { id: 'linkedin', label: 'LinkedIn', color: '#0A66C2' },
-                      ].filter(p => connectedPlatforms.includes(p.id)).map(p => (
-                        <div key={p.id} onClick={() => setNewPlatforms(prev => prev.includes(p.id) ? prev.filter(x => x !== p.id) : [...prev, p.id])} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 14px', borderRadius: '20px', border: '2px solid ' + (newPlatforms.includes(p.id) ? p.color : '#e5e7eb'), background: newPlatforms.includes(p.id) ? p.color + '15' : '#fff', cursor: 'pointer', transition: 'all 0.15s' }}>
-                          <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: p.color }} />
-                          <span style={{ fontSize: '13px', fontWeight: '600', color: newPlatforms.includes(p.id) ? p.color : '#555' }}>{p.label}</span>
-                          {newPlatforms.includes(p.id) && <span style={{ fontSize: '12px', color: p.color }}>✓</span>}
-                        </div>
-                      ))}
+        {step === 'done' && results && (
+          <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+            <p style={{ fontWeight: '700', fontSize: '18px', color: '#111', marginBottom: '20px' }}>Published Successfully</p>
+
+            <div style={{ background: '#f9fafb', borderRadius: '10px', padding: '16px', marginBottom: '16px', borderLeft: '4px solid #E8610A' }}>
+              <p style={{ fontWeight: '700', color: '#111', marginBottom: '4px', fontSize: '14px' }}>Blog Post</p>
+              <p style={{ color: '#555', fontSize: '14px', margin: '0 0 8px' }}>{results.blog.title}</p>
+              {results.wpUrl && <a href={results.wpUrl} target='_blank' style={{ color: '#E8610A', fontSize: '13px', fontWeight: '600', textDecoration: 'none' }}>View on WordPress →</a>}
+            </div>
+
+            {results.social && Object.keys(results.social).length > 0 && (
+              <div>
+                <p style={{ fontWeight: '700', fontSize: '14px', color: '#111', marginBottom: '12px' }}>Social Posts (saved to Content Queue)</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {Object.entries(results.social).map(([plat, post]) => (
+                    <div key={plat} style={{ padding: '12px 16px', background: '#f9fafb', borderRadius: '8px', borderLeft: '3px solid #8B5CF6' }}>
+                      <p style={{ fontWeight: '600', fontSize: '12px', color: '#666', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{plat}</p>
+                      <p style={{ fontSize: '13px', color: '#333', margin: 0, lineHeight: 1.6 }}>{typeof post === 'string' ? post.substring(0, 150) + '...' : ''}</p>
                     </div>
-                  )}
+                  ))}
                 </div>
-              )}
-              <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', fontSize: '13px', color: '#333' }}>Status</label>
-                <select value={newStatus} onChange={e => setNewStatus(e.target.value)} style={{ width: '100%', padding: '10px 14px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', fontFamily: 'DM Sans, sans-serif', background: '#fff' }}>
-                  <option value='scheduled'>Scheduled</option>
-                  <option value='draft'>Draft</option>
-                  <option value='published'>Published</option>
-                </select>
               </div>
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', fontSize: '13px', color: '#333' }}>Date</label>
-                <input type='date' value={newDate} onChange={e => setNewDate(e.target.value)} style={{ width: '100%', padding: '10px 14px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', fontFamily: 'DM Sans, sans-serif' }} />
-              </div>
-              <div style={{ display: 'flex', gap: '12px' }}>
-                <button onClick={() => setShowAddModal(false)} style={{ flex: 1, padding: '11px', background: '#f5f5f5', color: '#333', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: '600', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>Cancel</button>
-                <button onClick={addEvent} disabled={saving || !newTitle || !newDate} style={{ flex: 1, padding: '11px', background: saving ? '#ccc' : '#E8610A', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: '700', cursor: saving ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif' }}>
-                  {saving ? 'Saving...' : 'Schedule'}
-                </button>
-              </div>
+            )}
+
+            <div style={{ marginTop: '20px', display: 'flex', gap: '12px' }}>
+              <button onClick={() => { setStep('idle'); setLogs([]); setResults(null); setTopic('') }} style={{ flex: 1, padding: '11px', background: '#E8610A', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>Publish Another</button>
+              <a href='/dashboard/calendar' style={{ flex: 1, padding: '11px', background: '#111', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', textDecoration: 'none', textAlign: 'center' }}>View Calendar</a>
             </div>
           </div>
         )}
@@ -272,7 +288,6 @@ export default function ContentCalendar() {
     </div>
   )
 }
-`;
+`);
 
-fs.writeFileSync('src/app/dashboard/calendar/page.tsx', newFile);
-console.log('DONE -- full calendar rewritten cleanly');
+console.log('DONE -- One-Push Publish Panel written');
