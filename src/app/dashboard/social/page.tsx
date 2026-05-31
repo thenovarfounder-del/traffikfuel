@@ -83,7 +83,7 @@ export default function SocialGenerator() {
                 <option>Facebook</option>
                 <option>Instagram</option>
                 <option>TikTok</option>
-                <option>X</option>
+                <option>X / Twitter</option>
                 <option>LinkedIn</option>
               </select>
             </div>
