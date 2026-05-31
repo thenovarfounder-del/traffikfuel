@@ -111,7 +111,8 @@ export default function Billing() {
                     </div>
                   ))}
                 </div>
-                <button style={{ width: '100%', padding: '10px', borderRadius: '8px', border: 'none', backgroundColor: plan.current ? '#1a1a1a' : plan.color, color: plan.current ? '#94a3b8' : '#fff', cursor: plan.current ? 'default' : 'pointer', fontSize: '13px', fontWeight: '600' }}>
+                <button style={{ width: '100%', padding: '10px', borderRadius: '8px', border: 'none', backgroundColor: plan.current ? '#1a1a1a' : plan.color, color: plan.current ? '#94a3b8' : '#fff', cursor: plan.current ? 'default' : 'pointer', fontSize: '13px', fontWeight: '600' }}
+                  onClick={() => { if (!plan.current) window.location.href = 'https://www.traffikora.com/pricing' }}>
                   {plan.current ? 'Current Plan' : 'Upgrade'}
                 </button>
               </div>
