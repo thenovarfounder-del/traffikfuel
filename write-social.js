@@ -8,16 +8,13 @@ const content = `// @ts-nocheck
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createBrowserClient } from '@supabase/ssr'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 const PLATFORMS = ['All', 'Facebook', 'Instagram', 'Twitter', 'LinkedIn']
 const STATUSES = ['All', 'scheduled', 'published', 'draft']
 
 export default function ContentQueue() {
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  )
+  const supabase = createClientComponentClient()
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
   const [filterPlatform, setFilterPlatform] = useState('All')
@@ -187,4 +184,4 @@ export default function ContentQueue() {
 `;
 
 fs.writeFileSync(filePath, content, 'utf8');
-console.log('DONE - Content Queue fixed and saved');
+console.log('DONE - Content Queue fixed with correct Supabase import');
