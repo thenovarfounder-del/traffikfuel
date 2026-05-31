@@ -13,7 +13,6 @@ import Footer from '@/components/Footer'
 const PLANS = [
   {
     name: 'Starter',
-    tag: 'STARTER',
     price: '\$97',
     period: '/mo',
     description: 'Perfect for solo business owners ready to automate their marketing.',
@@ -25,7 +24,6 @@ const PLANS = [
   },
   {
     name: 'Pro',
-    tag: 'MOST POPULAR',
     price: '\$197',
     period: '/mo',
     description: 'Full automation for serious business owners who want it all.',
@@ -37,7 +35,6 @@ const PLANS = [
   },
   {
     name: 'Agency',
-    tag: 'AGENCY',
     price: '\$797',
     period: '/mo',
     description: 'Manage multiple clients from one powerful dashboard.',
@@ -49,7 +46,6 @@ const PLANS = [
   },
   {
     name: 'Enterprise',
-    tag: 'ENTERPRISE',
     price: '\$1,497',
     period: '/mo',
     description: 'For large agencies scaling across many clients at once.',
@@ -63,13 +59,13 @@ const PLANS = [
 
 export default function Pricing() {
   return (
-    <>
+    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}>
       <Nav />
-      <div style={{ backgroundColor: '#0a0a0a', color: '#fff', fontFamily: 'system-ui, sans-serif' }}>
+      <div style={{ color: '#fff', fontFamily: 'system-ui, sans-serif', backgroundColor: '#0a0a0a' }}>
 
         <div style={{ textAlign: 'center', padding: '100px 32px 60px' }}>
           <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '16px' }}>SIMPLE PRICING</div>
-          <h1 style={{ fontSize: '52px', fontWeight: '800', margin: '0 0 16px 0', letterSpacing: '-1px' }}>No surprises. <em style={{ color: '#f97316', fontStyle: 'italic' }}>Ever.</em></h1>
+          <h1 style={{ fontSize: '52px', fontWeight: '800', margin: '0 0 16px 0', letterSpacing: '-1px', color: '#fff' }}>No surprises. <em style={{ color: '#f97316', fontStyle: 'italic' }}>Ever.</em></h1>
           <p style={{ fontSize: '18px', color: '#64748b', margin: '0 auto', maxWidth: '500px', lineHeight: '1.6' }}>Credit card required -- No charge for 7 days -- Cancel anytime</p>
         </div>
 
@@ -79,8 +75,7 @@ export default function Pricing() {
               {plan.highlight && (
                 <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#f97316', color: '#fff', fontSize: '11px', fontWeight: '700', padding: '4px 16px', borderRadius: '20px', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Most Popular</div>
               )}
-              <div style={{ marginBottom: '8px', fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{plan.tag}</div>
-              <div style={{ fontSize: '22px', fontWeight: '800', marginBottom: '12px' }}>{plan.name}</div>
+              <div style={{ fontSize: '22px', fontWeight: '800', marginBottom: '12px', color: '#fff' }}>{plan.name}</div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '12px' }}>
                 <span style={{ fontSize: '42px', fontWeight: '800', color: plan.color }}>{plan.price}</span>
                 <span style={{ fontSize: '14px', color: '#64748b' }}>{plan.period}</span>
@@ -89,19 +84,19 @@ export default function Pricing() {
               <div style={{ flex: 1, marginBottom: '28px' }}>
                 {plan.features.map(f => (
                   <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '10px', fontSize: '14px', color: '#e2e8f0' }}>
-                    <span style={{ color: plan.color, fontWeight: '700', fontSize: '16px', marginTop: '0px' }}>+</span>
+                    <span style={{ color: plan.color, fontWeight: '700', fontSize: '16px' }}>+</span>
                     {f}
                   </div>
                 ))}
               </div>
-              <a href={plan.href} style={{ display: 'block', textAlign: 'center', padding: '14px', borderRadius: '10px', border: 'none', backgroundColor: plan.highlight ? '#f97316' : plan.color + '20', color: plan.highlight ? '#fff' : plan.color, cursor: 'pointer', fontSize: '14px', fontWeight: '700', textDecoration: 'none', transition: 'opacity 0.2s' }}>
+              <a href={plan.href} style={{ display: 'block', textAlign: 'center', padding: '14px', borderRadius: '10px', backgroundColor: plan.highlight ? '#f97316' : plan.color + '20', color: plan.highlight ? '#fff' : plan.color, cursor: 'pointer', fontSize: '14px', fontWeight: '700', textDecoration: 'none' }}>
                 {plan.cta}
               </a>
             </div>
           ))}
         </div>
 
-        <div style={{ borderTop: '1px solid #1a1a1a', borderBottom: '1px solid #1a1a1a', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', maxWidth: '1200px', margin: '0 auto 80px', padding: '0 32px' }}>
+        <div style={{ borderTop: '1px solid #1a1a1a', borderBottom: '1px solid #1a1a1a', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', maxWidth: '1200px', margin: '0 auto 80px', padding: '0 32px', backgroundColor: '#0a0a0a' }}>
           {[
             { icon: '🛡', title: 'No Charge for 7 Days', desc: 'Credit card required to start' },
             { icon: '⚡', title: 'Cancel Any Time', desc: 'One click, no questions asked' },
@@ -118,10 +113,10 @@ export default function Pricing() {
 
       </div>
       <Footer />
-    </>
+    </div>
   )
 }
 `;
 
 fs.writeFileSync(pricingPath, content, 'utf8');
-console.log('DONE - Pricing page rebuilt with Nav and Footer');
+console.log('DONE - Pricing page dark background fixed');
