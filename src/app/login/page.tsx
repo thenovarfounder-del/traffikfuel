@@ -2,87 +2,147 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
-import Nav from '@/components/Nav'
-import Footer from '@/components/Footer'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@supabase/supabase-js'
 
-export default function LoginPage() {
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+)
+
+export default function Login() {
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
 
   async function handleLogin() {
     setLoading(true)
     setError('')
     try {
-      const { supabase } = await import('@/lib/supabase')
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) {
-        setError('Invalid email or password. Please try again.')
-      } else {
-        window.location.href = '/dashboard'
-      }
-    } catch (e) {
-      setError('Something went wrong. Please try again.')
+      const { error: loginError } = await supabase.auth.signInWithPassword({ email, password })
+      if (loginError) throw loginError
+      router.push('/dashboard')
+    } catch (err) {
+      setError(err.message)
     }
     setLoading(false)
   }
 
+  const inputStyle = {
+    width: '100%',
+    padding: '16px 20px',
+    borderRadius: '12px',
+    border: '1px solid #2a2a2a',
+    backgroundColor: '#111',
+    color: '#fff',
+    fontSize: '15px',
+    outline: 'none',
+    boxSizing: 'border-box',
+    fontFamily: 'inherit'
+  }
+
+  const labelStyle = {
+    display: 'block',
+    fontSize: '12px',
+    fontWeight: '600',
+    color: '#94a3b8',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em',
+    marginBottom: '8px'
+  }
+
   return (
-    <>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-      <Nav />
+    <div style={{ minHeight: '100vh', backgroundColor: '#050505', color: '#fff', fontFamily: "'Georgia', serif", display: 'flex' }}>
 
-      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px 60px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Welcome Back</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, marginBottom: '16px' }}>Log in to Traffikora</h1>
-        <p style={{ fontSize: '18px', color: '#ccc', marginBottom: '0' }}>Pick up right where you left off.</p>
-      </section>
+      {/* LEFT PANEL */}
+      <div style={{ width: '45%', background: 'linear-gradient(135deg, #0a0a0a 0%, #111 50%, #0f0a00 100%)', padding: '60px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRight: '1px solid #1a1a1a', position: 'relative', overflow: 'hidden' }}>
 
-      <section style={{ background: '#fff', padding: '60px 32px', display: 'flex', justifyContent: 'center' }}>
-        <div style={{ width: '100%', maxWidth: '460px' }}>
-          {error && (
-            <div style={{ background: '#fff0f0', border: '2px solid #e00', color: '#c00', padding: '14px 18px', marginBottom: '24px', fontFamily: 'DM Sans, sans-serif', fontSize: '15px' }}>
-              {error}
+        <div style={{ position: 'absolute', top: '-100px', right: '-100px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, #f9731615 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '-50px', left: '-50px', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, #f9731608 0%, transparent 70%)', pointerEvents: 'none' }} />
+
+        <div>
+          <a href="/" style={{ textDecoration: 'none' }}>
+            <div style={{ fontSize: '22px', fontWeight: '800', color: '#fff', letterSpacing: '-0.5px', fontFamily: 'system-ui, sans-serif' }}>
+              Traffik<span style={{ color: '#f97316' }}>ora</span>
+              <span style={{ fontSize: '11px', color: '#f97316', verticalAlign: 'super' }}>™</span>
             </div>
-          )}
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Email address</label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }}
-            />
-          </div>
-          <div style={{ marginBottom: '28px' }}>
-            <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              placeholder="Your password"
-              style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }}
-            />
-          </div>
-          <button
-            onClick={handleLogin}
-            disabled={loading}
-            style={{ width: '100%', background: '#E8610A', color: '#fff', padding: '16px', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', opacity: loading ? 0.7 : 1 }}
-          >
-            {loading ? 'Logging in...' : 'Log In'}
-          </button>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#666', textAlign: 'center', marginTop: '24px' }}>
-            Don’t have an account? <Link href="/signup" style={{ color: '#E8610A', fontWeight: 600, textDecoration: 'none' }}>Start free trial</Link>
-          </p>
+          </a>
         </div>
-      </section>
 
-      <Footer />
-    </>
+        <div>
+          <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '20px', fontFamily: 'system-ui, sans-serif' }}>Welcome Back</div>
+          <h1 style={{ fontSize: '42px', fontWeight: '400', lineHeight: '1.2', margin: '0 0 24px 0', color: '#fff' }}>
+            Your marketing<br />
+            <em style={{ color: '#f97316', fontStyle: 'italic' }}>never stopped.</em>
+          </h1>
+          <p style={{ fontSize: '16px', color: '#64748b', lineHeight: '1.7', margin: '0 0 48px 0', fontFamily: 'system-ui, sans-serif' }}>
+            While you were away your AI agents kept working. Log back in to see what was published.
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {[
+              { icon: '🤖', text: 'AI agents ran while you were away' },
+              { icon: '📊', text: 'New analytics waiting for you' },
+              { icon: '📅', text: 'Content calendar updated' },
+              { icon: '⚡', text: 'Posts scheduled and ready' }
+            ].map(item => (
+              <div key={item.text} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#f9731615', border: '1px solid #f9731630', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>{item.icon}</div>
+                <span style={{ fontSize: '14px', color: '#94a3b8', fontFamily: 'system-ui, sans-serif' }}>{item.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ fontSize: '13px', color: '#2a2a2a', fontFamily: 'system-ui, sans-serif' }}>
+          © 2026 Traffikora. All rights reserved.
+        </div>
+      </div>
+
+      {/* RIGHT PANEL */}
+      <div style={{ flex: 1, padding: '60px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div style={{ maxWidth: '420px', width: '100%', margin: '0 auto' }}>
+
+          <div style={{ marginBottom: '40px' }}>
+            <div style={{ fontSize: '12px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px', fontFamily: 'system-ui, sans-serif' }}>Welcome Back</div>
+            <h2 style={{ fontSize: '32px', fontWeight: '400', margin: '0 0 8px 0' }}>Log in to Traffikora</h2>
+            <p style={{ fontSize: '14px', color: '#64748b', margin: 0, fontFamily: 'system-ui, sans-serif' }}>Pick up right where you left off.</p>
+          </div>
+
+          {error && (
+            <div style={{ backgroundColor: '#ef444415', border: '1px solid #ef4444', borderRadius: '10px', padding: '12px 16px', marginBottom: '20px', fontSize: '13px', color: '#ef4444', fontFamily: 'system-ui, sans-serif' }}>{error}</div>
+          )}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div>
+              <label style={labelStyle}>Email Address</label>
+              <input style={inputStyle} type="email" placeholder="you@yourbusiness.com" value={email} onChange={e => setEmail(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleLogin()} />
+            </div>
+            <div>
+              <label style={labelStyle}>Password</label>
+              <input style={inputStyle} type="password" placeholder="Your password" value={password} onChange={e => setPassword(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleLogin()} />
+            </div>
+
+            <button onClick={handleLogin} disabled={loading} style={{ width: '100%', padding: '16px', borderRadius: '12px', border: 'none', background: loading ? '#333' : 'linear-gradient(135deg, #f97316, #ea6a0a)', color: '#fff', fontSize: '15px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'system-ui, sans-serif' }}>
+              {loading ? 'Logging in...' : 'Log In →'}
+            </button>
+
+            <div style={{ textAlign: 'center', fontSize: '13px', color: '#64748b', fontFamily: 'system-ui, sans-serif' }}>
+              Don't have an account?{' '}
+              <a href="/signup" style={{ color: '#f97316', textDecoration: 'none', fontWeight: '600' }}>Start free trial</a>
+            </div>
+
+            <div style={{ textAlign: 'center' }}>
+              <a href="/reset-password" style={{ fontSize: '13px', color: '#64748b', textDecoration: 'none', fontFamily: 'system-ui, sans-serif' }}>Forgot your password?</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
   )
 }

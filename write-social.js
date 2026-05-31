@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const signupPath = path.join('C:\\Users\\randy\\traffikfuel\\src\\app\\signup\\page.tsx');
+const loginPath = path.join('C:\\Users\\randy\\traffikfuel\\src\\app\\login\\page.tsx');
 
 const content = `// @ts-nocheck
 'use client'
@@ -16,51 +16,20 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
 
-export default function Signup() {
+export default function Login() {
   const router = useRouter()
-  const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [form, setForm] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-    phone: '',
-    businessName: '',
-    industry: '',
-    city: ''
-  })
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
-  function update(field, value) {
-    setForm(prev => ({ ...prev, [field]: value }))
-  }
-
-  async function handleSignup() {
+  async function handleLogin() {
     setLoading(true)
     setError('')
     try {
-      const { data, error: signUpError } = await supabase.auth.signUp({
-        email: form.email,
-        password: form.password,
-        options: {
-          data: {
-            full_name: form.fullName,
-            phone: form.phone,
-            business_name: form.businessName
-          }
-        }
-      })
-      if (signUpError) throw signUpError
-      if (data.user) {
-        await supabase.from('business_profiles').insert({
-          user_id: data.user.id,
-          business_name: form.businessName,
-          industry: form.industry,
-          city: form.city,
-          phone: form.phone
-        })
-        router.push('/dashboard')
-      }
+      const { error: loginError } = await supabase.auth.signInWithPassword({ email, password })
+      if (loginError) throw loginError
+      router.push('/dashboard')
     } catch (err) {
       setError(err.message)
     }
@@ -77,8 +46,7 @@ export default function Signup() {
     fontSize: '15px',
     outline: 'none',
     boxSizing: 'border-box',
-    fontFamily: 'inherit',
-    transition: 'border-color 0.2s'
+    fontFamily: 'inherit'
   }
 
   const labelStyle = {
@@ -110,21 +78,21 @@ export default function Signup() {
         </div>
 
         <div>
-          <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '20px', fontFamily: 'system-ui, sans-serif' }}>Start Free Today</div>
+          <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '20px', fontFamily: 'system-ui, sans-serif' }}>Welcome Back</div>
           <h1 style={{ fontSize: '42px', fontWeight: '400', lineHeight: '1.2', margin: '0 0 24px 0', color: '#fff' }}>
-            Your marketing.<br />
-            <em style={{ color: '#f97316', fontStyle: 'italic' }}>Automated forever.</em>
+            Your marketing<br />
+            <em style={{ color: '#f97316', fontStyle: 'italic' }}>never stopped.</em>
           </h1>
           <p style={{ fontSize: '16px', color: '#64748b', lineHeight: '1.7', margin: '0 0 48px 0', fontFamily: 'system-ui, sans-serif' }}>
-            Join hundreds of businesses letting AI handle their marketing while they focus on what matters most.
+            While you were away your AI agents kept working. Log back in to see what was published.
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {[
-              { icon: '⚡', text: 'Live in under 5 minutes' },
-              { icon: '🤖', text: 'AI agents running 24/7' },
-              { icon: '🛡', text: 'No charge for 7 days' },
-              { icon: '✕', text: 'Cancel anytime, one click' }
+              { icon: '🤖', text: 'AI agents ran while you were away' },
+              { icon: '📊', text: 'New analytics waiting for you' },
+              { icon: '📅', text: 'Content calendar updated' },
+              { icon: '⚡', text: 'Posts scheduled and ready' }
             ].map(item => (
               <div key={item.text} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                 <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#f9731615', border: '1px solid #f9731630', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>{item.icon}</div>
@@ -140,95 +108,43 @@ export default function Signup() {
       </div>
 
       {/* RIGHT PANEL */}
-      <div style={{ flex: 1, padding: '60px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'center', overflowY: 'auto' }}>
-
+      <div style={{ flex: 1, padding: '60px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <div style={{ maxWidth: '420px', width: '100%', margin: '0 auto' }}>
 
           <div style={{ marginBottom: '40px' }}>
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '32px' }}>
-              {[1, 2].map(s => (
-                <div key={s} style={{ flex: 1, height: '3px', borderRadius: '2px', backgroundColor: step >= s ? '#f97316' : '#1a1a1a', transition: 'background-color 0.3s' }} />
-              ))}
-            </div>
-            <div style={{ fontSize: '12px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px', fontFamily: 'system-ui, sans-serif' }}>
-              Step {step} of 2
-            </div>
-            <h2 style={{ fontSize: '28px', fontWeight: '400', margin: '0 0 8px 0' }}>
-              {step === 1 ? 'Create your account' : 'Tell us about your business'}
-            </h2>
-            <p style={{ fontSize: '14px', color: '#64748b', margin: 0, fontFamily: 'system-ui, sans-serif' }}>
-              {step === 1 ? 'Your information is encrypted and secure.' : 'This helps us personalize your content.'}
-            </p>
+            <div style={{ fontSize: '12px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px', fontFamily: 'system-ui, sans-serif' }}>Welcome Back</div>
+            <h2 style={{ fontSize: '32px', fontWeight: '400', margin: '0 0 8px 0' }}>Log in to Traffikora</h2>
+            <p style={{ fontSize: '14px', color: '#64748b', margin: 0, fontFamily: 'system-ui, sans-serif' }}>Pick up right where you left off.</p>
           </div>
 
           {error && (
-            <div style={{ backgroundColor: '#ef444415', border: '1px solid #ef4444', borderRadius: '10px', padding: '12px 16px', marginBottom: '20px', fontSize: '13px', color: '#ef4444', fontFamily: 'system-ui, sans-serif' }}>
-              {error}
-            </div>
+            <div style={{ backgroundColor: '#ef444415', border: '1px solid #ef4444', borderRadius: '10px', padding: '12px 16px', marginBottom: '20px', fontSize: '13px', color: '#ef4444', fontFamily: 'system-ui, sans-serif' }}>{error}</div>
           )}
 
-          {step === 1 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div>
-                <label style={labelStyle}>Full Name</label>
-                <input style={inputStyle} placeholder="John Smith" value={form.fullName} onChange={e => update('fullName', e.target.value)} />
-              </div>
-              <div>
-                <label style={labelStyle}>Email Address</label>
-                <input style={inputStyle} type="email" placeholder="john@yourbusiness.com" value={form.email} onChange={e => update('email', e.target.value)} />
-              </div>
-              <div>
-                <label style={labelStyle}>Password</label>
-                <input style={inputStyle} type="password" placeholder="Min 6 characters" value={form.password} onChange={e => update('password', e.target.value)} />
-              </div>
-              <div>
-                <label style={labelStyle}>Phone Number</label>
-                <input style={inputStyle} placeholder="+1 (305) 555-1234" value={form.phone} onChange={e => update('phone', e.target.value)} />
-              </div>
-              <button
-                onClick={() => {
-                  if (!form.fullName || !form.email || !form.password) { setError('Please fill in all fields'); return }
-                  setError('')
-                  setStep(2)
-                }}
-                style={{ width: '100%', padding: '16px', borderRadius: '12px', border: 'none', background: 'linear-gradient(135deg, #f97316, #ea6a0a)', color: '#fff', fontSize: '15px', fontWeight: '700', cursor: 'pointer', fontFamily: 'system-ui, sans-serif', letterSpacing: '0.02em' }}>
-                Continue →
-              </button>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div>
+              <label style={labelStyle}>Email Address</label>
+              <input style={inputStyle} type="email" placeholder="you@yourbusiness.com" value={email} onChange={e => setEmail(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleLogin()} />
             </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div>
-                <label style={labelStyle}>Business Name</label>
-                <input style={inputStyle} placeholder="Acme Marketing Co." value={form.businessName} onChange={e => update('businessName', e.target.value)} />
-              </div>
-              <div>
-                <label style={labelStyle}>Industry</label>
-                <select style={{ ...inputStyle, cursor: 'pointer' }} value={form.industry} onChange={e => update('industry', e.target.value)}>
-                  <option value="">Select your industry</option>
-                  {['Marketing Agency', 'Restaurant', 'Real Estate', 'HVAC', 'Dental', 'Law Firm', 'Salon & Spa', 'Gym & Fitness', 'Auto Repair', 'Med Spa', 'Plumbing', 'Chiropractic', 'Other'].map(i => (
-                    <option key={i} value={i}>{i}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label style={labelStyle}>City & State</label>
-                <input style={inputStyle} placeholder="Fort Pierce, FL" value={form.city} onChange={e => update('city', e.target.value)} />
-              </div>
-              <button
-                onClick={handleSignup}
-                disabled={loading}
-                style={{ width: '100%', padding: '16px', borderRadius: '12px', border: 'none', background: loading ? '#333' : 'linear-gradient(135deg, #f97316, #ea6a0a)', color: '#fff', fontSize: '15px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'system-ui, sans-serif', letterSpacing: '0.02em' }}>
-                {loading ? 'Creating your account...' : 'Start Free Trial →'}
-              </button>
-              <button onClick={() => setStep(1)} style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #1a1a1a', backgroundColor: 'transparent', color: '#64748b', fontSize: '14px', cursor: 'pointer', fontFamily: 'system-ui, sans-serif' }}>
-                ← Back
-              </button>
+            <div>
+              <label style={labelStyle}>Password</label>
+              <input style={inputStyle} type="password" placeholder="Your password" value={password} onChange={e => setPassword(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleLogin()} />
             </div>
-          )}
 
-          <div style={{ textAlign: 'center', marginTop: '28px', fontSize: '13px', color: '#64748b', fontFamily: 'system-ui, sans-serif' }}>
-            Already have an account?{' '}
-            <a href="/login" style={{ color: '#f97316', textDecoration: 'none', fontWeight: '600' }}>Log in</a>
+            <button onClick={handleLogin} disabled={loading} style={{ width: '100%', padding: '16px', borderRadius: '12px', border: 'none', background: loading ? '#333' : 'linear-gradient(135deg, #f97316, #ea6a0a)', color: '#fff', fontSize: '15px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'system-ui, sans-serif' }}>
+              {loading ? 'Logging in...' : 'Log In →'}
+            </button>
+
+            <div style={{ textAlign: 'center', fontSize: '13px', color: '#64748b', fontFamily: 'system-ui, sans-serif' }}>
+              Don't have an account?{' '}
+              <a href="/signup" style={{ color: '#f97316', textDecoration: 'none', fontWeight: '600' }}>Start free trial</a>
+            </div>
+
+            <div style={{ textAlign: 'center' }}>
+              <a href="/reset-password" style={{ fontSize: '13px', color: '#64748b', textDecoration: 'none', fontFamily: 'system-ui, sans-serif' }}>Forgot your password?</a>
+            </div>
           </div>
 
         </div>
@@ -238,5 +154,5 @@ export default function Signup() {
 }
 `;
 
-fs.writeFileSync(signupPath, content, 'utf8');
-console.log('DONE - Beautiful new signup page created');
+fs.writeFileSync(loginPath, content, 'utf8');
+console.log('DONE - Login page redesigned to match signup');
