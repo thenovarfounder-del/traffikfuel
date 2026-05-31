@@ -1,17 +1,32 @@
+// @ts-nocheck
 const fs = require('fs');
+const path = require('path');
 
-let cal = fs.readFileSync('src/app/dashboard/calendar/page.tsx', 'utf8');
+const layoutPath = path.join('C:\\Users\\randy\\traffikfuel\\src\\app\\layout.tsx');
 
-cal = cal.replace(
-  `  async function deleteEvent(id) {
-    await supabase.from('content_calendar').delete().eq('id', id)
-    loadEvents(); setSelected(null)
-  }`,
-  `  async function deleteEvent(id) {
-    await supabase.from('content_calendar').delete().eq('id', id)
-    await loadEvents()
-  }`
-);
+let content = fs.readFileSync(layoutPath, 'utf8');
 
-fs.writeFileSync('src/app/dashboard/calendar/page.tsx', cal);
-console.log('DONE -- delete fix applied');
+const cookieyesScript = `
+      {/* CookieYes Banner */}
+      <script
+        id="cookieyes"
+        type="text/javascript"
+        src="https://cdn-cookieyes.com/client_data/a2449444538b162a3443686343550cec/script.js"
+      />`;
+
+// Add script to the <head> section
+if (content.includes('<head>')) {
+  content = content.replace('<head>', `<head>${cookieyesScript}`);
+} else if (content.includes('<Head>')) {
+  content = content.replace('<Head>', `<Head>${cookieyesScript}`);
+} else {
+  // If no head tag, add after the opening return or metadata export
+  content = content.replace(
+    'export const metadata',
+    `// CookieYes installed\nexport const metadata`
+  );
+  console.log('WARNING: Could not find <head> tag. Please check layout.tsx manually.');
+}
+
+fs.writeFileSync(layoutPath, content, 'utf8');
+console.log('DONE - CookieYes script added to layout.tsx');

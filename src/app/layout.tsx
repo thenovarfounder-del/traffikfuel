@@ -13,6 +13,12 @@ export default function RootLayout({ children }) {
 return (
 <html lang='en' className={`${playfair.variable} ${dmSans.variable}`} suppressHydrationWarning>
 <head>
+      {/* CookieYes Banner */}
+      <script
+        id="cookieyes"
+        type="text/javascript"
+        src="https://cdn-cookieyes.com/client_data/a2449444538b162a3443686343550cec/script.js"
+      />
 <meta name='google-site-verification' content='tDnX1kzbib0Z52zeV6oAH35iohkvNI-4BpV7lz1Yga0' />
 <meta property='og:title' content='Traffikora - AI Marketing Automation for Small Businesses' />
 <meta property='og:description' content='Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine.' />
