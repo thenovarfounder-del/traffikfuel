@@ -67,11 +67,7 @@ export default function SocialGenerator() {
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px' }}>AI Social Media Generator</p>
         <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, margin: '0 auto 16px', maxWidth: '700px' }}>Generate Social Posts</h1>
         <p style={{ fontSize: '17px', color: '#ccc', maxWidth: '560px', margin: '0 auto' }}>One topic. Five platforms. Every post optimized for maximum reach and engagement.</p>
-        {profile && (
-          <p style={{ marginTop: '16px', fontSize: '13px', color: '#E8610A', fontFamily: 'DM Sans, sans-serif' }}>
-            Generating for: {businessName} -- {industry} -- {city}
-          </p>
-        )}
+
       </section>
       <section style={{ background: '#f7f7f7', padding: '40px 32px', borderBottom: '2px solid #111' }}>
         <div style={{ maxWidth: '860px', margin: '0 auto' }}>
