@@ -130,7 +130,7 @@ export default function SignupPage() {
         <p style={{ fontSize: '18px', color: '#ccc' }}>No credit card charged today. Cancel anytime.</p>
       </section>
 
-      <section style={{ background: '#fff', padding: '60px 32px', display: 'flex', justifyContent: 'center' }}>
+      <section style={{ background: '#0a0a0a', padding: '60px 32px', display: 'flex', justifyContent: 'center' }}>
         <div style={{ width: '100%', maxWidth: '500px' }}>
 
           {error && <div style={{ background: '#fff0f0', border: '2px solid #e00', color: '#c00', padding: '14px 18px', marginBottom: '24px', fontFamily: 'DM Sans, sans-serif', fontSize: '15px' }}>{error}</div>}
