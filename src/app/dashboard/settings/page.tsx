@@ -1,10 +1,8 @@
 // @ts-nocheck
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import Nav from '@/components/Nav'
-import Footer from '@/components/Footer'
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
@@ -18,8 +16,30 @@ export default function DashboardSettings() {
   const [industry, setIndustry] = useState('')
   const [city, setCity] = useState('')
   const [website, setWebsite] = useState('')
+  const [autoMode, setAutoMode] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+
+  useEffect(() => {
+    async function loadProfile() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      const { data } = await supabase
+        .from('business_profiles')
+        .select('*')
+        .eq('user_id', user.id)
+        .single()
+      if (data) {
+        setBusinessName(data.business_name || '')
+        setIndustry(data.industry || '')
+        setCity(data.phone || '')
+        setWebsite(data.website || '')
+        setAutoMode(data.auto_mode || false)
+      }
+    }
+    loadProfile()
+  }, [])
 
   async function handleSubmit() {
     if (!businessName || !industry || !city) {
@@ -28,6 +48,7 @@ export default function DashboardSettings() {
     }
     setLoading(true)
     setError('')
+    setSuccess('')
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { setError('Not logged in.'); setLoading(false); return }
@@ -38,60 +59,82 @@ export default function DashboardSettings() {
           business_name: businessName,
           industry: industry,
           website: website,
-          phone: city
+          phone: city,
+          auto_mode: autoMode,
         }, { onConflict: 'user_id' })
       if (upsertError) { setError('Save failed: ' + upsertError.message); setLoading(false); return }
-      router.push('/dashboard')
+      setSuccess('Settings saved!')
+      setTimeout(() => setSuccess(''), 3000)
     } catch (e) {
       setError('Something went wrong. Please try again.')
-      setLoading(false)
     }
+    setLoading(false)
   }
 
   return (
-    <>
-      <Nav />
-      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Business Setup</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Tell Us About Your Business</h1>
-        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto' }}>This helps Traffikora create content that matches your brand, industry, and customers.</p>
-      </section>
-      <section style={{ background: '#fff', padding: '80px 32px', maxWidth: '720px', margin: '0 auto' }}>
-        <div style={{ marginBottom: '32px' }}>
-          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Business Name</label>
-          <input type='text' placeholder='e.g. Randy Auto Repair' value={businessName} onChange={e => setBusinessName(e.target.value)} style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+    <div style={{ minHeight: '100vh', background: '#f9fafb', padding: '40px 24px', fontFamily: 'DM Sans, sans-serif' }}>
+      <div style={{ maxWidth: '640px', margin: '0 auto' }}>
+        <h1 style={{ fontSize: '28px', fontWeight: '700', color: '#111', marginBottom: '4px' }}>Business Settings</h1>
+        <p style={{ color: '#666', marginBottom: '32px', fontSize: '15px' }}>This information is used to personalize all your generated content.</p>
+
+        <div style={{ background: '#fff', borderRadius: '16px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', marginBottom: '24px' }}>
+
+          <div style={{ marginBottom: '24px' }}>
+            <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#333', fontSize: '14px' }}>Business Name</label>
+            <input type='text' placeholder='e.g. Randy Auto Repair' value={businessName} onChange={e => setBusinessName(e.target.value)} style={{ width: '100%', padding: '10px 14px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', fontFamily: 'DM Sans, sans-serif' }} />
+          </div>
+
+          <div style={{ marginBottom: '24px' }}>
+            <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#333', fontSize: '14px' }}>Business Category</label>
+            <select value={industry} onChange={e => setIndustry(e.target.value)} style={{ width: '100%', padding: '10px 14px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', fontFamily: 'DM Sans, sans-serif', background: '#fff' }}>
+              <option value=''>Select your category...</option>
+              <option>Restaurant</option>
+              <option>Dental Practice</option>
+              <option>Real Estate</option>
+              <option>Salon or Spa</option>
+              <option>HVAC</option>
+              <option>Plumbing</option>
+              <option>Auto Repair</option>
+              <option>Law Firm</option>
+              <option>Chiropractic</option>
+              <option>Marketing Agency</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div style={{ marginBottom: '24px' }}>
+            <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#333', fontSize: '14px' }}>City and State</label>
+            <input type='text' placeholder='e.g. Tampa, FL' value={city} onChange={e => setCity(e.target.value)} style={{ width: '100%', padding: '10px 14px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', fontFamily: 'DM Sans, sans-serif' }} />
+          </div>
+
+          <div style={{ marginBottom: '32px' }}>
+            <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#333', fontSize: '14px' }}>Website URL (optional)</label>
+            <input type='text' placeholder='e.g. https://www.yourbusiness.com' value={website} onChange={e => setWebsite(e.target.value)} style={{ width: '100%', padding: '10px 14px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', fontFamily: 'DM Sans, sans-serif' }} />
+          </div>
+
+          <div style={{ borderTop: '1px solid #eee', paddingTop: '24px', marginBottom: '24px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <p style={{ fontWeight: '700', color: '#111', marginBottom: '4px', fontSize: '15px' }}>Publishing Mode</p>
+                <p style={{ fontSize: '13px', color: '#666', margin: 0 }}>{autoMode ? 'Auto Mode -- Content publishes automatically without review' : 'Manual Mode -- You approve each post before it publishes'}</p>
+              </div>
+              <div
+                onClick={() => setAutoMode(!autoMode)}
+                style={{ width: '52px', height: '28px', borderRadius: '14px', background: autoMode ? '#E8610A' : '#ccc', cursor: 'pointer', position: 'relative', transition: 'background 0.2s', flexShrink: 0 }}
+              >
+                <div style={{ position: 'absolute', top: '3px', left: autoMode ? '27px' : '3px', width: '22px', height: '22px', borderRadius: '50%', background: '#fff', transition: 'left 0.2s', boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }} />
+              </div>
+            </div>
+          </div>
+
+          {error && <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: '8px', padding: '12px', marginBottom: '16px', color: '#dc2626', fontSize: '14px' }}>{error}</div>}
+          {success && <div style={{ background: '#f0fff4', border: '1px solid #86efac', borderRadius: '8px', padding: '12px', marginBottom: '16px', color: '#166534', fontSize: '14px' }}>{success}</div>}
+
+          <button onClick={handleSubmit} disabled={loading} style={{ width: '100%', padding: '12px', background: loading ? '#ccc' : '#E8610A', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif' }}>
+            {loading ? 'Saving...' : 'Save Settings'}
+          </button>
         </div>
-        <div style={{ marginBottom: '32px' }}>
-          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Business Category</label>
-          <select value={industry} onChange={e => setIndustry(e.target.value)} style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box', background: '#fff' }}>
-            <option value=''>Select your category...</option>
-            <option>Restaurant</option>
-            <option>Dental Practice</option>
-            <option>Real Estate</option>
-            <option>Salon or Spa</option>
-            <option>HVAC</option>
-            <option>Plumbing</option>
-            <option>Auto Repair</option>
-            <option>Law Firm</option>
-            <option>Chiropractic</option>
-            <option>Marketing Agency</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div style={{ marginBottom: '32px' }}>
-          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>City and State</label>
-          <input type='text' placeholder='e.g. Tampa, FL' value={city} onChange={e => setCity(e.target.value)} style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
-        </div>
-        <div style={{ marginBottom: '48px' }}>
-          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Website URL (optional)</label>
-          <input type='text' placeholder='e.g. https://www.yourbusiness.com' value={website} onChange={e => setWebsite(e.target.value)} style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
-        </div>
-        {error && <p style={{ color: 'red', marginBottom: '16px', fontFamily: 'DM Sans, sans-serif' }}>{error}</p>}
-        <button onClick={handleSubmit} disabled={loading} style={{ display: 'block', width: '100%', background: loading ? '#ccc' : '#E8610A', color: '#fff', padding: '20px', fontSize: '18px', fontWeight: 700, border: 'none', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', textAlign: 'center', boxSizing: 'border-box' }}>
-          {loading ? 'Saving...' : 'Finish Setup'}
-        </button>
-      </section>
-      <Footer />
-    </>
+      </div>
+    </div>
   )
 }

@@ -1,10 +1,440 @@
-﻿// @ts-nocheck
+=== src/app/dashboard/social/layout.tsx ===
+// @ts-nocheck
+'use client'
+export default function Layout({ children }) { return <>{children}</> }
+
+
+=== src/app/dashboard/social/page.tsx ===
+// @ts-nocheck
+'use client'
+import { useState } from 'react'
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
+export default function SocialGenerator() {
+  const [topic, setTopic] = useState('')
+  const [platform, setPlatform] = useState('All Platforms')
+  const [tone, setTone] = useState('Professional')
+  const [loading, setLoading] = useState(false)
+  const [posts, setPosts] = useState(null)
+  const [error, setError] = useState('')
+  const [copied, setCopied] = useState('')
+  async function generatePosts() {
+    if (!topic) { setError('Please enter a topic or keyword.'); return }
+    setLoading(true); setError(''); setPosts(null)
+    try {
+      const response = await fetch('/api/generate-social', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic, platform, tone, businessName: 'Traffikora', industry: 'Marketing Agency', city: 'Fort Pierce, Florida', websiteUrl: 'https://www.traffikora.com' })
+      })
+      const data = await response.json()
+      if (!data.success) { setError('Generation failed: ' + (data.error || 'unknown error')); setLoading(false); return }
+      setPosts(data.posts)
+    } catch (e) { setError('Generation failed: ' + e.message) }
+    setLoading(false)
+  }
+  function copyPost(text, key) {
+    navigator.clipboard.writeText(text)
+    setCopied(key)
+    setTimeout(() => setCopied(''), 2000)
+  }
+  const platformColors = { Facebook: '#1877F2', Instagram: '#E1306C', TikTok: '#010101', X: '#000000', LinkedIn: '#0A66C2' }
+  return (
+    <main suppressHydrationWarning>
+      <Nav />
+      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '60px 32px' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px' }}>AI Social Media Generator</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, margin: '0 auto 16px', maxWidth: '700px' }}>Generate Social Posts</h1>
+        <p style={{ fontSize: '17px', color: '#ccc', maxWidth: '560px', margin: '0 auto' }}>One topic. Five platforms. Every post optimized for maximum reach and engagement.</p>
+      </section>
+      <section style={{ background: '#f7f7f7', padding: '40px 32px', borderBottom: '2px solid #111' }}>
+        <div style={{ maxWidth: '860px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 200px 180px', gap: '16px', marginBottom: '16px' }}>
+            <div>
+              <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px', color: '#111' }}>Topic or Keyword</label>
+              <input type='text' placeholder='e.g. 5 marketing tips for small businesses in Fort Pierce' value={topic} onChange={e => setTopic(e.target.value)} style={{ width: '100%', padding: '13px 16px', fontSize: '15px', border: '2px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box', background: '#fff' }} />
+            </div>
+            <div>
+              <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px', color: '#111' }}>Platform</label>
+              <select value={platform} onChange={e => setPlatform(e.target.value)} style={{ width: '100%', padding: '13px 16px', fontSize: '15px', border: '2px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box', background: '#fff' }}>
+                <option>All Platforms</option>
+                <option>Facebook</option>
+                <option>Instagram</option>
+                <option>TikTok</option>
+                <option>X</option>
+                <option>LinkedIn</option>
+              </select>
+            </div>
+            <div>
+              <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px', color: '#111' }}>Tone</label>
+              <select value={tone} onChange={e => setTone(e.target.value)} style={{ width: '100%', padding: '13px 16px', fontSize: '15px', border: '2px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box', background: '#fff' }}>
+                <option>Professional</option>
+                <option>Friendly</option>
+                <option>Bold</option>
+                <option>Conversational</option>
+              </select>
+            </div>
+          </div>
+          {error && <p style={{ color: 'red', marginBottom: '12px', fontFamily: 'DM Sans, sans-serif', fontSize: '14px' }}>{error}</p>}
+          <button onClick={generatePosts} disabled={loading} style={{ width: '100%', background: loading ? '#999' : '#E8610A', color: '#fff', padding: '16px', fontSize: '16px', fontWeight: 700, border: 'none', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif' }}>
+            {loading ? 'Generating posts for all platforms...' : 'Generate Social Posts'}
+          </button>
+        </div>
+      </section>
+      {posts && (
+        <section style={{ background: '#fff', padding: '40px 32px', maxWidth: '900px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {Object.entries(posts).map(([plat, post]) => (
+              <div key={plat} style={{ border: '2px solid #e8e8e8', borderRadius: '8px', overflow: 'hidden' }}>
+                <div style={{ background: platformColors[plat] || '#111', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#fff', margin: 0 }}>{plat}</p>
+                  <button onClick={() => copyPost(post, plat)} style={{ background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.4)', color: '#fff', padding: '6px 14px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', borderRadius: '4px' }}>
+                    {copied === plat ? 'Copied!' : 'Copy'}
+                  </button>
+                </div>
+                <div style={{ padding: '20px' }}>
+                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#222', lineHeight: 1.8, margin: 0 }}>{post}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+      <Footer />
+    </main>
+  )
+}
+
+
+=== src/app/dashboard/scrape/page.tsx ===
+'use client';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+
+export default function ScrapePage() {
+  const [url, setUrl] = useState('');
+  const [status, setStatus] = useState('');
+  const [brain, setBrain] = useState<Record<string, unknown> | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [businessId, setBusinessId] = useState('');
+
+  useEffect(() => {
+    const load = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      console.log('USER:', user?.id);
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('business_profiles')
+        .select('id, website, brain')
+        .eq('user_id', user.id)
+        .single();
+
+      console.log('PROFILE DATA:', JSON.stringify(data));
+      console.log('PROFILE ERROR:', JSON.stringify(error));
+
+      if (data) {
+        setBusinessId(data.id);
+        setUrl(data.website || '');
+        if (data.brain) setBrain(data.brain as Record<string, unknown>);
+      }
+    };
+    load();
+  }, []);
+
+  const handleBuild = async () => {
+    console.log('businessId:', businessId);
+    console.log('url:', url);
+
+    if (!url || !businessId) {
+      setStatus('Missing URL or business profile.');
+      return;
+    }
+    setLoading(true);
+    setStatus('Building your brain...');
+    setBrain(null);
+
+    try {
+      const res = await fetch('/api/scrape', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ businessId, url }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setStatus(`Error: ${data.error || 'Unknown error'}`);
+      } else {
+        setBrain(data.brain);
+        setStatus('Brain built successfully!');
+      }
+    } catch {
+      setStatus('Error: Network failure');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="p-8 max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold mb-2">Business Brain</h1>
+      <p className="text-gray-400 mb-6">Enter your website URL and we'll build your AI marketing brain.</p>
+      <div className="flex gap-3 mb-4">
+        <input
+          type="text"
+          value={url}
+          onChange={e => setUrl(e.target.value)}
+          placeholder="https://yourwebsite.com"
+          className="flex-1 px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
+        />
+        <button
+          onClick={handleBuild}
+          disabled={loading}
+          className="px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded font-semibold disabled:opacity-50"
+        >
+          {loading ? 'Building...' : 'Build Brain'}
+        </button>
+      </div>
+      {status && <p className="text-sm mb-4 text-gray-300">{status}</p>}
+      {brain && (
+        <div className="bg-gray-800 rounded-lg p-4 mt-4">
+          <h2 className="text-lg font-bold mb-3 text-orange-400">Your Business Brain</h2>
+          <pre className="text-sm text-gray-300 whitespace-pre-wrap">{JSON.stringify(brain, null, 2)}</pre>
+        </div>
+      )}
+    </div>
+  );
+}
+
+=== src/app/dashboard/settings/page.tsx ===
+// @ts-nocheck
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+)
+
+export default function DashboardSettings() {
+  const router = useRouter()
+  const [businessName, setBusinessName] = useState('')
+  const [industry, setIndustry] = useState('')
+  const [city, setCity] = useState('')
+  const [website, setWebsite] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  async function handleSubmit() {
+    if (!businessName || !industry || !city) {
+      setError('Please fill in Business Name, Category, and City.')
+      return
+    }
+    setLoading(true)
+    setError('')
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) { setError('Not logged in.'); setLoading(false); return }
+      const { error: upsertError } = await supabase
+        .from('business_profiles')
+        .upsert({
+          user_id: user.id,
+          business_name: businessName,
+          industry: industry,
+          website: website,
+          phone: city
+        }, { onConflict: 'user_id' })
+      if (upsertError) { setError('Save failed: ' + upsertError.message); setLoading(false); return }
+      router.push('/dashboard')
+    } catch (e) {
+      setError('Something went wrong. Please try again.')
+      setLoading(false)
+    }
+  }
+
+  return (
+    <>
+      <Nav />
+      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Business Setup</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Tell Us About Your Business</h1>
+        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto' }}>This helps Traffikora create content that matches your brand, industry, and customers.</p>
+      </section>
+      <section style={{ background: '#fff', padding: '80px 32px', maxWidth: '720px', margin: '0 auto' }}>
+        <div style={{ marginBottom: '32px' }}>
+          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Business Name</label>
+          <input type='text' placeholder='e.g. Randy Auto Repair' value={businessName} onChange={e => setBusinessName(e.target.value)} style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+        </div>
+        <div style={{ marginBottom: '32px' }}>
+          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Business Category</label>
+          <select value={industry} onChange={e => setIndustry(e.target.value)} style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box', background: '#fff' }}>
+            <option value=''>Select your category...</option>
+            <option>Restaurant</option>
+            <option>Dental Practice</option>
+            <option>Real Estate</option>
+            <option>Salon or Spa</option>
+            <option>HVAC</option>
+            <option>Plumbing</option>
+            <option>Auto Repair</option>
+            <option>Law Firm</option>
+            <option>Chiropractic</option>
+            <option>Marketing Agency</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div style={{ marginBottom: '32px' }}>
+          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>City and State</label>
+          <input type='text' placeholder='e.g. Tampa, FL' value={city} onChange={e => setCity(e.target.value)} style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+        </div>
+        <div style={{ marginBottom: '48px' }}>
+          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Website URL (optional)</label>
+          <input type='text' placeholder='e.g. https://www.yourbusiness.com' value={website} onChange={e => setWebsite(e.target.value)} style={{ width: '100%', padding: '14px 16px', fontSize: '16px', border: '2.5px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+        </div>
+        {error && <p style={{ color: 'red', marginBottom: '16px', fontFamily: 'DM Sans, sans-serif' }}>{error}</p>}
+        <button onClick={handleSubmit} disabled={loading} style={{ display: 'block', width: '100%', background: loading ? '#ccc' : '#E8610A', color: '#fff', padding: '20px', fontSize: '18px', fontWeight: 700, border: 'none', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', textAlign: 'center', boxSizing: 'border-box' }}>
+          {loading ? 'Saving...' : 'Finish Setup'}
+        </button>
+      </section>
+      <Footer />
+    </>
+  )
+}
+
+=== src/app/dashboard/layout.tsx ===
+// @ts-nocheck
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
+import Link from 'next/link'
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+)
+
+export default function DashboardLayout({ children }) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const [email, setEmail] = useState('')
+  const [collapsed, setCollapsed] = useState(false)
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) { router.push('/login') }
+      else { setEmail(session.user.email ?? '') }
+    })
+  }, [router])
+
+  async function handleSignOut() {
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
+
+  const isActive = (href) => pathname === href
+
+  const linkStyle = (href) => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    padding: '9px 20px',
+    color: isActive(href) ? '#E8610A' : '#aaa',
+    background: isActive(href) ? 'rgba(232,97,10,0.08)' : 'transparent',
+    textDecoration: 'none',
+    fontSize: '13px',
+    fontFamily: 'DM Sans, sans-serif',
+    fontWeight: isActive(href) ? 700 : 400,
+    borderLeft: isActive(href) ? '3px solid #E8610A' : '3px solid transparent',
+    transition: 'all 0.15s',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+  })
+
+  const sectionLabel = (text) => (
+    { label: text, isSection: true }
+  )
+
+  const nav = [
+    { href: '/dashboard', icon: '🏠', label: 'Dashboard' },
+    { isSection: true, label: 'CONTENT' },
+    { href: '/dashboard/blog', icon: '✍️', label: 'Blog Generator' },
+    { href: '/dashboard/social', icon: '📱', label: 'Social Media' },
+    { href: '/dashboard/content/queue', icon: '📋', label: 'Content Queue' },
+    { isSection: true, label: 'PLATFORM' },
+    { href: '/dashboard/scrape', icon: '🧠', label: 'Business Brain' },
+    { href: '/dashboard/settings', icon: '⚙️', label: 'Business Settings' },
+    { isSection: true, label: 'CONNECTIONS' },
+    { href: '/dashboard/connect/google', icon: '🔵', label: 'Google' },
+    { href: '/dashboard/connect/facebook', icon: '📘', label: 'Facebook' },
+    { href: '/dashboard/connect/instagram', icon: '📸', label: 'Instagram' },
+    { href: '/dashboard/connect/tiktok', icon: '🎵', label: 'TikTok' },
+    { href: '/dashboard/connect/twitter', icon: '🐦', label: 'X / Twitter' },
+    { href: '/dashboard/connect/linkedin', icon: '💼', label: 'LinkedIn' },
+    { href: '/dashboard/connect/wordpress', icon: '🌐', label: 'WordPress' },
+    { isSection: true, label: 'ACCOUNT' },
+    { href: '/dashboard/billing', icon: '💳', label: 'Billing' },
+    { href: '/dashboard/support', icon: '💬', label: 'Support' },
+  ]
+
+  return (
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f7f7f7' }}>
+
+      {/* SIDEBAR */}
+      <div style={{ width: collapsed ? '56px' : '220px', minHeight: '100vh', background: '#111', display: 'flex', flexDirection: 'column', borderRight: '1px solid #222', transition: 'width 0.2s', flexShrink: 0, position: 'sticky', top: 0, height: '100vh', overflowY: 'auto', overflowX: 'hidden' }}>
+
+        {/* Logo */}
+        <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid #1e1e1e', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+          {!collapsed && <span style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: 700, color: '#fff' }}>Traffik<span style={{ color: '#E8610A' }}>ora</span></span>}
+          <button onClick={() => setCollapsed(!collapsed)} style={{ background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: '16px', padding: '2px 4px', marginLeft: collapsed ? 'auto' : 0, marginRight: collapsed ? 'auto' : 0 }}>
+            {collapsed ? '→' : '←'}
+          </button>
+        </div>
+
+        {/* Nav */}
+        <nav style={{ flex: 1, paddingTop: '8px' }}>
+          {nav.map((item, i) => {
+            if (item.isSection) {
+              if (collapsed) return null
+              return <div key={i} style={{ padding: '14px 20px 4px', fontSize: '10px', fontFamily: 'DM Sans, sans-serif', fontWeight: 700, letterSpacing: '0.12em', color: '#444', textTransform: 'uppercase' }}>{item.label}</div>
+            }
+            return (
+              <Link key={item.href} href={item.href} style={linkStyle(item.href)} title={collapsed ? item.label : undefined}>
+                <span style={{ fontSize: '15px', flexShrink: 0 }}>{item.icon}</span>
+                {!collapsed && <span>{item.label}</span>}
+              </Link>
+            )
+          })}
+        </nav>
+
+        {/* User footer */}
+        <div style={{ padding: '16px', borderTop: '1px solid #1e1e1e', flexShrink: 0 }}>
+          {!collapsed && <div style={{ fontSize: '11px', color: '#555', marginBottom: '10px', fontFamily: 'DM Sans, sans-serif', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{email}</div>}
+          <button onClick={handleSignOut} style={{ background: '#E8610A', color: '#fff', border: 'none', padding: collapsed ? '8px' : '8px 16px', cursor: 'pointer', fontSize: '12px', fontFamily: 'DM Sans, sans-serif', fontWeight: 600, width: '100%', borderRadius: '4px' }}>
+            {collapsed ? '↩' : 'Sign Out'}
+          </button>
+        </div>
+      </div>
+
+      {/* MAIN CONTENT */}
+      <main style={{ flex: 1, overflowY: 'auto', minHeight: '100vh' }}>
+        {children}
+      </main>
+
+    </div>
+  )
+}
+
+=== src/app/dashboard/page.tsx ===
+// @ts-nocheck
 'use client'
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Nav from '@/components/Nav'
-import Footer from '@/components/Footer'
 
 export default function DashboardPage() {
   const [user, setUser] = useState(null)
@@ -14,67 +444,56 @@ export default function DashboardPage() {
     async function checkAuth() {
       const { supabase } = await import('@/lib/supabase')
       const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        window.location.href = '/login'
-        return
-      }
+      if (!session) { window.location.href = '/login'; return }
       setUser(session.user)
       setLoading(false)
     }
     checkAuth()
   }, [])
 
-  if (loading) {
-    return (
-      <>
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-        <Nav />
-        <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#666' }}>Loading...</p>
-        </div>
-        <Footer />
-      </>
-    )
-  }
+  if (loading) return <div style={{ padding: '40px', fontFamily: 'DM Sans, sans-serif', color: '#666' }}>Loading...</div>
+
+  const cards = [
+    { title: 'Blog Generator', desc: 'Generate SEO-optimized blog posts with one click. Ranks on Google and gets cited by ChatGPT.', href: '/dashboard/blog', btn: 'Generate Post', color: '#E8610A' },
+    { title: 'Business Brain', desc: 'Enter your website URL and AI builds your complete marketing profile automatically.', href: '/dashboard/scrape', btn: 'Build Brain', color: '#111' },
+    { title: 'Business Settings', desc: 'Set up your business name, category, city and website.', href: '/dashboard/settings', btn: 'Go to Settings', color: '#111' },
+    { title: 'Connect Google', desc: 'Link your Google Business Profile to track ratings, reviews and visibility.', href: '/dashboard/connect/google', btn: 'Connect', color: '#4285F4' },
+    { title: 'Connect Facebook', desc: 'Link your Facebook Page to track reach, engagement and follower data.', href: '/dashboard/connect/facebook', btn: 'Connect', color: '#1877F2' },
+    { title: 'Connect Instagram', desc: 'Link your Instagram Business account to track follower count and reach.', href: '/dashboard/connect/instagram', btn: 'Connect', color: '#E1306C' },
+    { title: 'Connect TikTok', desc: 'Link your TikTok account to auto-publish videos and track performance.', href: '/dashboard/connect/tiktok', btn: 'Connect', color: '#010101' },
+    { title: 'Connect X / Twitter', desc: 'Link your X account to publish posts and track engagement.', href: '/dashboard/connect/twitter', btn: 'Connect', color: '#000' },
+    { title: 'Connect LinkedIn', desc: 'Link your LinkedIn page to publish content and grow your professional network.', href: '/dashboard/connect/linkedin', btn: 'Connect', color: '#0A66C2' },
+    { title: 'Connect WordPress', desc: 'Link your WordPress site so Traffikora can publish blog posts automatically.', href: '/dashboard/connect/wordpress', btn: 'Connect', color: '#21759B' },
+    { title: 'Billing', desc: 'Manage your subscription, view invoices, and update payment details.', href: '/dashboard/billing', btn: 'View Billing', color: '#111' },
+    { title: 'Support', desc: 'Need help? Our team is standing by.', href: '/support', btn: 'Get Help', color: '#111' },
+  ]
 
   return (
-    <>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-      <Nav />
+    <main style={{ background: '#f7f7f7', minHeight: '100vh' }}>
 
-      <section style={{ background: '#111', color: '#fff', padding: '60px 32px' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px' }}>Dashboard</p>
-          <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '42px', fontWeight: 900, marginBottom: '8px' }}>Welcome back.</h1>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#ccc' }}>{user?.email}</p>
+      {/* Header */}
+      <div style={{ background: '#111', padding: '40px 40px 32px' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', fontWeight: 700, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '8px' }}>Dashboard</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '36px', fontWeight: 900, color: '#fff', marginBottom: '6px' }}>Welcome back.</h1>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#888' }}>{user?.email}</p>
+      </div>
+
+      {/* Cards */}
+      <div style={{ padding: '32px 40px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '20px' }}>
+          {cards.map((card, i) => (
+            <div key={i} style={{ background: '#fff', border: '2px solid #e8e8e8', padding: '24px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: 700, color: '#111', margin: 0 }}>{card.title}</h2>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#666', lineHeight: 1.6, margin: 0, flex: 1 }}>{card.desc}</p>
+              <Link href={card.href} style={{ background: card.color, color: '#fff', padding: '10px 18px', textDecoration: 'none', fontSize: '13px', fontWeight: 700, display: 'inline-block', fontFamily: 'DM Sans, sans-serif', marginTop: '4px', alignSelf: 'flex-start' }}>
+                {card.btn}
+              </Link>
+            </div>
+          ))}
         </div>
-      </section>
+      </div>
 
-      <section style={{ background: '#fff', padding: '60px 32px' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px' }}>Connect Accounts</h2>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', marginBottom: '20px' }}>Link your Google, Facebook, and Instagram accounts to get started.</p>
-              <Link href="/dashboard/connect/google" style={{ background: '#E8610A', color: '#fff', padding: '12px 24px', textDecoration: 'none', fontSize: '15px', fontWeight: 700, display: 'inline-block' }}>Connect Now</Link>
-            </div>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px' }}>Business Settings</h2>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', marginBottom: '20px' }}>Set up your business name, category, and location.</p>
-              <Link href="/dashboard/settings" style={{ background: '#111', color: '#fff', padding: '12px 24px', textDecoration: 'none', fontSize: '15px', fontWeight: 700, display: 'inline-block' }}>Go to Settings</Link>
-            </div>
-            <div style={{ border: '2.5px solid #111', padding: '32px' }}>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px' }}>Support</h2>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', marginBottom: '20px' }}>Need help? Our team is standing by.</p>
-              <Link href="/support" style={{ background: '#111', color: '#fff', padding: '12px 24px', textDecoration: 'none', fontSize: '15px', fontWeight: 700, display: 'inline-block' }}>Get Help</Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <Footer />
-    </>
+    </main>
   )
 }
+
