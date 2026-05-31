@@ -73,8 +73,8 @@ export default function Billing() {
               <button style={{ padding: '10px 20px', borderRadius: '8px', border: '1px solid #333', backgroundColor: 'transparent', color: '#94a3b8', cursor: 'pointer', fontSize: '14px' }}>
                 Cancel Plan
               </button>
-              <button style={{ padding: '10px 20px', borderRadius: '8px', border: 'none', backgroundColor: '#f97316', color: '#fff', cursor: 'pointer', fontSize: '14px', fontWeight: '600' }}>
-                Manage Billing
+              <button style={{ padding: '10px 20px', borderRadius: '8px', border: 'none', backgroundColor: '#f97316', color: '#fff', cursor: 'not-allowed', fontSize: '14px', fontWeight: '600', opacity: '0.6' }}>
+                Manage Billing (Phase 4)
               </button>
             </div>
           </div>
