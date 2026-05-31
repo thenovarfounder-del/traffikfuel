@@ -4,22 +4,20 @@ const path = require('path');
 
 const filePath = path.join('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\content\\queue\\page.tsx');
 
-const dir = path.dirname(filePath);
-if (!fs.existsSync(dir)) {
-  fs.mkdirSync(dir, { recursive: true });
-}
-
 const content = `// @ts-nocheck
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createBrowserClient } from '@supabase/ssr'
 
 const PLATFORMS = ['All', 'Facebook', 'Instagram', 'Twitter', 'LinkedIn']
 const STATUSES = ['All', 'scheduled', 'published', 'draft']
 
 export default function ContentQueue() {
-  const supabase = createClientComponentClient()
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  )
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
   const [filterPlatform, setFilterPlatform] = useState('All')
@@ -84,7 +82,7 @@ export default function ContentQueue() {
           <p style={{ color: '#94a3b8', margin: 0 }}>Manage all your scheduled and published social posts</p>
         </div>
 
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '24px', marginBottom: '24px', flexWrap: 'wrap' }}>
           <div>
             <label style={{ fontSize: '12px', color: '#94a3b8', display: 'block', marginBottom: '6px' }}>PLATFORM</label>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -111,7 +109,7 @@ export default function ContentQueue() {
           </div>
         </div>
 
-        <div style={{ backgroundColor: '#111', borderRadius: '8px', border: '1px solid #1f1f1f', marginBottom: '16px', padding: '12px 20px', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 140px', gap: '12px', fontSize: '12px', color: '#94a3b8', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <div style={{ backgroundColor: '#111', borderRadius: '8px', border: '1px solid #1f1f1f', marginBottom: '8px', padding: '12px 20px', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 140px', gap: '12px', fontSize: '12px', color: '#94a3b8', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
           <span>Post</span>
           <span>Platform</span>
           <span>Status</span>
@@ -189,4 +187,4 @@ export default function ContentQueue() {
 `;
 
 fs.writeFileSync(filePath, content, 'utf8');
-console.log('DONE - Content Queue page created at /dashboard/content/queue');
+console.log('DONE - Content Queue fixed and saved');
