@@ -2,120 +2,126 @@
 const fs = require('fs');
 const path = require('path');
 
-const dashPath = path.join('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\page.tsx');
+const pricingPath = path.join('C:\\Users\\randy\\traffikfuel\\src\\app\\pricing\\page.tsx');
 
 const content = `// @ts-nocheck
 'use client'
 
-export const dynamic = 'force-dynamic'
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { createClient } from '@supabase/supabase-js'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-)
-
-const CARDS = [
-  { title: 'Blog Generator', desc: 'Generate SEO blog posts with one click. Ranks on Google and gets cited by ChatGPT.', href: '/dashboard/blog', label: 'Generate Post', color: '#f97316', icon: '✍' },
-  { title: 'Social Media', desc: 'Create platform-specific posts for Facebook, Instagram, TikTok, LinkedIn and more.', href: '/dashboard/social', label: 'Create Posts', color: '#f97316', icon: '📱' },
-  { title: 'One-Push Publish', desc: 'Enter one topic and publish blog + all social posts simultaneously in one click.', href: '/dashboard/publish', label: 'Publish Now', color: '#f97316', icon: '🚀' },
-  { title: 'Content Queue', desc: 'View and manage all your scheduled and published social posts in one place.', href: '/dashboard/content/queue', label: 'View Queue', color: '#3b82f6', icon: '📋' },
-  { title: 'Content Calendar', desc: 'See all your scheduled content on a monthly calendar view by platform.', href: '/dashboard/calendar', label: 'Open Calendar', color: '#3b82f6', icon: '📅' },
-  { title: 'AI Agents', desc: 'Your 4 AI agents running 24/7 — strategist, creator, publisher, and monitor.', href: '/dashboard/agents', label: 'View Agents', color: '#a855f7', icon: '🤖' },
-  { title: 'Business Brain', desc: 'Enter your website URL and AI builds your complete marketing profile automatically.', href: '/dashboard/brain', label: 'Build Brain', color: '#22c55e', icon: '🧠' },
-  { title: 'Business Settings', desc: 'Set up your business name, category, city, platforms and publishing mode.', href: '/dashboard/settings', label: 'Go to Settings', color: '#22c55e', icon: '⚙' },
-  { title: 'Analytics', desc: 'Track your content performance across all platforms with real data.', href: '/dashboard/analytics', label: 'View Analytics', color: '#22c55e', icon: '📊' },
-  { title: 'WordPress', desc: 'Connect your WordPress site to publish blog posts directly from Traffikora.', href: '/dashboard/wordpress', label: 'Connect', color: '#64748b', icon: '🌐' },
-  { title: 'Billing', desc: 'Manage your subscription, view invoices, and update payment details.', href: '/dashboard/billing', label: 'View Billing', color: '#64748b', icon: '💳' },
-  { title: 'Support', desc: 'Need help? Our team is standing by to assist you with anything.', href: '/dashboard/support', label: 'Get Help', color: '#64748b', icon: '💬' },
+const PLANS = [
+  {
+    name: 'Starter',
+    tag: 'STARTER',
+    price: '\$97',
+    period: '/mo',
+    description: 'Perfect for solo business owners ready to automate their marketing.',
+    features: ['Blog + social automation', 'Google SEO tools', '1 website connected', 'AI content generation', '7-day free trial'],
+    color: '#94a3b8',
+    highlight: false,
+    cta: 'Start Free Trial',
+    href: '/signup'
+  },
+  {
+    name: 'Pro',
+    tag: 'MOST POPULAR',
+    price: '\$197',
+    period: '/mo',
+    description: 'Full automation for serious business owners who want it all.',
+    features: ['Everything in Starter', 'TikTok + YouTube push', 'AI engine optimization', 'Reddit amplifier', 'Priority support'],
+    color: '#f97316',
+    highlight: true,
+    cta: 'Start Free Trial',
+    href: '/signup'
+  },
+  {
+    name: 'Agency',
+    tag: 'AGENCY',
+    price: '\$797',
+    period: '/mo',
+    description: 'Manage multiple clients from one powerful dashboard.',
+    features: ['Everything in Pro', 'Up to 10 client accounts', 'White-label reports', 'Client management tools', 'Dedicated support'],
+    color: '#3b82f6',
+    highlight: false,
+    cta: 'Start Free Trial',
+    href: '/signup'
+  },
+  {
+    name: 'Enterprise',
+    tag: 'ENTERPRISE',
+    price: '\$1,497',
+    period: '/mo',
+    description: 'For large agencies scaling across many clients at once.',
+    features: ['Everything in Agency', 'Unlimited client accounts', 'Custom integrations', 'SLA guarantee', 'Dedicated account manager'],
+    color: '#a855f7',
+    highlight: false,
+    cta: 'Contact Us',
+    href: '/contact'
+  }
 ]
 
-export default function Dashboard() {
-  const router = useRouter()
-  const [user, setUser] = useState(null)
-  const [stats, setStats] = useState({ total: 0, published: 0, scheduled: 0 })
-
-  useEffect(() => {
-    async function load() {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/login'); return }
-      setUser(user)
-      const { data } = await supabase
-        .from('content_calendar')
-        .select('status')
-        .eq('user_id', user.id)
-      if (data) {
-        setStats({
-          total: data.length,
-          published: data.filter(p => p.status === 'published').length,
-          scheduled: data.filter(p => p.status === 'scheduled').length
-        })
-      }
-    }
-    load()
-  }, [])
-
+export default function Pricing() {
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#fff', fontFamily: 'system-ui, sans-serif' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '48px 32px' }}>
+    <>
+      <Nav />
+      <div style={{ backgroundColor: '#0a0a0a', color: '#fff', fontFamily: 'system-ui, sans-serif' }}>
 
-        {/* Header */}
-        <div style={{ marginBottom: '48px' }}>
-          <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '12px' }}>DASHBOARD</div>
-          <h1 style={{ fontSize: '36px', fontWeight: '300', margin: '0 0 8px 0', letterSpacing: '-0.5px' }}>
-            Welcome back<span style={{ color: '#f97316' }}>.</span>
-          </h1>
-          <p style={{ color: '#64748b', margin: 0, fontSize: '14px' }}>{user?.email}</p>
+        <div style={{ textAlign: 'center', padding: '100px 32px 60px' }}>
+          <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '16px' }}>SIMPLE PRICING</div>
+          <h1 style={{ fontSize: '52px', fontWeight: '800', margin: '0 0 16px 0', letterSpacing: '-1px' }}>No surprises. <em style={{ color: '#f97316', fontStyle: 'italic' }}>Ever.</em></h1>
+          <p style={{ fontSize: '18px', color: '#64748b', margin: '0 auto', maxWidth: '500px', lineHeight: '1.6' }}>Credit card required -- No charge for 7 days -- Cancel anytime</p>
         </div>
 
-        {/* Stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '48px' }}>
-          {[
-            { label: 'Total Posts', value: stats.total, color: '#f97316' },
-            { label: 'Published', value: stats.published, color: '#22c55e' },
-            { label: 'Scheduled', value: stats.scheduled, color: '#3b82f6' }
-          ].map(stat => (
-            <div key={stat.label} style={{ backgroundColor: '#111', borderRadius: '16px', border: '1px solid #1a1a1a', padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div>
-                <div style={{ fontSize: '12px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>{stat.label}</div>
-                <div style={{ fontSize: '36px', fontWeight: '700', color: stat.color, lineHeight: 1 }}>{stat.value}</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', maxWidth: '1200px', margin: '0 auto', padding: '0 32px 80px' }}>
+          {PLANS.map(plan => (
+            <div key={plan.name} style={{ backgroundColor: '#111', borderRadius: '16px', border: plan.highlight ? '2px solid #f97316' : '1px solid #1f1f1f', padding: '32px 24px', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+              {plan.highlight && (
+                <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#f97316', color: '#fff', fontSize: '11px', fontWeight: '700', padding: '4px 16px', borderRadius: '20px', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Most Popular</div>
+              )}
+              <div style={{ marginBottom: '8px', fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{plan.tag}</div>
+              <div style={{ fontSize: '22px', fontWeight: '800', marginBottom: '12px' }}>{plan.name}</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '12px' }}>
+                <span style={{ fontSize: '42px', fontWeight: '800', color: plan.color }}>{plan.price}</span>
+                <span style={{ fontSize: '14px', color: '#64748b' }}>{plan.period}</span>
               </div>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: stat.color + '15', border: '1px solid ' + stat.color + '30', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
-                {stat.label === 'Total Posts' ? '📊' : stat.label === 'Published' ? '✅' : '🕐'}
+              <div style={{ fontSize: '13px', color: '#64748b', marginBottom: '24px', lineHeight: '1.6' }}>{plan.description}</div>
+              <div style={{ flex: 1, marginBottom: '28px' }}>
+                {plan.features.map(f => (
+                  <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '10px', fontSize: '14px', color: '#e2e8f0' }}>
+                    <span style={{ color: plan.color, fontWeight: '700', fontSize: '16px', marginTop: '0px' }}>+</span>
+                    {f}
+                  </div>
+                ))}
               </div>
+              <a href={plan.href} style={{ display: 'block', textAlign: 'center', padding: '14px', borderRadius: '10px', border: 'none', backgroundColor: plan.highlight ? '#f97316' : plan.color + '20', color: plan.highlight ? '#fff' : plan.color, cursor: 'pointer', fontSize: '14px', fontWeight: '700', textDecoration: 'none', transition: 'opacity 0.2s' }}>
+                {plan.cta}
+              </a>
             </div>
           ))}
         </div>
 
-        {/* Cards Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-          {CARDS.map(card => (
-            <div key={card.title}
-              onClick={() => router.push(card.href)}
-              style={{ backgroundColor: '#111', borderRadius: '16px', border: '1px solid #1a1a1a', padding: '28px', cursor: 'pointer', transition: 'border-color 0.2s', position: 'relative', overflow: 'hidden' }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = card.color + '60'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = '#1a1a1a'}>
-              <div style={{ position: 'absolute', top: '-20px', right: '-20px', width: '80px', height: '80px', borderRadius: '50%', backgroundColor: card.color + '08', pointerEvents: 'none' }} />
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '16px' }}>
-                <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: card.color + '15', border: '1px solid ' + card.color + '30', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>{card.icon}</div>
-              </div>
-              <div style={{ fontSize: '16px', fontWeight: '700', marginBottom: '8px', color: '#fff' }}>{card.title}</div>
-              <div style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.6', marginBottom: '20px' }}>{card.desc}</div>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '600', color: card.color }}>
-                {card.label} <span style={{ fontSize: '16px' }}>→</span>
-              </div>
+        <div style={{ borderTop: '1px solid #1a1a1a', borderBottom: '1px solid #1a1a1a', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', maxWidth: '1200px', margin: '0 auto 80px', padding: '0 32px' }}>
+          {[
+            { icon: '🛡', title: 'No Charge for 7 Days', desc: 'Credit card required to start' },
+            { icon: '⚡', title: 'Cancel Any Time', desc: 'One click, no questions asked' },
+            { icon: '🔒', title: 'Secure Checkout', desc: '256-bit SSL, Powered by Stripe' },
+            { icon: '💬', title: 'Live Support Included', desc: 'Real humans, not bots' }
+          ].map((item, i) => (
+            <div key={item.title} style={{ padding: '40px 24px', textAlign: 'center', borderRight: i < 3 ? '1px solid #1a1a1a' : 'none' }}>
+              <div style={{ fontSize: '28px', marginBottom: '10px' }}>{item.icon}</div>
+              <div style={{ fontSize: '14px', fontWeight: '700', marginBottom: '4px', color: '#fff' }}>{item.title}</div>
+              <div style={{ fontSize: '12px', color: '#64748b' }}>{item.desc}</div>
             </div>
           ))}
         </div>
 
       </div>
-    </div>
+      <Footer />
+    </>
   )
 }
 `;
 
-fs.writeFileSync(dashPath, content, 'utf8');
-console.log('DONE - Dashboard home page fully redesigned');
+fs.writeFileSync(pricingPath, content, 'utf8');
+console.log('DONE - Pricing page rebuilt with Nav and Footer');
