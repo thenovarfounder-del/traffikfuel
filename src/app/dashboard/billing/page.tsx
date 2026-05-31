@@ -52,6 +52,7 @@ const PLANS = [
 
 export default function Billing() {
   const [loading, setLoading] = useState(true)
+  const [selectedPlan, setSelectedPlan] = useState('Pro')
 
   useEffect(() => {
     setLoading(false)
@@ -91,7 +92,7 @@ export default function Billing() {
           <h2 style={{ fontSize: '18px', fontWeight: '600', margin: '0 0 20px 0' }}>Available Plans</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
             {PLANS.map(plan => (
-              <div key={plan.name} style={{ backgroundColor: '#111', borderRadius: '12px', border: plan.current ? '2px solid #f97316' : '1px solid #1f1f1f', padding: '24px', position: 'relative' }}>
+              <div key={plan.name} onClick={() => setSelectedPlan(plan.name)} style={{ backgroundColor: '#111', borderRadius: '12px', border: (plan.current || selectedPlan === plan.name) ? `2px solid ${plan.color}` : '1px solid #1f1f1f', padding: '24px', position: 'relative', cursor: 'pointer' }}>
                 {plan.current && (
                   <div style={{ position: 'absolute', top: '-12px', left: '20px', backgroundColor: '#f97316', color: '#fff', fontSize: '11px', fontWeight: '700', padding: '3px 12px', borderRadius: '12px', textTransform: 'uppercase' }}>Current Plan</div>
                 )}
@@ -112,8 +113,8 @@ export default function Billing() {
                   ))}
                 </div>
                 <button style={{ width: '100%', padding: '10px', borderRadius: '8px', border: 'none', backgroundColor: plan.current ? '#1a1a1a' : plan.color, color: plan.current ? '#94a3b8' : '#fff', cursor: plan.current ? 'default' : 'pointer', fontSize: '13px', fontWeight: '600' }}
-                  onClick={() => { if (!plan.current) window.location.href = 'https://www.traffikora.com/pricing' }}>
-                  {plan.current ? 'Current Plan' : 'Upgrade'}
+                  onClick={(e) => { e.stopPropagation(); if (!plan.current) window.location.href = 'https://www.traffikora.com/pricing' }}>
+                  {plan.current ? 'Current Plan' : selectedPlan === plan.name ? 'Selected - Upgrade' : 'Upgrade'}
                 </button>
               </div>
             ))}
