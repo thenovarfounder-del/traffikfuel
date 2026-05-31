@@ -88,7 +88,7 @@ export default function ContentCalendar() {
 
   async function deleteEvent(id) {
     await supabase.from('content_calendar').delete().eq('id', id)
-    loadEvents(); setSelected(null)
+    await loadEvents()
   }
 
   async function updateStatus(id, status) {
