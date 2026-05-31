@@ -2,115 +2,139 @@
 const fs = require('fs');
 const path = require('path');
 
-const pricingPath = path.join('C:\\Users\\randy\\traffikfuel\\src\\app\\pricing\\page.tsx');
+const contactPath = path.join('C:\\Users\\randy\\traffikfuel\\src\\app\\contact\\page.tsx');
 
 const content = `// @ts-nocheck
 'use client'
 
+import { useState } from 'react'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
-const PLANS = [
-  {
-    name: 'Starter',
-    price: '\$97',
-    period: '/mo',
-    description: 'Perfect for solo business owners ready to automate their marketing.',
-    features: ['Blog + social automation', 'Google SEO tools', '1 website connected', 'AI content generation', '7-day free trial'],
-    color: '#94a3b8',
-    highlight: false,
-    cta: 'Start Free Trial',
-    href: '/signup'
-  },
-  {
-    name: 'Pro',
-    price: '\$197',
-    period: '/mo',
-    description: 'Full automation for serious business owners who want it all.',
-    features: ['Everything in Starter', 'TikTok + YouTube push', 'AI engine optimization', 'Reddit amplifier', 'Priority support'],
-    color: '#f97316',
-    highlight: true,
-    cta: 'Start Free Trial',
-    href: '/signup'
-  },
-  {
-    name: 'Agency',
-    price: '\$797',
-    period: '/mo',
-    description: 'Manage multiple clients from one powerful dashboard.',
-    features: ['Everything in Pro', 'Up to 10 client accounts', 'White-label reports', 'Client management tools', 'Dedicated support'],
-    color: '#3b82f6',
-    highlight: false,
-    cta: 'Start Free Trial',
-    href: '/signup'
-  },
-  {
-    name: 'Enterprise',
-    price: '\$1,497',
-    period: '/mo',
-    description: 'For large agencies scaling across many clients at once.',
-    features: ['Everything in Agency', 'Unlimited client accounts', 'Custom integrations', 'SLA guarantee', 'Dedicated account manager'],
-    color: '#a855f7',
-    highlight: false,
-    cta: 'Contact Us',
-    href: '/contact'
-  }
-]
+export default function Contact() {
+  const [form, setForm] = useState({ name: '', email: '', message: '' })
+  const [sent, setSent] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-export default function Pricing() {
+  function update(field, value) {
+    setForm(prev => ({ ...prev, [field]: value }))
+  }
+
+  async function handleSubmit() {
+    setLoading(true)
+    await new Promise(r => setTimeout(r, 1000))
+    setSent(true)
+    setLoading(false)
+  }
+
+  const inputStyle = {
+    width: '100%',
+    padding: '16px 20px',
+    borderRadius: '12px',
+    border: '1px solid #2a2a2a',
+    backgroundColor: '#111',
+    color: '#fff',
+    fontSize: '15px',
+    outline: 'none',
+    boxSizing: 'border-box',
+    fontFamily: 'system-ui, sans-serif',
+    resize: 'vertical'
+  }
+
+  const labelStyle = {
+    display: 'block',
+    fontSize: '12px',
+    fontWeight: '600',
+    color: '#94a3b8',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em',
+    marginBottom: '8px'
+  }
+
   return (
     <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}>
       <Nav />
       <div style={{ color: '#fff', fontFamily: 'system-ui, sans-serif', backgroundColor: '#0a0a0a' }}>
 
-        <div style={{ textAlign: 'center', padding: '100px 32px 60px' }}>
-          <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '16px' }}>SIMPLE PRICING</div>
-          <h1 style={{ fontSize: '52px', fontWeight: '800', margin: '0 0 16px 0', letterSpacing: '-1px', color: '#fff' }}>No surprises. <em style={{ color: '#f97316', fontStyle: 'italic' }}>Ever.</em></h1>
-          <p style={{ fontSize: '18px', color: '#64748b', margin: '0 auto', maxWidth: '500px', lineHeight: '1.6' }}>Credit card required -- No charge for 7 days -- Cancel anytime</p>
-        </div>
+        <div style={{ display: 'flex', minHeight: 'calc(100vh - 80px)' }}>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', maxWidth: '1200px', margin: '0 auto', padding: '0 32px 80px' }}>
-          {PLANS.map(plan => (
-            <div key={plan.name} style={{ backgroundColor: '#111', borderRadius: '16px', border: plan.highlight ? '2px solid #f97316' : '1px solid #1f1f1f', padding: '32px 24px', position: 'relative', display: 'flex', flexDirection: 'column' }}>
-              {plan.highlight && (
-                <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#f97316', color: '#fff', fontSize: '11px', fontWeight: '700', padding: '4px 16px', borderRadius: '20px', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Most Popular</div>
-              )}
-              <div style={{ fontSize: '22px', fontWeight: '800', marginBottom: '12px', color: '#fff' }}>{plan.name}</div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '12px' }}>
-                <span style={{ fontSize: '42px', fontWeight: '800', color: plan.color }}>{plan.price}</span>
-                <span style={{ fontSize: '14px', color: '#64748b' }}>{plan.period}</span>
-              </div>
-              <div style={{ fontSize: '13px', color: '#64748b', marginBottom: '24px', lineHeight: '1.6' }}>{plan.description}</div>
-              <div style={{ flex: 1, marginBottom: '28px' }}>
-                {plan.features.map(f => (
-                  <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '10px', fontSize: '14px', color: '#e2e8f0' }}>
-                    <span style={{ color: plan.color, fontWeight: '700', fontSize: '16px' }}>+</span>
-                    {f}
+          {/* LEFT PANEL */}
+          <div style={{ width: '45%', background: 'linear-gradient(135deg, #0a0a0a 0%, #111 50%, #0f0a00 100%)', padding: '80px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderRight: '1px solid #1a1a1a', position: 'relative', overflow: 'hidden' }}>
+
+            <div style={{ position: 'absolute', top: '-100px', right: '-100px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, #f9731615 0%, transparent 70%)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', bottom: '-50px', left: '-50px', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, #f9731608 0%, transparent 70%)', pointerEvents: 'none' }} />
+
+            <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '20px' }}>CONTACT US</div>
+            <h1 style={{ fontSize: '42px', fontWeight: '300', lineHeight: '1.2', margin: '0 0 24px 0', color: '#fff', fontFamily: 'Georgia, serif' }}>
+              We'd love to<br />
+              <em style={{ color: '#f97316', fontStyle: 'italic' }}>hear from you.</em>
+            </h1>
+            <p style={{ fontSize: '16px', color: '#64748b', lineHeight: '1.7', margin: '0 0 48px 0' }}>
+              Questions, feedback, or just want to say hi -- reach out and we'll get back to you fast.
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              {[
+                { icon: '📧', label: 'Email', value: 'support@traffikora.com' },
+                { icon: '💬', label: 'Live Chat', value: 'Available 24/7 via chat widget' },
+                { icon: '⚡', label: 'Response Time', value: 'Usually within 2 hours' }
+              ].map(item => (
+                <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: '#f9731615', border: '1px solid #f9731630', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>{item.icon}</div>
+                  <div>
+                    <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '2px' }}>{item.label}</div>
+                    <div style={{ fontSize: '14px', color: '#e2e8f0' }}>{item.value}</div>
                   </div>
-                ))}
-              </div>
-              <a href={plan.href} style={{ display: 'block', textAlign: 'center', padding: '14px', borderRadius: '10px', backgroundColor: plan.highlight ? '#f97316' : plan.color + '20', color: plan.highlight ? '#fff' : plan.color, cursor: 'pointer', fontSize: '14px', fontWeight: '700', textDecoration: 'none' }}>
-                {plan.cta}
-              </a>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
 
-        <div style={{ borderTop: '1px solid #1a1a1a', borderBottom: '1px solid #1a1a1a', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', maxWidth: '1200px', margin: '0 auto 80px', padding: '0 32px', backgroundColor: '#0a0a0a' }}>
-          {[
-            { icon: '🛡', title: 'No Charge for 7 Days', desc: 'Credit card required to start' },
-            { icon: '⚡', title: 'Cancel Any Time', desc: 'One click, no questions asked' },
-            { icon: '🔒', title: 'Secure Checkout', desc: '256-bit SSL, Powered by Stripe' },
-            { icon: '💬', title: 'Live Support Included', desc: 'Real humans, not bots' }
-          ].map((item, i) => (
-            <div key={item.title} style={{ padding: '40px 24px', textAlign: 'center', borderRight: i < 3 ? '1px solid #1a1a1a' : 'none' }}>
-              <div style={{ fontSize: '28px', marginBottom: '10px' }}>{item.icon}</div>
-              <div style={{ fontSize: '14px', fontWeight: '700', marginBottom: '4px', color: '#fff' }}>{item.title}</div>
-              <div style={{ fontSize: '12px', color: '#64748b' }}>{item.desc}</div>
+          {/* RIGHT PANEL */}
+          <div style={{ flex: 1, padding: '80px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'center', backgroundColor: '#0a0a0a' }}>
+            <div style={{ maxWidth: '480px', width: '100%', margin: '0 auto' }}>
+
+              {sent ? (
+                <div style={{ textAlign: 'center', padding: '60px 0' }}>
+                  <div style={{ fontSize: '48px', marginBottom: '20px' }}>✅</div>
+                  <h2 style={{ fontSize: '28px', fontWeight: '300', marginBottom: '12px', fontFamily: 'Georgia, serif' }}>Message sent!</h2>
+                  <p style={{ color: '#64748b', fontSize: '15px' }}>We'll get back to you within 2 hours.</p>
+                  <button onClick={() => { setSent(false); setForm({ name: '', email: '', message: '' }) }}
+                    style={{ marginTop: '24px', padding: '12px 24px', borderRadius: '10px', border: '1px solid #2a2a2a', backgroundColor: 'transparent', color: '#94a3b8', cursor: 'pointer', fontSize: '14px' }}>
+                    Send another message
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div style={{ marginBottom: '40px' }}>
+                    <div style={{ fontSize: '12px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Get In Touch</div>
+                    <h2 style={{ fontSize: '32px', fontWeight: '300', margin: '0', fontFamily: 'Georgia, serif' }}>Send us a message</h2>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    <div>
+                      <label style={labelStyle}>Your Name</label>
+                      <input style={inputStyle} placeholder="Jane Smith" value={form.name} onChange={e => update('name', e.target.value)} />
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Email Address</label>
+                      <input style={inputStyle} type="email" placeholder="jane@yourbusiness.com" value={form.email} onChange={e => update('email', e.target.value)} />
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Message</label>
+                      <textarea style={{ ...inputStyle, minHeight: '140px' }} placeholder="How can we help?" value={form.message} onChange={e => update('message', e.target.value)} />
+                    </div>
+                    <button onClick={handleSubmit} disabled={loading}
+                      style={{ width: '100%', padding: '16px', borderRadius: '12px', border: 'none', background: loading ? '#333' : 'linear-gradient(135deg, #f97316, #ea6a0a)', color: '#fff', fontSize: '15px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer' }}>
+                      {loading ? 'Sending...' : 'Send Message →'}
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
-          ))}
-        </div>
+          </div>
 
+        </div>
       </div>
       <Footer />
     </div>
@@ -118,5 +142,5 @@ export default function Pricing() {
 }
 `;
 
-fs.writeFileSync(pricingPath, content, 'utf8');
-console.log('DONE - Pricing page dark background fixed');
+fs.writeFileSync(contactPath, content, 'utf8');
+console.log('DONE - Contact page redesigned with dark split layout');
