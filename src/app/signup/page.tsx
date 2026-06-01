@@ -53,7 +53,7 @@ export default function Signup() {
           city: form.city,
           phone: form.phone
         })
-        router.push('/onboarding')
+        router.push('/check-email')
       }
     } catch (err) {
       setError(err.message)
