@@ -1,16 +1,31 @@
 const fs = require('fs');
 
-const filePath = 'C:\\Users\\randy\\traffikfuel\\src\\app\\features\\page.tsx';
+const filePath = 'C:\\Users\\randy\\traffikfuel\\src\\components\\Nav.tsx';
 let content = fs.readFileSync(filePath, 'utf8');
 
-// Fix duplicate "Free Free"
-content = content.replace('Start Free Free Today', 'Start Free Today');
-
-// Fix old trial language
+// Add usePathname import
 content = content.replace(
-  'Free plan available. No charge until day 8. Cancel anytime with one click.',
-  'Free plan available. No credit card required. Cancel anytime with one click.'
+  "import Link from 'next/link'",
+  "import Link from 'next/link'\nimport { usePathname } from 'next/navigation'"
+);
+
+// Add pathname hook after export default function Nav() {
+content = content.replace(
+  'export default function Nav() {\n  return (',
+  "export default function Nav() {\n  const pathname = usePathname()\n  const isHome = pathname === '/'\n  return ("
+);
+
+// Hide Home link on homepage - desktop
+content = content.replace(
+  '<Link href="/" style={{ color: \'#111\', textDecoration: \'none\', fontSize: \'14px\', fontWeight: 500 }}>Home</Link>',
+  '{!isHome && <Link href="/" style={{ color: \'#111\', textDecoration: \'none\', fontSize: \'14px\', fontWeight: 500 }}>Home</Link>}'
+);
+
+// Hide Home link on homepage - mobile
+content = content.replace(
+  '<a href="/">Home</a>',
+  '{!isHome && <a href="/">Home</a>}'
 );
 
 fs.writeFileSync(filePath, content, 'utf8');
-console.log('SUCCESS: features page fixed');
+console.log('SUCCESS: Home link hidden on homepage');

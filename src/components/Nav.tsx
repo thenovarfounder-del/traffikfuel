@@ -1,8 +1,11 @@
 // @ts-nocheck
 'use client'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 export default function Nav() {
+  const pathname = usePathname()
+  const isHome = pathname === '/'
   return (
     <>
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -32,7 +35,7 @@ export default function Nav() {
         </Link>
 
         <div className="nav-links">
-          <Link href="/" style={{ color: '#111', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>Home</Link>
+          {!isHome && <Link href="/" style={{ color: '#111', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>Home</Link>}
           <Link href="/features" style={{ color: '#111', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>Features</Link>
           <Link href="/solutions" style={{ color: '#111', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>Solutions</Link>
           <Link href="/pricing" style={{ color: '#111', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>Pricing</Link>
@@ -57,7 +60,7 @@ export default function Nav() {
       </nav>
 
       <div id="mobile-nav-menu" className="mobile-menu">
-        <a href="/">Home</a>
+        {!isHome && <a href="/">Home</a>}
         <a href="/features">Features</a>
         <a href="/solutions">Solutions</a>
         <a href="/pricing">Pricing</a>
