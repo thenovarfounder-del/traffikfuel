@@ -2,10 +2,17 @@ const fs = require('fs');
 
 let home = fs.readFileSync('src/app/page.tsx', 'utf8');
 
+// Remove Watch 2-Min Demo button from hero
 home = home.replace(
-  `Every day without Traffikora is a day your competitor gets the lead instead. Start free &mdash; no credit card &mdash; be live in 5 minutes.</p>`,
-  `<span style="color:#E8610A;font-family:'Playfair Display',serif;font-style:italic;font-size:18px;font-weight:700">Every day without Traffikora is a day your competitor gets the lead instead.</span><br><span style="color:#fff;font-size:15px;font-weight:400">Start free &mdash; no credit card &mdash; be live in 5 minutes.</span></p>`
+  `<button class="btn-ghost" onclick="window.location.href='/demo'">&#9654; Watch 2-Min Demo</button>`,
+  ``
+);
+
+// Remove Watch how it works demo link from hero right panel
+home = home.replace(
+  `<a class="demo-btn" href="/demo"><div class="demo-play">&#9654;</div><div class="demo-lbl"><span>Watch how it works</span> &mdash; 2 min demo</div></a>`,
+  ``
 );
 
 fs.writeFileSync('src/app/page.tsx', home);
-console.log('Done - ' + (home.includes('Playfair Display') && home.includes('competitor gets the lead') ? 'SUCCESS' : 'FAILED'));
+console.log('Done - ' + (home.includes("Watch 2-Min Demo") ? 'FAILED' : 'SUCCESS — demo removed'));

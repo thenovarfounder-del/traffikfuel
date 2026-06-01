@@ -65,7 +65,7 @@ export default function SolutionsPage() {
             Traffikora works for any local business that wants more customers. Start your free trial and see for yourself.
           </p>
           <button onClick={() => window.location.href='/signup'} style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', border: 'none', padding: '18px 40px', borderRadius: '8px', fontSize: '16px', fontWeight: 800, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
-            Start Your Free 7-Day Trial
+            Start Free — No Card Needed
           </button>
         </section>
       </main>

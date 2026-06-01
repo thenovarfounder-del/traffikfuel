@@ -35,7 +35,7 @@ export default function Demo() {
         <p class='demo-note'>No spam. Just the demo. <a href='/contact'>Questions? Contact us.</a></p>
         <div class='demo-divider'></div>
         <p class='demo-alt'>Ready to get started without the video?</p>
-        <a href='/signup' class='demo-trial'>Start Your Free 7-Day Trial</a>
+        <a href='/signup' class='demo-trial'>Start Free — No Card Needed</a>
       </div>
     </section>
   `;

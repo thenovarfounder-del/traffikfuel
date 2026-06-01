@@ -34,7 +34,7 @@ export default function FeaturesPage() {
             Traffikora automates your marketing across Google, TikTok, YouTube, Instagram, Facebook, Reddit, ChatGPT, Claude, Gemini, and more from a single dashboard.
           </p>
           <button onClick={() => window.location.href='/signup'} style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', border: 'none', padding: '18px 40px', borderRadius: '8px', fontSize: '16px', fontWeight: 800, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
-            Start Free 7-Day Trial
+            Start Free Free Today
           </button>
         </section>
 
@@ -75,9 +75,9 @@ export default function FeaturesPage() {
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '42px', fontWeight: 700, color: '#111', marginBottom: '16px' }}>
             Ready to put your marketing <em style={{ color: '#E8610A', fontStyle: 'italic' }}>on autopilot?</em>
           </h2>
-          <p style={{ fontSize: '16px', color: '#555', maxWidth: '480px', margin: '0 auto 32px', lineHeight: 1.8 }}>7-day free trial. No charge until day 8. Cancel anytime with one click.</p>
+          <p style={{ fontSize: '16px', color: '#555', maxWidth: '480px', margin: '0 auto 32px', lineHeight: 1.8 }}>Free plan available. No charge until day 8. Cancel anytime with one click.</p>
           <button onClick={() => window.location.href='/signup'} style={{ background: '#111', color: '#fff', border: 'none', padding: '18px 40px', borderRadius: '8px', fontSize: '16px', fontWeight: 800, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
-            Start Your Free Trial
+            Start Free Today
           </button>
         </section>
       </main>

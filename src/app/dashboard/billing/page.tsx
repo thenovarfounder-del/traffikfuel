@@ -17,7 +17,7 @@ const PLANS = [
     price: '$97',
     period: '/month',
     description: 'Perfect for solo business owners ready to automate their marketing.',
-    features: ['Blog + social automation', 'Google SEO tools', '1 website connected', 'AI content generation', '7-day free trial'],
+    features: ['Blog + social automation', 'Google SEO tools', '1 website connected', 'AI content generation', 'Free plan available'],
     color: '#94a3b8',
     current: false
   },

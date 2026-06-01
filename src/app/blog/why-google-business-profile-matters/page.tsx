@@ -48,15 +48,15 @@ export default function Post3() {
           <div style={{ background: '#f9f9f9', border: '2.5px solid #111', padding: '36px', textAlign: 'center' }}>
             <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '26px', fontWeight: 900, color: '#111', marginBottom: '12px' }}>Traffikora manages your Google Business Profile automatically.</h3>
             <p style={{ fontSize: '16px', color: '#444', marginBottom: '24px' }}>Weekly posts, review responses, photo uploads — all handled for you so your profile stays active and ranking.</p>
-            <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '14px 36px', textDecoration: 'none', fontSize: '16px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free 7-Day Trial</Link>
+            <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '14px 36px', textDecoration: 'none', fontSize: '16px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free Free Today</Link>
           </div>
         </div>
       </article>
 
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
         <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Your Google Business Profile. Managed automatically. Forever.</h2>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
-        <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Trial</Link>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No no credit card required. Cancel anytime.</p>
+        <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Today</Link>
       </section>
 
       <Footer />

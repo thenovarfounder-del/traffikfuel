@@ -2,8 +2,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Start Your Free Trial | Traffikora',
-  description: 'Sign up for Traffikora and start your free 7-day trial. No credit card required. Automate your marketing in under 5 minutes.',
+  title: 'Start Free Today | Traffikora',
+  description: 'Sign up for Traffikora and start your free 7-day trial. No no credit card required. Automate your marketing in under 5 minutes.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {

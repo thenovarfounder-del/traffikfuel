@@ -26,7 +26,7 @@ export default function RefundPolicy() {
     <section class='rp-hero'>
       <p class='eyebrow'>Billing</p>
       <h1>Refund Policy</h1>
-      <p>Our 7-day free trial and 30-day satisfaction guarantee, explained clearly.</p>
+      <p>Our Free plan available and 30-day satisfaction guarantee, explained clearly.</p>
     </section>
     <section class='rp-body'>
       <div class='inner'>
@@ -34,9 +34,9 @@ export default function RefundPolicy() {
         <h2>Our Commitment</h2>
         <p>We stand behind Traffikora with a clear, customer-friendly refund policy. We want you to feel confident trying our platform, and we make it easy to get your money back if it is not the right fit.</p>
         <h2>Free Trial</h2>
-        <p>All paid Traffikora plans include a 7-day free trial. You will not be charged during the trial period. You may cancel at any time before the trial ends with no charge.</p>
+        <p>All paid Traffikora plans include a Free plan available. You will not be charged during the trial period. You may cancel at any time before the trial ends with no charge.</p>
         <ul>
-          <li>No credit card required to start a trial on select plans</li>
+          <li>No no credit card required to start a trial on select plans</li>
           <li>Trial access includes the full feature set of your selected plan</li>
           <li>Trial ends automatically and converts to a paid subscription unless cancelled</li>
         </ul>

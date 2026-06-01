@@ -45,7 +45,7 @@ export default function Nav() {
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '8px' }}>
           <Link href="/login" className="nav-login-btn" style={{ background: '#fff', color: '#111', padding: '9px 16px', textDecoration: 'none', fontSize: '13px', fontWeight: 600, borderRadius: '6px', border: '1.5px solid #222' }}>Login</Link>
-          <Link href="/signup" className="nav-cta-btn" style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', padding: '9px 16px', textDecoration: 'none', fontSize: '13px', fontWeight: 700, borderRadius: '8px', border: '2.5px solid #111' }}>Start Free Trial</Link>
+          <Link href="/signup" className="nav-cta-btn" style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', padding: '9px 16px', textDecoration: 'none', fontSize: '13px', fontWeight: 700, borderRadius: '8px', border: '2.5px solid #111' }}>Start Free Today</Link>
           <button className="nav-hamburger" aria-label="Toggle menu" onClick={() => { const menu = document.getElementById('mobile-nav-menu'); if (menu) menu.classList.toggle('is-open'); }}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round">
               <line x1="3" y1="6" x2="21" y2="6" />
@@ -68,7 +68,7 @@ export default function Nav() {
         <a href="/contact">Contact</a>
         <a href="/about">About Us</a>
         <a href="/login" class="login-mobile">Login</a>
-        <a href="/signup" class="cta-mobile">Start Free Trial</a>
+        <a href="/signup" class="cta-mobile">Start Free Today</a>
       </div>
     </>
   )

@@ -22,7 +22,7 @@ export default function SmallBusinessesPage() {
             Stop doing your marketing manually. Traffikora handles your SEO, social media, Google Business Profile, and AI engine visibility -- automatically, every day.
           </p>
           <Link href="/signup" style={{ background: "#E8610A", color: "#ffffff", padding: "14px 32px", borderRadius: "6px", fontWeight: "700", textDecoration: "none", fontSize: "1rem" }}>
-            Start Your Free 7-Day Trial
+            Start Free — No Card Needed
           </Link>
         </section>
 
@@ -172,10 +172,10 @@ export default function SmallBusinessesPage() {
             Join thousands of small business owners who stopped doing marketing manually. Traffikora handles it -- every day, automatically.
           </p>
           <Link href="/signup" style={{ background: "#ffffff", color: "#E8610A", padding: "16px 36px", borderRadius: "6px", fontWeight: "700", textDecoration: "none", fontSize: "1.05rem" }}>
-            Start Your Free 7-Day Trial
+            Start Free — No Card Needed
           </Link>
           <p style={{ color: "#ffffff", marginTop: "16px", fontSize: "0.9rem", opacity: 0.85 }}>
-            No credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.
+            No no credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.
           </p>
         </section>
 

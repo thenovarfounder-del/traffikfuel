@@ -9,7 +9,7 @@ export default function ResultsPage() {
         <p style={{ color: '#E8610A', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.15em', fontSize: '13px', margin: '0 0 16px 0' }}>Real Results</p>
         <h1 style={{ fontSize: 'clamp(32px, 6vw, 60px)', fontWeight: 700, color: '#fff', margin: '0 0 24px 0', lineHeight: 1.1 }}>What Happens When <span style={{ color: '#E8610A' }}>Marketing Runs Itself</span></h1>
         <p style={{ color: '#d1d5db', fontSize: '18px', maxWidth: '640px', margin: '0 auto 48px', lineHeight: 1.7 }}>Traffikora customers see measurable growth in local rankings, social reach, and inbound leads -- without adding headcount or ad spend.</p>
-        <Link href='/signup' style={{ display: 'inline-block', background: '#E8610A', color: '#fff', fontWeight: 700, fontSize: '17px', padding: '16px 40px', borderRadius: '50px', textDecoration: 'none' }}>Start Free Trial</Link>
+        <Link href='/signup' style={{ display: 'inline-block', background: '#E8610A', color: '#fff', fontWeight: 700, fontSize: '17px', padding: '16px 40px', borderRadius: '50px', textDecoration: 'none' }}>Start Free Today</Link>
       </section>
       <section style={{ maxWidth: '1100px', margin: '0 auto', padding: '80px 24px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', marginBottom: '80px' }}>
@@ -93,8 +93,8 @@ export default function ResultsPage() {
       </section>
       <section style={{ padding: '80px 24px', textAlign: 'center', background: 'linear-gradient(135deg, #E8610A 0%, #C84E06 100%)' }}>
         <h2 style={{ fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 700, color: '#fff', margin: '0 0 16px 0' }}>Ready to See Results Like These?</h2>
-        <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '18px', margin: '0 auto 32px', maxWidth: '500px' }}>Start your free trial today. No credit card required. Results start within days.</p>
-        <Link href='/signup' style={{ display: 'inline-block', background: '#fff', color: '#E8610A', fontWeight: 700, fontSize: '17px', padding: '16px 40px', borderRadius: '50px', textDecoration: 'none' }}>Start Free Trial</Link>
+        <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '18px', margin: '0 auto 32px', maxWidth: '500px' }}>Start your free trial today. No no credit card required. Results start within days.</p>
+        <Link href='/signup' style={{ display: 'inline-block', background: '#fff', color: '#E8610A', fontWeight: 700, fontSize: '17px', padding: '16px 40px', borderRadius: '50px', textDecoration: 'none' }}>Start Free Today</Link>
       </section>
     </main>
   )

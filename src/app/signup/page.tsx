@@ -117,7 +117,7 @@ export default function Signup() {
             {[
               { icon: '⚡', text: 'Live in under 5 minutes' },
               { icon: '🤖', text: 'AI agents running 24/7' },
-              { icon: '🛡', text: 'No charge for 7 days' },
+              { icon: '🛡', text: 'Free plan — no card needed' },
               { icon: '✕', text: 'Cancel anytime, one click' }
             ].map(item => (
               <div key={item.text} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -212,7 +212,7 @@ export default function Signup() {
                 onClick={handleSignup}
                 disabled={loading}
                 style={{ width: '100%', padding: '16px', borderRadius: '12px', border: 'none', background: loading ? '#333' : 'linear-gradient(135deg, #f97316, #ea6a0a)', color: '#fff', fontSize: '15px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'system-ui, sans-serif', letterSpacing: '0.02em' }}>
-                {loading ? 'Creating your account...' : 'Start Free Trial →'}
+                {loading ? 'Creating your account...' : 'Start Free Today →'}
               </button>
               <button onClick={() => setStep(1)} style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #1a1a1a', backgroundColor: 'transparent', color: '#64748b', fontSize: '14px', cursor: 'pointer', fontFamily: 'system-ui, sans-serif' }}>
                 ← Back

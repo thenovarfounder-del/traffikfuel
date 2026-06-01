@@ -33,7 +33,7 @@ export default function TermsPage() {
           </div>
           <div style={{ marginBottom: '40px' }}>
             <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>4. Subscription Plans and Billing</h2>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>Traffikora offers multiple subscription tiers billed on a monthly basis. New accounts receive a 7-day free trial with full access to all features of the selected plan. After the trial period, your payment method will be charged automatically at the beginning of each billing cycle. All fees are non-refundable except as required by law. We reserve the right to change pricing with 30 days’ notice. Continued use after a price change constitutes acceptance of the new pricing.</p>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>Traffikora offers multiple subscription tiers billed on a monthly basis. New accounts receive a Free plan available with full access to all features of the selected plan. After the trial period, your payment method will be charged automatically at the beginning of each billing cycle. All fees are non-refundable except as required by law. We reserve the right to change pricing with 30 days’ notice. Continued use after a price change constitutes acceptance of the new pricing.</p>
           </div>
           <div style={{ marginBottom: '40px' }}>
             <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>5. Cancellation and Termination</h2>

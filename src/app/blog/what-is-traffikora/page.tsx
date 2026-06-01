@@ -77,13 +77,13 @@ export default function WhatIsTraffikora() {
 
           <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '34px', fontWeight: 700, color: '#111', margin: '56px 0 20px' }}>How to Get Started</h2>
 
-          <p>Traffikora starts at $97/month and includes a free 7-day trial. No credit card required to start. Setup takes less than 10 minutes — connect your accounts, tell us about your business, and we handle everything from there.</p>
+          <p>Traffikora starts at $97/month and includes a free 7-day trial. No no credit card required to start. Setup takes less than 10 minutes — connect your accounts, tell us about your business, and we handle everything from there.</p>
 
           <p style={{ marginTop: '28px' }}>The businesses that win the next five years of local marketing are the ones that show up consistently — on Google, on social, and in AI search — without burning out trying to do it all manually. Traffikora makes that possible for any business, at any size.</p>
 
           <div style={{ marginTop: '56px', padding: '40px', background: '#f9f9f9', border: '2.5px solid #111', textAlign: 'center' }}>
             <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '26px', fontWeight: 700, color: '#111', marginBottom: '16px' }}>Ready to put your marketing on autopilot?</p>
-            <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Your Free 7-Day Trial</Link>
+            <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free — No Card Needed</Link>
           </div>
 
         </div>
@@ -91,8 +91,8 @@ export default function WhatIsTraffikora() {
 
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
         <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Your marketing should work while you sleep.</h2>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
-        <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Trial</Link>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No no credit card required. Cancel anytime.</p>
+        <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Today</Link>
       </section>
 
       <Footer />

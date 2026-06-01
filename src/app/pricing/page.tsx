@@ -14,7 +14,7 @@ const PLANS = [
       '3 AI blog posts per month',
       'See your content before it publishes',
       'Access to the content dashboard',
-      'No credit card required',
+      'No no credit card required',
       'Upgrade anytime in one click'
     ],
     color: '#64748b',
