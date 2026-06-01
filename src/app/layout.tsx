@@ -2,7 +2,6 @@
 'use client'
 import './globals.css'
 import { Playfair_Display, DM_Sans } from 'next/font/google'
-import CrispChat from '@/components/CrispChat'
 import CookieBanner from '@/components/CookieBanner'
 import ScrollToTop from '@/components/ScrollToTop'
 import ChatBubble from '@/components/ChatBubble'
@@ -35,7 +34,7 @@ return (
 </head>
 <body suppressHydrationWarning>
 {children}
-<CrispChat />
+
 <CookieBanner />
 <ScrollToTop />
 <ChatBubble />
