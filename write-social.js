@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const filePath = path.join('C:\\Users\\randy\\traffikora\\src\\app\\reset-password\\page.tsx');
+const filePath = path.join('C:\\Users\\randy\\traffikfuel\\src\\app\\reset-password\\page.tsx');
 
 const content = `'use client'
 
@@ -36,46 +36,38 @@ export default function ResetPasswordPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a0a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'Inter, sans-serif', padding: '24px' }}>
-
-      {/* Logo */}
       <a href="/" style={{ marginBottom: '48px', textDecoration: 'none' }}>
         <span style={{ fontSize: '28px', fontWeight: '800', color: '#fff', letterSpacing: '-0.5px' }}>
           Traffik<span style={{ color: '#f97316' }}>ora</span>
         </span>
       </a>
-
-      {/* Card */}
       <div style={{ background: '#111111', border: '1px solid #1f1f1f', borderRadius: '16px', padding: '48px 40px', width: '100%', maxWidth: '440px', boxShadow: '0 0 60px rgba(249,115,22,0.06)' }}>
-
         {!submitted ? (
           <>
             <div style={{ marginBottom: '32px' }}>
-              <h1 style={{ color: '#ffffff', fontSize: '26px', fontWeight: '700', margin: '0 0 10px 0', letterSpacing: '-0.3px' }}>Forgot your password?</h1>
-              <p style={{ color: '#6b7280', fontSize: '15px', margin: '0', lineHeight: '1.6' }}>No worries. Enter your email and we'll send you a secure reset link.</p>
+              <h1 style={{ color: '#ffffff', fontSize: '26px', fontWeight: '700', margin: '0 0 10px 0' }}>Forgot your password?</h1>
+              <p style={{ color: '#6b7280', fontSize: '15px', margin: '0', lineHeight: '1.6' }}>Enter your email and we'll send you a secure reset link.</p>
             </div>
-
             <div style={{ marginBottom: '16px' }}>
-              <label style={{ display: 'block', color: '#9ca3af', fontSize: '13px', fontWeight: '500', marginBottom: '8px', letterSpacing: '0.3px', textTransform: 'uppercase' }}>Email Address</label>
+              <label style={{ display: 'block', color: '#9ca3af', fontSize: '13px', fontWeight: '500', marginBottom: '8px', textTransform: 'uppercase' }}>Email Address</label>
               <input
                 type="email"
                 placeholder="you@example.com"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && email && handleSubmit()}
-                style={{ width: '100%', padding: '13px 16px', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: '10px', color: '#ffffff', fontSize: '15px', outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+                style={{ width: '100%', padding: '13px 16px', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: '10px', color: '#ffffff', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }}
               />
             </div>
-
             {error && (
               <div style={{ background: '#1f0a0a', border: '1px solid #7f1d1d', borderRadius: '8px', padding: '12px 14px', marginBottom: '16px' }}>
                 <p style={{ color: '#f87171', fontSize: '13px', margin: '0' }}>⚠ {error}</p>
               </div>
             )}
-
             <button
               onClick={handleSubmit}
               disabled={loading || !email}
-              style={{ width: '100%', padding: '14px', background: loading || !email ? '#1f1f1f' : 'linear-gradient(135deg, #f97316, #ea580c)', border: 'none', borderRadius: '10px', color: loading || !email ? '#555' : '#fff', fontSize: '15px', fontWeight: '700', cursor: loading || !email ? 'not-allowed' : 'pointer', letterSpacing: '0.2px', transition: 'opacity 0.2s' }}
+              style={{ width: '100%', padding: '14px', background: loading || !email ? '#1f1f1f' : 'linear-gradient(135deg, #f97316, #ea580c)', border: 'none', borderRadius: '10px', color: loading || !email ? '#555' : '#fff', fontSize: '15px', fontWeight: '700', cursor: loading || !email ? 'not-allowed' : 'pointer' }}
             >
               {loading ? 'Sending...' : 'Send Reset Link →'}
             </button>
@@ -91,12 +83,10 @@ export default function ResetPasswordPage() {
             <p style={{ color: '#4b5563', fontSize: '13px', marginTop: '20px' }}>Didn't get it? Check your spam folder.</p>
           </div>
         )}
-
         <div style={{ borderTop: '1px solid #1f1f1f', marginTop: '32px', paddingTop: '24px', textAlign: 'center' }}>
           <a href="/login" style={{ color: '#f97316', fontSize: '14px', textDecoration: 'none', fontWeight: '500' }}>← Back to login</a>
         </div>
       </div>
-
       <p style={{ color: '#374151', fontSize: '13px', marginTop: '32px' }}>© 2026 Traffikora. All rights reserved.</p>
     </div>
   )
