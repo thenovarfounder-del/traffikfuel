@@ -37,7 +37,8 @@ return (
 <CrispChat />
 <CookieBanner />
 <ScrollToTop />
-</body>
+<ChatBubble />
+      </body>
 </html>
 )
 }
