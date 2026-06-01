@@ -15,9 +15,20 @@ export default function Contact() {
   }
 
   async function handleSubmit() {
+    if (!form.name || !form.email || !form.message) return
     setLoading(true)
-    await new Promise(r => setTimeout(r, 1000))
-    setSent(true)
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      })
+      if (res.ok) {
+        setSent(true)
+      }
+    } catch (e) {
+      console.error(e)
+    }
     setLoading(false)
   }
 

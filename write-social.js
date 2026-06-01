@@ -1,34 +1,81 @@
 const fs = require('fs');
+const path = require('path');
 
-const filePath = 'C:\\Users\\randy\\traffikfuel\\src\\app\\faq\\page.tsx';
-let content = fs.readFileSync(filePath, 'utf8');
+// First create the API route
+const apiDir = 'C:\\Users\\randy\\traffikfuel\\src\\app\\api\\contact';
+if (!fs.existsSync(apiDir)) { fs.mkdirSync(apiDir, { recursive: true }); }
 
-// Fix wrong pricing
+const apiContent = `// @ts-nocheck
+import { NextResponse } from 'next/server'
+
+export async function POST(request) {
+  const { name, email, message } = await request.json()
+
+  if (!name || !email || !message) {
+    return NextResponse.json({ error: 'All fields required' }, { status: 400 })
+  }
+
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': \`Bearer \${process.env.RESEND_API_KEY}\`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      from: 'Traffikora Contact <support@traffikora.com>',
+      to: ['support@traffikora.com'],
+      reply_to: email,
+      subject: \`New Contact Form Message from \${name}\`,
+      html: \`
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> \${name}</p>
+        <p><strong>Email:</strong> \${email}</p>
+        <p><strong>Message:</strong></p>
+        <p>\${message.replace(/\\n/g, '<br>')}</p>
+      \`
+    })
+  })
+
+  if (!res.ok) {
+    return NextResponse.json({ error: 'Failed to send' }, { status: 500 })
+  }
+
+  return NextResponse.json({ success: true })
+}
+`;
+
+fs.writeFileSync(path.join(apiDir, 'route.ts'), apiContent, 'utf8');
+console.log('SUCCESS: contact API route created');
+
+// Now update the contact page to call the API
+const pagePath = 'C:\\Users\\randy\\traffikfuel\\src\\app\\contact\\page.tsx';
+let content = fs.readFileSync(pagePath, 'utf8');
+
 content = content.replace(
-  'Traffikora starts at $97 per month for the Starter plan, which covers one business location. The Pro plan is $197 per month for up to 3 locations. The Agency plan is $797 per month for up to 20 locations. Enterprise is $1,497 per month for unlimited locations and custom needs.',
-  'Traffikora offers a Free plan at $0 forever with 3 blog posts per month. The Starter plan is $47 per month for unlimited blogs and social content. The Pro plan is $97 per month and adds AI Agents, Auto Mode, TikTok and YouTube. The Agency plan is $297 per month for up to 10 clients. Enterprise is $997 per month for unlimited clients and custom AI training.'
+  `async function handleSubmit() {
+    setLoading(true)
+    await new Promise(r => setTimeout(r, 1000))
+    setSent(true)
+    setLoading(false)
+  }`,
+  `async function handleSubmit() {
+    if (!form.name || !form.email || !form.message) return
+    setLoading(true)
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      })
+      if (res.ok) {
+        setSent(true)
+      }
+    } catch (e) {
+      console.error(e)
+    }
+    setLoading(false)
+  }`
 );
 
-// Fix free trial language in CTA
-content = content.replace(
-  'Free 7-day trial. No no credit card required. Cancel anytime.',
-  'Free plan available. No credit card required. Cancel anytime.'
-);
-
-// Fix "No no credit card"
-content = content.replace(/No no credit card/g, 'No credit card');
-
-// Fix "Free plan available" used awkwardly in getting started
-content = content.replace(
-  'You can start your Free plan available with just your email address. You will not be charged anything until your trial ends and you choose to continue.',
-  'You can start your free plan with just your email address. No credit card required ever on the free plan.'
-);
-
-// Fix refund answer
-content = content.replace(
-  'We offer a Free plan available so you can experience Traffikora before being charged. If you have a billing issue after your trial, contact our support team and we will work with you to make it right.',
-  'We offer a free plan so you can experience Traffikora before being charged. If you have a billing issue after upgrading, contact our support team within 30 days and we will make it right.'
-);
-
-fs.writeFileSync(filePath, content, 'utf8');
-console.log('SUCCESS: FAQ page fixed');
+fs.writeFileSync(pagePath, content, 'utf8');
+console.log('SUCCESS: contact page wired to API');
