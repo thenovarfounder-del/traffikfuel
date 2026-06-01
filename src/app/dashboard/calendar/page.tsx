@@ -114,7 +114,7 @@ export default function ContentCalendar() {
   const scheduledCount = Object.values(events).flat().filter(e => e.status === 'scheduled').length
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f9fafb', padding: '32px 24px', fontFamily: 'DM Sans, sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: '#ffffff', padding: '32px 24px', fontFamily: 'DM Sans, sans-serif' }}>
       <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
 
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
@@ -160,7 +160,7 @@ export default function ContentCalendar() {
               const isSelected = selected === day
               const dayEvents = events[day] || []
               return (
-                <div key={day} onClick={() => setSelected(isSelected ? null : day)} style={{ minHeight: '90px', borderRight: '1px solid #f5f5f5', borderBottom: '1px solid #f5f5f5', padding: '8px', cursor: 'pointer', background: isSelected ? '#fff8f5' : '#fff', transition: 'background 0.1s' }}>
+                <div key={day} onClick={() => setSelected(isSelected ? null : day)} style={{ minHeight: '90px', borderRight: '1px solid #f5f5f5', borderBottom: '1px solid #f5f5f5', padding: '8px', cursor: 'pointer', background: isSelected ? '#fff8f5' : '#fff', transition: 'background 0.1s', outline: isSelected ? '2px solid #E8610A' : 'none', outlineOffset: '-2px' }}>
                   <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: isToday ? '#E8610A' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '4px' }}>
                     <span style={{ fontSize: '12px', fontWeight: isToday ? '700' : '400', color: isToday ? '#fff' : '#333' }}>{day}</span>
                   </div>
