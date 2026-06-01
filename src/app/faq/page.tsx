@@ -16,7 +16,7 @@ export default function FaqPage() {
         { q: 'What is Traffikora?', a: 'Traffikora is an AI-powered marketing automation platform built for small and mid-size businesses. You connect your accounts once, and Traffikora handles your social media, Google Business Profile, local SEO, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini automatically — forever.' },
         { q: 'How long does setup take?', a: 'Most businesses are fully set up in under 10 minutes. You connect your Google Business Profile, social media accounts, and tell us about your business. Traffikora takes it from there.' },
         { q: 'Do I need any marketing experience to use Traffikora?', a: 'None at all. Traffikora was built specifically for business owners who are not marketers. You do not need to understand SEO, social media algorithms, or content strategy. The platform handles everything automatically.' },
-        { q: 'Do I need a credit card to start the free trial?', a: 'No. You can start your Free plan available with just your email address. You will not be charged anything until your trial ends and you choose to continue.' },
+        { q: 'Do I need a credit card to start the free trial?', a: 'No. You can start your free plan with just your email address. No credit card required ever on the free plan.' },
       ]
     },
     {
@@ -33,11 +33,11 @@ export default function FaqPage() {
     {
       category: 'Pricing and Plans',
       questions: [
-        { q: 'How much does Traffikora cost?', a: 'Traffikora starts at $97 per month for the Starter plan, which covers one business location. The Pro plan is $197 per month for up to 3 locations. The Agency plan is $797 per month for up to 20 locations. Enterprise is $1,497 per month for unlimited locations and custom needs.' },
+        { q: 'How much does Traffikora cost?', a: 'Traffikora offers a Free plan at $0 forever with 3 blog posts per month. The Starter plan is $47 per month for unlimited blogs and social content. The Pro plan is $97 per month and adds AI Agents, Auto Mode, TikTok and YouTube. The Agency plan is $297 per month for up to 10 clients. Enterprise is $997 per month for unlimited clients and custom AI training.' },
         { q: 'Can I cancel anytime?', a: 'Yes. Cancel anytime from your dashboard with one click. There are no cancellation fees, no long-term contracts, and no questions asked.' },
         { q: 'Can I upgrade or downgrade my plan?', a: 'Yes. You can change your plan at any time from your account settings. Upgrades take effect immediately. Downgrades take effect at the start of your next billing cycle.' },
         { q: 'Is there a contract or minimum commitment?', a: 'No contracts and no minimum commitment. Traffikora is month-to-month. You pay only for what you use and cancel whenever you want.' },
-        { q: 'Do you offer refunds?', a: 'We offer a Free plan available so you can experience Traffikora before being charged. If you have a billing issue after your trial, contact our support team and we will work with you to make it right.' },
+        { q: 'Do you offer refunds?', a: 'We offer a free plan so you can experience Traffikora before being charged. If you have a billing issue after upgrading, contact our support team within 30 days and we will make it right.' },
       ]
     },
     {
@@ -111,7 +111,7 @@ export default function FaqPage() {
 
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
         <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Ready to see it for yourself?</h2>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No no credit card required. Cancel anytime.</p>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free plan available. No credit card required. Cancel anytime.</p>
         <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Today</Link>
       </section>
 
