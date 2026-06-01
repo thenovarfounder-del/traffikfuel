@@ -27,7 +27,7 @@ export default function AboutPage() {
               <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Our Mission</p>
               <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '42px', fontWeight: 900, color: '#111', lineHeight: 1.15, marginBottom: '24px' }}>Set it once. It markets forever.</h2>
               <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.8, marginBottom: '20px' }}>Small businesses are getting crushed by marketing complexity. Between Google, Facebook, Instagram, AI search engines, and review platforms — it’s impossible to keep up without a full marketing team.</p>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.8 }}>Traffikora changes that. Connect your accounts once and our platform handles everything automatically — content, SEO, AI engine optimization, reviews, and more — every single day.</p>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.8 }}>Traffikora changes that. Connect your accounts once and our platform handles everything automatically — content, SEO, Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini, reviews, and more — every single day.</p>
             </div>
             <div style={{ background: '#f8f8f8', border: '2.5px solid #111', padding: '48px 40px' }}>
               <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '32px' }}>By the numbers</p>
@@ -55,7 +55,7 @@ export default function AboutPage() {
           <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', maxWidth: '700px', margin: '0 auto 48px', lineHeight: 1.8 }}>We built Traffikora to optimize for Google AND every major AI engine — Claude, ChatGPT, Gemini, Copilot, Perplexity, and more. Because that’s where your customers are searching now.</p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '32px' }}>
             {[
-              { title: 'AI Engine Optimization', desc: 'Get found on Claude, ChatGPT, Gemini, Copilot, and Perplexity — not just Google.' },
+              { title: 'Google SEO + AI Engine Optimization', desc: 'Get found on Claude, ChatGPT, Gemini, Copilot, and Perplexity — not just Google.' },
               { title: 'Full Automation', desc: 'Content, reviews, social, SEO — all handled automatically after a one-time setup.' },
               { title: 'Built for Small Business', desc: 'No agencies, no complexity, no ongoing work. Just results.' }
             ].map((item, i) => (

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Pricing — Marketing Automation for Small Businesses | Traffikora',
-  description: 'Traffikora plans start at $97/month. Social media, local SEO, Google Business Profile, and AI engine optimization — all automated. Free 7-day trial, no credit card.',
+  description: 'Traffikora plans start at $97/month. Social media, local SEO, Google Business Profile, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini — all automated. Free 7-day trial, no credit card.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             "name": "Traffikora",
             "url": "https://www.traffikora.com",
             "applicationCategory": "BusinessApplication",
-            "description": "Traffikora is an AI-powered marketing automation platform for small businesses. Plans start at $97/month. Automates social media, local SEO, Google Business Profile, and AI engine optimization.",
+            "description": "Traffikora is an AI-powered marketing automation platform for small businesses. Plans start at $97/month. Automates social media, local SEO, Google Business Profile, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.",
             "offers": [
               { "@type": "Offer", "name": "Starter", "price": "97", "priceCurrency": "USD" },
               { "@type": "Offer", "name": "Pro", "price": "197", "priceCurrency": "USD" },

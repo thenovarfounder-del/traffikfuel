@@ -35,7 +35,7 @@ export default function VendastaComparePage() {
               <tbody>
                 {[
                   ['Built for small businesses', '✅', '❌'],
-                  ['AI engine optimization (ChatGPT, Gemini)', '✅', '❌'],
+                  ['Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini (ChatGPT, Gemini)', '✅', '❌'],
                   ['Fully automated — no manual work', '✅', '❌'],
                   ['Google Business Profile automation', '✅', '✅'],
                   ['Review generation', '✅', '✅'],

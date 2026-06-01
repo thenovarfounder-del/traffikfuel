@@ -49,12 +49,12 @@ export default function WhyTraffikoraPage() {
           <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', textAlign: 'center', maxWidth: '700px', margin: '0 auto 56px' }}>HubSpot, Hootsuite, Mailchimp, SEMrush — these are great tools built for a world that is rapidly changing. None of them were designed to optimize your presence across AI engines. Traffikora was.</p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
             {[
-              { tool: 'HubSpot', problem: 'Built for enterprise sales teams. Overwhelming for small businesses. No AI engine optimization. Starts at $800+/month for real features.' },
+              { tool: 'HubSpot', problem: 'Built for enterprise sales teams. Overwhelming for small businesses. No Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini. Starts at $800+/month for real features.' },
               { tool: 'Hootsuite', problem: 'A social media scheduler. Does not write your content, does not touch Google, does not do SEO, and has zero AI engine strategy.' },
               { tool: 'Mailchimp', problem: 'An email newsletter tool. Completely ignores Google, social media automation, local SEO, and AI engine visibility.' },
               { tool: 'SEMrush', problem: 'A powerful SEO research tool for experts. Requires significant marketing knowledge to use. Does not automate or publish anything for you.' },
               { tool: 'Yext', problem: 'Manages your business listings across directories. Does not create content, does not post to social media, and does not optimize for AI engines.' },
-              { tool: 'Later', problem: 'A social media scheduling tool. You still have to create every piece of content yourself. No SEO, no Google, no AI engine optimization.' },
+              { tool: 'Later', problem: 'A social media scheduling tool. You still have to create every piece of content yourself. No SEO, no Google, no Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.' },
             ].map((item) => (
               <div key={item.tool} style={{ background: '#fff', border: '2.5px solid #111', padding: '28px' }}>
                 <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, marginBottom: '10px', color: '#111' }}>{item.tool}</h3>

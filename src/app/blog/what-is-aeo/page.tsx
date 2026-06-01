@@ -15,7 +15,7 @@ export default function WhatIsAEO() {
 
       <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Traffikora Blog</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '52px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>What Is AI Engine Optimization and Why It Matters for Your Business.</h1>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '52px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>What Is Google SEO + AI Engine Optimization and Why It Matters for Your Business.</h1>
         <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto 40px' }}>SEO got your business on Google. AEO gets your business recommended by ChatGPT, Claude, Gemini, and every major AI engine.</p>
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#888' }}>7 min read · Traffikora Team</p>
       </section>
@@ -31,11 +31,11 @@ export default function WhatIsAEO() {
 
           <p style={{ marginTop: '28px' }}>They get a direct answer. A recommendation. A name. And they trust it.</p>
 
-          <p style={{ marginTop: '28px' }}>If your business is not optimized to appear in those AI-generated answers, you are invisible to this growing segment of buyers — no matter how well you rank on Google. That is the problem AI Engine Optimization solves.</p>
+          <p style={{ marginTop: '28px' }}>If your business is not optimized to appear in those AI-generated answers, you are invisible to this growing segment of buyers — no matter how well you rank on Google. That is the problem Google SEO + AI Engine Optimization solves.</p>
 
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '34px', fontWeight: 700, color: '#111', margin: '56px 0 20px' }}>What Is AI Engine Optimization (AEO)?</h2>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '34px', fontWeight: 700, color: '#111', margin: '56px 0 20px' }}>What Is Google SEO + AI Engine Optimization (AEO)?</h2>
 
-          <p>AI Engine Optimization — AEO — is the practice of structuring your business’s online presence so that AI-powered search engines can understand, trust, and recommend your business to users.</p>
+          <p>Google SEO + AI Engine Optimization — AEO — is the practice of structuring your business’s online presence so that AI-powered search engines can understand, trust, and recommend your business to users.</p>
 
           <p style={{ marginTop: '28px' }}>It is the next evolution beyond traditional SEO. Where SEO focuses on ranking signals that Google’s algorithm reads — keywords, backlinks, page speed — AEO focuses on trust signals that AI engines use to determine which businesses to recommend.</p>
 

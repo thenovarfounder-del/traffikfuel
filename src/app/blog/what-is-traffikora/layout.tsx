@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'What Is Traffikora? The Marketing Platform That Never Stops Working | Traffikora',
-  description: 'Traffikora is an automated marketing platform for small businesses. Connect once and it handles social media, local SEO, Google Business Profile, and AI engine optimization forever.',
+  description: 'Traffikora is an automated marketing platform for small businesses. Connect once and it handles social media, local SEO, Google Business Profile, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini forever.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {

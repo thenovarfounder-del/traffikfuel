@@ -43,7 +43,7 @@ export default function WhatIsTraffikora() {
 
           <p style={{ marginTop: '28px' }}>More and more people are skipping Google entirely and going straight to AI engines to find businesses, get recommendations, and make decisions. When someone asks ChatGPT “What’s the best HVAC company near me?” or asks Claude “Who is a good dentist in Tampa?” — your business either shows up or it doesn’t.</p>
 
-          <p style={{ marginTop: '28px' }}>Traffikora is the only platform built to optimize your presence for both — Google AND every major AI engine. We call it AI Engine Optimization (AEO), and it’s the single biggest marketing advantage a small business can have right now.</p>
+          <p style={{ marginTop: '28px' }}>Traffikora is the only platform built to optimize your presence for both — Google AND every major AI engine. We call it Google SEO + AI Engine Optimization (AEO), and it’s the single biggest marketing advantage a small business can have right now.</p>
 
           <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '34px', fontWeight: 700, color: '#111', margin: '56px 0 20px' }}>What Traffikora Actually Does</h2>
 

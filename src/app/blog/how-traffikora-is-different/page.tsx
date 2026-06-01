@@ -27,7 +27,7 @@ export default function BlogPost() {
           </div>
           <div style={{ marginBottom: '48px' }}>
             <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, color: '#111', marginBottom: '16px' }}>Traffikora is a complete marketing machine</h2>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.8 }}>Traffikora combines SEO, AI engine optimization, Google Business Profile management, social media automation, review generation, and content marketing into one platform. Connect once. It runs everything. Forever.</p>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', lineHeight: 1.8 }}>Traffikora combines SEO, Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini, Google Business Profile management, social media automation, review generation, and content marketing into one platform. Connect once. It runs everything. Forever.</p>
           </div>
           <div style={{ marginBottom: '48px' }}>
             <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, color: '#111', marginBottom: '16px' }}>The AI engine advantage</h2>

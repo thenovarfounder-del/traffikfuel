@@ -26,7 +26,7 @@ export default function Footer() {
             <div style={{ marginBottom: '10px' }}><Link href="/features" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>All Features</Link></div>
             <div style={{ marginBottom: '10px' }}><Link href="/features" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Social Media Automation</Link></div>
             <div style={{ marginBottom: '10px' }}><Link href="/features" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Google SEO Automation</Link></div>
-            <div style={{ marginBottom: '10px' }}><Link href="/features" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>AI Engine Optimization</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/features" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Google SEO + AI Engine Optimization</Link></div>
             <div style={{ marginBottom: '10px' }}><Link href="/features" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Blog Automation</Link></div>
           </div>
           <div>

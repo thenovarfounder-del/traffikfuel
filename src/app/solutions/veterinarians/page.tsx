@@ -47,7 +47,7 @@ export default function VeterinariansPage() {
             {[
               { title: 'Google Business Profile', body: 'Automated posts, pet care tips, and practice updates keep your profile active and ranking in local search.' },
               { title: 'Review Generation', body: 'Automated review requests go out after appointments. More 5-star reviews mean more new pet owners trust your practice.' },
-              { title: 'AI Engine Optimization', body: 'Your practice gets optimized to appear when pet owners ask ChatGPT, Gemini, or Perplexity for vet recommendations nearby.' },
+              { title: 'Google SEO + AI Engine Optimization', body: 'Your practice gets optimized to appear when pet owners ask ChatGPT, Gemini, or Perplexity for vet recommendations nearby.' },
               { title: 'Social Media Content', body: 'Pet care tips, seasonal reminders, and staff highlights posted to Facebook and Instagram automatically.' },
               { title: 'Local SEO', body: 'Ongoing optimization so you rank when people search for veterinarians, animal hospitals, or pet clinics in your area.' },
               { title: 'Reputation Monitoring', body: 'Every review tracked across Google and Facebook. Stay informed and respond fast to protect your practice’s reputation.' },

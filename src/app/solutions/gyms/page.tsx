@@ -47,7 +47,7 @@ export default function GymsPage() {
             {[
               { title: 'Google Business Profile', body: 'Automated posts, class schedules, and promos keep your profile fresh and ranking at the top of local search.' },
               { title: 'Review Generation', body: 'Automated requests go out to members after milestones and check-ins. More reviews mean more new signups.' },
-              { title: 'AI Engine Optimization', body: 'Your gym gets optimized to appear when people ask ChatGPT, Gemini, or Perplexity for gym recommendations nearby.' },
+              { title: 'Google SEO + AI Engine Optimization', body: 'Your gym gets optimized to appear when people ask ChatGPT, Gemini, or Perplexity for gym recommendations nearby.' },
               { title: 'Social Media Content', body: 'Workout tips, member spotlights, class announcements, and promotions posted to Facebook and Instagram automatically.' },
               { title: 'Local SEO', body: 'Ongoing optimization so you rank when people in your area search for gyms, fitness centers, or personal training.' },
               { title: 'Reputation Monitoring', body: 'Every review tracked across Google and Facebook. Get alerted instantly so you can respond and protect your brand.' },

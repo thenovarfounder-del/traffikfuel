@@ -35,7 +35,7 @@ export default function ReputationComComparePage() {
               <tbody>
                 {[
                   ['Built for small businesses', '✅', '❌'],
-                  ['AI engine optimization (ChatGPT, Gemini)', '✅', '❌'],
+                  ['Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini (ChatGPT, Gemini)', '✅', '❌'],
                   ['Fully automated — no manual work', '✅', '❌'],
                   ['Google Business Profile automation', '✅', '✅'],
                   ['Review generation', '✅', '✅'],
@@ -64,7 +64,7 @@ export default function ReputationComComparePage() {
             {[
               { title: 'Priced for Small Business', body: 'Reputation.com targets enterprise clients with custom pricing in the thousands per month. Traffikora starts at $97/month.' },
               { title: 'AI Search Built In', body: 'Traffikora optimizes your business for ChatGPT, Gemini, Perplexity, and every major AI engine. Reputation.com does not.' },
-              { title: 'Full Marketing Automation', body: 'Reputation.com focuses on review management. Traffikora also handles Google, social media, local SEO, and AI engine optimization.' },
+              { title: 'Full Marketing Automation', body: 'Reputation.com focuses on review management. Traffikora also handles Google, social media, local SEO, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.' },
             ].map((card) => (
               <div key={card.title} style={{ border: '2.5px solid #111', padding: '32px', background: '#fff' }}>
                 <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px' }}>{card.title}</h3>

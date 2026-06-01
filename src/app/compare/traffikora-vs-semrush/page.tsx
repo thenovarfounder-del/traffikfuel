@@ -57,7 +57,7 @@ export default function VsSemrushPage() {
                     ["Local Citation Building", "Yes -- automated", "Reports issues, you fix them"],
                     ["Content Creation", "Yes -- daily social and weekly blog", "No"],
                     ["Google Business Profile Management", "Yes -- automated", "No"],
-                    ["AI Engine Optimization", "Yes -- built in", "No"],
+                    ["Google SEO + AI Engine Optimization", "Yes -- built in", "No"],
                     ["Social Media Automation", "Yes -- 9+ platforms", "No"],
                     ["Review Request Automation", "Yes", "No"],
                     ["Requires SEO Expertise to Use", "No", "Yes"],
@@ -85,8 +85,8 @@ export default function VsSemrushPage() {
         <section style={{ background: "#1a1a1a", padding: "60px 24px" }}>
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "2rem", marginBottom: "24px" }}>Why This Comparison Matters More in 2026</h2>
-            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>SEO is expanding beyond Google. AI engines like ChatGPT, Perplexity, and Gemini now handle a significant share of local search queries -- and they use different signals than traditional Google SEO. Semrush has no AI engine optimization features. Its product is built around Google search data, which remains important but is no longer the complete picture for local businesses.</p>
-            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Traffikora builds your visibility across both traditional local SEO and AI engine optimization simultaneously. Every piece of content, every citation, and every structured data signal strengthens your presence on Google and increases your likelihood of appearing in AI-generated local recommendations. Local businesses that cover both channels now are building a durable visibility advantage that pure SEO research tools cannot replicate.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>SEO is expanding beyond Google. AI engines like ChatGPT, Perplexity, and Gemini now handle a significant share of local search queries -- and they use different signals than traditional Google SEO. Semrush has no Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini features. Its product is built around Google search data, which remains important but is no longer the complete picture for local businesses.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Traffikora builds your visibility across both traditional local SEO and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini simultaneously. Every piece of content, every citation, and every structured data signal strengthens your presence on Google and increases your likelihood of appearing in AI-generated local recommendations. Local businesses that cover both channels now are building a durable visibility advantage that pure SEO research tools cannot replicate.</p>
           </div>
         </section>
         <section style={{ background: "#111111", padding: "60px 24px" }}>
@@ -108,7 +108,7 @@ export default function VsSemrushPage() {
         </section>
         <section style={{ background: "#E8610A", padding: "60px 24px", textAlign: "center" }}>
           <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "16px" }}>Stop Researching. Start Ranking.</h2>
-          <p style={{ color: "#ffffff", fontSize: "1.1rem", maxWidth: "560px", margin: "0 auto 32px" }}>Traffikora executes your local SEO automatically -- citations, content, Google profile, and AI engine optimization -- every week without you touching it.</p>
+          <p style={{ color: "#ffffff", fontSize: "1.1rem", maxWidth: "560px", margin: "0 auto 32px" }}>Traffikora executes your local SEO automatically -- citations, content, Google profile, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini -- every week without you touching it.</p>
           <Link href="/signup" style={{ background: "#ffffff", color: "#E8610A", padding: "16px 36px", borderRadius: "6px", fontWeight: "700", textDecoration: "none", fontSize: "1.05rem" }}>Start Free — No Card Needed</Link>
           <p style={{ color: "#ffffff", marginTop: "16px", fontSize: "0.9rem", opacity: 0.85 }}>No no credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.</p>
         </section>

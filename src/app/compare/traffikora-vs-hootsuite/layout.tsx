@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             "name": "Traffikora",
             "url": "https://www.traffikora.com",
             "applicationCategory": "BusinessApplication",
-            "description": "Traffikora is an AI-powered marketing automation platform for small businesses — a powerful alternative to Hootsuite with SEO, AI engine optimization, and full content automation.",
+            "description": "Traffikora is an AI-powered marketing automation platform for small businesses — a powerful alternative to Hootsuite with SEO, Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini, and full content automation.",
             "offers": {
               "@type": "Offer",
               "price": "97",

@@ -47,7 +47,7 @@ export default function TherapistsPage() {
             {[
               { title: 'Google Business Profile', body: 'Consistent posts and updates keep your profile active and ranking higher in local search results.' },
               { title: 'Review Generation', body: 'Automated follow-ups encourage satisfied clients to leave reviews, building trust with future clients.' },
-              { title: 'AI Engine Optimization', body: 'Your practice gets optimized to appear when people ask ChatGPT, Gemini, or Perplexity for therapist recommendations.' },
+              { title: 'Google SEO + AI Engine Optimization', body: 'Your practice gets optimized to appear when people ask ChatGPT, Gemini, or Perplexity for therapist recommendations.' },
               { title: 'Social Media Content', body: 'Thoughtful mental health content, tips, and practice updates posted to Facebook and Instagram automatically.' },
               { title: 'Local SEO', body: 'Keyword optimization so you rank when people in your area search for therapy or counseling services.' },
               { title: 'Reputation Monitoring', body: 'Every review tracked across platforms. Stay informed and respond quickly to protect your reputation.' },

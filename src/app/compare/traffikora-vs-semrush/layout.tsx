@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Traffikora vs Semrush — Automate vs Analyze | Traffikora',
-  description: 'Semrush shows you what to do. Traffikora does it automatically. Compare SEO automation, content creation, and AI engine optimization. Start free trial.',
+  description: 'Semrush shows you what to do. Traffikora does it automatically. Compare SEO automation, content creation, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini. Start free trial.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {

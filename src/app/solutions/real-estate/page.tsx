@@ -54,7 +54,7 @@ export default function RealEstatePage() {
                 ["Daily Social Content", "Branded posts about your listings, market insights, and local expertise published every day to Facebook, Instagram, YouTube, and more -- without you writing a word."],
                 ["Google Business Profile Management", "Automated GBP posts, Q&A updates, and profile optimization that keeps your listing active and ranking when buyers search for agents near them."],
                 ["Local SEO for Realtors", "Citation building, schema markup, and keyword content targeting your specific market -- pushing your name up Google rankings for high-intent buyer and seller searches."],
-                ["AI Engine Optimization", "Structured content and entity signals that get your name recommended when buyers ask ChatGPT, Perplexity, or Gemini to suggest a real estate agent in your city."],
+                ["Google SEO + AI Engine Optimization", "Structured content and entity signals that get your name recommended when buyers ask ChatGPT, Perplexity, or Gemini to suggest a real estate agent in your city."],
                 ["Weekly Blog Content", "SEO blog posts about your market, neighborhoods, and buying process published to your website automatically -- building long-term organic traffic and authority."],
                 ["Automated Review Requests", "Review campaigns sent to past clients at the right moment -- growing your star rating and building the social proof that converts new prospects into signed clients."],
                 ["Consistent Presence During Busy Periods", "Your marketing keeps running even when you are in back-to-back closings. No more feast-or-famine visibility cycles."],

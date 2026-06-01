@@ -89,7 +89,7 @@ export default function SmallBusinessesPage() {
                 ["Google Business Profile Management", "Automated posts, Q&A updates, and review request campaigns that keep your GBP active and ranking in the local map pack."],
                 ["Local SEO Automation", "Citation building, on-page schema markup, and keyword content that pushes your business up Google rankings for searches in your city."],
                 ["Weekly Blog Posts", "SEO-optimized articles published directly to your website every week, building organic traffic without you writing a single word."],
-                ["AI Engine Optimization", "Structured content and entity signals that make your business visible when people ask ChatGPT, Perplexity, or Gemini for recommendations near them."],
+                ["Google SEO + AI Engine Optimization", "Structured content and entity signals that make your business visible when people ask ChatGPT, Perplexity, or Gemini for recommendations near them."],
                 ["Review Automation", "Automated campaigns that ask your happy customers for reviews at exactly the right moment -- growing your star rating on autopilot."],
                 ["Performance Reporting", "A clear dashboard showing your visibility growth, content published, and rankings improvement -- so you always know it is working."],
                 ["One Dashboard, Everything Connected", "Your social, SEO, GBP, blog, and AI visibility all managed from a single platform. No juggling five tools."]
@@ -113,7 +113,7 @@ export default function SmallBusinessesPage() {
               Search behavior has fundamentally changed. In 2026, 73% of local searches now happen through AI engines like ChatGPT, Perplexity, and Google Gemini -- not just traditional Google search. When someone asks "what is the best auto shop near me" or "find a reliable plumber in [city]," they are asking an AI, not typing into a search bar. If your business is not optimized for AI engine visibility, you are invisible to the fastest-growing segment of local search traffic.
             </p>
             <p style={{ color: "#cccccc", lineHeight: "1.8" }}>
-              Traffikora is built for this new reality. While other tools are still focused on traditional SEO and social scheduling, Traffikora combines local SEO automation with AI engine optimization -- making sure your business gets cited and recommended whether a customer is searching on Google or asking ChatGPT. Small businesses that adopt AI marketing automation now are building a compounding visibility advantage that will be very hard for slower competitors to close.
+              Traffikora is built for this new reality. While other tools are still focused on traditional SEO and social scheduling, Traffikora combines local SEO automation with Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini -- making sure your business gets cited and recommended whether a customer is searching on Google or asking ChatGPT. Small businesses that adopt AI marketing automation now are building a compounding visibility advantage that will be very hard for slower competitors to close.
             </p>
           </div>
         </section>
@@ -148,7 +148,7 @@ export default function SmallBusinessesPage() {
               "@type": "SoftwareApplication",
               "name": "Traffikora",
               "applicationCategory": "BusinessApplication",
-              "description": "Marketing automation platform for small businesses. Automates SEO, social media, Google Business Profile, and AI engine optimization.",
+              "description": "Marketing automation platform for small businesses. Automates SEO, social media, Google Business Profile, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.",
               "url": "https://www.traffikora.com",
               "offers": { "@type": "Offer", "price": "97", "priceCurrency": "USD" }
             },

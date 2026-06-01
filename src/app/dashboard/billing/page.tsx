@@ -26,7 +26,7 @@ const PLANS = [
     price: '$197',
     period: '/month',
     description: 'Full automation for serious business owners who want it all.',
-    features: ['Everything in Starter', 'TikTok + YouTube push', 'AI engine optimization', 'Reddit amplifier', 'Priority support'],
+    features: ['Everything in Starter', 'TikTok + YouTube push', 'Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini', 'Reddit amplifier', 'Priority support'],
     color: '#f97316',
     current: true
   },

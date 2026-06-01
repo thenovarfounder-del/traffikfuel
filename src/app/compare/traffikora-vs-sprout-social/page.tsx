@@ -35,7 +35,7 @@ export default function SproutSocialComparePage() {
               <tbody>
                 {[
                   ['Built for small businesses', '✅', '❌'],
-                  ['AI engine optimization (ChatGPT, Gemini)', '✅', '❌'],
+                  ['Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini (ChatGPT, Gemini)', '✅', '❌'],
                   ['Fully automated — no manual work', '✅', '❌'],
                   ['Google Business Profile automation', '✅', '❌'],
                   ['Review generation', '✅', '❌'],
@@ -63,7 +63,7 @@ export default function SproutSocialComparePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
             {[
               { title: 'No Staff Required', body: 'Traffikora runs automatically. Sprout Social still requires someone on your team to create, schedule, and manage content every week.' },
-              { title: 'Beyond Social Media', body: 'Sprout Social only handles social. Traffikora also automates Google, reviews, local SEO, and AI engine optimization.' },
+              { title: 'Beyond Social Media', body: 'Sprout Social only handles social. Traffikora also automates Google, reviews, local SEO, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.' },
               { title: 'Priced for Small Business', body: 'Sprout Social starts at hundreds per month and is priced for enterprise teams. Traffikora starts at $97/month with a free trial.' },
             ].map((card) => (
               <div key={card.title} style={{ border: '2.5px solid #111', padding: '32px', background: '#fff' }}>

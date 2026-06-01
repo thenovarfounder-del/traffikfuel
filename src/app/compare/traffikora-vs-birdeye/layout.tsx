@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Traffikora vs Birdeye: Full Comparison 2026 | Traffikora',
-  description: 'Traffikora vs Birdeye: More features, AI engine optimization, social media automation, and 3x lower price. See why local businesses choose Traffikora.',
+  description: 'Traffikora vs Birdeye: More features, Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini, social media automation, and 3x lower price. See why local businesses choose Traffikora.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             "name": "Traffikora",
             "url": "https://www.traffikora.com",
             "applicationCategory": "BusinessApplication",
-            "description": "Traffikora is an AI-powered marketing automation platform for local businesses. Automates social media, local SEO, Google Business Profile, and AI engine optimization.",
+            "description": "Traffikora is an AI-powered marketing automation platform for local businesses. Automates social media, local SEO, Google Business Profile, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.",
             "offers": {
               "@type": "Offer",
               "price": "97",

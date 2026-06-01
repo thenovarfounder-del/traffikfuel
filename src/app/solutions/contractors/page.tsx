@@ -47,7 +47,7 @@ export default function ContractorsPage() {
             {[
               { title: 'Google Business Profile', body: 'Posts, updates, and photos published automatically to keep your profile active and ranked.' },
               { title: 'Review Generation', body: 'Automated review requests sent to every customer after job completion. More 5-star reviews, less effort.' },
-              { title: 'AI Engine Optimization', body: 'Your business gets optimized to appear when homeowners ask ChatGPT, Gemini, or Perplexity for contractor recommendations.' },
+              { title: 'Google SEO + AI Engine Optimization', body: 'Your business gets optimized to appear when homeowners ask ChatGPT, Gemini, or Perplexity for contractor recommendations.' },
               { title: 'Social Media Posts', body: 'Before-and-after project photos, seasonal promotions, and local content posted to Facebook and Instagram.' },
               { title: 'Local SEO', body: 'Ongoing keyword optimization so you rank higher when people in your area search for your services.' },
               { title: 'Reputation Monitoring', body: 'Every new review tracked across Google and Facebook. You’re alerted instantly to anything negative.' },

@@ -36,7 +36,7 @@ const posts = [
   },
   {
     category: 'AI Search',
-    title: 'What Is AI Engine Optimization (AEO) and Why It Matters for Your Business.',
+    title: 'What Is Google SEO + AI Engine Optimization (AEO) and Why It Matters for Your Business.',
     excerpt: 'SEO got your business on Google. AEO gets your business recommended by ChatGPT, Claude, Gemini, and every major AI engine.',
     slug: 'what-is-aeo',
     read: '7 min read',
@@ -50,7 +50,7 @@ const posts = [
   },
   {
     category: 'AI Search',
-    title: 'What Is AI Engine Optimization?',
+    title: 'What Is Google SEO + AI Engine Optimization?',
     excerpt: 'A deep dive into AEO — the new discipline that gets your business recommended by AI-powered search engines.',
     slug: 'what-is-ai-engine-optimization',
     read: '5 min read',
@@ -112,7 +112,7 @@ export default function Blog() {
       <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Traffikora Blog</p>
         <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Marketing insights for small businesses that want to grow.</h1>
-        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '580px', margin: '0 auto' }}>Practical guides on local SEO, AI engine optimization, social media, and automated marketing.</p>
+        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '580px', margin: '0 auto' }}>Practical guides on local SEO, Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini, social media, and automated marketing.</p>
       </section>
 
       <section style={{ background: '#fff', padding: '80px 32px' }}>

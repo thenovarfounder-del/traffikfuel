@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             "name": "Traffikora",
             "url": "https://www.traffikora.com",
             "applicationCategory": "BusinessApplication",
-            "description": "Traffikora is a full marketing automation platform — a powerful and affordable alternative to Yext with SEO, social media, and AI engine optimization.",
+            "description": "Traffikora is a full marketing automation platform — a powerful and affordable alternative to Yext with SEO, social media, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.",
             "offers": { "@type": "Offer", "price": "97", "priceCurrency": "USD" },
             "operatingSystem": "Web",
             "provider": { "@type": "Organization", "name": "Traffikora", "url": "https://www.traffikora.com" }

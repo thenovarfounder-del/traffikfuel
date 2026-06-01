@@ -25,7 +25,7 @@ export default function VsHubspotPage() {
               <li>Optimizes your Google Business Profile with zero manual effort</li>
               <li>Builds local SEO citations and schema markup automatically</li>
               <li>Publishes weekly SEO blog posts to your website</li>
-              <li>Delivers AI engine optimization for ChatGPT, Perplexity, and Gemini visibility</li>
+              <li>Delivers Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini for ChatGPT, Perplexity, and Gemini visibility</li>
               <li>Sends automated review request campaigns to grow your star rating</li>
             </ul>
           </div>
@@ -34,7 +34,7 @@ export default function VsHubspotPage() {
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "24px" }}>HubSpot Was Not Built for Your Business</h2>
             <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>HubSpot is one of the most powerful marketing and sales platforms in the world. It is also built entirely for B2B companies with dedicated sales teams, marketing managers, and developers to implement and maintain it. The starter plan begins around $800 per month, and to access the features most businesses actually need, you are looking at $1,600 to $3,200 per month or more.</p>
-            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>For a local restaurant, auto repair shop, chiropractic practice, or real estate agent, HubSpot is the wrong tool entirely. It has no Google Business Profile automation. It has no local SEO citation building. It has no AI engine optimization. It is a CRM and inbound marketing platform designed for companies with sales pipelines, lead nurturing workflows, and marketing operations staff -- none of which describe how a small local business actually operates.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>For a local restaurant, auto repair shop, chiropractic practice, or real estate agent, HubSpot is the wrong tool entirely. It has no Google Business Profile automation. It has no local SEO citation building. It has no Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini. It is a CRM and inbound marketing platform designed for companies with sales pipelines, lead nurturing workflows, and marketing operations staff -- none of which describe how a small local business actually operates.</p>
             <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Most small businesses that try HubSpot end up using 10% of its features, paying for 100% of its cost, and spending hours every week trying to make an enterprise tool fit a local business use case it was never designed for. That is not a HubSpot failure -- it is a category mismatch.</p>
           </div>
         </section>
@@ -56,7 +56,7 @@ export default function VsHubspotPage() {
                     ["Automated Social Media Publishing", "Yes -- daily, across 9+ platforms", "Manual -- you write and schedule"],
                     ["Google Business Profile Automation", "Yes -- fully automated", "No"],
                     ["Local SEO Citation Building", "Yes -- automated", "No"],
-                    ["AI Engine Optimization", "Yes -- built in", "No"],
+                    ["Google SEO + AI Engine Optimization", "Yes -- built in", "No"],
                     ["Automated Blog Content", "Yes -- weekly SEO posts", "No -- requires your content team"],
                     ["Review Request Automation", "Yes -- automated campaigns", "Limited"],
                     ["Setup Time", "Under 30 minutes", "Weeks to months"],
@@ -85,7 +85,7 @@ export default function VsHubspotPage() {
         <section style={{ background: "#1a1a1a", padding: "60px 24px" }}>
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "2rem", marginBottom: "24px" }}>Why This Comparison Matters More in 2026</h2>
-            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Local search has changed significantly. AI engines now handle a large and growing share of the queries that used to go to Google search. HubSpot has no roadmap for local AI engine optimization -- it is not part of their product category. Traffikora is built around it. For local businesses competing in 2026, AI engine visibility is not optional -- it is the new frontier of local search.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Local search has changed significantly. AI engines now handle a large and growing share of the queries that used to go to Google search. HubSpot has no roadmap for local Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini -- it is not part of their product category. Traffikora is built around it. For local businesses competing in 2026, AI engine visibility is not optional -- it is the new frontier of local search.</p>
             <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Choosing between Traffikora and HubSpot as a local business is not really a close comparison. They serve fundamentally different markets. Traffikora is the right tool for local businesses that want automated marketing, better Google rankings, more reviews, and AI engine visibility -- delivered without complexity, without a large team, and without enterprise pricing.</p>
           </div>
         </section>

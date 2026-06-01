@@ -52,7 +52,7 @@ const PLANS = [
       'AI Agents — Content Strategist, Creator, Publisher & Monitor run daily at 6am automatically',
       'Auto Mode — turn it on and never touch it again',
       'TikTok + YouTube Shorts publishing',
-      'AI Engine Optimization — get found on ChatGPT, Claude, Gemini & Perplexity',
+      'Google SEO + Google SEO + AI Engine Optimization — rank on Google, Bing, ChatGPT, Claude, Gemini & Perplexity',
       'Advanced performance analytics',
       'Reddit amplifier',
       'Priority email support'

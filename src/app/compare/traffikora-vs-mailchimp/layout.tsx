@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Traffikora vs Mailchimp: Full Comparison | Traffikora',
-  description: 'Traffikora vs Mailchimp compared. See why local businesses replace Mailchimp with Traffikora for automated SEO, social media, and AI engine optimization.',
+  description: 'Traffikora vs Mailchimp compared. See why local businesses replace Mailchimp with Traffikora for automated SEO, social media, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             "name": "Traffikora",
             "url": "https://www.traffikora.com",
             "applicationCategory": "BusinessApplication",
-            "description": "Traffikora is an AI-powered marketing automation platform for small businesses. Automates social media, local SEO, Google Business Profile, and AI engine optimization.",
+            "description": "Traffikora is an AI-powered marketing automation platform for small businesses. Automates social media, local SEO, Google Business Profile, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.",
             "offers": {
               "@type": "Offer",
               "price": "97",

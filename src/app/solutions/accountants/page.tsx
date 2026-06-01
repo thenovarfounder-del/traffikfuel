@@ -47,7 +47,7 @@ export default function AccountantsPage() {
             {[
               { title: 'Google Business Profile', body: 'Automated posts and updates keep your profile active and ranking higher when people search for accountants locally.' },
               { title: 'Review Generation', body: 'Automated review requests sent to clients after tax season and engagements. More reviews build instant credibility.' },
-              { title: 'AI Engine Optimization', body: 'Your firm gets optimized to appear when business owners ask ChatGPT, Gemini, or Perplexity for accountant recommendations.' },
+              { title: 'Google SEO + AI Engine Optimization', body: 'Your firm gets optimized to appear when business owners ask ChatGPT, Gemini, or Perplexity for accountant recommendations.' },
               { title: 'Social Media Content', body: 'Tax tips, deadline reminders, and financial advice posted to Facebook and LinkedIn automatically.' },
               { title: 'Local SEO', body: 'Ongoing keyword optimization so you rank when people search for accountants, CPAs, or bookkeepers in your area.' },
               { title: 'Reputation Monitoring', body: 'Every review tracked across platforms. Stay on top of your online reputation without checking manually.' },

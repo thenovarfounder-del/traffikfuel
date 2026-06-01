@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Restaurant Marketing Automation — Fill More Tables | Traffikora',
-  description: 'Traffikora automates Google SEO, TikTok, Instagram, and AI engine optimization for restaurants. Get more diners without lifting a finger. Start free trial.',
+  description: 'Traffikora automates Google SEO, TikTok, Instagram, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini for restaurants. Get more diners without lifting a finger. Start free trial.',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             "name": "Traffikora",
             "url": "https://www.traffikora.com",
             "applicationCategory": "BusinessApplication",
-            "description": "Traffikora automates marketing for restaurants — Google SEO, social media, AI engine optimization, and Google Business Profile.",
+            "description": "Traffikora automates marketing for restaurants — Google SEO, social media, Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini, and Google Business Profile.",
             "offers": { "@type": "Offer", "price": "97", "priceCurrency": "USD" },
             "operatingSystem": "Web",
             "provider": { "@type": "Organization", "name": "Traffikora", "url": "https://www.traffikora.com" }

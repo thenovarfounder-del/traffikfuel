@@ -28,7 +28,7 @@ export default function LawyersPage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '32px' }}>
             {[
-              { title: 'AI Engine Optimization', desc: 'Get found on Claude, ChatGPT, Gemini, Copilot, and Perplexity — not just Google.' },
+              { title: 'Google SEO + AI Engine Optimization', desc: 'Get found on Claude, ChatGPT, Gemini, Copilot, and Perplexity — not just Google.' },
               { title: 'Google Business Profile', desc: 'Automated posts, updates, and review responses on your Google listing every day.' },
               { title: 'Review Generation', desc: 'Automatically request 5-star reviews from happy customers across every platform.' },
               { title: 'Social Media Automation', desc: 'Consistent branded content posted to Facebook and Instagram automatically.' },

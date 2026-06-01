@@ -39,9 +39,9 @@ export default function WhyAIEngineOptimization() {
 
           <p style={{ marginTop: '28px' }}>This is how a growing percentage of your potential customers are finding businesses right now. And if your business isn’t optimized to appear in those AI-generated answers, you are invisible to them — no matter how well you rank on Google.</p>
 
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '34px', fontWeight: 700, color: '#111', margin: '56px 0 20px' }}>What Is AI Engine Optimization (AEO)?</h2>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '34px', fontWeight: 700, color: '#111', margin: '56px 0 20px' }}>What Is Google SEO + AI Engine Optimization (AEO)?</h2>
 
-          <p>AI Engine Optimization — AEO — is the practice of making your business visible and recommendable inside AI-powered search engines. It is the next evolution of SEO, and it works differently.</p>
+          <p>Google SEO + AI Engine Optimization — AEO — is the practice of making your business visible and recommendable inside AI-powered search engines. It is the next evolution of SEO, and it works differently.</p>
 
           <p style={{ marginTop: '28px' }}>Traditional SEO is about keywords, backlinks, and ranking signals that Google’s algorithm reads. AEO is about structured, trustworthy, consistent information that AI engines can understand, verify, and confidently recommend to users.</p>
 
@@ -79,7 +79,7 @@ export default function WhyAIEngineOptimization() {
 
           <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '34px', fontWeight: 700, color: '#111', margin: '56px 0 20px' }}>The Window Is Open Right Now</h2>
 
-          <p>Here is the reality: most small businesses have not thought about AI engine optimization yet. Most of your competitors haven’t either. That means right now — today — there is a real opportunity to establish your business as the recommended option in your category and city before everyone else catches on.</p>
+          <p>Here is the reality: most small businesses have not thought about Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini yet. Most of your competitors haven’t either. That means right now — today — there is a real opportunity to establish your business as the recommended option in your category and city before everyone else catches on.</p>
 
           <p style={{ marginTop: '28px' }}>That window will not stay open forever. AI search is growing fast. The businesses that move now will have a compounding advantage that gets harder to overcome over time.</p>
 

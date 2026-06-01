@@ -7,7 +7,7 @@ import Footer from '@/components/Footer'
 
 export default function VsPage() {
   const rows = [
-    { feature: 'AI Engine Optimization (ChatGPT, Claude, Gemini)', traffikora: true, competitor: false },
+    { feature: 'Google SEO + AI Engine Optimization (ChatGPT, Claude, Gemini)', traffikora: true, competitor: false },
     { feature: 'Google Business Profile Automation', traffikora: true, competitor: false },
     { feature: 'Automated Review Generation', traffikora: true, competitor: false },
     { feature: 'Social Media Automation', traffikora: true, competitor: true },
@@ -61,7 +61,7 @@ export default function VsPage() {
 
           <div style={{ textAlign: 'center' }}>
             <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '36px', fontWeight: 900, color: '#111', marginBottom: '16px' }}>The bottom line</h2>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', maxWidth: '640px', margin: '0 auto 40px', lineHeight: 1.8 }}>Constant Contact does some things well. But it wasn’t built for small businesses who need everything automated in one place — including AI engine optimization. Traffikora was.</p>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', maxWidth: '640px', margin: '0 auto 40px', lineHeight: 1.8 }}>Constant Contact does some things well. But it wasn’t built for small businesses who need everything automated in one place — including Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini. Traffikora was.</p>
             <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #111', display: 'inline-block' }}>Try Traffikora Free for 7 Days</Link>
           </div>
         </div>
