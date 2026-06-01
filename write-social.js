@@ -1,19 +1,36 @@
 const fs = require('fs');
+const path = require('path');
 
-const filePath = 'C:\\Users\\randy\\traffikfuel\\src\\app\\why-traffikora\\page.tsx';
-let content = fs.readFileSync(filePath, 'utf8');
+const solutionsDir = 'C:\\Users\\randy\\traffikfuel\\src\\app\\solutions';
+let fixedCount = 0;
 
-// Fix duplicate "Free Free"
-content = content.replace('Start Free Free Today', 'Start Free Today');
+function fixFolder(dir) {
+  const items = fs.readdirSync(dir);
+  for (const item of items) {
+    const fullPath = path.join(dir, item);
+    const stat = fs.statSync(fullPath);
+    if (stat.isDirectory()) {
+      fixFolder(fullPath);
+    } else if (item === 'page.tsx') {
+      let content = fs.readFileSync(fullPath, 'utf8');
+      let changed = false;
+      if (content.includes('No no credit card')) {
+        content = content.replace(/No no credit card/g, 'No credit card');
+        changed = true;
+      }
+      if (content.includes('7-day trial') || content.includes('7 day trial')) {
+        content = content.replace(/7-day trial/g, 'free plan');
+        content = content.replace(/7 day trial/g, 'free plan');
+        changed = true;
+      }
+      if (changed) {
+        fs.writeFileSync(fullPath, content, 'utf8');
+        fixedCount++;
+        console.log('Fixed:', fullPath);
+      }
+    }
+  }
+}
 
-// Fix 7-day trial ref
-content = content.replace(
-  'Free 7-day trial. No no credit card required. Cancel anytime.',
-  'Free plan available. No credit card required. Cancel anytime.'
-);
-
-// Fix "No no credit card" if it appears elsewhere
-content = content.replace(/No no credit card/g, 'No credit card');
-
-fs.writeFileSync(filePath, content, 'utf8');
-console.log('SUCCESS: why-traffikora page fixed');
+fixFolder(solutionsDir);
+console.log('Total files fixed:', fixedCount);
