@@ -71,7 +71,7 @@ body{background:#fff;color:#111;font-family:'DM Sans',sans-serif;font-weight:300
 .hplat{background:#1a1a1a;border:1px solid #252525;border-radius:8px;padding:10px 14px}
 .hplat-lbl{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px}
 .hchips{display:flex;gap:4px;flex-wrap:wrap}
-.hchip{font-size:10px;background:#222;border:1px solid #333;color:#999;padding:3px 8px;border-radius:3px}
+.hchip{font-size:10px;background:#2a2a2a;border:1px solid #555;color:#ffffff;padding:3px 8px;border-radius:3px}
 .demo-btn{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:10px 16px;cursor:pointer;text-decoration:none}
 .demo-play{width:26px;height:26px;border-radius:50%;background:#E8610A;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;flex-shrink:0}
 .demo-lbl{font-size:12px;color:#ccc;font-weight:400}
@@ -79,7 +79,7 @@ body{background:#fff;color:#111;font-family:'DM Sans',sans-serif;font-weight:300
 .powered{background:#090909;border-top:1px solid #1a1a1a;padding:10px 40px;display:flex;align-items:center;gap:14px}
 .powered-lbl{font-size:10px;color:#555;text-transform:uppercase;letter-spacing:.12em;white-space:nowrap}
 .powered-logos{display:flex;gap:7px}
-.powered-logo{font-size:10px;color:#666;padding:4px 10px;border:1px solid #2a2a2a;border-radius:3px}
+.powered-logo{font-size:10px;color:#cccccc;padding:4px 10px;border:1px solid #555;border-radius:3px}
 .industry-section{background:#f7f7f7;border-bottom:2.5px solid #111;border-top:2.5px solid #111;padding:32px 40px}
 .section-label{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#E8610A;display:block;margin-bottom:8px}
 .industry-head{text-align:center;margin-bottom:22px}
