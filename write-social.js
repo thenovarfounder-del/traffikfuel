@@ -1,31 +1,19 @@
 const fs = require('fs');
 
-const filePath = 'C:\\Users\\randy\\traffikfuel\\src\\components\\Nav.tsx';
+const filePath = 'C:\\Users\\randy\\traffikfuel\\src\\app\\why-traffikora\\page.tsx';
 let content = fs.readFileSync(filePath, 'utf8');
 
-// Add usePathname import
+// Fix duplicate "Free Free"
+content = content.replace('Start Free Free Today', 'Start Free Today');
+
+// Fix 7-day trial ref
 content = content.replace(
-  "import Link from 'next/link'",
-  "import Link from 'next/link'\nimport { usePathname } from 'next/navigation'"
+  'Free 7-day trial. No no credit card required. Cancel anytime.',
+  'Free plan available. No credit card required. Cancel anytime.'
 );
 
-// Add pathname hook after export default function Nav() {
-content = content.replace(
-  'export default function Nav() {\n  return (',
-  "export default function Nav() {\n  const pathname = usePathname()\n  const isHome = pathname === '/'\n  return ("
-);
-
-// Hide Home link on homepage - desktop
-content = content.replace(
-  '<Link href="/" style={{ color: \'#111\', textDecoration: \'none\', fontSize: \'14px\', fontWeight: 500 }}>Home</Link>',
-  '{!isHome && <Link href="/" style={{ color: \'#111\', textDecoration: \'none\', fontSize: \'14px\', fontWeight: 500 }}>Home</Link>}'
-);
-
-// Hide Home link on homepage - mobile
-content = content.replace(
-  '<a href="/">Home</a>',
-  '{!isHome && <a href="/">Home</a>}'
-);
+// Fix "No no credit card" if it appears elsewhere
+content = content.replace(/No no credit card/g, 'No credit card');
 
 fs.writeFileSync(filePath, content, 'utf8');
-console.log('SUCCESS: Home link hidden on homepage');
+console.log('SUCCESS: why-traffikora page fixed');
