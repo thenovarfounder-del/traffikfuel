@@ -47,6 +47,7 @@ export default function Footer() {
           </div>
           <div>
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 700, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Company</p>
+            <div style={{ marginBottom: '10px' }}><Link href="/signup?plan=free" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#E8610A', textDecoration: 'none', fontWeight: 600 }}>Free Plan</Link></div>
             <div style={{ marginBottom: '10px' }}><Link href="/pricing" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Pricing</Link></div>
             <div style={{ marginBottom: '10px' }}><Link href="/why-traffikora" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Why Traffikora</Link></div>
             <div style={{ marginBottom: '10px' }}><Link href="/faq" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>FAQ</Link></div>
