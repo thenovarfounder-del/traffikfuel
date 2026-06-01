@@ -210,7 +210,7 @@ body{background:#fff;color:#111;font-family:'DM Sans',sans-serif;font-weight:300
 .pricing-h em{color:#E8610A;font-style:italic;text-shadow:0 0 40px rgba(232,97,10,0.4)}
 .pricing-sub{font-size:15px;color:#555;margin-top:14px;font-weight:300;letter-spacing:.02em}
 .pricing-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;max-width:1300px;margin:0 auto;position:relative;z-index:1}
-.plan{background:#111;padding:28px 20px;position:relative;border-radius:14px;border:1px solid rgba(255,255,255,0.12);display:flex;flex-direction:column;transition:border-color 0.2s}
+.plan{background:#111;padding:28px 20px;position:relative;border-radius:14px;border:1px solid rgba(255,255,255,0.35);display:flex;flex-direction:column;transition:border-color 0.2s}
 .plan:hover{border-color:rgba(255,255,255,0.25)}
 .plan-featured{background:linear-gradient(160deg,#1c1208 0%,#111 60%);border:1px solid #E8610A;box-shadow:0 0 50px rgba(232,97,10,0.18),0 0 100px rgba(232,97,10,0.06);transform:translateY(-10px)}
 .plan-badge{display:inline-block;background:linear-gradient(135deg,#E8610A,#ff8c42);color:#fff;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:5px 16px;border-radius:20px;margin-bottom:12px;font-weight:700;box-shadow:0 2px 14px rgba(232,97,10,0.45)}
