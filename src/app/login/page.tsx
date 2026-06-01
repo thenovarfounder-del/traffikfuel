@@ -21,9 +21,17 @@ export default function Login() {
     setLoading(true)
     setError('')
     try {
-      const { error: loginError } = await supabase.auth.signInWithPassword({ email, password })
+      const { data, error: loginError } = await supabase.auth.signInWithPassword({ email, password })
       if (loginError) throw loginError
-      router.push('/dashboard')
+      const user = data.user
+      if (user) {
+        const { data: profile } = await supabase.from('users').select('onboarding_complete').eq('id', user.id).single()
+        if (!profile || profile.onboarding_complete === false) {
+          router.push('/onboarding')
+        } else {
+          router.push('/dashboard')
+        }
+      }
     } catch (err) {
       setError(err.message)
     }
@@ -56,9 +64,7 @@ export default function Login() {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#050505', color: '#fff', fontFamily: "'Georgia', serif", display: 'flex' }}>
 
-      {/* LEFT PANEL */}
       <div style={{ width: '45%', background: 'linear-gradient(135deg, #0a0a0a 0%, #111 50%, #0f0a00 100%)', padding: '60px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRight: '1px solid #1a1a1a', position: 'relative', overflow: 'hidden' }}>
-
         <div style={{ position: 'absolute', top: '-100px', right: '-100px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, #f9731615 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: '-50px', left: '-50px', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, #f9731608 0%, transparent 70%)', pointerEvents: 'none' }} />
 
@@ -80,7 +86,6 @@ export default function Login() {
           <p style={{ fontSize: '16px', color: '#64748b', lineHeight: '1.7', margin: '0 0 48px 0', fontFamily: 'system-ui, sans-serif' }}>
             While you were away your AI agents kept working. Log back in to see what was published.
           </p>
-
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {[
               { icon: '🤖', text: 'AI agents ran while you were away' },
@@ -101,10 +106,8 @@ export default function Login() {
         </div>
       </div>
 
-      {/* RIGHT PANEL */}
       <div style={{ flex: 1, padding: '60px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <div style={{ maxWidth: '420px', width: '100%', margin: '0 auto' }}>
-
           <div style={{ marginBottom: '40px' }}>
             <div style={{ fontSize: '12px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px', fontFamily: 'system-ui, sans-serif' }}>Welcome Back</div>
             <h2 style={{ fontSize: '32px', fontWeight: '400', margin: '0 0 8px 0' }}>Log in to Traffikora</h2>
@@ -118,13 +121,11 @@ export default function Login() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
               <label style={labelStyle}>Email Address</label>
-              <input style={inputStyle} type="email" placeholder="you@yourbusiness.com" value={email} onChange={e => setEmail(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleLogin()} />
+              <input style={inputStyle} type="email" placeholder="you@yourbusiness.com" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleLogin()} />
             </div>
             <div>
               <label style={labelStyle}>Password</label>
-              <input style={inputStyle} type="password" placeholder="Your password" value={password} onChange={e => setPassword(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleLogin()} />
+              <input style={inputStyle} type="password" placeholder="Your password" value={password} onChange={e => setPassword(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleLogin()} />
             </div>
 
             <button onClick={handleLogin} disabled={loading} style={{ width: '100%', padding: '16px', borderRadius: '12px', border: 'none', background: loading ? '#333' : 'linear-gradient(135deg, #f97316, #ea6a0a)', color: '#fff', fontSize: '15px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'system-ui, sans-serif' }}>
@@ -132,7 +133,7 @@ export default function Login() {
             </button>
 
             <div style={{ textAlign: 'center', fontSize: '13px', color: '#64748b', fontFamily: 'system-ui, sans-serif' }}>
-              Don't have an account?{' '}
+              Don’t have an account?{' '}
               <a href="/signup" style={{ color: '#f97316', textDecoration: 'none', fontWeight: '600' }}>Start free trial</a>
             </div>
 
@@ -140,7 +141,6 @@ export default function Login() {
               <a href="/reset-password" style={{ fontSize: '13px', color: '#64748b', textDecoration: 'none', fontFamily: 'system-ui, sans-serif' }}>Forgot your password?</a>
             </div>
           </div>
-
         </div>
       </div>
     </div>
