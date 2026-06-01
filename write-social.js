@@ -2,16 +2,20 @@ const fs = require('fs');
 
 let layout = fs.readFileSync('src/app/layout.tsx', 'utf8');
 
-const oldImport = `import type { Metadata } from 'next'`;
-const newImport = `import type { Metadata } from 'next'
-import ChatBubble from '@/components/ChatBubble'`;
+// Add import after ScrollToTop import
+layout = layout.replace(
+  `import ScrollToTop from '@/components/ScrollToTop'`,
+  `import ScrollToTop from '@/components/ScrollToTop'
+import ChatBubble from '@/components/ChatBubble'`
+);
 
-const oldClosing = `</body>`;
-const newClosing = `<ChatBubble />
-      </body>`;
-
-layout = layout.replace(oldImport, newImport);
-layout = layout.replace(oldClosing, newClosing);
+// Add component before closing body tag
+layout = layout.replace(
+  `</body>`,
+  `<ChatBubble />
+      </body>`
+);
 
 fs.writeFileSync('src/app/layout.tsx', layout);
-console.log('Done - ChatBubble added to layout');
+console.log('Done');
+console.log(layout.substring(0, 400));

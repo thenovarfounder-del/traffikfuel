@@ -5,6 +5,7 @@ import { Playfair_Display, DM_Sans } from 'next/font/google'
 import CrispChat from '@/components/CrispChat'
 import CookieBanner from '@/components/CookieBanner'
 import ScrollToTop from '@/components/ScrollToTop'
+import ChatBubble from '@/components/ChatBubble'
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400','700','900'], display: 'swap', variable: '--font-playfair' })
 const dmSans = DM_Sans({ subsets: ['latin'], weight: ['300','400','500','600','700'], display: 'swap', variable: '--font-dm-sans' })
@@ -38,6 +39,7 @@ return (
 <CookieBanner />
 <ScrollToTop />
 <ChatBubble />
+      <ChatBubble />
       </body>
 </html>
 )
