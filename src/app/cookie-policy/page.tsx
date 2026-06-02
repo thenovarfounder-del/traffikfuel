@@ -30,7 +30,7 @@ export default function CookiePolicy() {
     </section>
     <section class='cp-body'>
       <div class='inner'>
-        <p class='updated'>Last updated: June 2025</p>
+        <p class='updated'>Last updated: June 2026</p>
         <h2>What Are Cookies</h2>
         <p>Cookies are small text files placed on your device when you visit a website. They help us deliver a functional, personalized, and secure experience. Traffikora uses both first-party cookies (set by us) and third-party cookies (set by our service partners).</p>
         <h2>Types of Cookies We Use</h2>
