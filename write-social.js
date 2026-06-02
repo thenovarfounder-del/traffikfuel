@@ -1,8 +1,8 @@
 const fs = require('fs')
 
-let content = fs.readFileSync('C:/Users/randy/traffikfuel/src/app/cookie-policy/page.tsx', 'utf8')
+let content = fs.readFileSync('C:/Users/randy/traffikfuel/src/app/results/page.tsx', 'utf8')
 
-content = content.replace('Last updated: June 2025', 'Last updated: June 2026')
+content = content.replace('No no credit card required.', 'No credit card required.')
 
-fs.writeFileSync('C:/Users/randy/traffikfuel/src/app/cookie-policy/page.tsx', content)
-console.log('SUCCESS: Cookie policy date updated')
+fs.writeFileSync('C:/Users/randy/traffikfuel/src/app/results/page.tsx', content)
+console.log('SUCCESS: Results page fixed')
