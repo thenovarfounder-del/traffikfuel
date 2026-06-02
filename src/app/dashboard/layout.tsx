@@ -71,6 +71,7 @@ export default function DashboardLayout({ children }) {
     { href: '/dashboard/connect/wordpress', icon: '🌐', label: 'WordPress' },
     { isSection: true, label: 'ACCOUNT' },
     { href: '/dashboard/billing', icon: '💳', label: 'Billing' },
+    { href: '/dashboard/referral', icon: '🎁', label: 'Refer & Earn' },
     { href: '/dashboard/agents', icon: '🤖', label: 'AI Agents' },
     { href: '/dashboard/support', icon: '💬', label: 'Support' },
   ]
