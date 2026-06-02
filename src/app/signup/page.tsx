@@ -1,7 +1,7 @@
 // @ts-nocheck
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@supabase/supabase-js'
 
@@ -15,6 +15,7 @@ export default function Signup() {
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [plan, setPlan] = useState('free')
   const [form, setForm] = useState({
     fullName: '',
     email: '',
@@ -24,6 +25,12 @@ export default function Signup() {
     industry: '',
     city: ''
   })
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const p = params.get('plan')
+    if (p) setPlan(p)
+  }, [])
 
   function update(field, value) {
     setForm(prev => ({ ...prev, [field]: value }))
@@ -53,12 +60,35 @@ export default function Signup() {
           city: form.city,
           phone: form.phone
         })
-        router.push('/check-email')
+
+        if (plan === 'free') {
+          router.push('/check-email')
+        } else {
+          const res = await fetch('/api/stripe/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ plan, email: form.email, userId: data.user.id })
+          })
+          const result = await res.json()
+          if (result.url) {
+            window.location.href = result.url
+          } else {
+            throw new Error(result.error || 'Checkout failed')
+          }
+        }
       }
     } catch (err) {
       setError(err.message)
     }
     setLoading(false)
+  }
+
+  const planLabels = {
+    free: 'Free Plan',
+    starter: 'Starter — $47/mo',
+    pro: 'Pro — $97/mo',
+    agency: 'Agency — $297/mo',
+    enterprise: 'Enterprise — $997/mo'
   }
 
   const inputStyle = {
@@ -112,6 +142,14 @@ export default function Signup() {
           <p style={{ fontSize: '16px', color: '#64748b', lineHeight: '1.7', margin: '0 0 48px 0', fontFamily: 'system-ui, sans-serif' }}>
             Join hundreds of businesses letting AI handle their marketing while they focus on what matters most.
           </p>
+
+          {plan !== 'free' && (
+            <div style={{ backgroundColor: '#f9731615', border: '1px solid #f9731640', borderRadius: '12px', padding: '16px 20px', marginBottom: '32px', fontFamily: 'system-ui, sans-serif' }}>
+              <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>Selected Plan</div>
+              <div style={{ fontSize: '18px', color: '#fff', fontWeight: '700' }}>{planLabels[plan]}</div>
+              <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>You’ll be taken to secure checkout after signup</div>
+            </div>
+          )}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {[
@@ -212,7 +250,7 @@ export default function Signup() {
                 onClick={handleSignup}
                 disabled={loading}
                 style={{ width: '100%', padding: '16px', borderRadius: '12px', border: 'none', background: loading ? '#333' : 'linear-gradient(135deg, #f97316, #ea6a0a)', color: '#fff', fontSize: '15px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'system-ui, sans-serif', letterSpacing: '0.02em' }}>
-                {loading ? 'Creating your account...' : 'Start Free Today →'}
+                {loading ? 'Creating your account...' : plan === 'free' ? 'Start Free Today →' : 'Continue to Checkout →'}
               </button>
               <button onClick={() => setStep(1)} style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #1a1a1a', backgroundColor: 'transparent', color: '#64748b', fontSize: '14px', cursor: 'pointer', fontFamily: 'system-ui, sans-serif' }}>
                 ← Back
