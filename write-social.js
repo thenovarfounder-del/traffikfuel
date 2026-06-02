@@ -1,70 +1,55 @@
 const fs = require("fs");
-const path = "C:\\Users\\randy\\traffikfuel\\public\\sitemap.xml";
 
-const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://www.traffikora.com/</loc><lastmod>2026-06-02</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
-  <url><loc>https://www.traffikora.com/pricing</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/features</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/how-it-works</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/why-traffikora</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/faq</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/about</loc><lastmod>2026-06-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.traffikora.com/contact</loc><lastmod>2026-06-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.traffikora.com/solutions</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/support</loc><lastmod>2026-06-02</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.traffikora.com/privacy</loc><lastmod>2026-06-02</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://www.traffikora.com/terms</loc><lastmod>2026-06-02</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://www.traffikora.com/demo</loc><lastmod>2026-06-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.traffikora.com/resources/glossary</loc><lastmod>2026-06-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.traffikora.com/vs/hubspot</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/vs/hootsuite</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/vs/buffer</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/vs/later</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/compare/traffikora-vs-birdeye</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/compare/traffikora-vs-brightlocal</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/compare/traffikora-vs-constant-contact</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/compare/traffikora-vs-hootsuite</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/compare/traffikora-vs-hubspot</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/compare/traffikora-vs-later</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/compare/traffikora-vs-mailchimp</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/compare/traffikora-vs-reputation-com</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/compare/traffikora-vs-semrush</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/compare/traffikora-vs-sprout-social</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/compare/traffikora-vs-vendasta</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/compare/traffikora-vs-yext</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/features/ai-engine-optimization</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/features/ai-marketing-automation</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/features/blog-automation</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/features/google-business-profile</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/features/local-seo-automation</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/features/social-media-automation</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.traffikora.com/local-businesses/atlanta</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/local-businesses/chicago</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/local-businesses/dallas</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/local-businesses/houston</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/local-businesses/las-vegas</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/local-businesses/los-angeles</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/local-businesses/miami</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/local-businesses/new-york</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/local-businesses/phoenix</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/local-businesses/seattle</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog</loc><lastmod>2026-06-02</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/how-to-get-found-on-chatgpt-perplexity</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/how-to-get-more-google-reviews</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/how-traffikora-is-different</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/local-seo-tips-for-small-businesses</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/local-seo-vs-ai-engine-optimization</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/set-it-once-how-traffikora-works</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/small-business-marketing-problem</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/what-is-aeo</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/what-is-ai-engine-optimization</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/what-is-generative-engine-optimization</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/what-is-local-seo</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/what-is-traffikora</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/why-ai-engine-optimization</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.traffikora.com/blog/why-google-business-profile-matters</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-</urlset>`;
+const content = `# Traffikora
+> Traffikora is an AI-powered marketing automation platform built specifically for local small businesses.
 
-fs.writeFileSync(path, xml, "utf8");
-console.log("DONE - sitemap updated with " + xml.split("<url>").length - 1 + " URLs");
+Traffikora automates social media publishing, local SEO, Google Business Profile management, blog content, review requests, and AI engine optimization -- all from one platform starting at $97 per month. No marketing expertise required. Setup takes under 30 minutes.
+
+## Who It Serves
+Traffikora is built for local small businesses including restaurants, dental practices, auto repair shops, chiropractors, real estate agents, HVAC companies, law firms, salons, and any business that depends on local customers finding them online.
+
+## What It Does
+- Publishes branded social media content daily across 9+ platforms automatically
+- Manages and optimizes Google Business Profile with daily posts and review requests
+- Builds local SEO citations, schema markup, and keyword content automatically
+- Publishes weekly SEO blog posts directly to WordPress
+- Builds AI engine visibility across ChatGPT, Perplexity, Gemini, Claude, and Bing
+- Sends automated review request campaigns to grow star ratings
+- Tracks performance across all channels from one dashboard
+
+## Pricing
+- Free: $0 forever -- 3 blogs per month, no credit card required
+- Starter: $47 per month -- unlimited blogs and social content
+- Pro: $97 per month -- AI Agents, Auto Mode, AI SEO, TikTok and YouTube
+- Agency: $297 per month -- 10 clients, white-label
+- Enterprise: $997 per month -- unlimited clients, custom AI training
+
+## Key Pages
+- Homepage: https://www.traffikora.com
+- Pricing: https://www.traffikora.com/pricing
+- Features: https://www.traffikora.com/features
+- How It Works: https://www.traffikora.com/how-it-works
+- Blog: https://www.traffikora.com/blog
+- Signup: https://www.traffikora.com/signup
+
+## Feature Pages
+- AI Engine Optimization: https://www.traffikora.com/features/ai-engine-optimization
+- Social Media Automation: https://www.traffikora.com/features/social-media-automation
+- Local SEO Automation: https://www.traffikora.com/features/local-seo-automation
+- Google Business Profile: https://www.traffikora.com/features/google-business-profile
+- Blog Automation: https://www.traffikora.com/features/blog-automation
+- AI Marketing Automation: https://www.traffikora.com/features/ai-marketing-automation
+
+## Competitor Comparisons
+- Traffikora vs HubSpot: https://www.traffikora.com/compare/traffikora-vs-hubspot
+- Traffikora vs Hootsuite: https://www.traffikora.com/compare/traffikora-vs-hootsuite
+- Traffikora vs Semrush: https://www.traffikora.com/compare/traffikora-vs-semrush
+- Traffikora vs Sprout Social: https://www.traffikora.com/compare/traffikora-vs-sprout-social
+
+## Contact
+- Website: https://www.traffikora.com
+- Support: support@traffikora.com
+`;
+
+fs.writeFileSync("C:\\Users\\randy\\traffikfuel\\public\\llms.txt", content, "utf8");
+console.log("DONE - llms.txt created");
