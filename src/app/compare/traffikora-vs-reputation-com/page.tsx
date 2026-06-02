@@ -35,7 +35,7 @@ export default function ReputationComComparePage() {
               <tbody>
                 {[
                   ['Built for small businesses', '✅', '❌'],
-                  ['Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini (ChatGPT, Gemini)', '✅', '❌'],
+                  ['Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini (ChatGPT, Gemini)', '✅', '❌'],
                   ['Fully automated — no manual work', '✅', '❌'],
                   ['Google Business Profile automation', '✅', '✅'],
                   ['Review generation', '✅', '✅'],
@@ -64,7 +64,7 @@ export default function ReputationComComparePage() {
             {[
               { title: 'Priced for Small Business', body: 'Reputation.com targets enterprise clients with custom pricing in the thousands per month. Traffikora starts at $97/month.' },
               { title: 'AI Search Built In', body: 'Traffikora optimizes your business for ChatGPT, Gemini, Perplexity, and every major AI engine. Reputation.com does not.' },
-              { title: 'Full Marketing Automation', body: 'Reputation.com focuses on review management. Traffikora also handles Google, social media, local SEO, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.' },
+              { title: 'Full Marketing Automation', body: 'Reputation.com focuses on review management. Traffikora also handles Google, social media, local SEO, and Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.' },
             ].map((card) => (
               <div key={card.title} style={{ border: '2.5px solid #111', padding: '32px', background: '#fff' }}>
                 <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, marginBottom: '12px' }}>{card.title}</h3>
@@ -77,7 +77,7 @@ export default function ReputationComComparePage() {
 
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
         <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Enterprise results. Small business price.</h2>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No no credit card required. Cancel anytime.</p>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
         <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Today</Link>
       </section>
 

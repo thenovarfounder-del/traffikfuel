@@ -14,7 +14,7 @@ export default function VsPage() {
     { feature: 'Local SEO', traffikora: true, competitor: false },
     { feature: 'Set It Once — Runs Forever', traffikora: true, competitor: false },
     { feature: 'Built for Small Business', traffikora: true, competitor: false },
-    { feature: '7-Day Free Trial', traffikora: true, competitor: false },
+    { feature: 'Free Plan', traffikora: true, competitor: false },
     { feature: 'No Monthly Contract', traffikora: true, competitor: false },
   ]
 
@@ -61,7 +61,7 @@ export default function VsPage() {
 
           <div style={{ textAlign: 'center' }}>
             <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '36px', fontWeight: 900, color: '#111', marginBottom: '16px' }}>The bottom line</h2>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', maxWidth: '640px', margin: '0 auto 40px', lineHeight: 1.8 }}>Constant Contact does some things well. But it wasn’t built for small businesses who need everything automated in one place — including Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini. Traffikora was.</p>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', maxWidth: '640px', margin: '0 auto 40px', lineHeight: 1.8 }}>Constant Contact does some things well. But it wasn’t built for small businesses who need everything automated in one place — including Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini. Traffikora was.</p>
             <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #111', display: 'inline-block' }}>Try Traffikora Free for 7 Days</Link>
           </div>
         </div>
@@ -69,7 +69,7 @@ export default function VsPage() {
 
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
         <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Ready to make the switch?</h2>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No no credit card required. Cancel anytime.</p>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
         <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Today</Link>
       </section>
 

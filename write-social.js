@@ -1,47 +1,36 @@
-const fs = require('fs')
+const fs = require("fs");
 
-const pagesToCheck = [
-  'C:/Users/randy/traffikfuel/src/app/demo/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/resources/glossary/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/privacy/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/terms/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/contact/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/solutions/restaurants/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/solutions/hvac/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/solutions/lawyers/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/solutions/dentists/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/solutions/real-estate/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/solutions/salons/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/solutions/gyms/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/solutions/auto-repair/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/solutions/plumbers/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/solutions/chiropractors/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/solutions/contractors/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/solutions/therapists/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/solutions/veterinarians/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/solutions/accountants/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/solutions/marketing-agencies/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/blog/ai-search-for-local-business/page.tsx',
-  'C:/Users/randy/traffikfuel/src/app/blog/marketing-automation-small-business-2026/page.tsx',
-]
+const pages = [
+  "traffikora-vs-birdeye",
+  "traffikora-vs-brightlocal",
+  "traffikora-vs-constant-contact",
+  "traffikora-vs-hootsuite",
+  "traffikora-vs-hubspot",
+  "traffikora-vs-later",
+  "traffikora-vs-mailchimp",
+  "traffikora-vs-reputation-com",
+  "traffikora-vs-semrush",
+  "traffikora-vs-sprout-social",
+  "traffikora-vs-vendasta",
+  "traffikora-vs-yext",
+];
 
-const badPhrases = [
-  'No no credit card','no no credit card','Start Free Free','Free Free Today',
-  '7-day free trial','7 day free trial','No charge until day 8',
-  'Google SEO + Google SEO','Free 7-day','June 2025','â€"','â€™','â€œ','ðŸ','Â©'
-]
+const base = "C:\\Users\\randy\\traffikfuel\\src\\app\\compare";
+let fixed = 0;
+let skipped = 0;
 
-let totalIssues = 0
-pagesToCheck.forEach(filePath => {
-  if (!fs.existsSync(filePath)) { console.log('MISSING: ' + filePath); return }
-  const content = fs.readFileSync(filePath, 'utf8')
-  const issues = badPhrases.filter(p => content.includes(p))
-  if (issues.length > 0) {
-    console.log('STILL HAS ISSUES: ' + filePath.split('app/')[1].replace('/page.tsx',''))
-    issues.forEach(i => console.log('  - ' + i))
-    totalIssues += issues.length
-  } else {
-    console.log('CLEAN: ' + filePath.split('app/')[1].replace('/page.tsx',''))
-  }
-})
-console.log('\nTotal remaining issues: ' + totalIssues)
+for (const page of pages) {
+  const fp = base + "\\" + page + "\\page.tsx";
+  if (!fs.existsSync(fp)) { console.log("SKIPPED: " + page); skipped++; continue; }
+  let c = fs.readFileSync(fp, "utf8");
+  const orig = c;
+  c = c.split("Google SEO + Google SEO").join("Google SEO");
+  c = c.split("No no credit card").join("No credit card");
+  c = c.split("No No credit card").join("No credit card");
+  c = c.split("7-day free trial").join("free plan");
+  c = c.split("7-Day Free Trial").join("Free Plan");
+  c = c.split("June 2025").join("2026");
+  if (c !== orig) { fs.writeFileSync(fp, c, "utf8"); console.log("FIXED: " + page); fixed++; }
+  else { console.log("CLEAN: " + page); }
+}
+console.log("DONE. Fixed: " + fixed + " Skipped: " + skipped);

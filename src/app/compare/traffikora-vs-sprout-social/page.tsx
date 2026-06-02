@@ -35,7 +35,7 @@ export default function SproutSocialComparePage() {
               <tbody>
                 {[
                   ['Built for small businesses', '✅', '❌'],
-                  ['Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini (ChatGPT, Gemini)', '✅', '❌'],
+                  ['Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini (ChatGPT, Gemini)', '✅', '❌'],
                   ['Fully automated — no manual work', '✅', '❌'],
                   ['Google Business Profile automation', '✅', '❌'],
                   ['Review generation', '✅', '❌'],
@@ -63,7 +63,7 @@ export default function SproutSocialComparePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
             {[
               { title: 'No Staff Required', body: 'Traffikora runs automatically. Sprout Social still requires someone on your team to create, schedule, and manage content every week.' },
-              { title: 'Beyond Social Media', body: 'Sprout Social only handles social. Traffikora also automates Google, reviews, local SEO, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.' },
+              { title: 'Beyond Social Media', body: 'Sprout Social only handles social. Traffikora also automates Google, reviews, local SEO, and Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.' },
               { title: 'Priced for Small Business', body: 'Sprout Social starts at hundreds per month and is priced for enterprise teams. Traffikora starts at $97/month with a free trial.' },
             ].map((card) => (
               <div key={card.title} style={{ border: '2.5px solid #111', padding: '32px', background: '#fff' }}>
@@ -77,7 +77,7 @@ export default function SproutSocialComparePage() {
 
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
         <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>All the power. None of the complexity.</h2>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No no credit card required. Cancel anytime.</p>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No credit card required. Cancel anytime.</p>
         <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Today</Link>
       </section>
 
