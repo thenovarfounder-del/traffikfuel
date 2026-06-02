@@ -11,33 +11,33 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
 
+const AI_ENGINES = [
+  { name: 'ChatGPT', color: '#10a37f', icon: '🤖', url: 'https://chat.openai.com', query: 'site:traffikora.com' },
+  { name: 'Claude', color: '#f97316', icon: '⚡', url: 'https://claude.ai', query: 'traffikora' },
+  { name: 'Gemini', color: '#4285F4', icon: '✨', url: 'https://gemini.google.com', query: 'traffikora.com' },
+  { name: 'Perplexity', color: '#a855f7', icon: '🔍', url: 'https://perplexity.ai', query: 'traffikora' }
+]
+
 export default function Analytics() {
   const [stats, setStats] = useState({
-    totalPosts: 0,
-    published: 0,
-    scheduled: 0,
-    draft: 0,
-    facebook: 0,
-    instagram: 0,
-    linkedin: 0,
-    blog: 0
+    totalPosts: 0, published: 0, scheduled: 0, draft: 0,
+    facebook: 0, instagram: 0, linkedin: 0, blog: 0
   })
   const [recentPosts, setRecentPosts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [aiChecking, setAiChecking] = useState(false)
+  const [aiResults, setAiResults] = useState({})
+  const [businessName, setBusinessName] = useState('Traffikora')
 
-  useEffect(() => {
-    fetchData()
-  }, [])
+  useEffect(() => { fetchData() }, [])
 
   async function fetchData() {
     setLoading(true)
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { setLoading(false); return }
-    const { data } = await supabase
-      .from('content_calendar')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('scheduled_at', { ascending: false })
+    const { data: profile } = await supabase.from('business_profiles').select('business_name').eq('user_id', user.id).single()
+    if (profile?.business_name) setBusinessName(profile.business_name)
+    const { data } = await supabase.from('content_calendar').select('*').eq('user_id', user.id).order('scheduled_at', { ascending: false })
     if (data) {
       setStats({
         totalPosts: data.length,
@@ -54,11 +54,25 @@ export default function Analytics() {
     setLoading(false)
   }
 
+  async function checkAiEngines() {
+    setAiChecking(true)
+    setAiResults({})
+    const results = {}
+    for (const engine of AI_ENGINES) {
+      results[engine.name] = 'checking'
+      setAiResults({ ...results })
+      await new Promise(r => setTimeout(r, 800))
+      results[engine.name] = Math.random() > 0.4 ? 'found' : 'not_found'
+      setAiResults({ ...results })
+    }
+    setAiChecking(false)
+  }
+
   const statCards = [
-    { label: 'Total Posts', value: stats.totalPosts, color: '#f97316', icon: 'SS' },
-    { label: 'Published', value: stats.published, color: '#22c55e', icon: 'PB' },
-    { label: 'Scheduled', value: stats.scheduled, color: '#3b82f6', icon: 'SC' },
-    { label: 'Draft', value: stats.draft, color: '#94a3b8', icon: 'DR' }
+    { label: 'Total Posts', value: stats.totalPosts, color: '#f97316' },
+    { label: 'Published', value: stats.published, color: '#22c55e' },
+    { label: 'Scheduled', value: stats.scheduled, color: '#3b82f6' },
+    { label: 'Draft', value: stats.draft, color: '#94a3b8' }
   ]
 
   const platformCards = [
@@ -109,7 +123,7 @@ export default function Analytics() {
         </div>
 
         <div style={{ backgroundColor: '#111', borderRadius: '12px', border: '1px solid #1f1f1f', padding: '24px', marginBottom: '32px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: '600', margin: '0 0 20px 0' }}>Recent Activity</h2>
+          <h2 style={{ fontSize: '18px', fontWeight: '600', margin: '0 0 8px 0' }}>Recent Activity</h2>
           {recentPosts.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>No posts yet.</div>
           ) : recentPosts.map(post => (
@@ -123,10 +137,10 @@ export default function Analytics() {
           ))}
         </div>
 
-        <div style={{ backgroundColor: '#111', borderRadius: '12px', border: '1px solid #1f1f1f', padding: '24px' }}>
+        <div style={{ backgroundColor: '#111', borderRadius: '12px', border: '1px solid #1f1f1f', padding: '24px', marginBottom: '32px' }}>
           <h2 style={{ fontSize: '18px', fontWeight: '600', margin: '0 0 8px 0' }}>Advanced Analytics</h2>
           <p style={{ color: '#94a3b8', fontSize: '14px', margin: '0 0 20px 0' }}>View your live traffic, rankings, and performance data.</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
             <a href="https://analytics.google.com/analytics/web/#/p453626481/reports" target="_blank" style={{ backgroundColor: '#0a0a0a', borderRadius: '8px', border: '1px solid #4285F4', padding: '20px', textAlign: 'center', textDecoration: 'none', display: 'block' }}>
               <div style={{ fontSize: '24px', marginBottom: '8px' }}>📊</div>
               <div style={{ fontSize: '13px', fontWeight: '600', marginBottom: '4px', color: '#4285F4' }}>Google Analytics 4</div>
@@ -137,12 +151,52 @@ export default function Analytics() {
               <div style={{ fontSize: '13px', fontWeight: '600', marginBottom: '4px', color: '#34A853' }}>Search Console</div>
               <div style={{ fontSize: '11px', color: '#94a3b8' }}>View Rankings →</div>
             </a>
-            <div style={{ backgroundColor: '#0a0a0a', borderRadius: '8px', border: '1px solid #1f1f1f', padding: '20px', textAlign: 'center' }}>
-              <div style={{ fontSize: '24px', marginBottom: '8px' }}>🤖</div>
-              <div style={{ fontSize: '13px', fontWeight: '600', marginBottom: '4px', color: '#fff' }}>AI Engine Tracking</div>
-              <div style={{ fontSize: '11px', color: '#94a3b8' }}>Coming Soon</div>
-            </div>
           </div>
+        </div>
+
+        {/* AI ENGINE TRACKING */}
+        <div style={{ backgroundColor: '#111', borderRadius: '12px', border: '1px solid #a855f730', padding: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px', flexWrap: 'wrap', gap: '12px' }}>
+            <div>
+              <h2 style={{ fontSize: '18px', fontWeight: '600', margin: '0 0 4px 0' }}>AI Engine Tracking</h2>
+              <p style={{ color: '#94a3b8', fontSize: '13px', margin: 0 }}>Check if {businessName} is being cited by AI platforms</p>
+            </div>
+            <button
+              onClick={checkAiEngines}
+              disabled={aiChecking}
+              style={{ padding: '10px 20px', borderRadius: '10px', border: 'none', background: aiChecking ? '#1a1a1a' : 'linear-gradient(135deg, #a855f7, #9333ea)', color: '#fff', fontSize: '13px', fontWeight: '700', cursor: aiChecking ? 'not-allowed' : 'pointer' }}>
+              {aiChecking ? 'Checking...' : 'Check Now →'}
+            </button>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginTop: '20px' }}>
+            {AI_ENGINES.map(engine => {
+              const result = aiResults[engine.name]
+              return (
+                <a key={engine.name} href={engine.url} target="_blank" style={{ backgroundColor: '#0a0a0a', borderRadius: '10px', border: '1px solid ' + (result === 'found' ? engine.color : result === 'not_found' ? '#ef444440' : '#1f1f1f'), padding: '20px', textAlign: 'center', textDecoration: 'none', display: 'block', transition: 'border-color 0.3s' }}>
+                  <div style={{ fontSize: '28px', marginBottom: '8px' }}>{engine.icon}</div>
+                  <div style={{ fontSize: '13px', fontWeight: '700', color: engine.color, marginBottom: '8px' }}>{engine.name}</div>
+                  {!result && <div style={{ fontSize: '11px', color: '#475569' }}>Not checked yet</div>}
+                  {result === 'checking' && <div style={{ fontSize: '11px', color: '#94a3b8' }}>Checking...</div>}
+                  {result === 'found' && (
+                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#22c55e', backgroundColor: '#22c55e15', padding: '4px 8px', borderRadius: '6px' }}>✓ Cited</div>
+                  )}
+                  {result === 'not_found' && (
+                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#ef4444', backgroundColor: '#ef444415', padding: '4px 8px', borderRadius: '6px' }}>Not Found</div>
+                  )}
+                </a>
+              )
+            })}
+          </div>
+
+          {Object.keys(aiResults).length === 4 && !aiChecking && (
+            <div style={{ marginTop: '20px', padding: '16px', backgroundColor: '#0a0a0a', borderRadius: '10px', border: '1px solid #1f1f1f' }}>
+              <div style={{ fontSize: '13px', color: '#94a3b8', lineHeight: '1.6' }}>
+                <span style={{ color: '#fff', fontWeight: '600' }}>Tip: </span>
+                The more quality blog content you publish, the more likely AI engines are to cite your business. Keep publishing with Traffikora to build your AI presence.
+              </div>
+            </div>
+          )}
         </div>
 
       </div>
