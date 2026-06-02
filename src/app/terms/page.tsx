@@ -25,7 +25,7 @@ export default function TermsPage() {
           </div>
           <div style={{ marginBottom: '40px' }}>
             <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>2. Description of Service</h2>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>Traffikora is an automated marketing platform designed for small and mid-size businesses. The Service connects to your Google Business Profile, Facebook, Instagram, and other third-party platforms to automate marketing activities including content publishing, review generation, SEO optimization, Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini, and social media management. Features and functionality may be updated, modified, or discontinued at any time with reasonable notice.</p>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#444', lineHeight: 1.8 }}>Traffikora is an automated marketing platform designed for small and mid-size businesses. The Service connects to your Google Business Profile, Facebook, Instagram, and other third-party platforms to automate marketing activities including content publishing, review generation, SEO optimization, AI engine optimization — Google, Bing, ChatGPT, Claude, Gemini, and social media management. Features and functionality may be updated, modified, or discontinued at any time with reasonable notice.</p>
           </div>
           <div style={{ marginBottom: '40px' }}>
             <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', marginBottom: '12px' }}>3. Account Registration and Security</h2>

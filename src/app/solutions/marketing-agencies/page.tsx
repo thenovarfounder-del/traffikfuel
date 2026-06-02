@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "Marketing Automation for Agencies | Traffikora",
-  description: "Traffikora gives marketing agencies a white-label automation platform to scale client results across SEO, social media, Google Business Profile, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.",
+  description: "Traffikora gives marketing agencies a white-label automation platform to scale client results across SEO, social media, Google Business Profile, and AI engine optimization — Google, Bing, ChatGPT, Claude, Gemini.",
 };
 
 export default function MarketingAgenciesPage() {
@@ -25,7 +25,7 @@ export default function MarketingAgenciesPage() {
               <li>Manages Google Business Profile optimization for every client automatically</li>
               <li>Builds local SEO citations and schema markup at scale</li>
               <li>Publishes weekly SEO blog content to client websites automatically</li>
-              <li>Delivers Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini across your entire client portfolio</li>
+              <li>Delivers AI engine optimization — Google, Bing, ChatGPT, Claude, Gemini across your entire client portfolio</li>
               <li>Provides white-label reporting your clients see as your own work</li>
             </ul>
           </div>
@@ -43,7 +43,7 @@ export default function MarketingAgenciesPage() {
             <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "2rem", marginBottom: "24px" }}>White-Label Marketing Automation That Scales With Your Agency</h2>
             <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Traffikora is built for agencies managing multiple local business clients. Connect each client account and Traffikora handles the daily execution -- social content published, Google profiles updated, SEO citations built, blog posts live -- automatically across your entire portfolio. Your team stops doing the repetitive work and starts focusing on the strategy that justifies your retainer.</p>
             <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>White-label tools command 40% higher margins because you are selling a system, not just hours. Traffikora lets you package automation as part of your agency offering -- delivering more consistent results than manual execution while increasing the profitability of every client account. Clients stay longer when results are consistent. Consistent results require consistent execution. Traffikora makes that execution automatic.</p>
-            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>The agency marketing platform also covers Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini -- the fastest-growing channel in local search that most agencies are not yet delivering for clients. Adding AI engine visibility to your service offering differentiates your agency from competitors still focused only on traditional SEO and social scheduling.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>The agency marketing platform also covers AI engine optimization — Google, Bing, ChatGPT, Claude, Gemini -- the fastest-growing channel in local search that most agencies are not yet delivering for clients. Adding AI engine visibility to your service offering differentiates your agency from competitors still focused only on traditional SEO and social scheduling.</p>
           </div>
         </section>
         <section style={{ background: "#111111", padding: "60px 24px" }}>
@@ -71,15 +71,15 @@ export default function MarketingAgenciesPage() {
         <section style={{ background: "#1a1a1a", padding: "60px 24px" }}>
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "2rem", marginBottom: "24px" }}>Why Agency Marketing Automation Matters More in 2026</h2>
-            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Clients are asking about Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini. They are hearing about ChatGPT and Perplexity and they want to know if their business shows up there. Agencies that can deliver AI engine visibility alongside traditional SEO and social are winning new clients and retaining existing ones at higher rates. Agencies that cannot are losing to competitors who can.</p>
-            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Traffikora puts Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini inside your standard agency offering without adding complexity to your workflow. Every client account automatically gets the structured content, citations, and entity signals that drive AI engine recommendations -- delivered as part of the same automated system handling their social media and SEO. Your agency delivers more value. Your clients get better results. Your margins improve.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Clients are asking about AI engine optimization — Google, Bing, ChatGPT, Claude, Gemini. They are hearing about ChatGPT and Perplexity and they want to know if their business shows up there. Agencies that can deliver AI engine visibility alongside traditional SEO and social are winning new clients and retaining existing ones at higher rates. Agencies that cannot are losing to competitors who can.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Traffikora puts AI engine optimization — Google, Bing, ChatGPT, Claude, Gemini inside your standard agency offering without adding complexity to your workflow. Every client account automatically gets the structured content, citations, and entity signals that drive AI engine recommendations -- delivered as part of the same automated system handling their social media and SEO. Your agency delivers more value. Your clients get better results. Your margins improve.</p>
           </div>
         </section>
         <section style={{ background: "#111111", padding: "60px 24px" }}>
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "32px" }}>Frequently Asked Questions</h2>
             {[
-              ["What is marketing automation for agencies?", "Marketing automation for agencies means using software to handle the repeatable execution work across client accounts -- publishing social content, managing Google Business Profiles, building SEO citations, and delivering Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini -- automatically, without your team doing it manually for each client. Traffikora is built specifically for agencies managing multiple local business clients."],
+              ["What is marketing automation for agencies?", "Marketing automation for agencies means using software to handle the repeatable execution work across client accounts -- publishing social content, managing Google Business Profiles, building SEO citations, and delivering AI engine optimization — Google, Bing, ChatGPT, Claude, Gemini -- automatically, without your team doing it manually for each client. Traffikora is built specifically for agencies managing multiple local business clients."],
               ["How does Traffikora help my agency scale without adding staff?", "Traffikora automates the daily execution work that currently requires staff hours -- content creation, social publishing, GBP management, citation building, and blog posts. When that work runs automatically across all client accounts, your team can manage more clients without working more hours. Most agencies using Traffikora can handle 2 to 3x more clients with the same team size."],
               ["Can I white-label Traffikora for my clients?", "Yes. Traffikora is designed to be part of your agency offering. The reporting and output can be presented as your agency service. Clients see consistent results delivered under your brand. You get the margin improvement that comes from automation without clients needing to know the underlying platform."],
               ["How does Traffikora handle different client industries?", "Traffikora generates content and SEO strategy based on each client account profile -- their industry, location, target keywords, and brand voice. A restaurant client gets food and hospitality content. A dental practice gets healthcare and patient education content. Each account is treated individually even though the execution is automated."],
