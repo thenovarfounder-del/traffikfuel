@@ -68,7 +68,7 @@ export default function HowItWorksPage() {
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '42px', fontWeight: 700, color: '#111', marginBottom: '16px' }}>
             Ready to start in <em style={{ color: '#E8610A', fontStyle: 'italic' }}>5 minutes?</em>
           </h2>
-          <p style={{ fontSize: '16px', color: '#555', maxWidth: '440px', margin: '0 auto 32px', lineHeight: 1.8 }}>Free plan available. No charge until day 8. Cancel anytime.</p>
+          <p style={{ fontSize: '16px', color: '#555', maxWidth: '440px', margin: '0 auto 32px', lineHeight: 1.8 }}>Free plan available. Free plan available. No credit card required. Cancel anytime.</p>
           <button onClick={() => window.location.href='/signup'} style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', border: 'none', padding: '18px 40px', borderRadius: '8px', fontSize: '16px', fontWeight: 800, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
             Start Free — No Card Needed
           </button>
