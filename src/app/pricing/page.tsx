@@ -19,7 +19,7 @@ const PLANS = [
     ],
     color: '#94a3b8',
     highlight: false,
-    cta: 'Start Free — No Card Needed',
+    cta: 'Start Free — No Credit Card Needed',
     href: '/signup?plan=free'
   },
   {

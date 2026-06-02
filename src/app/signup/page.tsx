@@ -155,7 +155,7 @@ export default function Signup() {
             {[
               { icon: '⚡', text: 'Live in under 5 minutes' },
               { icon: '🤖', text: 'AI agents running 24/7' },
-              { icon: '🛡', text: 'Free plan — no card needed' },
+              { icon: '🛡', text: 'Free plan — no credit card needed' },
               { icon: '✕', text: 'Cancel anytime, one click' }
             ].map(item => (
               <div key={item.text} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
