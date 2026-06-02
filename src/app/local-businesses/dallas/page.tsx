@@ -21,7 +21,7 @@ export default function DallasPage() {
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "2rem", marginBottom: "24px" }}>Why Dallas Small Businesses Need Marketing Automation</h2>
             <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Dallas is growing rapidly, with new residents arriving every month who need local businesses for every service they require. These new Dallas residents have no existing loyalties -- they are going to Google, ChatGPT, and social media to find businesses in their new city. The local businesses that have built consistent online visibility are the ones capturing these customers. The ones that have not are invisible to an entire wave of high-intent new customers.</p>
-            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>For existing Dallas small businesses, staying competitive means maintaining the kind of consistent marketing presence that Google, AI engines, and social platforms reward. Traffikora automates daily social content, Google Business Profile management, local SEO, blog automation, review requests, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini for Dallas businesses -- so your marketing runs continuously and your visibility compounds over time.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>For existing Dallas small businesses, staying competitive means maintaining the kind of consistent marketing presence that Google, AI engines, and social platforms reward. Traffikora automates daily social content, Google Business Profile management, local SEO, blog automation, review requests, and Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini for Dallas businesses -- so your marketing runs continuously and your visibility compounds over time.</p>
           </div>
         </section>
         <section style={{ background: "#111111", padding: "60px 24px" }}>
@@ -57,7 +57,7 @@ export default function DallasPage() {
           <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "16px" }}>Dallas Businesses That Show Up Win</h2>
           <p style={{ color: "#ffffff", fontSize: "1.1rem", maxWidth: "560px", margin: "0 auto 32px" }}>Traffikora automates your marketing so your Dallas business shows up first -- on Google, on social, and on AI engines -- every single day.</p>
           <Link href="/signup" style={{ background: "#ffffff", color: "#E8610A", padding: "16px 36px", borderRadius: "6px", fontWeight: "700", textDecoration: "none", fontSize: "1.05rem" }}>Start Free — No Card Needed</Link>
-          <p style={{ color: "#ffffff", marginTop: "16px", fontSize: "0.9rem", opacity: 0.85 }}>No no credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.</p>
+          <p style={{ color: "#ffffff", marginTop: "16px", fontSize: "0.9rem", opacity: 0.85 }}>No credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.</p>
         </section>
       </main>
       <Footer />

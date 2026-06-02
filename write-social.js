@@ -1,15 +1,19 @@
 const fs = require("fs");
 
 const pages = [
-  "ai-engine-optimization",
-  "ai-marketing-automation",
-  "blog-automation",
-  "google-business-profile",
-  "local-seo-automation",
-  "social-media-automation",
+  "atlanta",
+  "chicago",
+  "dallas",
+  "houston",
+  "las-vegas",
+  "los-angeles",
+  "miami",
+  "new-york",
+  "phoenix",
+  "seattle",
 ];
 
-const base = "C:\\Users\\randy\\traffikfuel\\src\\app\\features";
+const base = "C:\\Users\\randy\\traffikfuel\\src\\app\\local-businesses";
 const bad1 = "Google SEO + Google SEO";
 const bad2 = "No no credit card";
 const bad3 = "No No credit card";

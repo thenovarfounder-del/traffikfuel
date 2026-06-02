@@ -21,7 +21,7 @@ export default function PhoenixPage() {
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "2rem", marginBottom: "24px" }}>Why Phoenix Small Businesses Need Marketing Automation</h2>
             <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Phoenix consistently ranks among the fastest-growing cities in the United States -- which means a constant influx of new residents who are actively searching for local businesses across every category. New Phoenix residents have no established loyalties and are going straight to Google, ChatGPT, and social media to find the businesses that will serve them. The local businesses with consistent online visibility capture these customers at the exact moment they are ready to choose.</p>
-            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Traffikora automates the marketing that makes Phoenix small businesses visible to new and existing customers -- daily social content across 9+ platforms, automated Google Business Profile management, local SEO citation building, weekly blog content, review request campaigns, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini -- all running automatically so your Phoenix business stays competitive without adding to your workload.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Traffikora automates the marketing that makes Phoenix small businesses visible to new and existing customers -- daily social content across 9+ platforms, automated Google Business Profile management, local SEO citation building, weekly blog content, review request campaigns, and Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini -- all running automatically so your Phoenix business stays competitive without adding to your workload.</p>
           </div>
         </section>
         <section style={{ background: "#111111", padding: "60px 24px" }}>
@@ -57,7 +57,7 @@ export default function PhoenixPage() {
           <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "16px" }}>Phoenix Businesses That Show Up Win</h2>
           <p style={{ color: "#ffffff", fontSize: "1.1rem", maxWidth: "560px", margin: "0 auto 32px" }}>Traffikora automates your marketing so your Phoenix business shows up first -- on Google, on social, and on AI engines -- every single day.</p>
           <Link href="/signup" style={{ background: "#ffffff", color: "#E8610A", padding: "16px 36px", borderRadius: "6px", fontWeight: "700", textDecoration: "none", fontSize: "1.05rem" }}>Start Free — No Card Needed</Link>
-          <p style={{ color: "#ffffff", marginTop: "16px", fontSize: "0.9rem", opacity: 0.85 }}>No no credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.</p>
+          <p style={{ color: "#ffffff", marginTop: "16px", fontSize: "0.9rem", opacity: 0.85 }}>No credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.</p>
         </section>
       </main>
       <Footer />

@@ -21,7 +21,7 @@ export default function ChicagoPage() {
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "2rem", marginBottom: "24px" }}>Why Chicago Small Businesses Need Marketing Automation</h2>
             <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Chicago is a city of neighborhoods where local loyalty runs deep -- but that loyalty has to be earned online first. When a new family moves to Lincoln Park or Wicker Park and searches for a dentist, restaurant, or auto shop, they are going to Google and ChatGPT before they ask a neighbor. If your business does not show up in those results, the referral never comes. Your online presence has to do the work before word of mouth can take over.</p>
-            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Chicago small businesses face the same challenge as local businesses everywhere -- not enough time to maintain the consistent marketing presence that drives online visibility. Traffikora automates social media, local SEO, Google Business Profile, blog content, review requests, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini for Chicago businesses -- so your marketing runs every day regardless of how busy your season gets or how much the city demands of you.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Chicago small businesses face the same challenge as local businesses everywhere -- not enough time to maintain the consistent marketing presence that drives online visibility. Traffikora automates social media, local SEO, Google Business Profile, blog content, review requests, and Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini for Chicago businesses -- so your marketing runs every day regardless of how busy your season gets or how much the city demands of you.</p>
           </div>
         </section>
         <section style={{ background: "#111111", padding: "60px 24px" }}>
@@ -57,7 +57,7 @@ export default function ChicagoPage() {
           <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "16px" }}>Chicago Businesses That Show Up Win</h2>
           <p style={{ color: "#ffffff", fontSize: "1.1rem", maxWidth: "560px", margin: "0 auto 32px" }}>Traffikora automates your marketing so your Chicago business shows up first -- on Google, on social, and on AI engines -- every single day.</p>
           <Link href="/signup" style={{ background: "#ffffff", color: "#E8610A", padding: "16px 36px", borderRadius: "6px", fontWeight: "700", textDecoration: "none", fontSize: "1.05rem" }}>Start Free — No Card Needed</Link>
-          <p style={{ color: "#ffffff", marginTop: "16px", fontSize: "0.9rem", opacity: 0.85 }}>No no credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.</p>
+          <p style={{ color: "#ffffff", marginTop: "16px", fontSize: "0.9rem", opacity: 0.85 }}>No credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.</p>
         </section>
       </main>
       <Footer />

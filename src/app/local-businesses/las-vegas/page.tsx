@@ -21,7 +21,7 @@ export default function LasVegasPage() {
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "2rem", marginBottom: "24px" }}>Why Las Vegas Small Businesses Need Marketing Automation</h2>
             <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Las Vegas is a unique local business market -- a large residential population living alongside one of the highest-traffic tourist destinations in the world. Local businesses in Las Vegas serve both long-term residents who form lasting customer relationships and visitors who discover businesses through online search and AI engine queries while planning their trip. Showing up in both of those discovery channels requires consistent marketing across Google, social media, and AI engines simultaneously.</p>
-            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Traffikora automates marketing for Las Vegas small businesses across every channel that drives local discovery -- daily social content, Google Business Profile management, local SEO, blog automation, review requests, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini. Whether your next customer is a Las Vegas resident or a visitor asking ChatGPT for recommendations before their trip, Traffikora makes sure your business shows up in the answer.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Traffikora automates marketing for Las Vegas small businesses across every channel that drives local discovery -- daily social content, Google Business Profile management, local SEO, blog automation, review requests, and Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini. Whether your next customer is a Las Vegas resident or a visitor asking ChatGPT for recommendations before their trip, Traffikora makes sure your business shows up in the answer.</p>
           </div>
         </section>
         <section style={{ background: "#111111", padding: "60px 24px" }}>
@@ -57,7 +57,7 @@ export default function LasVegasPage() {
           <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "16px" }}>Las Vegas Businesses That Show Up Win</h2>
           <p style={{ color: "#ffffff", fontSize: "1.1rem", maxWidth: "560px", margin: "0 auto 32px" }}>Traffikora automates your marketing so your Las Vegas business shows up first -- on Google, on social, and on AI engines -- every single day.</p>
           <Link href="/signup" style={{ background: "#ffffff", color: "#E8610A", padding: "16px 36px", borderRadius: "6px", fontWeight: "700", textDecoration: "none", fontSize: "1.05rem" }}>Start Free — No Card Needed</Link>
-          <p style={{ color: "#ffffff", marginTop: "16px", fontSize: "0.9rem", opacity: 0.85 }}>No no credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.</p>
+          <p style={{ color: "#ffffff", marginTop: "16px", fontSize: "0.9rem", opacity: 0.85 }}>No credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.</p>
         </section>
       </main>
       <Footer />

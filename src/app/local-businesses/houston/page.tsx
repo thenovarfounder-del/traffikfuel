@@ -21,7 +21,7 @@ export default function HoustonPage() {
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "2rem", marginBottom: "24px" }}>Why Houston Small Businesses Need Marketing Automation</h2>
             <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Houston is growing faster than almost any major city in the United States -- which means a constant wave of new residents who need every local service and do not have existing relationships with any local businesses yet. New Houstonians are going straight to Google, ChatGPT, and social media to find restaurants, doctors, mechanics, and every other local service. The businesses that show up first in those searches capture customers who will potentially stay for years.</p>
-            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>For established Houston small businesses, the challenge is competing with this growth while managing an already demanding operation. Traffikora automates the consistent marketing output that makes your business visible to Houston customers old and new -- daily social content, Google Business Profile management, local SEO, weekly blog posts, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini -- all running automatically so you can focus on serving the customers it brings in.</p>
+            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>For established Houston small businesses, the challenge is competing with this growth while managing an already demanding operation. Traffikora automates the consistent marketing output that makes your business visible to Houston customers old and new -- daily social content, Google Business Profile management, local SEO, weekly blog posts, and Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini -- all running automatically so you can focus on serving the customers it brings in.</p>
           </div>
         </section>
         <section style={{ background: "#111111", padding: "60px 24px" }}>
@@ -57,7 +57,7 @@ export default function HoustonPage() {
           <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "16px" }}>Houston Businesses That Show Up Win</h2>
           <p style={{ color: "#ffffff", fontSize: "1.1rem", maxWidth: "560px", margin: "0 auto 32px" }}>Traffikora automates your marketing so your Houston business shows up first -- on Google, on social, and on AI engines -- every single day.</p>
           <Link href="/signup" style={{ background: "#ffffff", color: "#E8610A", padding: "16px 36px", borderRadius: "6px", fontWeight: "700", textDecoration: "none", fontSize: "1.05rem" }}>Start Free — No Card Needed</Link>
-          <p style={{ color: "#ffffff", marginTop: "16px", fontSize: "0.9rem", opacity: 0.85 }}>No no credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.</p>
+          <p style={{ color: "#ffffff", marginTop: "16px", fontSize: "0.9rem", opacity: 0.85 }}>No credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.</p>
         </section>
       </main>
       <Footer />
