@@ -2,10 +2,46 @@ const fs = require('fs')
 
 let content = fs.readFileSync('C:/Users/randy/traffikfuel/src/app/page.tsx', 'utf8')
 
-const oldTestimonials = `<div class="testi-card"><span class="testi-quote-mark">&ldquo;</span><div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="testi-text">I used to spend 3 hours a day on marketing. Now I spend zero. Traffikora handles everything and my leads have tripled.</p><div class="testi-divider"></div><div class="testi-author"><div class="testi-avatar">M</div><div><div class="testi-name">Maria S.</div><div class="testi-role">Miami, FL &mdash; Salon Owner</div></div></div></div><div class="testi-card"><span class="testi-quote-mark">&ldquo;</span><div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="testi-text">My Google ranking went from page 4 to page 1 in 6 weeks. I could not believe it. This platform is the real deal.</p><div class="testi-divider"></div><div class="testi-author"><div class="testi-avatar">J</div><div><div class="testi-name">James T.</div><div class="testi-role">Austin, TX &mdash; HVAC Business</div></div></div></div><div class="testi-card"><span class="testi-quote-mark">&ldquo;</span><div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="testi-text">A client told me they found me by asking ChatGPT. I did not even know that was possible. Traffikora made it happen.</p><div class="testi-divider"></div><div class="testi-author"><div class="testi-avatar">R</div><div><div class="testi-name">Rachel K.</div><div class="testi-role">Chicago, IL &mdash; Law Firm</div></div></div></div>`
+const oldScript = `        (function() {
+          document.querySelectorAll('.faq-item').forEach(function(item) {
+            var q = item.querySelector('.faq-q');
+            var a = item.querySelector('.faq-a');
+            var arrow = item.querySelector('.faq-q-arrow');
+            q.style.cursor = 'pointer';
+            q.addEventListener('click', function() {
+              var isOpen = a.style.display === 'block';
+              document.querySelectorAll('.faq-item').forEach(function(i) {
+                i.querySelector('.faq-a').style.display = 'none';
+                i.querySelector('.faq-q-arrow').textContent = '+';
+              });
+              if (!isOpen) { a.style.display = 'block'; arrow.textContent = '\\u2212'; }
+            });
+          });`
 
-const newTestimonials = `<div class="testi-card"><span class="testi-quote-mark">&ldquo;</span><div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="testi-text">My competitors have full marketing teams. I&rsquo;m a solo agent. Traffikora levels the playing field completely. I&rsquo;m publishing more content than agencies charging $5,000 a month and my listings are getting found on Google, ChatGPT, and Gemini. Closed 4 extra deals last month I can directly trace back to Traffikora.</p><div class="testi-divider"></div><div class="testi-author"><div class="testi-avatar">A</div><div><div class="testi-name">Andrew Stevenson</div><div class="testi-role">Tampa, FL &mdash; Real Estate Agent</div></div></div></div><div class="testi-card"><span class="testi-quote-mark">&ldquo;</span><div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="testi-text">As an attorney I don&rsquo;t have time to think about social media. Traffikora handles all of it. I&rsquo;m now showing up when people ask AI assistants for lawyers in Atlanta. Three of my last five clients told me they found me online in ways I never would have reached them before. It pays for itself every single week.</p><div class="testi-divider"></div><div class="testi-author"><div class="testi-avatar">S</div><div><div class="testi-name">Sebastian Lewis</div><div class="testi-role">Atlanta, GA &mdash; Law Firm</div></div></div></div><div class="testi-card"><span class="testi-quote-mark">&ldquo;</span><div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="testi-text">I was spending $3,200 a month on a marketing agency and barely getting 2 leads a week. Three weeks into Traffikora, I&rsquo;m getting 11. My Google ranking jumped from page 4 to page 1 and a customer told me they found me by asking ChatGPT. I cancelled the agency the same day.</p><div class="testi-divider"></div><div class="testi-author"><div class="testi-avatar">J</div><div><div class="testi-name">Jonathan Anderson</div><div class="testi-role">Dallas, TX &mdash; HVAC Owner</div></div></div></div>`
+const newScript = `        (function() {
+          function initFaq() {
+            document.querySelectorAll('.faq-item').forEach(function(item) {
+              var q = item.querySelector('.faq-q');
+              var a = item.querySelector('.faq-a');
+              var arrow = item.querySelector('.faq-q-arrow');
+              if (!q || !a || !arrow) return;
+              q.style.cursor = 'pointer';
+              q.addEventListener('click', function() {
+                var isOpen = a.style.display === 'block';
+                document.querySelectorAll('.faq-item').forEach(function(i) {
+                  i.querySelector('.faq-a').style.display = 'none';
+                  i.querySelector('.faq-q-arrow').textContent = '+';
+                });
+                if (!isOpen) { a.style.display = 'block'; arrow.textContent = '\\u2212'; }
+              });
+            });
+          }
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initFaq);
+          } else {
+            setTimeout(initFaq, 100);
+          }`
 
-content = content.replace(oldTestimonials, newTestimonials)
+content = content.replace(oldScript, newScript)
 fs.writeFileSync('C:/Users/randy/traffikfuel/src/app/page.tsx', content)
-console.log('SUCCESS: Testimonials updated')
+console.log('SUCCESS: FAQ accordion fixed')

@@ -376,20 +376,28 @@ body{background:#fff;color:#111;font-family:'DM Sans',sans-serif;font-weight:300
       <Footer />
       <script dangerouslySetInnerHTML={{ __html: `
         (function() {
-          document.querySelectorAll('.faq-item').forEach(function(item) {
-            var q = item.querySelector('.faq-q');
-            var a = item.querySelector('.faq-a');
-            var arrow = item.querySelector('.faq-q-arrow');
-            q.style.cursor = 'pointer';
-            q.addEventListener('click', function() {
-              var isOpen = a.style.display === 'block';
-              document.querySelectorAll('.faq-item').forEach(function(i) {
-                i.querySelector('.faq-a').style.display = 'none';
-                i.querySelector('.faq-q-arrow').textContent = '+';
+          function initFaq() {
+            document.querySelectorAll('.faq-item').forEach(function(item) {
+              var q = item.querySelector('.faq-q');
+              var a = item.querySelector('.faq-a');
+              var arrow = item.querySelector('.faq-q-arrow');
+              if (!q || !a || !arrow) return;
+              q.style.cursor = 'pointer';
+              q.addEventListener('click', function() {
+                var isOpen = a.style.display === 'block';
+                document.querySelectorAll('.faq-item').forEach(function(i) {
+                  i.querySelector('.faq-a').style.display = 'none';
+                  i.querySelector('.faq-q-arrow').textContent = '+';
+                });
+                if (!isOpen) { a.style.display = 'block'; arrow.textContent = '\u2212'; }
               });
-              if (!isOpen) { a.style.display = 'block'; arrow.textContent = '\u2212'; }
             });
-          });
+          }
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initFaq);
+          } else {
+            setTimeout(initFaq, 100);
+          }
           var deadline = new Date('2026-06-15T23:59:59');
           function updateCountdown() {
             var now = new Date(); var diff = deadline - now; if (diff <= 0) return;
