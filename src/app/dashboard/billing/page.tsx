@@ -1,9 +1,8 @@
 // @ts-nocheck
 'use client'
 
-export const dynamic = 'force-dynamic'
-
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
@@ -12,133 +11,139 @@ const supabase = createClient(
 )
 
 const PLANS = [
-  {
-    name: 'Starter',
-    price: '$97',
-    period: '/month',
-    description: 'Perfect for solo business owners ready to automate their marketing.',
-    features: ['Blog + social automation', 'Google SEO tools', '1 website connected', 'AI content generation', 'Free plan available'],
-    color: '#94a3b8',
-    current: false
-  },
-  {
-    name: 'Pro',
-    price: '$197',
-    period: '/month',
-    description: 'Full automation for serious business owners who want it all.',
-    features: ['Everything in Starter', 'TikTok + YouTube push', 'Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini', 'Reddit amplifier', 'Priority support'],
-    color: '#f97316',
-    current: true
-  },
-  {
-    name: 'Agency',
-    price: '$797',
-    period: '/month',
-    description: 'Manage multiple clients from one powerful dashboard.',
-    features: ['Everything in Pro', 'Up to 10 client accounts', 'White-label reports', 'Client management tools', 'Dedicated support'],
-    color: '#3b82f6',
-    current: false
-  },
-  {
-    name: 'Enterprise',
-    price: '$1,497',
-    period: '/month',
-    description: 'For large agencies scaling across many clients at once.',
-    features: ['Everything in Agency', 'Unlimited client accounts', 'Custom integrations', 'SLA guarantee', 'Dedicated account manager'],
-    color: '#a855f7',
-    current: false
-  }
+  { key: 'free', name: 'Free', price: '$0', period: '/forever', color: '#94a3b8', features: ['3 AI blog posts/month', 'Content dashboard access', 'No credit card required'] },
+  { key: 'starter', name: 'Starter', price: '$47', period: '/mo', color: '#f97316', features: ['Unlimited blog posts', 'Social media content', 'One-Push Publish', 'Content Calendar'] },
+  { key: 'pro', name: 'Pro', price: '$97', period: '/mo', color: '#f97316', features: ['Everything in Starter', 'AI Agents running 24/7', 'Auto Mode', 'TikTok + YouTube', 'AI SEO'] },
+  { key: 'agency', name: 'Agency', price: '$297', period: '/mo', color: '#3b82f6', features: ['Everything in Pro', '10 client accounts', 'White-label dashboard', 'Client management portal'] },
+  { key: 'enterprise', name: 'Enterprise', price: '$997', period: '/mo', color: '#a855f7', features: ['Everything in Agency', 'Unlimited clients', 'Custom AI training', 'Dedicated account manager'] }
 ]
 
 export default function Billing() {
+  const router = useRouter()
+  const [user, setUser] = useState(null)
+  const [userPlan, setUserPlan] = useState('free')
   const [loading, setLoading] = useState(true)
-  const [selectedPlan, setSelectedPlan] = useState('Pro')
+  const [upgrading, setUpgrading] = useState(false)
 
   useEffect(() => {
-    setLoading(false)
+    async function load() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) { router.push('/login'); return }
+      setUser(user)
+      const { data } = await supabase.from('users').select('plan').eq('id', user.id).single()
+      if (data?.plan) setUserPlan(data.plan)
+      setLoading(false)
+    }
+    load()
   }, [])
 
+  async function handleUpgrade(planKey) {
+    if (planKey === 'free' || planKey === userPlan) return
+    setUpgrading(true)
+    try {
+      const res = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: planKey, email: user.email, userId: user.id })
+      })
+      const result = await res.json()
+      if (result.url) {
+        window.location.href = result.url
+      }
+    } catch (err) {
+      console.error(err)
+    }
+    setUpgrading(false)
+  }
+
+  const currentPlan = PLANS.find(p => p.key === userPlan) || PLANS[0]
+
   if (loading) return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8' }}>Loading...</div>
+    <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ color: '#f97316', fontSize: '14px' }}>Loading billing info...</div>
+    </div>
   )
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#fff', padding: '40px 32px', fontFamily: 'system-ui, sans-serif' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#fff', fontFamily: 'system-ui, sans-serif' }}>
+      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '48px 32px' }}>
 
-        <div style={{ marginBottom: '40px' }}>
-          <h1 style={{ fontSize: '28px', fontWeight: '700', margin: '0 0 8px 0' }}>Billing</h1>
-          <p style={{ color: '#94a3b8', margin: 0 }}>Manage your subscription and billing information</p>
+        {/* Header */}
+        <div style={{ marginBottom: '48px' }}>
+          <button onClick={() => router.push('/dashboard')} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: '13px', marginBottom: '20px', padding: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+            ← Back to Dashboard
+          </button>
+          <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '12px' }}>Billing</div>
+          <h1 style={{ fontSize: '36px', fontWeight: '300', margin: '0 0 8px 0', letterSpacing: '-0.5px' }}>
+            Your Plan<span style={{ color: '#f97316' }}>.</span>
+          </h1>
+          <p style={{ color: '#64748b', margin: 0, fontSize: '14px' }}>Manage your subscription and billing details.</p>
         </div>
 
-        <div style={{ backgroundColor: '#111', borderRadius: '12px', border: '1px solid #1f1f1f', padding: '24px', marginBottom: '32px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+        {/* Current Plan Card */}
+        <div style={{ backgroundColor: '#111', borderRadius: '16px', border: '1px solid ' + currentPlan.color + '40', padding: '32px', marginBottom: '40px', background: 'linear-gradient(135deg, #111 0%, #0f0a00 100%)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
             <div>
-              <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Current Plan</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <span style={{ fontSize: '24px', fontWeight: '700' }}>Pro Plan</span>
-                <span style={{ padding: '3px 10px', borderRadius: '12px', fontSize: '12px', fontWeight: '600', backgroundColor: '#f9731622', color: '#f97316' }}>Active</span>
-              </div>
-              <div style={{ fontSize: '14px', color: '#94a3b8', marginTop: '4px' }}>$197/month -- Next billing date: June 30, 2026</div>
+              <div style={{ fontSize: '11px', color: currentPlan.color, fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '8px' }}>Current Plan</div>
+              <div style={{ fontSize: '32px', fontWeight: '700', color: '#fff', marginBottom: '4px' }}>{currentPlan.name}</div>
+              <div style={{ fontSize: '24px', color: currentPlan.color, fontWeight: '700' }}>{currentPlan.price}<span style={{ fontSize: '14px', color: '#64748b' }}>{currentPlan.period}</span></div>
             </div>
-            <div style={{ display: 'flex', gap: '12px' }}>
-              <button style={{ padding: '10px 20px', borderRadius: '8px', border: '1px solid #333', backgroundColor: 'transparent', color: '#94a3b8', cursor: 'pointer', fontSize: '14px' }}>Cancel Plan</button>
-              <button style={{ padding: '10px 20px', borderRadius: '8px', border: 'none', backgroundColor: '#f97316', color: '#fff', cursor: 'not-allowed', fontSize: '14px', fontWeight: '600', opacity: '0.6' }}>Manage Billing (Phase 4)</button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {currentPlan.features.map(f => (
+                <div key={f} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#ddd' }}>
+                  <span style={{ color: currentPlan.color, fontWeight: '700' }}>✓</span> {f}
+                </div>
+              ))}
             </div>
+            {userPlan !== 'free' && (
+              <a href="https://billing.stripe.com/p/login/test_00g000000000000" target="_blank" style={{ display: 'inline-block', padding: '12px 24px', borderRadius: '10px', border: '1px solid #2a2a2a', color: '#fff', fontSize: '13px', fontWeight: '600', textDecoration: 'none', backgroundColor: '#1a1a1a', cursor: 'pointer' }}>
+                Manage Billing →
+              </a>
+            )}
           </div>
         </div>
 
-        <div style={{ marginBottom: '32px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: '600', margin: '0 0 20px 0' }}>Available Plans</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
-            {PLANS.map(plan => (
-              <div key={plan.name} onClick={() => setSelectedPlan(plan.name)} style={{ backgroundColor: '#111', borderRadius: '12px', border: (plan.current || selectedPlan === plan.name) ? `2px solid ${plan.color}` : '1px solid #1f1f1f', padding: '24px', position: 'relative', cursor: 'pointer' }}>
-                {plan.current && (
-                  <div style={{ position: 'absolute', top: '-12px', left: '20px', backgroundColor: '#f97316', color: '#fff', fontSize: '11px', fontWeight: '700', padding: '3px 12px', borderRadius: '12px', textTransform: 'uppercase' }}>Current Plan</div>
-                )}
-                <div style={{ marginBottom: '12px' }}>
-                  <div style={{ fontSize: '18px', fontWeight: '700', marginBottom: '4px' }}>{plan.name}</div>
-                  <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: '1.4' }}>{plan.description}</div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '16px' }}>
-                  <span style={{ fontSize: '28px', fontWeight: '800', color: plan.color }}>{plan.price}</span>
-                  <span style={{ fontSize: '13px', color: '#94a3b8' }}>{plan.period}</span>
-                </div>
-                <div style={{ marginBottom: '20px' }}>
-                  {plan.features.map(f => (
-                    <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '8px', fontSize: '13px', color: '#e2e8f0' }}>
-                      <span style={{ color: plan.color, fontSize: '14px', marginTop: '1px' }}>+</span>
-                      {f}
-                    </div>
-                  ))}
-                </div>
-                <button style={{ width: '100%', padding: '10px', borderRadius: '8px', border: 'none', backgroundColor: plan.current ? '#1a1a1a' : plan.color, color: plan.current ? '#94a3b8' : '#fff', cursor: plan.current ? 'default' : 'pointer', fontSize: '13px', fontWeight: '600' }}
-                  onClick={(e) => { e.stopPropagation(); if (!plan.current) window.location.href = 'https://www.traffikora.com/pricing' }}>
-                  {plan.current ? 'Current Plan' : selectedPlan === plan.name ? 'Selected - Upgrade' : 'Upgrade'}
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ backgroundColor: '#111', borderRadius: '12px', border: '1px solid #1f1f1f', padding: '24px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: '600', margin: '0 0 20px 0' }}>Billing History</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '12px', fontSize: '12px', color: '#94a3b8', fontWeight: '600', textTransform: 'uppercase', marginBottom: '12px', padding: '0 4px' }}>
-            <span>Date</span><span>Description</span><span>Amount</span><span>Status</span>
-          </div>
-          {[
-            { date: 'May 31, 2026', desc: 'Pro Plan -- Monthly', amount: '$197.00', status: 'Paid' },
-            { date: 'Apr 30, 2026', desc: 'Pro Plan -- Monthly', amount: '$197.00', status: 'Paid' },
-            { date: 'Mar 31, 2026', desc: 'Pro Plan -- Monthly', amount: '$197.00', status: 'Paid' },
-          ].map((row, i) => (
-            <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '12px', padding: '14px 4px', borderTop: '1px solid #1f1f1f', fontSize: '14px', alignItems: 'center' }}>
-              <span style={{ color: '#94a3b8' }}>{row.date}</span>
-              <span>{row.desc}</span>
-              <span style={{ fontWeight: '600' }}>{row.amount}</span>
-              <span style={{ color: '#22c55e', fontWeight: '600' }}>{row.status}</span>
+        {/* Upgrade Options */}
+        {userPlan !== 'enterprise' && (
+          <>
+            <div style={{ fontSize: '11px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '20px' }}>
+              {userPlan === 'free' ? 'Upgrade Your Plan' : 'Available Upgrades'}
             </div>
-          ))}
-        </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
+              {PLANS.filter(p => p.key !== 'free' && p.key !== userPlan).map(plan => (
+                <div key={plan.key} style={{ backgroundColor: '#111', borderRadius: '16px', border: '1px solid #1a1a1a', padding: '24px 20px', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ fontSize: '10px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '8px' }}>{plan.name}</div>
+                  <div style={{ fontSize: '28px', fontWeight: '700', color: '#fff', marginBottom: '2px' }}>{plan.price}</div>
+                  <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '16px' }}>{plan.period}</div>
+                  <div style={{ flex: 1, marginBottom: '20px' }}>
+                    {plan.features.slice(0, 3).map(f => (
+                      <div key={f} style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '6px', display: 'flex', gap: '6px' }}>
+                        <span style={{ color: plan.color }}>+</span> {f}
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => handleUpgrade(plan.key)}
+                    disabled={upgrading}
+                    style={{ width: '100%', padding: '12px', borderRadius: '10px', border: 'none', background: 'linear-gradient(135deg, ' + plan.color + ', ' + plan.color + 'cc)', color: '#fff', fontSize: '13px', fontWeight: '700', cursor: upgrading ? 'not-allowed' : 'pointer' }}>
+                    {upgrading ? 'Loading...' : 'Upgrade →'}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Free plan CTA */}
+        {userPlan === 'free' && (
+          <div style={{ marginTop: '40px', backgroundColor: '#f9731610', border: '1px solid #f9731630', borderRadius: '16px', padding: '28px', textAlign: 'center' }}>
+            <div style={{ fontSize: '20px', fontWeight: '700', marginBottom: '8px' }}>Ready to go unlimited?</div>
+            <div style={{ fontSize: '14px', color: '#94a3b8', marginBottom: '20px' }}>Start with Starter at $47/mo and publish unlimited content today.</div>
+            <button onClick={() => handleUpgrade('starter')} style={{ padding: '14px 32px', borderRadius: '12px', border: 'none', background: 'linear-gradient(135deg, #f97316, #ea6a0a)', color: '#fff', fontSize: '15px', fontWeight: '700', cursor: 'pointer' }}>
+              Upgrade to Starter →
+            </button>
+          </div>
+        )}
 
       </div>
     </div>

@@ -1,6 +1,9 @@
 const fs = require('fs')
 const path = require('path')
 
+const dir = 'C:/Users/randy/traffikfuel/src/app/dashboard/billing'
+fs.mkdirSync(dir, { recursive: true })
+
 const content = `// @ts-nocheck
 'use client'
 
@@ -13,265 +16,146 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
 
-export default function Signup() {
+const PLANS = [
+  { key: 'free', name: 'Free', price: '$0', period: '/forever', color: '#94a3b8', features: ['3 AI blog posts/month', 'Content dashboard access', 'No credit card required'] },
+  { key: 'starter', name: 'Starter', price: '$47', period: '/mo', color: '#f97316', features: ['Unlimited blog posts', 'Social media content', 'One-Push Publish', 'Content Calendar'] },
+  { key: 'pro', name: 'Pro', price: '$97', period: '/mo', color: '#f97316', features: ['Everything in Starter', 'AI Agents running 24/7', 'Auto Mode', 'TikTok + YouTube', 'AI SEO'] },
+  { key: 'agency', name: 'Agency', price: '$297', period: '/mo', color: '#3b82f6', features: ['Everything in Pro', '10 client accounts', 'White-label dashboard', 'Client management portal'] },
+  { key: 'enterprise', name: 'Enterprise', price: '$997', period: '/mo', color: '#a855f7', features: ['Everything in Agency', 'Unlimited clients', 'Custom AI training', 'Dedicated account manager'] }
+]
+
+export default function Billing() {
   const router = useRouter()
-  const [step, setStep] = useState(1)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [plan, setPlan] = useState('free')
-  const [form, setForm] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-    phone: '',
-    businessName: '',
-    industry: '',
-    city: ''
-  })
+  const [user, setUser] = useState(null)
+  const [userPlan, setUserPlan] = useState('free')
+  const [loading, setLoading] = useState(true)
+  const [upgrading, setUpgrading] = useState(false)
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const p = params.get('plan')
-    if (p) setPlan(p)
+    async function load() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) { router.push('/login'); return }
+      setUser(user)
+      const { data } = await supabase.from('users').select('plan').eq('id', user.id).single()
+      if (data?.plan) setUserPlan(data.plan)
+      setLoading(false)
+    }
+    load()
   }, [])
 
-  function update(field, value) {
-    setForm(prev => ({ ...prev, [field]: value }))
-  }
-
-  async function handleSignup() {
-    setLoading(true)
-    setError('')
+  async function handleUpgrade(planKey) {
+    if (planKey === 'free' || planKey === userPlan) return
+    setUpgrading(true)
     try {
-      const { data, error: signUpError } = await supabase.auth.signUp({
-        email: form.email,
-        password: form.password,
-        options: {
-          data: {
-            full_name: form.fullName,
-            phone: form.phone,
-            business_name: form.businessName
-          }
-        }
+      const res = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: planKey, email: user.email, userId: user.id })
       })
-      if (signUpError) throw signUpError
-      if (data.user) {
-        await supabase.from('business_profiles').insert({
-          user_id: data.user.id,
-          business_name: form.businessName,
-          industry: form.industry,
-          city: form.city,
-          phone: form.phone
-        })
-
-        if (plan === 'free') {
-          router.push('/check-email')
-        } else {
-          const res = await fetch('/api/stripe/checkout', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ plan, email: form.email, userId: data.user.id })
-          })
-          const result = await res.json()
-          if (result.url) {
-            window.location.href = result.url
-          } else {
-            throw new Error(result.error || 'Checkout failed')
-          }
-        }
+      const result = await res.json()
+      if (result.url) {
+        window.location.href = result.url
       }
     } catch (err) {
-      setError(err.message)
+      console.error(err)
     }
-    setLoading(false)
+    setUpgrading(false)
   }
 
-  const planLabels = {
-    free: 'Free Plan',
-    starter: 'Starter \u2014 $47/mo',
-    pro: 'Pro \u2014 $97/mo',
-    agency: 'Agency \u2014 $297/mo',
-    enterprise: 'Enterprise \u2014 $997/mo'
-  }
+  const currentPlan = PLANS.find(p => p.key === userPlan) || PLANS[0]
 
-  const inputStyle = {
-    width: '100%',
-    padding: '16px 20px',
-    borderRadius: '12px',
-    border: '1px solid #2a2a2a',
-    backgroundColor: '#111',
-    color: '#fff',
-    fontSize: '15px',
-    outline: 'none',
-    boxSizing: 'border-box',
-    fontFamily: 'inherit',
-    transition: 'border-color 0.2s'
-  }
-
-  const labelStyle = {
-    display: 'block',
-    fontSize: '12px',
-    fontWeight: '600',
-    color: '#94a3b8',
-    textTransform: 'uppercase',
-    letterSpacing: '0.08em',
-    marginBottom: '8px'
-  }
+  if (loading) return (
+    <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ color: '#f97316', fontSize: '14px' }}>Loading billing info...</div>
+    </div>
+  )
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#050505', color: '#fff', fontFamily: "'Georgia', serif", display: 'flex' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#fff', fontFamily: 'system-ui, sans-serif' }}>
+      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '48px 32px' }}>
 
-      {/* LEFT PANEL */}
-      <div style={{ width: '45%', background: 'linear-gradient(135deg, #0a0a0a 0%, #111 50%, #0f0a00 100%)', padding: '60px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRight: '1px solid #1a1a1a', position: 'relative', overflow: 'hidden' }}>
-
-        <div style={{ position: 'absolute', top: '-100px', right: '-100px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, #f9731615 0%, transparent 70%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: '-50px', left: '-50px', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, #f9731608 0%, transparent 70%)', pointerEvents: 'none' }} />
-
-        <div>
-          <a href="/" style={{ textDecoration: 'none' }}>
-            <div style={{ fontSize: '22px', fontWeight: '800', color: '#fff', letterSpacing: '-0.5px', fontFamily: 'system-ui, sans-serif' }}>
-              Traffik<span style={{ color: '#f97316' }}>ora</span>
-              <span style={{ fontSize: '11px', color: '#f97316', verticalAlign: 'super' }}>\u2122</span>
-            </div>
-          </a>
-        </div>
-
-        <div>
-          <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '20px', fontFamily: 'system-ui, sans-serif' }}>Start Free Today</div>
-          <h1 style={{ fontSize: '42px', fontWeight: '400', lineHeight: '1.2', margin: '0 0 24px 0', color: '#fff' }}>
-            Your marketing.<br />
-            <em style={{ color: '#f97316', fontStyle: 'italic' }}>Automated forever.</em>
+        {/* Header */}
+        <div style={{ marginBottom: '48px' }}>
+          <button onClick={() => router.push('/dashboard')} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: '13px', marginBottom: '20px', padding: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+            \u2190 Back to Dashboard
+          </button>
+          <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '12px' }}>Billing</div>
+          <h1 style={{ fontSize: '36px', fontWeight: '300', margin: '0 0 8px 0', letterSpacing: '-0.5px' }}>
+            Your Plan<span style={{ color: '#f97316' }}>.</span>
           </h1>
-          <p style={{ fontSize: '16px', color: '#64748b', lineHeight: '1.7', margin: '0 0 48px 0', fontFamily: 'system-ui, sans-serif' }}>
-            Join hundreds of businesses letting AI handle their marketing while they focus on what matters most.
-          </p>
+          <p style={{ color: '#64748b', margin: 0, fontSize: '14px' }}>Manage your subscription and billing details.</p>
+        </div>
 
-          {plan !== 'free' && (
-            <div style={{ backgroundColor: '#f9731615', border: '1px solid #f9731640', borderRadius: '12px', padding: '16px 20px', marginBottom: '32px', fontFamily: 'system-ui, sans-serif' }}>
-              <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>Selected Plan</div>
-              <div style={{ fontSize: '18px', color: '#fff', fontWeight: '700' }}>{planLabels[plan]}</div>
-              <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>You\u2019ll be taken to secure checkout after signup</div>
+        {/* Current Plan Card */}
+        <div style={{ backgroundColor: '#111', borderRadius: '16px', border: '1px solid ' + currentPlan.color + '40', padding: '32px', marginBottom: '40px', background: 'linear-gradient(135deg, #111 0%, #0f0a00 100%)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
+            <div>
+              <div style={{ fontSize: '11px', color: currentPlan.color, fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '8px' }}>Current Plan</div>
+              <div style={{ fontSize: '32px', fontWeight: '700', color: '#fff', marginBottom: '4px' }}>{currentPlan.name}</div>
+              <div style={{ fontSize: '24px', color: currentPlan.color, fontWeight: '700' }}>{currentPlan.price}<span style={{ fontSize: '14px', color: '#64748b' }}>{currentPlan.period}</span></div>
             </div>
-          )}
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {[
-              { icon: '\u26a1', text: 'Live in under 5 minutes' },
-              { icon: '\uD83E\uDD16', text: 'AI agents running 24/7' },
-              { icon: '\uD83D\uDEE1', text: 'Free plan \u2014 no card needed' },
-              { icon: '\u2715', text: 'Cancel anytime, one click' }
-            ].map(item => (
-              <div key={item.text} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#f9731615', border: '1px solid #f9731630', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>{item.icon}</div>
-                <span style={{ fontSize: '14px', color: '#94a3b8', fontFamily: 'system-ui, sans-serif' }}>{item.text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ fontSize: '13px', color: '#2a2a2a', fontFamily: 'system-ui, sans-serif' }}>
-          \u00A9 2026 Traffikora. All rights reserved.
-        </div>
-      </div>
-
-      {/* RIGHT PANEL */}
-      <div style={{ flex: 1, padding: '60px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'center', overflowY: 'auto' }}>
-
-        <div style={{ maxWidth: '420px', width: '100%', margin: '0 auto' }}>
-
-          <div style={{ marginBottom: '40px' }}>
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '32px' }}>
-              {[1, 2].map(s => (
-                <div key={s} style={{ flex: 1, height: '3px', borderRadius: '2px', backgroundColor: step >= s ? '#f97316' : '#1a1a1a', transition: 'background-color 0.3s' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {currentPlan.features.map(f => (
+                <div key={f} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#ddd' }}>
+                  <span style={{ color: currentPlan.color, fontWeight: '700' }}>\u2713</span> {f}
+                </div>
               ))}
             </div>
-            <div style={{ fontSize: '12px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px', fontFamily: 'system-ui, sans-serif' }}>
-              Step {step} of 2
-            </div>
-            <h2 style={{ fontSize: '28px', fontWeight: '400', margin: '0 0 8px 0' }}>
-              {step === 1 ? 'Create your account' : 'Tell us about your business'}
-            </h2>
-            <p style={{ fontSize: '14px', color: '#64748b', margin: 0, fontFamily: 'system-ui, sans-serif' }}>
-              {step === 1 ? 'Your information is encrypted and secure.' : 'This helps us personalize your content.'}
-            </p>
+            {userPlan !== 'free' && (
+              <a href="https://billing.stripe.com/p/login/test_00g000000000000" target="_blank" style={{ display: 'inline-block', padding: '12px 24px', borderRadius: '10px', border: '1px solid #2a2a2a', color: '#fff', fontSize: '13px', fontWeight: '600', textDecoration: 'none', backgroundColor: '#1a1a1a', cursor: 'pointer' }}>
+                Manage Billing \u2192
+              </a>
+            )}
           </div>
-
-          {error && (
-            <div style={{ backgroundColor: '#ef444415', border: '1px solid #ef4444', borderRadius: '10px', padding: '12px 16px', marginBottom: '20px', fontSize: '13px', color: '#ef4444', fontFamily: 'system-ui, sans-serif' }}>
-              {error}
-            </div>
-          )}
-
-          {step === 1 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div>
-                <label style={labelStyle}>Full Name</label>
-                <input style={inputStyle} placeholder="John Smith" value={form.fullName} onChange={e => update('fullName', e.target.value)} />
-              </div>
-              <div>
-                <label style={labelStyle}>Email Address</label>
-                <input style={inputStyle} type="email" placeholder="john@yourbusiness.com" value={form.email} onChange={e => update('email', e.target.value)} />
-              </div>
-              <div>
-                <label style={labelStyle}>Password</label>
-                <input style={inputStyle} type="password" placeholder="Min 6 characters" value={form.password} onChange={e => update('password', e.target.value)} />
-              </div>
-              <div>
-                <label style={labelStyle}>Phone Number</label>
-                <input style={inputStyle} placeholder="+1 (305) 555-1234" value={form.phone} onChange={e => update('phone', e.target.value)} />
-              </div>
-              <button
-                onClick={() => {
-                  if (!form.fullName || !form.email || !form.password) { setError('Please fill in all fields'); return }
-                  setError('')
-                  setStep(2)
-                }}
-                style={{ width: '100%', padding: '16px', borderRadius: '12px', border: 'none', background: 'linear-gradient(135deg, #f97316, #ea6a0a)', color: '#fff', fontSize: '15px', fontWeight: '700', cursor: 'pointer', fontFamily: 'system-ui, sans-serif', letterSpacing: '0.02em' }}>
-                Continue \u2192
-              </button>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div>
-                <label style={labelStyle}>Business Name</label>
-                <input style={inputStyle} placeholder="Acme Marketing Co." value={form.businessName} onChange={e => update('businessName', e.target.value)} />
-              </div>
-              <div>
-                <label style={labelStyle}>Industry</label>
-                <select style={{ ...inputStyle, cursor: 'pointer' }} value={form.industry} onChange={e => update('industry', e.target.value)}>
-                  <option value="">Select your industry</option>
-                  {['Marketing Agency', 'Restaurant', 'Real Estate', 'HVAC', 'Dental', 'Law Firm', 'Salon & Spa', 'Gym & Fitness', 'Auto Repair', 'Med Spa', 'Plumbing', 'Chiropractic', 'Other'].map(i => (
-                    <option key={i} value={i}>{i}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label style={labelStyle}>City & State</label>
-                <input style={inputStyle} placeholder="Fort Pierce, FL" value={form.city} onChange={e => update('city', e.target.value)} />
-              </div>
-              <button
-                onClick={handleSignup}
-                disabled={loading}
-                style={{ width: '100%', padding: '16px', borderRadius: '12px', border: 'none', background: loading ? '#333' : 'linear-gradient(135deg, #f97316, #ea6a0a)', color: '#fff', fontSize: '15px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'system-ui, sans-serif', letterSpacing: '0.02em' }}>
-                {loading ? 'Creating your account...' : plan === 'free' ? 'Start Free Today \u2192' : 'Continue to Checkout \u2192'}
-              </button>
-              <button onClick={() => setStep(1)} style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #1a1a1a', backgroundColor: 'transparent', color: '#64748b', fontSize: '14px', cursor: 'pointer', fontFamily: 'system-ui, sans-serif' }}>
-                \u2190 Back
-              </button>
-            </div>
-          )}
-
-          <div style={{ textAlign: 'center', marginTop: '28px', fontSize: '13px', color: '#64748b', fontFamily: 'system-ui, sans-serif' }}>
-            Already have an account?{' '}
-            <a href="/login" style={{ color: '#f97316', textDecoration: 'none', fontWeight: '600' }}>Log in</a>
-          </div>
-
         </div>
+
+        {/* Upgrade Options */}
+        {userPlan !== 'enterprise' && (
+          <>
+            <div style={{ fontSize: '11px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '20px' }}>
+              {userPlan === 'free' ? 'Upgrade Your Plan' : 'Available Upgrades'}
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
+              {PLANS.filter(p => p.key !== 'free' && p.key !== userPlan).map(plan => (
+                <div key={plan.key} style={{ backgroundColor: '#111', borderRadius: '16px', border: '1px solid #1a1a1a', padding: '24px 20px', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ fontSize: '10px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '8px' }}>{plan.name}</div>
+                  <div style={{ fontSize: '28px', fontWeight: '700', color: '#fff', marginBottom: '2px' }}>{plan.price}</div>
+                  <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '16px' }}>{plan.period}</div>
+                  <div style={{ flex: 1, marginBottom: '20px' }}>
+                    {plan.features.slice(0, 3).map(f => (
+                      <div key={f} style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '6px', display: 'flex', gap: '6px' }}>
+                        <span style={{ color: plan.color }}>+</span> {f}
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => handleUpgrade(plan.key)}
+                    disabled={upgrading}
+                    style={{ width: '100%', padding: '12px', borderRadius: '10px', border: 'none', background: 'linear-gradient(135deg, ' + plan.color + ', ' + plan.color + 'cc)', color: '#fff', fontSize: '13px', fontWeight: '700', cursor: upgrading ? 'not-allowed' : 'pointer' }}>
+                    {upgrading ? 'Loading...' : 'Upgrade \u2192'}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Free plan CTA */}
+        {userPlan === 'free' && (
+          <div style={{ marginTop: '40px', backgroundColor: '#f9731610', border: '1px solid #f9731630', borderRadius: '16px', padding: '28px', textAlign: 'center' }}>
+            <div style={{ fontSize: '20px', fontWeight: '700', marginBottom: '8px' }}>Ready to go unlimited?</div>
+            <div style={{ fontSize: '14px', color: '#94a3b8', marginBottom: '20px' }}>Start with Starter at $47/mo and publish unlimited content today.</div>
+            <button onClick={() => handleUpgrade('starter')} style={{ padding: '14px 32px', borderRadius: '12px', border: 'none', background: 'linear-gradient(135deg, #f97316, #ea6a0a)', color: '#fff', fontSize: '15px', fontWeight: '700', cursor: 'pointer' }}>
+              Upgrade to Starter \u2192
+            </button>
+          </div>
+        )}
+
       </div>
     </div>
   )
 }
 `
 
-fs.writeFileSync('C:/Users/randy/traffikfuel/src/app/signup/page.tsx', content)
-console.log('SUCCESS: Signup page updated')
+fs.writeFileSync(path.join(dir, 'page.tsx'), content)
+console.log('SUCCESS: Billing dashboard written')
