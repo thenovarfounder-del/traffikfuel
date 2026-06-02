@@ -1,49 +1,70 @@
 const fs = require("fs");
+const path = "C:\\Users\\randy\\traffikfuel\\public\\sitemap.xml";
 
-const blogs = [
-  "how-to-get-found-on-chatgpt-perplexity",
-  "how-to-get-more-google-reviews",
-  "how-traffikora-is-different",
-  "local-seo-tips-for-small-businesses",
-  "local-seo-vs-ai-engine-optimization",
-  "set-it-once-how-traffikora-works",
-  "small-business-marketing-problem",
-  "what-is-aeo",
-  "what-is-ai-engine-optimization",
-  "what-is-generative-engine-optimization",
-  "what-is-local-seo",
-  "what-is-traffikora",
-  "why-ai-engine-optimization",
-  "why-google-business-profile-matters",
-];
+const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.traffikora.com/</loc><lastmod>2026-06-02</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://www.traffikora.com/pricing</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/features</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/how-it-works</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/why-traffikora</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/faq</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/about</loc><lastmod>2026-06-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/contact</loc><lastmod>2026-06-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/solutions</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/support</loc><lastmod>2026-06-02</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.traffikora.com/privacy</loc><lastmod>2026-06-02</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.traffikora.com/terms</loc><lastmod>2026-06-02</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.traffikora.com/demo</loc><lastmod>2026-06-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/resources/glossary</loc><lastmod>2026-06-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.traffikora.com/vs/hubspot</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/vs/hootsuite</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/vs/buffer</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/vs/later</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/compare/traffikora-vs-birdeye</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/compare/traffikora-vs-brightlocal</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/compare/traffikora-vs-constant-contact</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/compare/traffikora-vs-hootsuite</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/compare/traffikora-vs-hubspot</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/compare/traffikora-vs-later</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/compare/traffikora-vs-mailchimp</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/compare/traffikora-vs-reputation-com</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/compare/traffikora-vs-semrush</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/compare/traffikora-vs-sprout-social</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/compare/traffikora-vs-vendasta</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/compare/traffikora-vs-yext</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/features/ai-engine-optimization</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/features/ai-marketing-automation</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/features/blog-automation</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/features/google-business-profile</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/features/local-seo-automation</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/features/social-media-automation</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.traffikora.com/local-businesses/atlanta</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/local-businesses/chicago</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/local-businesses/dallas</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/local-businesses/houston</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/local-businesses/las-vegas</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/local-businesses/los-angeles</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/local-businesses/miami</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/local-businesses/new-york</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/local-businesses/phoenix</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/local-businesses/seattle</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/blog</loc><lastmod>2026-06-02</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/blog/how-to-get-found-on-chatgpt-perplexity</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/blog/how-to-get-more-google-reviews</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/blog/how-traffikora-is-different</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/blog/local-seo-tips-for-small-businesses</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/blog/local-seo-vs-ai-engine-optimization</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/blog/set-it-once-how-traffikora-works</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/blog/small-business-marketing-problem</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/blog/what-is-aeo</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/blog/what-is-ai-engine-optimization</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/blog/what-is-generative-engine-optimization</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/blog/what-is-local-seo</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/blog/what-is-traffikora</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/blog/why-ai-engine-optimization</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.traffikora.com/blog/why-google-business-profile-matters</loc><lastmod>2026-06-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+</urlset>`;
 
-const base = "C:\\Users\\randy\\traffikfuel\\src\\app\\blog";
-const b1 = "Google SEO + Google SEO";
-const b2 = "No no credit card";
-const b3 = "No No credit card";
-const b4 = "Free 7-day trial";
-const b5 = "free 7-day trial";
-const b6 = "7-Day Free Trial";
-const b7 = "Start Free Free Today";
-const b8 = "Start Free Free";
-const b9 = "June 2025";
-let fixed = 0;
-
-for (const blog of blogs) {
-  const fp = base + "\\" + blog + "\\page.tsx";
-  if (!fs.existsSync(fp)) { console.log("SKIPPED: " + blog); continue; }
-  let c = fs.readFileSync(fp, "utf8");
-  const orig = c;
-  c = c.split(b1).join("Google SEO");
-  c = c.split(b2).join("No credit card");
-  c = c.split(b3).join("No credit card");
-  c = c.split(b4).join("Start free today");
-  c = c.split(b5).join("start free today");
-  c = c.split(b6).join("Free Plan");
-  c = c.split(b7).join("Start Free Today");
-  c = c.split(b8).join("Start Free");
-  c = c.split(b9).join("2026");
-  if (c !== orig) { fs.writeFileSync(fp, c, "utf8"); console.log("FIXED: " + blog); fixed++; }
-  else { console.log("CLEAN: " + blog); }
-}
-console.log("DONE. Fixed: " + fixed);
+fs.writeFileSync(path, xml, "utf8");
+console.log("DONE - sitemap updated with " + xml.split("<url>").length - 1 + " URLs");
