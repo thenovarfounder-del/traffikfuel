@@ -1,25 +1,19 @@
 const fs = require('fs')
 
-let content = fs.readFileSync('C:/Users/randy/traffikfuel/src/app/dashboard/layout.tsx', 'utf8')
+let content = fs.readFileSync('C:/Users/randy/traffikfuel/src/app/dashboard/referral/page.tsx', 'utf8')
 
-// Find the billing line and add referral after it
-const billingLine = "{ href: '/dashboard/billing', icon: '\uD83D\uDCB3', label: 'Billing' },"
-const replacement = "{ href: '/dashboard/billing', icon: '\uD83D\uDCB3', label: 'Billing' },\n    { href: '/dashboard/referral', icon: '\uD83C\uDF81', label: 'Refer & Earn' },"
+const oldButtons = `            <a href={\`https://www.facebook.com/sharer/sharer.php?u=\${encodeURIComponent(referralLink)}\`} target="_blank" style={{ padding: '10px 20px', borderRadius: '8px', backgroundColor: '#1877F2', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '600' }}>Share on Facebook</a>
+            <a href={\`https://twitter.com/intent/tweet?text=I%20use%20Traffikora%20to%20automate%20my%20marketing%20%E2%80%94%20you%20should%20try%20it%3A&url=\${encodeURIComponent(referralLink)}\`} target="_blank" style={{ padding: '10px 20px', borderRadius: '8px', backgroundColor: '#000', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '600' }}>Share on X</a>
+            <a href={\`https://www.linkedin.com/sharing/share-offsite/?url=\${encodeURIComponent(referralLink)}\`} target="_blank" style={{ padding: '10px 20px', borderRadius: '8px', backgroundColor: '#0A66C2', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '600' }}>Share on LinkedIn</a>
+            <a href={\`mailto:?subject=Try%20Traffikora%20for%20free&body=Hey!%20I%20use%20Traffikora%20to%20automate%20all%20my%20marketing.%20Use%20my%20link%20to%20get%2020%25%20off%20your%20first%20month%3A%20\${encodeURIComponent(referralLink)}\`} style={{ padding: '10px 20px', borderRadius: '8px', backgroundColor: '#1a1a1a', border: '1px solid #2a2a2a', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '600' }}>Share via Email</a>`
 
-if (content.includes(billingLine)) {
-  content = content.replace(billingLine, replacement)
-  fs.writeFileSync('C:/Users/randy/traffikfuel/src/app/dashboard/layout.tsx', content)
-  console.log('SUCCESS: Referral link added')
-} else {
-  // Try a different approach - find any billing href line
-  content = content.replace(
-    "href: '/dashboard/billing'",
-    "href: '/dashboard/billing'"
-  )
-  // Insert after billing block
-  const idx = content.indexOf("'/dashboard/billing'")
-  const lineEnd = content.indexOf('\n', idx)
-  content = content.slice(0, lineEnd + 1) + "    { href: '/dashboard/referral', icon: '\uD83C\uDF81', label: 'Refer & Earn' },\n" + content.slice(lineEnd + 1)
-  fs.writeFileSync('C:/Users/randy/traffikfuel/src/app/dashboard/layout.tsx', content)
-  console.log('SUCCESS: Referral link inserted after billing')
-}
+const newButtons = `            <a href={\`https://wa.me/?text=Hey!%20I%20use%20Traffikora%20to%20automate%20all%20my%20marketing%20%E2%80%94%20try%20it%20free%3A%20\${encodeURIComponent(referralLink)}\`} target="_blank" style={{ padding: '10px 20px', borderRadius: '8px', backgroundColor: '#25D366', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '600' }}>WhatsApp</a>
+            <a href={\`sms:?body=Hey!%20I%20use%20Traffikora%20to%20automate%20my%20marketing%20%E2%80%94%20try%20it%20free%3A%20\${referralLink}\`} style={{ padding: '10px 20px', borderRadius: '8px', backgroundColor: '#6366f1', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '600' }}>Text a Friend</a>
+            <a href={\`https://www.facebook.com/sharer/sharer.php?u=\${encodeURIComponent(referralLink)}\`} target="_blank" style={{ padding: '10px 20px', borderRadius: '8px', backgroundColor: '#1877F2', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '600' }}>Facebook</a>
+            <a href={\`https://twitter.com/intent/tweet?text=I%20use%20Traffikora%20to%20automate%20my%20marketing%20%E2%80%94%20you%20should%20try%20it%3A&url=\${encodeURIComponent(referralLink)}\`} target="_blank" style={{ padding: '10px 20px', borderRadius: '8px', backgroundColor: '#000', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '600' }}>X (Twitter)</a>
+            <a href={\`https://www.linkedin.com/sharing/share-offsite/?url=\${encodeURIComponent(referralLink)}\`} target="_blank" style={{ padding: '10px 20px', borderRadius: '8px', backgroundColor: '#0A66C2', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '600' }}>LinkedIn</a>
+            <a href={\`mailto:?subject=Try%20Traffikora%20for%20free&body=Hey!%20I%20use%20Traffikora%20to%20automate%20all%20my%20marketing.%20Use%20my%20link%20to%20get%2020%25%20off%20your%20first%20month%3A%20\${encodeURIComponent(referralLink)}\`} style={{ padding: '10px 20px', borderRadius: '8px', backgroundColor: '#1a1a1a', border: '1px solid #2a2a2a', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '600' }}>Email</a>`
+
+content = content.replace(oldButtons, newButtons)
+fs.writeFileSync('C:/Users/randy/traffikfuel/src/app/dashboard/referral/page.tsx', content)
+console.log('SUCCESS: WhatsApp and SMS added to referral share buttons')
