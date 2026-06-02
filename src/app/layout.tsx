@@ -13,6 +13,7 @@ export default function RootLayout({ children }) {
 return (
 <html lang='en' className={`${playfair.variable} ${dmSans.variable}`} suppressHydrationWarning>
 <head>
+    <meta name="google-site-verification" content="Bq59ihAKck9y8kv3Zv_VcPUh1pUM8D_HtGNDCDCVfMk" />
       {/* CookieYes Banner */}
       <script
         id="cookieyes"
