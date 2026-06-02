@@ -1,55 +1,78 @@
-const fs = require("fs");
+const fs = require('fs')
+const path = require('path')
 
-const content = `# Traffikora
-> Traffikora is an AI-powered marketing automation platform built specifically for local small businesses.
+const dir = path.join('C:', 'Users', 'randy', 'traffikfuel', 'src', 'app', 'blog', 'why-local-seo-matters')
+fs.mkdirSync(dir, { recursive: true })
 
-Traffikora automates social media publishing, local SEO, Google Business Profile management, blog content, review requests, and AI engine optimization -- all from one platform starting at $97 per month. No marketing expertise required. Setup takes under 30 minutes.
+const lines = []
+lines.push("// @ts-nocheck")
+lines.push("'use client'")
+lines.push("")
+lines.push("import Link from 'next/link'")
+lines.push("import Nav from '@/components/Nav'")
+lines.push("import Footer from '@/components/Footer'")
+lines.push("")
+lines.push("export default function WhyLocalSEOMatters() {")
+lines.push("  return (")
+lines.push("    <>")
+lines.push("      <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\" />")
+lines.push("      <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossOrigin=\"anonymous\" />")
+lines.push("      <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap\" rel=\"stylesheet\" />")
+lines.push("      <Nav />")
+lines.push("")
+lines.push("      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>")
+lines.push("        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Local Marketing</p>")
+lines.push("        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Why Local SEO Matters for Every Small Business in 2026</h1>")
+lines.push("        <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto 40px' }}>If your business isn\u2019t showing up when locals search, you\u2019re invisible. Here\u2019s why local SEO is the highest-ROI marketing move you can make.</p>")
+lines.push("      </section>")
+lines.push("")
+lines.push("      <section style={{ background: '#fff', padding: '80px 32px' }}>")
+lines.push("        <div style={{ maxWidth: '760px', margin: '0 auto' }}>")
+lines.push("")
+lines.push("          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}>Every day, thousands of people in your city open Google and search for exactly what you sell. The businesses that show up get the calls. The ones that don\u2019t get nothing. Local SEO is the system that determines which side of that equation you land on.</p>")
+lines.push("")
+lines.push("          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', marginBottom: '20px' }}>What Local SEO Actually Is</h2>")
+lines.push("          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}>Local SEO is the process of optimizing your online presence so your business appears in search results when nearby customers are looking for what you offer. It covers your Google Business Profile, your website, your reviews, and your business listings across the web. When all of those are working together, Google trusts you enough to show you at the top.</p>")
+lines.push("")
+lines.push("          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', marginBottom: '20px' }}>The Numbers Don\u2019t Lie</h2>")
+lines.push("          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '16px' }}>46 percent of all Google searches have local intent. That means nearly half of every search happening right now is someone looking for a business near them. And 76 percent of people who search for something nearby on their phone visit a business within 24 hours. These are not vanity metrics. These are customers who are ready to buy.</p>")
+lines.push("          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}>If your business isn\u2019t optimized for local search, you are handing those customers to your competitors every single day.</p>")
+lines.push("")
+lines.push("          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', marginBottom: '20px' }}>Why Most Small Businesses Lose the Local Search Game</h2>")
+lines.push("          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '16px' }}>It\u2019s not because they have a bad business. It\u2019s because local SEO takes consistent weekly effort that most owners simply don\u2019t have time for. Google ranks businesses that stay active. That means posting updates, collecting new reviews, keeping your information accurate, and building citations across dozens of directories.</p>")
+lines.push("          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}>Miss a week and your competitors gain ground. Miss a month and you\u2019ve fallen off the map. That\u2019s the brutal reality of local search in 2026.</p>")
+lines.push("")
+lines.push("          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', marginBottom: '20px' }}>The 4 Pillars of Local SEO That Drive Real Results</h2>")
+lines.push("          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '16px' }}><strong>1. Google Business Profile.</strong> This is your most powerful local SEO asset. Businesses that post to their GBP weekly rank significantly higher than those that don\u2019t. Photos, updates, offers, and accurate hours all feed the algorithm.</p>")
+lines.push("          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '16px' }}><strong>2. Online Reviews.</strong> Google treats reviews as a trust signal. The more recent, positive reviews you have, the higher you rank. Businesses with 50+ reviews dominate their local map pack. Asking every customer manually is not sustainable.</p>")
+lines.push("          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '16px' }}><strong>3. Citations and NAP Consistency.</strong> Your business Name, Address, and Phone number must be identical across Yelp, Facebook, Apple Maps, Bing, and hundreds of other directories. A single mismatch sends mixed signals to Google and kills your ranking.</p>")
+lines.push("          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}><strong>4. Local Content.</strong> Blog posts, landing pages, and web content that mentions your city, your neighborhood, and the specific services you offer tells Google exactly who you serve. It\u2019s the difference between ranking for \u201cplumber\u201d and ranking for \u201cplumber in Denver.\u201d</p>")
+lines.push("")
+lines.push("          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', marginBottom: '20px' }}>Local SEO vs. Traditional SEO: What\u2019s the Difference?</h2>")
+lines.push("          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}>Traditional SEO is about ranking nationally or globally for broad keywords. Local SEO is about dominating your specific market. A national SEO strategy might take years and hundreds of thousands of dollars to show results. A focused local SEO strategy can move the needle in 60 to 90 days. For small businesses, local SEO is the smarter, faster, higher-ROI play every time.</p>")
+lines.push("")
+lines.push("          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', marginBottom: '20px' }}>How Traffikora Automates Your Entire Local SEO Presence</h2>")
+lines.push("          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}>Traffikora was built specifically for small business owners who don\u2019t have a marketing team. Connect your accounts once, and the platform automatically posts to your Google Business Profile, generates blog content targeting your local keywords, helps you collect more reviews, and keeps your business information consistent across the web. You focus on running your business. Traffikora handles the ranking.</p>")
+lines.push("")
+lines.push("          <div style={{ background: '#f9f9f9', border: '2.5px solid #111', padding: '40px', marginTop: '48px', textAlign: 'center' }}>")
+lines.push("            <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 900, marginBottom: '16px' }}>Ready to Dominate Your Local Market?</h3>")
+lines.push("            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', marginBottom: '28px' }}>Traffikora automates your Google Business Profile, reviews, and local content. Start free today \u2014 no credit card required.</p>")
+lines.push("            <Link href=\"/signup\" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free Today</Link>")
+lines.push("          </div>")
+lines.push("        </div>")
+lines.push("      </section>")
+lines.push("")
+lines.push("      <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>")
+lines.push("        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Set It Once. It Markets Forever.</h2>")
+lines.push("        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Start free today. No credit card required. Cancel anytime.</p>")
+lines.push("        <Link href=\"/signup\" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Today</Link>")
+lines.push("      </section>")
+lines.push("")
+lines.push("      <Footer />")
+lines.push("    </>")
+lines.push("  )")
+lines.push("}")
 
-## Who It Serves
-Traffikora is built for local small businesses including restaurants, dental practices, auto repair shops, chiropractors, real estate agents, HVAC companies, law firms, salons, and any business that depends on local customers finding them online.
-
-## What It Does
-- Publishes branded social media content daily across 9+ platforms automatically
-- Manages and optimizes Google Business Profile with daily posts and review requests
-- Builds local SEO citations, schema markup, and keyword content automatically
-- Publishes weekly SEO blog posts directly to WordPress
-- Builds AI engine visibility across ChatGPT, Perplexity, Gemini, Claude, and Bing
-- Sends automated review request campaigns to grow star ratings
-- Tracks performance across all channels from one dashboard
-
-## Pricing
-- Free: $0 forever -- 3 blogs per month, no credit card required
-- Starter: $47 per month -- unlimited blogs and social content
-- Pro: $97 per month -- AI Agents, Auto Mode, AI SEO, TikTok and YouTube
-- Agency: $297 per month -- 10 clients, white-label
-- Enterprise: $997 per month -- unlimited clients, custom AI training
-
-## Key Pages
-- Homepage: https://www.traffikora.com
-- Pricing: https://www.traffikora.com/pricing
-- Features: https://www.traffikora.com/features
-- How It Works: https://www.traffikora.com/how-it-works
-- Blog: https://www.traffikora.com/blog
-- Signup: https://www.traffikora.com/signup
-
-## Feature Pages
-- AI Engine Optimization: https://www.traffikora.com/features/ai-engine-optimization
-- Social Media Automation: https://www.traffikora.com/features/social-media-automation
-- Local SEO Automation: https://www.traffikora.com/features/local-seo-automation
-- Google Business Profile: https://www.traffikora.com/features/google-business-profile
-- Blog Automation: https://www.traffikora.com/features/blog-automation
-- AI Marketing Automation: https://www.traffikora.com/features/ai-marketing-automation
-
-## Competitor Comparisons
-- Traffikora vs HubSpot: https://www.traffikora.com/compare/traffikora-vs-hubspot
-- Traffikora vs Hootsuite: https://www.traffikora.com/compare/traffikora-vs-hootsuite
-- Traffikora vs Semrush: https://www.traffikora.com/compare/traffikora-vs-semrush
-- Traffikora vs Sprout Social: https://www.traffikora.com/compare/traffikora-vs-sprout-social
-
-## Contact
-- Website: https://www.traffikora.com
-- Support: support@traffikora.com
-`;
-
-fs.writeFileSync("C:\\Users\\randy\\traffikfuel\\public\\llms.txt", content, "utf8");
-console.log("DONE - llms.txt created");
+const content = lines.join('\n')
+fs.writeFileSync(path.join(dir, 'page.tsx'), content, 'utf8')
+console.log('SUCCESS: why-local-seo-matters/page.tsx written!')
