@@ -25,8 +25,8 @@ export default function Post1() {
           <p style={{ marginBottom: '28px' }}>They are asking things like: <em>What is the best dentist near me? Which HVAC company should I call? Can you recommend a good family law attorney in Austin?</em></p>
           <p style={{ marginBottom: '28px' }}>And those AI engines are answering with specific business recommendations. The question is: is your business one of them?</p>
 
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', margin: '48px 0 20px' }}>What is Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini?</h2>
-          <p style={{ marginBottom: '28px' }}>Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini (AEO) is the practice of making your business visible and recommendable across AI-powered search platforms. Just like traditional SEO helps you rank on Google, AEO helps you get cited when someone asks an AI engine for a recommendation in your category.</p>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', margin: '48px 0 20px' }}>What is Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini?</h2>
+          <p style={{ marginBottom: '28px' }}>Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini (AEO) is the practice of making your business visible and recommendable across AI-powered search platforms. Just like traditional SEO helps you rank on Google, AEO helps you get cited when someone asks an AI engine for a recommendation in your category.</p>
           <p style={{ marginBottom: '28px' }}>The major AI engines you need to be visible on in 2026 are ChatGPT, Google Gemini, Anthropic Claude, Perplexity, and Microsoft Copilot. Each of these platforms has hundreds of millions of users and is growing rapidly.</p>
 
           <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#111', margin: '48px 0 20px' }}>Why this matters for local businesses specifically</h2>
@@ -47,16 +47,16 @@ export default function Post1() {
           <p style={{ marginBottom: '48px' }}>The businesses that build strong AI engine visibility in 2026 will have a significant competitive advantage that compounds over time. The ones who wait will be playing catch-up in a market that has already moved on.</p>
 
           <div style={{ background: '#f9f9f9', border: '2.5px solid #111', padding: '36px', textAlign: 'center' }}>
-            <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '26px', fontWeight: 900, color: '#111', marginBottom: '12px' }}>Traffikora automates your Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.</h3>
+            <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '26px', fontWeight: 900, color: '#111', marginBottom: '12px' }}>Traffikora automates your Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.</h3>
             <p style={{ fontSize: '16px', color: '#444', marginBottom: '24px' }}>Connect your accounts once. We handle the rest — across Google, ChatGPT, Gemini, Claude, and Perplexity simultaneously.</p>
-            <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '14px 36px', textDecoration: 'none', fontSize: '16px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free Free Today</Link>
+            <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '14px 36px', textDecoration: 'none', fontSize: '16px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free Today</Link>
           </div>
         </div>
       </article>
 
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Let Traffikora handle your Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini automatically.</h2>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No no credit card required. Cancel anytime.</p>
+        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Let Traffikora handle your Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini automatically.</h2>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Start free today. No credit card required. Cancel anytime.</p>
         <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Today</Link>
       </section>
 

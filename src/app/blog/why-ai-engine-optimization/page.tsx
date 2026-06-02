@@ -79,7 +79,7 @@ export default function WhyAIEngineOptimization() {
 
           <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '34px', fontWeight: 700, color: '#111', margin: '56px 0 20px' }}>The Window Is Open Right Now</h2>
 
-          <p>Here is the reality: most small businesses have not thought about Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini yet. Most of your competitors haven’t either. That means right now — today — there is a real opportunity to establish your business as the recommended option in your category and city before everyone else catches on.</p>
+          <p>Here is the reality: most small businesses have not thought about Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini yet. Most of your competitors haven’t either. That means right now — today — there is a real opportunity to establish your business as the recommended option in your category and city before everyone else catches on.</p>
 
           <p style={{ marginTop: '28px' }}>That window will not stay open forever. AI search is growing fast. The businesses that move now will have a compounding advantage that gets harder to overcome over time.</p>
 
@@ -95,7 +95,7 @@ export default function WhyAIEngineOptimization() {
 
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
         <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Google is not the only search engine anymore.</h2>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No no credit card required. Cancel anytime.</p>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Start free today. No credit card required. Cancel anytime.</p>
         <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Today</Link>
       </section>
 

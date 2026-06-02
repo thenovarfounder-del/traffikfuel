@@ -1,48 +1,49 @@
 const fs = require("fs");
-const p = "C:\\Users\\randy\\traffikfuel\\src\\app\\resources\\glossary\\page.tsx";
-const lines = [
-  "// @ts-nocheck",
-  "'use client';",
-  "import Nav from '@/components/Nav';",
-  "import Footer from '@/components/Footer';",
-  "",
-  "const terms = [",
-  '  ["AI Engine Optimization (AEO)", "The process of making a business visible when people ask ChatGPT, Perplexity, and Gemini for recommendations. AEO focuses on structured data, entity signals, and citation authority."],',
-  '  ["AI Engine", "An AI-powered assistant tool that answers queries using language models. Examples include ChatGPT, Perplexity, Google Gemini, Claude, and Microsoft Copilot. AI engines are increasingly used for local business discovery."],',
-  '  ["Citation", "A mention of your business name, address, and phone number on directories and data aggregators. Consistent citations across high-authority sources are a foundational local SEO ranking factor."],',
-  '  ["Entity", "A uniquely identifiable business, person, or place. Google and AI engines use entity signals to verify a business is real and trustworthy before ranking or recommending it."],',
-  '  ["Generative Engine Optimization (GEO)", "Another term for AI Engine Optimization. GEO refers to optimizing content and signals so generative AI tools include your business in their responses to relevant queries."],',
-  '  ["Google Business Profile (GBP)", "A free Google tool that lets businesses manage their presence in Google Search and Google Maps. An active, optimized GBP listing is one of the most important local SEO ranking factors."],',
-  '  ["llms.txt", "A structured signal file on your website that tells AI crawlers how to interpret and cite your business. Similar to robots.txt for traditional search engines, it is an emerging standard for AI engine visibility."],',
-  '  ["Local Map Pack", "The block of three local business listings at the top of Google search results for local queries. Appearing here captures the majority of clicks for local searches."],',
-  '  ["Local SEO", "Search engine optimization focused on improving visibility in location-based search results. Includes citation building, Google Business Profile management, schema markup, and keyword-targeted content."],',
-  '  ["Marketing Automation", "Software that executes marketing tasks automatically -- creating content, publishing across channels, managing profiles, sending review requests -- without manual work from the business owner."],',
-  '  ["NAP Consistency", "The accuracy of your business Name, Address, and Phone number across all online directories. Inconsistent NAP data confuses search engines and weakens local ranking signals."],',
-  '  ["Schema Markup", "Structured data code added to website pages that helps search engines and AI engines understand what a business is and what it offers. LocalBusiness and FAQPage schema are valuable for local SEO."],',
-  '  ["Topical Authority", "The degree to which a website is recognized as an expert on a specific topic. Consistently publishing relevant content builds topical authority and improves rankings across all pages on your site."],',
-  '  ["Review Velocity", "The rate at which a business receives new reviews over time. Consistent review velocity signals to Google that a business is active and trusted -- a positive local ranking factor."],',
-  "];",
-  "",
-  "export default function GlossaryPage() {",
-  "  return (",
-  "    <>",
-  "      <Nav />",
-  "      <main style={{ background: '#111111', minHeight: '100vh', color: '#fff', fontFamily: 'DM Sans, sans-serif', padding: '80px 24px' }}>",
-  "        <div style={{ maxWidth: '800px', margin: '0 auto' }}>",
-  "          <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2rem, 5vw, 3rem)', color: '#E8610A', marginBottom: '16px' }}>SEO and AI Marketing Glossary</h1>",
-  "          <p style={{ fontSize: '18px', lineHeight: '1.7', color: '#cccccc', marginBottom: '60px' }}>Key terms every small business owner needs to know about SEO, AI engine optimization, and marketing automation.</p>",
-  "          {terms.map(([term, def]) => (",
-  "            <div key={term} style={{ borderBottom: '1px solid #2a2a2a', paddingBottom: '28px', marginBottom: '28px' }}>",
-  "              <h2 style={{ fontFamily: 'Playfair Display, serif', color: '#E8610A', fontSize: '1.2rem', marginBottom: '10px' }}>{term}</h2>",
-  "              <p style={{ color: '#cccccc', lineHeight: '1.8', fontSize: '1rem' }}>{def}</p>",
-  "            </div>",
-  "          ))}",
-  "        </div>",
-  "      </main>",
-  "      <Footer />",
-  "    </>",
-  "  );",
-  "}",
+
+const blogs = [
+  "how-to-get-found-on-chatgpt-perplexity",
+  "how-to-get-more-google-reviews",
+  "how-traffikora-is-different",
+  "local-seo-tips-for-small-businesses",
+  "local-seo-vs-ai-engine-optimization",
+  "set-it-once-how-traffikora-works",
+  "small-business-marketing-problem",
+  "what-is-aeo",
+  "what-is-ai-engine-optimization",
+  "what-is-generative-engine-optimization",
+  "what-is-local-seo",
+  "what-is-traffikora",
+  "why-ai-engine-optimization",
+  "why-google-business-profile-matters",
 ];
-fs.writeFileSync(p, lines.join("\n"), "utf8");
-console.log("DONE - glossary rebuilt");
+
+const base = "C:\\Users\\randy\\traffikfuel\\src\\app\\blog";
+const b1 = "Google SEO + Google SEO";
+const b2 = "No no credit card";
+const b3 = "No No credit card";
+const b4 = "Free 7-day trial";
+const b5 = "free 7-day trial";
+const b6 = "7-Day Free Trial";
+const b7 = "Start Free Free Today";
+const b8 = "Start Free Free";
+const b9 = "June 2025";
+let fixed = 0;
+
+for (const blog of blogs) {
+  const fp = base + "\\" + blog + "\\page.tsx";
+  if (!fs.existsSync(fp)) { console.log("SKIPPED: " + blog); continue; }
+  let c = fs.readFileSync(fp, "utf8");
+  const orig = c;
+  c = c.split(b1).join("Google SEO");
+  c = c.split(b2).join("No credit card");
+  c = c.split(b3).join("No credit card");
+  c = c.split(b4).join("Start free today");
+  c = c.split(b5).join("start free today");
+  c = c.split(b6).join("Free Plan");
+  c = c.split(b7).join("Start Free Today");
+  c = c.split(b8).join("Start Free");
+  c = c.split(b9).join("2026");
+  if (c !== orig) { fs.writeFileSync(fp, c, "utf8"); console.log("FIXED: " + blog); fixed++; }
+  else { console.log("CLEAN: " + blog); }
+}
+console.log("DONE. Fixed: " + fixed);

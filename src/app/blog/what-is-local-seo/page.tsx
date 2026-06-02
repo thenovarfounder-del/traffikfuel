@@ -32,7 +32,7 @@ export default function BlogPost2() {
           <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#444', lineHeight: 1.9, marginBottom: '32px' }}>Most small business owners do not have time to manage their Google Business Profile, build citations, and monitor reviews every week. Traffikora automates all of it. Connect your accounts once and the platform handles your entire local SEO presence so you rank higher without lifting a finger.</p>
           <div style={{ background: '#f9f9f9', border: '2.5px solid #111', padding: '40px', marginTop: '48px', textAlign: 'center' }}>
             <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 900, marginBottom: '16px' }}>Want Your Local SEO Done Automatically?</h3>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', marginBottom: '28px' }}>Traffikora automates your Google Business Profile, citations, and reviews. Start your free 7-day trial today.</p>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '17px', color: '#444', marginBottom: '28px' }}>Traffikora automates your Google Business Profile, citations, and reviews. Start your start free today today.</p>
             <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '16px 40px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, border: '2.5px solid #E8610A', display: 'inline-block' }}>Start Free Today</Link>
           </div>
         </div>
@@ -40,7 +40,7 @@ export default function BlogPost2() {
 
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
         <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Set It Once. It Markets Forever.</h2>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Free 7-day trial. No no credit card required. Cancel anytime.</p>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Start free today. No credit card required. Cancel anytime.</p>
         <Link href="/signup" style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Today</Link>
       </section>
 
