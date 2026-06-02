@@ -1,110 +1,117 @@
 const fs = require('fs')
 const path = require('path')
 
-const base = path.join('C:', 'Users', 'randy', 'traffikfuel', 'src', 'app', 'blog')
+const dir = path.join('C:', 'Users', 'randy', 'traffikfuel', 'src', 'app', 'features', 'review-automation')
+fs.mkdirSync(dir, { recursive: true })
 
-const layouts = [
-  {
-    folder: 'how-ai-marketing-automation-works',
-    title: 'How AI Marketing Automation Works for Small Business | Traffikora',
-    description: 'Learn how AI marketing automation works and how small businesses use it to save time, rank higher, and grow faster without a marketing team.',
-    url: 'https://www.traffikora.com/blog/how-ai-marketing-automation-works',
-    headline: 'How AI Marketing Automation Works for Small Business'
-  },
-  {
-    folder: 'how-to-get-found-on-chatgpt-perplexity',
-    title: 'How to Get Found on ChatGPT and Perplexity | Traffikora',
-    description: 'AI search is replacing Google for millions of searches. Here is how to get your small business found on ChatGPT, Perplexity, and other AI search engines.',
-    url: 'https://www.traffikora.com/blog/how-to-get-found-on-chatgpt-perplexity',
-    headline: 'How to Get Found on ChatGPT and Perplexity'
-  },
-  {
-    folder: 'how-traffikora-is-different',
-    title: 'How Traffikora Is Different From Every Other Marketing Tool | Traffikora',
-    description: 'Traffikora is not another dashboard. It is a fully automated marketing system built specifically for small businesses that runs 24/7 without your input.',
-    url: 'https://www.traffikora.com/blog/how-traffikora-is-different',
-    headline: 'How Traffikora Is Different From Every Other Marketing Tool'
-  },
-  {
-    folder: 'local-seo-vs-ai-engine-optimization',
-    title: 'Local SEO vs AI Engine Optimization: What Small Businesses Need to Know | Traffikora',
-    description: 'Local SEO and AI engine optimization are both essential in 2026. Learn the difference and how to win at both without a marketing agency.',
-    url: 'https://www.traffikora.com/blog/local-seo-vs-ai-engine-optimization',
-    headline: 'Local SEO vs AI Engine Optimization: What Small Businesses Need to Know'
-  },
-  {
-    folder: 'marketing-automation-small-business-2026',
-    title: 'Marketing Automation for Small Business in 2026 | Traffikora',
-    description: 'Marketing automation is no longer just for big companies. Here is how small businesses are using automation in 2026 to compete and win locally.',
-    url: 'https://www.traffikora.com/blog/marketing-automation-small-business-2026',
-    headline: 'Marketing Automation for Small Business in 2026'
-  },
-  {
-    folder: 'what-is-aeo',
-    title: 'What Is AEO? Answer Engine Optimization Explained | Traffikora',
-    description: 'AEO stands for Answer Engine Optimization. Learn what it is, why it matters for small businesses, and how to optimize your content for AI-powered search.',
-    url: 'https://www.traffikora.com/blog/what-is-aeo',
-    headline: 'What Is AEO? Answer Engine Optimization Explained'
-  },
-  {
-    folder: 'what-is-generative-engine-optimization',
-    title: 'What Is Generative Engine Optimization (GEO)? | Traffikora',
-    description: 'Generative Engine Optimization is how you get your business cited by AI search engines like ChatGPT and Perplexity. Here is what you need to know.',
-    url: 'https://www.traffikora.com/blog/what-is-generative-engine-optimization',
-    headline: 'What Is Generative Engine Optimization (GEO)?'
-  },
-  {
-    folder: 'why-local-seo-matters',
-    title: 'Why Local SEO Matters for Every Small Business in 2026 | Traffikora',
-    description: 'Local SEO is the highest-ROI marketing move a small business can make. Here is why it matters and how to dominate your local market in 2026.',
-    url: 'https://www.traffikora.com/blog/why-local-seo-matters',
-    headline: 'Why Local SEO Matters for Every Small Business in 2026'
-  }
-]
+const lines = []
+lines.push('import Link from "next/link"')
+lines.push('import Nav from "@/components/Nav"')
+lines.push('import Footer from "@/components/Footer"')
+lines.push('')
+lines.push('export const metadata = {')
+lines.push('  title: "Automated Review Generation Software for Small Business | Traffikora",')
+lines.push('  description: "Get more Google reviews automatically. Traffikora sends review requests after every job, monitors your reputation, and helps local businesses build 5-star authority on autopilot.",')
+lines.push('}')
+lines.push('')
+lines.push('export default function ReviewAutomationPage() {')
+lines.push('  return (')
+lines.push('    <>')
+lines.push('      <Nav />')
+lines.push('      <main suppressHydrationWarning>')
+lines.push('')
+lines.push('        <section style={{ background: "#111111", padding: "80px 24px 60px", textAlign: "center" }} suppressHydrationWarning>')
+lines.push('          <h1 style={{ fontFamily: "Playfair Display, serif", fontSize: "clamp(2rem, 5vw, 3.2rem)", color: "#ffffff", marginBottom: "20px" }}>Automated Review Generation for Local Business</h1>')
+lines.push('          <p style={{ color: "#cccccc", fontSize: "1.15rem", maxWidth: "640px", margin: "0 auto 32px" }}>Most customers want to leave a review. They just never get asked. Traffikora sends the ask automatically after every job and turns satisfied customers into 5-star reviews without lifting a finger.</p>')
+lines.push('          <Link href="/signup" style={{ background: "#E8610A", color: "#ffffff", padding: "14px 32px", borderRadius: "6px", fontWeight: "700", textDecoration: "none", fontSize: "1rem" }}>Start Free \u2014 No Card Needed</Link>')
+lines.push('        </section>')
+lines.push('')
+lines.push('        <section style={{ background: "#1a1a1a", padding: "60px 24px" }}>')
+lines.push('          <div style={{ maxWidth: "800px", margin: "0 auto" }}>')
+lines.push('            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "1.5rem", marginBottom: "16px" }}>What Traffikora Does For Your Online Reviews</h2>')
+lines.push('            <ul style={{ color: "#cccccc", lineHeight: "2", paddingLeft: "20px" }}>')
+lines.push('              <li>Sends automated review requests to customers via email and SMS after every transaction</li>')
+lines.push('              <li>Directs satisfied customers straight to your Google Business Profile review page</li>')
+lines.push('              <li>Monitors new reviews across Google, Yelp, and Facebook in real time</li>')
+lines.push('              <li>Alerts you instantly when a negative review is posted so you can respond fast</li>')
+lines.push('              <li>Tracks your review count, average rating, and review velocity over time</li>')
+lines.push('              <li>Builds the review authority Google uses to rank local businesses in the map pack</li>')
+lines.push('            </ul>')
+lines.push('          </div>')
+lines.push('        </section>')
+lines.push('')
+lines.push('        <section style={{ background: "#111111", padding: "60px 24px" }}>')
+lines.push('          <div style={{ maxWidth: "800px", margin: "0 auto" }}>')
+lines.push('            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "24px" }}>Why Reviews Are Your Most Powerful Local SEO Signal</h2>')
+lines.push('            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Google uses review quantity, recency, and average rating as direct ranking signals for local search. Businesses with more recent 5-star reviews consistently outrank competitors in the local map pack -- the three results that appear above all organic search results. If your competitors are collecting reviews and you are not, they are gaining ground on you every single week.</p>')
+lines.push('            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Reviews also drive conversion. Studies show that 93 percent of consumers read online reviews before choosing a local business, and businesses with a rating above 4.5 stars see dramatically higher click-through rates from Google search results. A strong review profile does not just help you rank -- it turns searchers into customers once they find you.</p>')
+lines.push('            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>The problem is that asking for reviews manually is time-consuming and inconsistent. Most business owners intend to ask every customer and ask almost none. Traffikora removes the human bottleneck entirely by automating the request the moment a job is complete.</p>')
+lines.push('          </div>')
+lines.push('        </section>')
+lines.push('')
+lines.push('        <section style={{ background: "#1a1a1a", padding: "60px 24px" }}>')
+lines.push('          <div style={{ maxWidth: "800px", margin: "0 auto" }}>')
+lines.push('            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#E8610A", fontSize: "2rem", marginBottom: "24px" }}>How Traffikora Automates Your Review Generation</h2>')
+lines.push('            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>When a customer completes a purchase or service, Traffikora automatically sends a review request via email or SMS with a direct link to your Google Business Profile review page. The timing, message, and follow-up are all handled automatically. You set it up once and the system runs forever.</p>')
+lines.push('            <p style={{ color: "#cccccc", lineHeight: "1.8", marginBottom: "16px" }}>Traffikora also monitors your reviews across Google, Yelp, and Facebook and sends you an instant alert when a new review is posted. For negative reviews, speed of response is critical -- a fast, professional reply shows potential customers that you care and can often change the outcome of the situation entirely.</p>')
+lines.push('            <p style={{ color: "#cccccc", lineHeight: "1.8" }}>Over time, the review dashboard shows you your total review count, average rating, and review velocity so you can see exactly how your reputation is growing and how you compare to local competitors. This is reputation management on autopilot -- no agency required.</p>')
+lines.push('          </div>')
+lines.push('        </section>')
+lines.push('')
+lines.push('        <section style={{ background: "#111111", padding: "60px 24px" }}>')
+lines.push('          <div style={{ maxWidth: "800px", margin: "0 auto" }}>')
+lines.push('            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "32px" }}>What You Get With Traffikora Review Automation</h2>')
+lines.push('            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "20px" }}>')
+lines.push('              {[')
+lines.push('                ["Automated Review Requests", "Email and SMS review requests sent automatically after every completed job or transaction. No manual follow-up required."],')
+lines.push('                ["Direct Google Review Links", "Every request sends customers directly to your Google Business Profile review page -- removing every friction point between happy customer and posted review."],')
+lines.push('                ["Multi-Platform Monitoring", "Real-time monitoring of your reviews across Google, Yelp, and Facebook so you never miss what customers are saying about your business."],')
+lines.push('                ["Instant Negative Review Alerts", "Get notified the moment a negative review is posted so you can respond quickly, professionally, and turn a bad experience into a recoverable one."],')
+lines.push('                ["Review Velocity Tracking", "See how fast your reviews are accumulating over time and measure the direct impact on your local search ranking position."],')
+lines.push('                ["Reputation Dashboard", "A single dashboard showing your total reviews, average rating, review trends, and competitive position in your local market."],')
+lines.push('                ["Review Response Templates", "Pre-written response templates for both positive and negative reviews that keep your tone professional and your response time fast."],')
+lines.push('                ["Ranking Impact Reports", "See the direct correlation between your growing review count and your position in Google Maps and local search results over time."]')
+lines.push('              ].map(([title, desc]) => (')
+lines.push('                <div key={title} style={{ background: "#1a1a1a", borderRadius: "8px", padding: "24px", borderLeft: "3px solid #E8610A" }}>')
+lines.push('                  <h3 style={{ color: "#E8610A", fontFamily: "Playfair Display, serif", fontSize: "1.1rem", marginBottom: "10px" }}>{title}</h3>')
+lines.push('                  <p style={{ color: "#cccccc", lineHeight: "1.7", fontSize: "0.95rem" }}>{desc}</p>')
+lines.push('                </div>')
+lines.push('              ))}')
+lines.push('            </div>')
+lines.push('          </div>')
+lines.push('        </section>')
+lines.push('')
+lines.push('        <section style={{ background: "#1a1a1a", padding: "60px 24px" }}>')
+lines.push('          <div style={{ maxWidth: "800px", margin: "0 auto" }}>')
+lines.push('            <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "32px" }}>Frequently Asked Questions</h2>')
+lines.push('            {[')
+lines.push('              ["How does automated review generation work?", "Traffikora connects to your customer data and automatically sends a review request via email or SMS after every completed job or purchase. The message includes a direct link to your Google Business Profile so customers can leave a review in seconds. The entire process is automated -- you set it up once and it runs continuously."],')
+lines.push('              ["Is it against Google policy to ask customers for reviews?", "No. Google explicitly allows and encourages businesses to ask customers for honest reviews. What Google prohibits is incentivizing reviews with discounts or payment, and posting fake reviews. Traffikora sends genuine requests to real customers for their honest feedback -- fully compliant with Google policy."],')
+lines.push('              ["How many more reviews will I get?", "Most businesses using automated review requests see a 3x to 5x increase in monthly review volume within the first 60 days. The exact number depends on your transaction volume, but the consistent and timely nature of automated requests significantly outperforms manual asking."],')
+lines.push('              ["Which platforms does Traffikora monitor?", "Traffikora monitors your reviews on Google, Yelp, and Facebook. Google reviews carry the most weight for local SEO ranking, but Yelp and Facebook reviews contribute to your overall online reputation and appear in search results as well."],')
+lines.push('              ["What happens when I get a negative review?", "Traffikora sends you an instant alert the moment a negative review is posted. You can respond directly from the dashboard using pre-written professional templates or write a custom response. Fast, professional responses to negative reviews demonstrate customer care and can significantly reduce the impact of a bad review on potential customers."],')
+lines.push('              ["How does review count affect my Google ranking?", "Google uses review quantity, recency, and average rating as direct signals in its local ranking algorithm. Businesses with more recent positive reviews consistently rank higher in the local map pack. Traffikora builds your review count systematically over time, creating a compounding SEO advantage that grows stronger every month."]')
+lines.push('            ].map(([q, a]) => (')
+lines.push('              <div key={q} style={{ borderBottom: "1px solid #2a2a2a", paddingBottom: "24px", marginBottom: "24px" }}>')
+lines.push('                <h3 style={{ color: "#E8610A", fontFamily: "Playfair Display, serif", fontSize: "1.1rem", marginBottom: "10px" }}>{q}</h3>')
+lines.push('                <p style={{ color: "#cccccc", lineHeight: "1.8" }}>{a}</p>')
+lines.push('              </div>')
+lines.push('            ))}')
+lines.push('          </div>')
+lines.push('        </section>')
+lines.push('')
+lines.push('        <section style={{ background: "#E8610A", padding: "60px 24px", textAlign: "center" }}>')
+lines.push('          <h2 style={{ fontFamily: "Playfair Display, serif", color: "#ffffff", fontSize: "2rem", marginBottom: "16px" }}>Start Getting More 5-Star Reviews Today</h2>')
+lines.push('          <p style={{ color: "#ffffff", fontSize: "1.1rem", maxWidth: "560px", margin: "0 auto 32px" }}>Traffikora automates your review requests, monitors your reputation, and builds the Google ranking authority that comes from a steady stream of 5-star reviews.</p>')
+lines.push('          <Link href="/signup" style={{ background: "#ffffff", color: "#E8610A", padding: "16px 36px", borderRadius: "6px", fontWeight: "700", textDecoration: "none", fontSize: "1.05rem" }}>Start Free \u2014 No Card Needed</Link>')
+lines.push('          <p style={{ color: "#ffffff", marginTop: "16px", fontSize: "0.9rem", opacity: 0.85 }}>No credit card required. See <Link href="/pricing" style={{ color: "#ffffff", textDecoration: "underline" }}>pricing</Link> or explore <Link href="/features" style={{ color: "#ffffff", textDecoration: "underline" }}>all features</Link>.</p>')
+lines.push('        </section>')
+lines.push('')
+lines.push('      </main>')
+lines.push('      <Footer />')
+lines.push('    </>')
+lines.push('  )')
+lines.push('}')
 
-layouts.forEach(({ folder, title, description, url, headline }) => {
-  const lines = []
-  lines.push("import type { Metadata } from 'next'")
-  lines.push("")
-  lines.push("export const metadata: Metadata = {")
-  lines.push("  title: '" + title + "',")
-  lines.push("  description: '" + description + "',")
-  lines.push("  alternates: { canonical: '" + url + "' },")
-  lines.push("  openGraph: {")
-  lines.push("    title: '" + title + "',")
-  lines.push("    description: '" + description + "',")
-  lines.push("    url: '" + url + "',")
-  lines.push("    siteName: 'Traffikora',")
-  lines.push("    type: 'article',")
-  lines.push("  },")
-  lines.push("}")
-  lines.push("")
-  lines.push("export default function Layout({ children }: { children: React.ReactNode }) {")
-  lines.push("  return (")
-  lines.push("    <>")
-  lines.push("      <script")
-  lines.push("        type=\"application/ld+json\"")
-  lines.push("        dangerouslySetInnerHTML={{")
-  lines.push("          __html: JSON.stringify({")
-  lines.push("            \"@context\": \"https://schema.org\",")
-  lines.push("            \"@type\": \"BlogPosting\",")
-  lines.push("            \"headline\": \"" + headline + "\",")
-  lines.push("            \"description\": \"" + description + "\",")
-  lines.push("            \"url\": \"" + url + "\",")
-  lines.push("            \"publisher\": { \"@type\": \"Organization\", \"name\": \"Traffikora\", \"url\": \"https://www.traffikora.com\" },")
-  lines.push("            \"mainEntityOfPage\": \"" + url + "\"")
-  lines.push("          })")
-  lines.push("        }}")
-  lines.push("      />")
-  lines.push("      {children}")
-  lines.push("    </>")
-  lines.push("  )")
-  lines.push("}")
-
-  const content = lines.join('\n')
-  const filePath = path.join(base, folder, 'layout.tsx')
-  fs.writeFileSync(filePath, content, 'utf8')
-  console.log('Written: ' + folder + '/layout.tsx')
-})
-
-console.log('\nDONE - All 8 layout files written!')
+fs.writeFileSync(path.join(dir, 'page.tsx'), lines.join('\n'), 'utf8')
+console.log('SUCCESS: features/review-automation/page.tsx written!')
