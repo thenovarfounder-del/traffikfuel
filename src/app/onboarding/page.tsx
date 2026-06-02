@@ -29,6 +29,8 @@ export default function OnboardingPage() {
   const [wpUrl, setWpUrl] = useState('')
   const [wpUser, setWpUser] = useState('')
   const [wpPass, setWpPass] = useState('')
+  const [wpSaving, setWpSaving] = useState(false)
+  const [wpSaved, setWpSaved] = useState(false)
   const [industry, setIndustry] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -42,6 +44,26 @@ export default function OnboardingPage() {
     }
     getUser()
   }, [])
+
+  const saveWordPress = async () => {
+    if (!wpUrl && !wpUser && !wpPass) { setStep(3); return }
+    setWpSaving(true)
+    const { error } = await supabase.from('wordpress_settings').upsert({
+      user_id: userId,
+      site_url: wpUrl,
+      wp_username: wpUser,
+      wp_app_password: wpPass,
+      connected: true,
+      last_updated: new Date().toISOString()
+    }, { onConflict: 'user_id' })
+    setWpSaving(false)
+    if (!error) {
+      setWpSaved(true)
+      setTimeout(() => setStep(3), 800)
+    } else {
+      setStep(3)
+    }
+  }
 
   const finishOnboarding = async () => {
     setLoading(true)
@@ -99,14 +121,21 @@ export default function OnboardingPage() {
         {step === 2 && (
           <div>
             <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-              <div style={{ fontSize: '40px', marginBottom: '12px' }}>📝</div>
+              <div style={{ fontSize: '40px', marginBottom: '12px' }}>🔗</div>
               <h2 style={{ fontSize: '22px', fontWeight: '700', color: '#ffffff', marginBottom: '8px' }}>Connect WordPress</h2>
               <p style={{ color: '#888888', fontSize: '14px' }}>Traffikora will auto-publish blog posts directly to your site.</p>
             </div>
-            <input style={input} type="text" placeholder="WordPress Site URL" value={wpUrl} onChange={e => setWpUrl(e.target.value)} />
+            <input style={input} type="text" placeholder="WordPress Site URL (e.g. https://yoursite.com)" value={wpUrl} onChange={e => setWpUrl(e.target.value)} />
             <input style={input} type="text" placeholder="WordPress Username" value={wpUser} onChange={e => setWpUser(e.target.value)} />
             <input style={input} type="password" placeholder="Application Password" value={wpPass} onChange={e => setWpPass(e.target.value)} />
-            <button style={btn} onClick={() => setStep(3)}>Save & Continue</button>
+            {wpSaved && (
+              <div style={{ backgroundColor: '#22c55e15', border: '1px solid #22c55e40', borderRadius: '8px', padding: '10px 14px', marginBottom: '12px', fontSize: '13px', color: '#22c55e', textAlign: 'center' }}>
+                ✓ WordPress credentials saved!
+              </div>
+            )}
+            <button style={{ ...btn, background: wpSaving ? '#333' : 'linear-gradient(135deg, #E8610A, #C84E06)', cursor: wpSaving ? 'not-allowed' : 'pointer' }} onClick={saveWordPress} disabled={wpSaving}>
+              {wpSaving ? 'Saving...' : 'Save & Continue'}
+            </button>
             <button style={skipBtn} onClick={() => setStep(3)}>Skip for now</button>
           </div>
         )}
