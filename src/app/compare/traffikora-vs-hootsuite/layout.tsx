@@ -1,8 +1,16 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Traffikora vs Hootsuite — More Than Social Scheduling | Traffikora',
-  description: 'Hootsuite only schedules posts. Traffikora automates SEO, AI engines, blog content, and social media for $97/mo. See why small businesses are switching.',
+  title: 'Traffikora vs Hootsuite: Best Social Media Tool for Local Business | Traffikora',
+  description: 'Compare Traffikora vs Hootsuite for local business social media. Traffikora automates content creation and publishing plus local SEO and reviews that Hootsuite cannot do.',
+  alternates: { canonical: 'https://www.traffikora.com/compare/traffikora-vs-hootsuite' },
+  openGraph: {
+    title: 'Traffikora vs Hootsuite: Best Social Media Tool for Local Business | Traffikora',
+    description: 'Compare Traffikora vs Hootsuite for local business social media. Traffikora automates content creation and publishing plus local SEO and reviews that Hootsuite cannot do.',
+    url: 'https://www.traffikora.com/compare/traffikora-vs-hootsuite',
+    siteName: 'Traffikora',
+    type: 'website',
+  },
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -11,25 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            "name": "Traffikora",
-            "url": "https://www.traffikora.com",
-            "applicationCategory": "BusinessApplication",
-            "description": "Traffikora is an AI-powered marketing automation platform for small businesses — a powerful alternative to Hootsuite with SEO, Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini, and full content automation.",
-            "offers": {
-              "@type": "Offer",
-              "price": "97",
-              "priceCurrency": "USD"
-            },
-            "operatingSystem": "Web",
-            "provider": {
-              "@type": "Organization",
-              "name": "Traffikora",
-              "url": "https://www.traffikora.com"
-            }
-          })
+          __html: JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does Traffikora compare to Hootsuite?","acceptedAnswer":{"@type":"Answer","text":"Hootsuite is a social media scheduling tool that requires you to create your own content. Traffikora generates and publishes social content automatically and also handles local SEO, Google Business Profile, reviews, and AI engine optimization -- a complete local marketing system."}},{"@type":"Question","name":"Is Traffikora cheaper than Hootsuite?","acceptedAnswer":{"@type":"Answer","text":"Traffikora starts at $47 per month and includes content creation plus local SEO. Hootsuite Professional starts at $99 per month for scheduling only -- you still have to create all the content yourself."}},{"@type":"Question","name":"Does Hootsuite do local SEO?","acceptedAnswer":{"@type":"Answer","text":"No. Hootsuite is a social media scheduling platform only. It does not manage your Google Business Profile, generate review requests, build local citations, or optimize for AI engine visibility. Traffikora does all of these automatically."}},{"@type":"Question","name":"Which is better for a small business -- Traffikora or Hootsuite?","acceptedAnswer":{"@type":"Answer","text":"Traffikora is the better choice for small businesses because it creates the content, publishes it, and handles local SEO simultaneously. Hootsuite requires you to bring your own content and does nothing for your Google ranking."}}]})
         }}
       />
       {children}
