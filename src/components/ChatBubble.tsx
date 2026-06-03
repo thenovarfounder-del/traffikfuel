@@ -47,7 +47,7 @@ export default function ChatBubble() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div style={{ position: 'relative', flexShrink: 0 }}>
                 <div style={{ width: '44px', height: '44px', borderRadius: '50%', overflow: 'hidden', border: '2px solid #E8610A', boxShadow: '0 0 12px rgba(232,97,10,0.4)' }}>
-                  <img src="/cyra.webp" alt="CYRA" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+                  <img src="/cyra.webp" alt="CYRA" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 8%', transform: 'scale(1.6)', transformOrigin: '50% 8%' }} />
                 </div>
                 <div style={{ position: 'absolute', bottom: '1px', right: '1px', width: '10px', height: '10px', borderRadius: '50%', background: '#22c55e', border: '2px solid #111' }} />
               </div>
@@ -65,7 +65,7 @@ export default function ChatBubble() {
               <div key={i} style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', alignItems: 'flex-end', gap: '8px' }}>
                 {m.role === 'assistant' && (
                   <div style={{ width: '28px', height: '28px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: '1px solid #E8610A' }}>
-                    <img src="/cyra.webp" alt="CYRA" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+                    <img src="/cyra.webp" alt="CYRA" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 8%', transform: 'scale(1.6)', transformOrigin: '50% 8%' }} />
                   </div>
                 )}
                 <div style={{ maxWidth: '78%', padding: '10px 14px', borderRadius: m.role === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px', background: m.role === 'user' ? 'linear-gradient(135deg,#E8610A,#ff8c42)' : '#1e1e1e', color: '#fff', fontSize: '13px', lineHeight: 1.6, border: m.role === 'assistant' ? '1px solid #2a2a2a' : 'none' }}>
@@ -76,7 +76,7 @@ export default function ChatBubble() {
             {loading && (
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px' }}>
                 <div style={{ width: '28px', height: '28px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: '1px solid #E8610A' }}>
-                  <img src="/cyra.webp" alt="CYRA" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+                  <img src="/cyra.webp" alt="CYRA" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 8%', transform: 'scale(1.6)', transformOrigin: '50% 8%' }} />
                 </div>
                 <div style={{ background: '#1e1e1e', border: '1px solid #2a2a2a', borderRadius: '16px 16px 16px 4px', padding: '10px 16px', display: 'flex', gap: '5px', alignItems: 'center' }}>
                   {[0,1,2].map(i => (
@@ -109,7 +109,7 @@ export default function ChatBubble() {
         {open ? (
           <span style={{ color: '#E8610A', fontSize: '26px', lineHeight: 1 }}>×</span>
         ) : (
-          <img src="/cyra.webp" alt="CYRA" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+          <img src="/cyra.webp" alt="CYRA" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 8%', transform: 'scale(1.6)', transformOrigin: '50% 8%' }} />
         )}
       </button>
     </>
