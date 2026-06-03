@@ -1,14 +1,13 @@
 const fs = require("fs");
 
-const filePath = "C:\\Users\\randy\\traffikfuel\\src\\app\\layout.tsx";
-let content = fs.readFileSync(filePath, "utf8");
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#111111"/>
+  <text x="16" y="24" font-family="Georgia, serif" font-size="24" font-weight="900" fill="#E8610A" text-anchor="middle">T</text>
+</svg>`;
 
-const oldHead = `<link rel='canonical' href='https://www.traffikora.com' />`;
-const newHead = `<link rel='canonical' href='https://www.traffikora.com' />
-<link rel='icon' href='/favicon.svg' type='image/svg+xml' />
-<link rel='icon' href='/favicon.ico' sizes='any' />
-<link rel='apple-touch-icon' href='/favicon.svg' />`;
+// Next.js app dir favicon - this is what actually works
+fs.writeFileSync("C:\\Users\\randy\\traffikfuel\\src\\app\\icon.svg", svg);
+fs.writeFileSync("C:\\Users\\randy\\traffikfuel\\public\\favicon.svg", svg);
 
-content = content.replace(oldHead, newHead);
-fs.writeFileSync(filePath, content);
-console.log("SUCCESS - Favicon added to layout!");
+// Also overwrite the existing icon.png placeholder reference
+console.log("SUCCESS - Favicon written to src/app/icon.svg!");
