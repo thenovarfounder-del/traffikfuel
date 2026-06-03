@@ -1,83 +1,109 @@
 // @ts-nocheck
 'use client'
-import { useState } from 'react'
-import Nav from '@/components/Nav'
-import Footer from '@/components/Footer'
+import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
+
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+
 export default function ConnectWordPress() {
-  const [siteUrl, setSiteUrl] = useState('')
-  const [username, setUsername] = useState('')
-  const [appPassword, setAppPassword] = useState('')
-  const [testing, setTesting] = useState(false)
+  const [wpUrl, setWpUrl] = useState('')
+  const [wpUser, setWpUser] = useState('')
+  const [wpPass, setWpPass] = useState('')
   const [saving, setSaving] = useState(false)
-  const [status, setStatus] = useState(null)
-  const [error, setError] = useState('')
-  async function testConnection() {
-    if (!siteUrl || !username || !appPassword) { setError('Please fill in all fields.'); return }
-    setTesting(true); setError(''); setStatus(null)
-    try {
-      const url = siteUrl.replace(/\/$/, '') + '/wp-json/wp/v2/posts?per_page=1'
-      const creds = btoa(username + ':' + appPassword)
-      const res = await fetch(url, { headers: { Authorization: 'Basic ' + creds } })
-      if (res.ok) { setStatus('success') } else { setError('Connection failed. Check your credentials and try again.') }
-    } catch (e) { setError('Could not reach that WordPress site. Check the URL and try again.') }
-    setTesting(false)
-  }
-  async function saveConnection() {
-    setSaving(true); setError('')
-    try {
+  const [message, setMessage] = useState('')
+  const [connected, setConnected] = useState(false)
+  const [userId, setUserId] = useState('')
+
+  useEffect(() => {
+    async function load() {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { setError('Not logged in.'); setSaving(false); return }
-      await supabase.from('wordpress_connections').upsert({ user_id: user.id, site_url: siteUrl, username: username, app_password: appPassword, connected_at: new Date().toISOString() }, { onConflict: 'user_id' })
-      window.location.href = '/dashboard'
-    } catch (e) { setError('Save failed. Please try again.') }
+      if (!user) return
+      setUserId(user.id)
+      const res = await fetch('/api/wordpress?user_id=' + user.id)
+      const data = await res.json()
+      if (data.connected) {
+        setConnected(true)
+        setWpUrl(data.wp_url || '')
+      }
+    }
+    load()
+  }, [])
+
+  async function handleConnect() {
+    if (!wpUrl || !wpUser || !wpPass) { setMessage('Please fill in all fields.'); return }
+    setSaving(true); setMessage('')
+    try {
+      const res = await fetch('/api/wordpress/connect', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ user_id: userId, wp_url: wpUrl, wp_username: wpUser, wp_app_password: wpPass }) })
+      const data = await res.json()
+      if (data.success) { setConnected(true); setMessage('WordPress connected successfully!') }
+      else { setMessage('Error: ' + (data.error || 'Connection failed')) }
+    } catch (e) { setMessage('Connection failed. Please try again.') }
     setSaving(false)
   }
+
+  const inputStyle = { width:"100%", background:"#0a0a0a", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"12px 16px", fontSize:"14px", color:"#fff", outline:"none", fontFamily:"DM Sans, sans-serif", boxSizing:"border-box" }
+  const labelStyle = { display:"block", fontSize:"12px", fontWeight:700, color:"#aaa", marginBottom:"8px", textTransform:"uppercase", letterSpacing:"0.08em" }
+
   return (
-    <main suppressHydrationWarning>
-      <Nav />
-      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '80px 32px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px' }}>WordPress Connection</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, margin: '0 auto 16px' }}>Connect WordPress</h1>
-        <p style={{ fontSize: '17px', color: '#ccc', maxWidth: '520px', margin: '0 auto' }}>Connect your WordPress site so Traffikora can publish blog posts automatically.</p>
-      </section>
-      <section style={{ background: '#fff', padding: '60px 32px', maxWidth: '680px', margin: '0 auto' }}>
-        <div style={{ background: '#fff8f0', border: '2px solid #E8610A', borderRadius: '8px', padding: '20px 24px', marginBottom: '32px' }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#E8610A', margin: '0 0 8px' }}>How to get your Application Password</p>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#555', margin: '0 0 6px', lineHeight: 1.7 }}>1. Log into your WordPress admin panel</p>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#555', margin: '0 0 6px', lineHeight: 1.7 }}>2. Go to Users &rarr; Profile</p>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#555', margin: '0 0 6px', lineHeight: 1.7 }}>3. Scroll down to Application Passwords</p>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#555', margin: '0', lineHeight: 1.7 }}>4. Enter a name (e.g. Traffikora) and click Add New Application Password</p>
+    <div style={{ minHeight:"100vh", background:"#0a0a0a", color:"#fff", fontFamily:"DM Sans, sans-serif" }}>
+      <div style={{ background:"linear-gradient(135deg,#111 0%,#1a0e00 100%)", borderBottom:"1px solid #1e1e1e", padding:"32px 40px", marginBottom:"40px", textAlign:"center" }}>
+        <p style={{ fontSize:"12px", fontWeight:700, color:"#E8610A", textTransform:"uppercase", letterSpacing:"0.12em", marginBottom:"12px" }}>WORDPRESS CONNECTION</p>
+        <div style={{ fontSize:"48px", marginBottom:"16px" }}>🌐</div>
+        <h1 style={{ fontFamily:"Playfair Display, serif", fontSize:"36px", fontWeight:900, color:"#fff", margin:"0 0 12px" }}>Connect WordPress</h1>
+        <p style={{ color:"#888", fontSize:"16px", maxWidth:"500px", margin:"0 auto" }}>Connect your WordPress site so Traffikora can publish blog posts automatically.</p>
+      </div>
+
+      <div style={{ maxWidth:"600px", margin:"0 auto", padding:"0 40px 60px" }}>
+
+        {/* Status */}
+        <div style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"12px", padding:"16px 20px", marginBottom:"20px", display:"flex", alignItems:"center", gap:"10px" }}>
+          <div style={{ width:"10px", height:"10px", borderRadius:"50%", background:connected?"#22c55e":"#555" }}></div>
+          <span style={{ color:"#888", fontSize:"14px" }}>Status: <strong style={{ color:connected?"#22c55e":"#fff" }}>{connected ? "Connected — " + wpUrl : "Not connected"}</strong></span>
         </div>
-        <div style={{ marginBottom: '24px' }}>
-          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>WordPress Site URL</label>
-          <input type='text' placeholder='https://www.yoursite.com' value={siteUrl} onChange={e => setSiteUrl(e.target.value)} style={{ width: '100%', padding: '13px 16px', fontSize: '15px', border: '2px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+
+        {/* How to get password */}
+        <div style={{ background:"rgba(232,97,10,0.08)", border:"1px solid rgba(232,97,10,0.2)", borderRadius:"12px", padding:"20px 24px", marginBottom:"20px" }}>
+          <p style={{ color:"#E8610A", fontWeight:700, fontSize:"14px", marginBottom:"12px" }}>How to get your Application Password</p>
+          {["Log into your WordPress admin panel", "Go to Users → Profile", "Scroll down to Application Passwords", "Enter a name (e.g. Traffikora) and click Add New Application Password"].map((step, i) => (
+            <div key={i} style={{ display:"flex", gap:"10px", marginBottom:"8px", alignItems:"flex-start" }}>
+              <span style={{ color:"#E8610A", fontWeight:700, fontSize:"13px", flexShrink:0 }}>{i+1}.</span>
+              <span style={{ color:"#ccc", fontSize:"13px" }}>{step}</span>
+            </div>
+          ))}
         </div>
-        <div style={{ marginBottom: '24px' }}>
-          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>WordPress Username</label>
-          <input type='text' placeholder='Your WordPress admin username' value={username} onChange={e => setUsername(e.target.value)} style={{ width: '100%', padding: '13px 16px', fontSize: '15px', border: '2px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
-        </div>
-        <div style={{ marginBottom: '32px' }}>
-          <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>Application Password</label>
-          <input type='password' placeholder='xxxx xxxx xxxx xxxx xxxx xxxx' value={appPassword} onChange={e => setAppPassword(e.target.value)} style={{ width: '100%', padding: '13px 16px', fontSize: '15px', border: '2px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
-        </div>
-        {error && <p style={{ color: 'red', marginBottom: '16px', fontFamily: 'DM Sans, sans-serif', fontSize: '14px' }}>{error}</p>}
-        {status === 'success' && <p style={{ color: '#2d6a2d', marginBottom: '16px', fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700 }}>Connection successful! Click Save to continue.</p>}
-        <button onClick={testConnection} disabled={testing} style={{ display: 'block', width: '100%', background: testing ? '#ccc' : '#111', color: '#fff', padding: '16px', fontSize: '16px', fontWeight: 700, border: 'none', cursor: testing ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', marginBottom: '12px' }}>
-          {testing ? 'Testing connection...' : 'Test Connection'}
-        </button>
-        {status === 'success' && (
-          <button onClick={saveConnection} disabled={saving} style={{ display: 'block', width: '100%', background: saving ? '#ccc' : '#E8610A', color: '#fff', padding: '16px', fontSize: '16px', fontWeight: 700, border: 'none', cursor: saving ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', marginBottom: '32px' }}>
-            {saving ? 'Saving...' : 'Save and Continue'}
+
+        {/* Form */}
+        <div style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"14px", padding:"28px" }}>
+          <div style={{ display:"flex", flexDirection:"column", gap:"16px", marginBottom:"20px" }}>
+            <div>
+              <label style={labelStyle}>WordPress Site URL</label>
+              <input type="text" value={wpUrl} onChange={e => setWpUrl(e.target.value)} placeholder="https://www.yoursite.com" style={inputStyle}
+                onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
+            </div>
+            <div>
+              <label style={labelStyle}>WordPress Username</label>
+              <input type="text" value={wpUser} onChange={e => setWpUser(e.target.value)} placeholder="Your WordPress admin username" style={inputStyle}
+                onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
+            </div>
+            <div>
+              <label style={labelStyle}>Application Password</label>
+              <input type="password" value={wpPass} onChange={e => setWpPass(e.target.value)} placeholder="xxxx xxxx xxxx xxxx xxxx xxxx" style={inputStyle}
+                onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
+            </div>
+          </div>
+
+          {message && (
+            <div style={{ background:message.includes("success") ? "rgba(34,197,94,0.08)" : "rgba(239,68,68,0.08)", border:"1px solid " + (message.includes("success") ? "rgba(34,197,94,0.2)" : "rgba(239,68,68,0.2)"), borderRadius:"8px", padding:"12px 16px", marginBottom:"16px", fontSize:"13px", color:message.includes("success") ? "#4ade80" : "#f87171" }}>
+              {message}
+            </div>
+          )}
+
+          <button onClick={handleConnect} disabled={saving}
+            style={{ width:"100%", background:saving?"#2a2a2a":"linear-gradient(135deg,#E8610A,#C84E06)", color:saving?"#666":"#fff", border:"none", borderRadius:"8px", padding:"14px", fontSize:"14px", fontWeight:700, cursor:saving?"not-allowed":"pointer", fontFamily:"DM Sans, sans-serif", boxShadow:saving?"none":"0 4px 20px rgba(232,97,10,0.35)" }}>
+            {saving ? "Connecting..." : connected ? "Update Connection" : "Connect WordPress"}
           </button>
-        )}
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px' }}>
-          <a href="/dashboard/connect/linkedin" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888', textDecoration: 'none' }}>&larr; Back</a>
-          <a href="/dashboard" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888', textDecoration: 'none' }}>Skip for now &rarr;</a>
         </div>
-      </section>
-      <Footer />
-    </main>
+      </div>
+    </div>
   )
 }
