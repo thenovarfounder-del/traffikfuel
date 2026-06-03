@@ -60,6 +60,7 @@ export default function DashboardLayout({ children }) {
     { href: '/dashboard/content/queue', icon: '📋', label: 'Content Queue' },
     { isSection: true, label: 'PLATFORM' },
     { href: '/dashboard/scrape', icon: '🧠', label: 'Business Brain' },
+    { href: '/dashboard/llm-engine', icon: '⚡', label: 'LLM Engine' },
     { href: '/dashboard/settings', icon: '⚙️', label: 'Business Settings' },
     { isSection: true, label: 'CONNECTIONS' },
     { href: '/dashboard/connect/google', icon: '🔵', label: 'Google' },
