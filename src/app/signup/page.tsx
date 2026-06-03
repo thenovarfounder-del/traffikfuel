@@ -53,6 +53,16 @@ export default function Signup() {
       })
       if (signUpError) throw signUpError
       if (data.user) {
+        // Insert into users table — this is what the app reads for plan/status
+        await supabase.from('users').upsert({
+          id: data.user.id,
+          full_name: form.fullName,
+          email: form.email,
+          status: 'free',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'id' })
+
         await supabase.from('business_profiles').insert({
           user_id: data.user.id,
           business_name: form.businessName,
