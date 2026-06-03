@@ -39,29 +39,8 @@ export default function ChatBubble() {
 
   const CyraIcon = ({ size }) => (
     <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style={{ width: size, height: size }}>
-      <defs>
-        <radialGradient id={`bg${size}`} cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#1a0800"/>
-          <stop offset="100%" stopColor="#050200"/>
-        </radialGradient>
-        <linearGradient id={`gT${size}`} x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#FFE55C"/>
-          <stop offset="35%" stopColor="#FFD700"/>
-          <stop offset="65%" stopColor="#E8610A"/>
-          <stop offset="100%" stopColor="#C84E06"/>
-        </linearGradient>
-      </defs>
-      <circle cx="16" cy="16" r="16" fill="url(#bg${size})"/>
-      <circle cx="16" cy="16" r="15" fill="none" stroke="#E8610A" strokeWidth="1.2"/>
-      <circle cx="16" cy="16" r="13" fill="none" stroke="#E8610A" strokeWidth="0.5" strokeDasharray="3 2" opacity="0.4"/>
-      <line x1="16" y1="1" x2="16" y2="4" stroke="#E8610A" strokeWidth="1.2"/>
-      <line x1="16" y1="28" x2="16" y2="31" stroke="#E8610A" strokeWidth="1.2"/>
-      <line x1="1" y1="16" x2="4" y2="16" stroke="#E8610A" strokeWidth="1.2"/>
-      <line x1="28" y1="16" x2="31" y2="16" stroke="#E8610A" strokeWidth="1.2"/>
-      <rect x="7" y="9" width="18" height="4" rx="1.5" fill="url(#gT${size})"/>
-      <rect x="14" y="9" width="4" height="16" rx="1.5" fill="url(#gT${size})"/>
-      <rect x="7" y="9" width="18" height="1.5" rx="1" fill="#FFE55C" opacity="0.5"/>
-      <rect x="14" y="10.5" width="1.5" height="14.5" rx="1" fill="#FFE55C" opacity="0.3"/>
+      <rect width="32" height="32" rx="6" fill="#111111"/>
+      <text x="16" y="24" fontFamily="Georgia, serif" fontSize="24" fontWeight="900" fill="#E8610A" textAnchor="middle">T</text>
     </svg>
   )
 
