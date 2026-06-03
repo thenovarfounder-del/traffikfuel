@@ -14,27 +14,35 @@ export default function BlogPage() {
   const [wpMessage, setWpMessage] = useState("")
   const [businessName, setBusinessName] = useState("")
   const [charCount, setCharCount] = useState(0)
+  const [userStatus, setUserStatus] = useState("free")
+  const [blogsUsed, setBlogsUsed] = useState(0)
 
   useEffect(() => {
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
       setUserId(user.id)
-      const { data } = await supabase
-        .from("business_profiles")
-        .select("id, business_name")
-        .eq("user_id", user.id)
-        .single()
-      if (data) {
-        setBusinessId(data.id)
-        setBusinessName(data.business_name || "")
-      }
+      const { data: bp } = await supabase.from("business_profiles").select("id, business_name").eq("user_id", user.id).single()
+      if (bp) { setBusinessId(bp.id); setBusinessName(bp.business_name || "") }
+      const { data: userData } = await supabase.from("users").select("status").eq("id", user.id).single()
+      if (userData?.status) setUserStatus(userData.status)
+      try {
+        const now = new Date()
+        const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
+        const { count } = await supabase.from("blog_generations").select("*", { count: "exact", head: true }).eq("user_id", user.id).gte("created_at", firstOfMonth)
+        setBlogsUsed(count || 0)
+      } catch (e) { setBlogsUsed(0) }
     }
     load()
   }, [])
 
+  const isPaid = userStatus && userStatus !== "free"
+  const freeLimit = 3
+  const freeExceeded = !isPaid && blogsUsed >= freeLimit
+
   const generate = async () => {
     if (!topic.trim()) return
+    if (freeExceeded) { setMessage("You’ve used all 3 free blogs this month. Upgrade to Starter for unlimited blogs."); return }
     setGenerating(true)
     setMessage("")
     setPost(null)
@@ -47,10 +55,8 @@ export default function BlogPage() {
       })
       const data = await res.json()
       if (data.error) { setMessage(data.error) }
-      else { setPost(data) }
-    } catch (e) {
-      setMessage("Something went wrong. Try again.")
-    }
+      else { setPost(data); if (!isPaid) setBlogsUsed(prev => prev + 1) }
+    } catch (e) { setMessage("Something went wrong. Try again.") }
     setGenerating(false)
   }
 
@@ -67,16 +73,11 @@ export default function BlogPage() {
       const data = await res.json()
       if (data.error) { setWpMessage("Error: " + data.error) }
       else { setWpMessage("Published! View post: " + data.wpPostUrl) }
-    } catch (e) {
-      setWpMessage("Something went wrong. Try again.")
-    }
+    } catch (e) { setWpMessage("Something went wrong. Try again.") }
     setPublishing(false)
   }
 
-  const handleTopicChange = (e) => {
-    setTopic(e.target.value)
-    setCharCount(e.target.value.length)
-  }
+  const handleTopicChange = (e) => { setTopic(e.target.value); setCharCount(e.target.value.length) }
 
   return (
     <div style={{ minHeight: "100vh", background: "#0a0a0a", padding: "0" }}>
@@ -91,12 +92,20 @@ export default function BlogPage() {
               <p style={{ color: "#666", fontSize: "13px", margin: 0, fontFamily: "DM Sans, sans-serif" }}>Powered by your Business Brain — AI that knows your business</p>
             </div>
           </div>
-          {businessName && (
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "rgba(232,97,10,0.1)", border: "1px solid rgba(232,97,10,0.3)", borderRadius: "20px", padding: "4px 14px", marginTop: "12px" }}>
-              <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#E8610A" }}></div>
-              <span style={{ fontSize: "12px", color: "#E8610A", fontFamily: "DM Sans, sans-serif", fontWeight: 600 }}>{businessName}</span>
-            </div>
-          )}
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 12, flexWrap: "wrap" }}>
+            {businessName && (
+              <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "rgba(232,97,10,0.1)", border: "1px solid rgba(232,97,10,0.3)", borderRadius: "20px", padding: "4px 14px" }}>
+                <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#E8610A" }}></div>
+                <span style={{ fontSize: "12px", color: "#E8610A", fontFamily: "DM Sans, sans-serif", fontWeight: 600 }}>{businessName}</span>
+              </div>
+            )}
+            {!isPaid && (
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(232,97,10,0.08)", border: "1px solid rgba(232,97,10,0.2)", borderRadius: "20px", padding: "4px 14px" }}>
+                <span style={{ fontSize: "12px", color: freeExceeded ? "#ef4444" : "#E8610A", fontFamily: "DM Sans, sans-serif", fontWeight: 600 }}>{blogsUsed}/{freeLimit} free blogs used this month</span>
+                {freeExceeded && <a href="/pricing" style={{ background: "#E8610A", color: "#fff", padding: "2px 10px", borderRadius: 4, fontSize: 11, fontWeight: 700, textDecoration: "none", fontFamily: "DM Sans, sans-serif" }}>Upgrade</a>}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -123,42 +132,36 @@ export default function BlogPage() {
         <div style={{ background: "#111", border: "1px solid #1e1e1e", borderRadius: "14px", padding: "28px", marginBottom: "24px" }}>
           <label style={{ display: "block", fontSize: "13px", fontWeight: 700, color: "#aaa", marginBottom: "10px", fontFamily: "DM Sans, sans-serif", letterSpacing: "0.08em", textTransform: "uppercase" }}>Blog Topic</label>
           <div style={{ position: "relative" }}>
-            <textarea
-              rows={3}
-              placeholder="e.g. 5 reasons local businesses need AI marketing in 2026..."
-              value={topic}
-              onChange={handleTopicChange}
-              style={{ width: "100%", background: "#0a0a0a", border: "1px solid #2a2a2a", borderRadius: "10px", padding: "14px 16px", fontSize: "15px", color: "#fff", resize: "vertical", boxSizing: "border-box", fontFamily: "DM Sans, sans-serif", outline: "none", lineHeight: 1.6, transition: "border-color 0.2s" }}
+            <textarea rows={3} placeholder="e.g. 5 reasons local businesses need AI marketing in 2026..." value={topic} onChange={handleTopicChange}
+              style={{ width: "100%", background: "#0a0a0a", border: "1px solid #2a2a2a", borderRadius: "10px", padding: "14px 16px", fontSize: "15px", color: "#fff", resize: "vertical", boxSizing: "border-box", fontFamily: "DM Sans, sans-serif", outline: "none", lineHeight: 1.6 }}
               onFocus={e => e.target.style.borderColor = "#E8610A"}
               onBlur={e => e.target.style.borderColor = "#2a2a2a"}
             />
             <div style={{ position: "absolute", bottom: "10px", right: "14px", fontSize: "11px", color: "#444" }}>{charCount} chars</div>
           </div>
-
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "16px", flexWrap: "wrap", gap: "12px" }}>
             <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
               {["AI Marketing Tips", "Local SEO Guide", "Why Choose Us", "Customer Success"].map(s => (
-                <button key={s} onClick={() => { setTopic(s); setCharCount(s.length) }} style={{ background: "#1a1a1a", border: "1px solid #2a2a2a", borderRadius: "20px", padding: "5px 12px", fontSize: "11px", color: "#888", cursor: "pointer", fontFamily: "DM Sans, sans-serif", transition: "all 0.15s" }}
+                <button key={s} onClick={() => { setTopic(s); setCharCount(s.length) }}
+                  style={{ background: "#1a1a1a", border: "1px solid #2a2a2a", borderRadius: "20px", padding: "5px 12px", fontSize: "11px", color: "#888", cursor: "pointer", fontFamily: "DM Sans, sans-serif" }}
                   onMouseEnter={e => { e.target.style.borderColor = "#E8610A"; e.target.style.color = "#E8610A" }}
                   onMouseLeave={e => { e.target.style.borderColor = "#2a2a2a"; e.target.style.color = "#888" }}
                 >{s}</button>
               ))}
             </div>
-            <button
-              onClick={generate}
-              disabled={generating || !topic.trim()}
-              style={{ background: generating ? "#2a2a2a" : "linear-gradient(135deg,#E8610A,#ff8c42)", color: generating ? "#666" : "#fff", padding: "12px 28px", borderRadius: "8px", fontSize: "14px", fontWeight: 700, border: "none", cursor: generating ? "not-allowed" : "pointer", fontFamily: "DM Sans, sans-serif", display: "flex", alignItems: "center", gap: "8px", transition: "all 0.2s", boxShadow: generating ? "none" : "0 4px 20px rgba(232,97,10,0.35)" }}
+            <button onClick={generate} disabled={generating || !topic.trim() || freeExceeded}
+              style={{ background: (generating || freeExceeded) ? "#2a2a2a" : "linear-gradient(135deg,#E8610A,#ff8c42)", color: (generating || freeExceeded) ? "#666" : "#fff", padding: "12px 28px", borderRadius: "8px", fontSize: "14px", fontWeight: 700, border: "none", cursor: (generating || freeExceeded) ? "not-allowed" : "pointer", fontFamily: "DM Sans, sans-serif", display: "flex", alignItems: "center", gap: "8px", boxShadow: (generating || freeExceeded) ? "none" : "0 4px 20px rgba(232,97,10,0.35)" }}
             >
-              {generating ? (
-                <>⏳ Generating...</>
-              ) : (
-                <>⚡ Generate Blog Post</>
-              )}
+              {freeExceeded ? "🔒 Limit Reached" : generating ? "⏳ Generating..." : "⚡ Generate Blog Post"}
             </button>
           </div>
-          {message && (
-            <div style={{ marginTop: "14px", background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: "8px", padding: "10px 14px", fontSize: "13px", color: "#f87171", fontFamily: "DM Sans, sans-serif" }}>{message}</div>
+          {freeExceeded && (
+            <div style={{ marginTop: 14, background: "rgba(232,97,10,0.08)", border: "1px solid rgba(232,97,10,0.2)", borderRadius: 8, padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
+              <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: 13, color: "#E8610A" }}>You’ve used all 3 free blogs this month.</span>
+              <a href="/pricing" style={{ background: "linear-gradient(135deg,#E8610A,#C84E06)", color: "#fff", padding: "8px 20px", borderRadius: 6, fontSize: 13, fontWeight: 700, textDecoration: "none", fontFamily: "DM Sans, sans-serif" }}>Upgrade to Starter — $47/mo</a>
+            </div>
           )}
+          {message && <div style={{ marginTop: "14px", background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: "8px", padding: "10px 14px", fontSize: "13px", color: "#f87171", fontFamily: "DM Sans, sans-serif" }}>{message}</div>}
         </div>
 
         {/* Generating state */}
@@ -168,9 +171,7 @@ export default function BlogPage() {
             <p style={{ fontFamily: "Playfair Display, serif", fontSize: "20px", color: "#fff", marginBottom: "8px" }}>Writing your blog post...</p>
             <p style={{ fontFamily: "DM Sans, sans-serif", fontSize: "13px", color: "#555" }}>Your Business Brain is crafting SEO-optimized content tailored to your business.</p>
             <div style={{ display: "flex", gap: "6px", justifyContent: "center", marginTop: "20px" }}>
-              {[0,1,2].map(i => (
-                <div key={i} style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#E8610A", opacity: 0.7 }} />
-              ))}
+              {[0,1,2].map(i => <div key={i} style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#E8610A", opacity: 0.7 }} />)}
             </div>
           </div>
         )}
@@ -178,35 +179,38 @@ export default function BlogPage() {
         {/* Result card */}
         {post && (
           <div style={{ background: "#111", border: "1px solid #1e1e1e", borderRadius: "14px", overflow: "hidden", marginBottom: "24px" }}>
-
-            {/* Result header */}
             <div style={{ background: "linear-gradient(135deg,#1a0e00,#111)", borderBottom: "1px solid #1e1e1e", padding: "20px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "12px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#22c55e" }}></div>
                 <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: "13px", color: "#22c55e", fontWeight: 600 }}>Blog post ready</span>
               </div>
-              <div style={{ display: "flex", gap: "8px" }}>
-                <button
-                  onClick={publishToWordPress}
-                  disabled={publishing}
-                  style={{ background: publishing ? "#1a1a1a" : "linear-gradient(135deg,#16a34a,#15803d)", color: publishing ? "#555" : "#fff", padding: "9px 20px", borderRadius: "7px", fontSize: "13px", fontWeight: 700, border: "none", cursor: publishing ? "not-allowed" : "pointer", fontFamily: "DM Sans, sans-serif", display: "flex", alignItems: "center", gap: "6px" }}
-                >
+              {isPaid && (
+                <button onClick={publishToWordPress} disabled={publishing}
+                  style={{ background: publishing ? "#1a1a1a" : "linear-gradient(135deg,#16a34a,#15803d)", color: publishing ? "#555" : "#fff", padding: "9px 20px", borderRadius: "7px", fontSize: "13px", fontWeight: 700, border: "none", cursor: publishing ? "not-allowed" : "pointer", fontFamily: "DM Sans, sans-serif" }}>
                   {publishing ? "⏳ Publishing..." : "🌐 Publish to WordPress"}
                 </button>
-              </div>
+              )}
             </div>
 
-            {/* Post title */}
             <div style={{ padding: "24px 28px 0" }}>
               <h2 style={{ fontFamily: "Playfair Display, serif", fontSize: "22px", fontWeight: 900, color: "#fff", margin: "0 0 16px", lineHeight: 1.3 }}>{post.title}</h2>
               <div style={{ height: "1px", background: "linear-gradient(90deg,#E8610A,transparent)", marginBottom: "20px" }}></div>
             </div>
 
-            {/* Post content */}
-            <div style={{ padding: "0 28px 28px" }}>
-              <div style={{ background: "#0a0a0a", border: "1px solid #1e1e1e", borderRadius: "10px", padding: "20px", maxHeight: "400px", overflowY: "auto" }}>
+            {/* Content - blurred for free users */}
+            <div style={{ padding: "0 28px 28px", position: "relative" }}>
+              <div style={{ background: "#0a0a0a", border: "1px solid #1e1e1e", borderRadius: "10px", padding: "20px", maxHeight: isPaid ? "400px" : "200px", overflowY: isPaid ? "auto" : "hidden", filter: isPaid ? "none" : "blur(4px)", pointerEvents: isPaid ? "auto" : "none", userSelect: isPaid ? "auto" : "none" }}>
                 <p style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: "#ccc", lineHeight: 1.85, whiteSpace: "pre-wrap", margin: 0 }}>{post.content}</p>
               </div>
+              {!isPaid && (
+                <div style={{ position: "absolute", bottom: 28, left: 28, right: 28, background: "linear-gradient(transparent, #111 60%)", paddingTop: 60, paddingBottom: 28, display: "flex", flexDirection: "column", alignItems: "center", gap: 12, borderRadius: "0 0 10px 10px" }}>
+                  <div style={{ fontSize: 36 }}>🔒</div>
+                  <p style={{ fontFamily: "Playfair Display, serif", fontSize: 20, fontWeight: 700, color: "#fff", margin: 0, textAlign: "center" }}>Your blog post is ready</p>
+                  <p style={{ fontFamily: "DM Sans, sans-serif", fontSize: 13, color: "#888", margin: 0, textAlign: "center" }}>Upgrade to copy, publish to WordPress, and get unlimited blogs</p>
+                  <a href="/pricing" style={{ background: "linear-gradient(135deg,#E8610A,#C84E06)", color: "#fff", padding: "12px 32px", borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: "none", boxShadow: "0 4px 20px rgba(232,97,10,0.35)", fontFamily: "DM Sans, sans-serif" }}>Upgrade to Starter — $47/month</a>
+                  <p style={{ color: "#555", fontSize: 11, margin: 0, fontFamily: "DM Sans, sans-serif" }}>Unlimited blogs • Social content • Manual publish</p>
+                </div>
+              )}
             </div>
 
             {wpMessage && (
