@@ -2,7 +2,6 @@ const fs = require("fs");
 const path = require("path");
 
 const dir = path.join("C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\llm-engine");
-if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
 const content = `// @ts-nocheck
 'use client'
@@ -65,17 +64,11 @@ Their website is \${profile?.website || "not provided"}.
 Business description: \${profile?.description || "A great local business serving the community."}.
 You know everything about this business and speak in their brand voice. You help generate content, answer questions about the business, and provide marketing advice tailored specifically to them.
 Always be helpful, specific to their business, and actionable.\`
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/llm-chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY,
-          "anthropic-version": "2023-06-01"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          system: systemPrompt,
+          systemPrompt,
           messages: [
             ...chatHistory.map(m => ({ role: m.role, content: m.content })),
             { role: "user", content: userMsg }
@@ -83,7 +76,7 @@ Always be helpful, specific to their business, and actionable.\`
         })
       })
       const data = await response.json()
-      const reply = data.content?.[0]?.text || "I couldn\u2019t generate a response. Please try again."
+      const reply = data.success ? data.reply : "I couldn\u2019t generate a response. Please try again."
       setChatHistory(prev => [...prev, { role: "assistant", content: reply }])
     } catch (e) {
       setChatHistory(prev => [...prev, { role: "assistant", content: "Connection error. Please try again." }])
@@ -112,16 +105,13 @@ Always be helpful, specific to their business, and actionable.\`
   return (
     <div style={{ minHeight: "100vh", background: "#111111", padding: "40px 32px", fontFamily: "DM Sans, sans-serif" }}>
 
-      {/* Header */}
       <div style={{ marginBottom: 40 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 10 }}>
           <div style={{ width: 48, height: 48, borderRadius: 12, background: "linear-gradient(135deg, #E8610A, #C84E06)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>
             \u{1F9E0}
           </div>
           <div>
-            <h1 style={{ color: "#ffffff", fontSize: 28, fontWeight: 700, margin: 0, fontFamily: "Playfair Display, serif" }}>
-              LLM Engine
-            </h1>
+            <h1 style={{ color: "#ffffff", fontSize: 28, fontWeight: 700, margin: 0, fontFamily: "Playfair Display, serif" }}>LLM Engine</h1>
             <p style={{ color: "#888", fontSize: 14, margin: 0 }}>
               {isPro ? (profile?.business_name ? "Custom AI trained on " + profile.business_name : "Your custom AI model") : "Your business\u2019s own custom AI model"}
             </p>
@@ -134,7 +124,6 @@ Always be helpful, specific to their business, and actionable.\`
         </div>
       </div>
 
-      {/* Stats Row */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 32, filter: isPro ? "none" : "blur(4px)", pointerEvents: isPro ? "auto" : "none" }}>
         {[
           { label: "Training Sources", value: trainedCount + "/6", icon: "\u{1F4C4}" },
@@ -150,19 +139,13 @@ Always be helpful, specific to their business, and actionable.\`
         ))}
       </div>
 
-      {/* Main Content */}
       <div style={{ position: "relative" }}>
         <div style={{ filter: isPro ? "none" : "blur(6px)", pointerEvents: isPro ? "auto" : "none" }}>
 
-          {/* Training Sources */}
           <div style={{ background: "#1a1a1a", border: "1px solid #2a2a2a", borderRadius: 16, padding: 28, marginBottom: 24 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-              <h2 style={{ color: "#fff", fontSize: 18, fontWeight: 700, margin: 0, fontFamily: "Playfair Display, serif" }}>
-                \u{1F9EC} Training Data Sources
-              </h2>
-              <div style={{ background: "#111", border: "1px solid #2a2a2a", borderRadius: 8, padding: "6px 14px", fontSize: 13, color: "#E8610A", fontWeight: 700 }}>
-                {trainedCount}/6 Sources Active
-              </div>
+              <h2 style={{ color: "#fff", fontSize: 18, fontWeight: 700, margin: 0, fontFamily: "Playfair Display, serif" }}>\u{1F9EC} Training Data Sources</h2>
+              <div style={{ background: "#111", border: "1px solid #2a2a2a", borderRadius: 8, padding: "6px 14px", fontSize: 13, color: "#E8610A", fontWeight: 700 }}>{trainedCount}/6 Sources Active</div>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
               {trainingSources.map((item, i) => (
@@ -183,78 +166,43 @@ Always be helpful, specific to their business, and actionable.\`
             )}
           </div>
 
-          {/* Live AI Console */}
           <div style={{ background: "#1a1a1a", border: "1px solid #2a2a2a", borderRadius: 16, padding: 28, marginBottom: 24 }}>
-            <h2 style={{ color: "#fff", fontSize: 18, fontWeight: 700, marginBottom: 4, fontFamily: "Playfair Display, serif" }}>
-              \u26A1 Live AI Console
-            </h2>
-            <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
-              Ask your custom AI anything about your business. It knows your brand, location, and industry.
-            </p>
+            <h2 style={{ color: "#fff", fontSize: 18, fontWeight: 700, marginBottom: 4, fontFamily: "Playfair Display, serif" }}>\u26A1 Live AI Console</h2>
+            <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>Ask your custom AI anything about your business. It knows your brand, location, and industry.</p>
             <div style={{ background: "#111", border: "1px solid #222", borderRadius: 10, padding: 20, minHeight: 200, maxHeight: 400, overflowY: "auto", marginBottom: 16, display: "flex", flexDirection: "column", gap: 12 }}>
               {chatHistory.length === 0 && (
-                <div style={{ color: "#555", fontSize: 14, textAlign: "center", marginTop: 60 }}>
-                  Ask your AI anything\u2026 try \u201CWrite me a Facebook post about our services\u201D
-                </div>
+                <div style={{ color: "#555", fontSize: 14, textAlign: "center", marginTop: 60 }}>Ask your AI anything\u2026 try \u201CWrite me a Facebook post about our services\u201D</div>
               )}
               {chatHistory.map((msg, i) => (
                 <div key={i} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}>
-                  <div style={{
-                    maxWidth: "80%",
-                    background: msg.role === "user" ? "linear-gradient(135deg, #E8610A, #C84E06)" : "#1a1a1a",
-                    border: msg.role === "assistant" ? "1px solid #2a2a2a" : "none",
-                    borderRadius: msg.role === "user" ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
-                    padding: "12px 16px",
-                    color: "#fff",
-                    fontSize: 14,
-                    lineHeight: 1.6
-                  }}>
-                    {msg.role === "assistant" && (
-                      <div style={{ color: "#E8610A", fontSize: 11, fontWeight: 700, marginBottom: 6, letterSpacing: 1 }}>YOUR AI \u2192</div>
-                    )}
+                  <div style={{ maxWidth: "80%", background: msg.role === "user" ? "linear-gradient(135deg, #E8610A, #C84E06)" : "#1a1a1a", border: msg.role === "assistant" ? "1px solid #2a2a2a" : "none", borderRadius: msg.role === "user" ? "16px 16px 4px 16px" : "16px 16px 16px 4px", padding: "12px 16px", color: "#fff", fontSize: 14, lineHeight: 1.6 }}>
+                    {msg.role === "assistant" && <div style={{ color: "#E8610A", fontSize: 11, fontWeight: 700, marginBottom: 6, letterSpacing: 1 }}>YOUR AI \u2192</div>}
                     {msg.content}
                   </div>
                 </div>
               ))}
               {aiLoading && (
                 <div style={{ display: "flex", justifyContent: "flex-start" }}>
-                  <div style={{ background: "#1a1a1a", border: "1px solid #2a2a2a", borderRadius: "16px 16px 16px 4px", padding: "12px 20px", color: "#E8610A", fontSize: 14 }}>
-                    Thinking\u2026
-                  </div>
+                  <div style={{ background: "#1a1a1a", border: "1px solid #2a2a2a", borderRadius: "16px 16px 16px 4px", padding: "12px 20px", color: "#E8610A", fontSize: 14 }}>Thinking\u2026</div>
                 </div>
               )}
               <div ref={chatEndRef} />
             </div>
             <div style={{ display: "flex", gap: 12 }}>
-              <input
-                value={question}
-                onChange={e => setQuestion(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && askAI()}
-                placeholder="Ask your AI anything about your business..."
-                style={{ flex: 1, background: "#111", border: "1px solid #333", borderRadius: 8, padding: "13px 16px", color: "#fff", fontSize: 14, outline: "none", fontFamily: "DM Sans, sans-serif" }}
-              />
-              <button
-                onClick={askAI}
-                disabled={aiLoading || !question.trim()}
-                style={{ background: aiLoading ? "#333" : "linear-gradient(135deg, #E8610A, #C84E06)", border: "none", borderRadius: 8, padding: "13px 28px", color: "#fff", fontWeight: 700, fontSize: 14, cursor: aiLoading ? "not-allowed" : "pointer", fontFamily: "DM Sans, sans-serif", whiteSpace: "nowrap" }}
-              >
+              <input value={question} onChange={e => setQuestion(e.target.value)} onKeyDown={e => e.key === "Enter" && askAI()} placeholder="Ask your AI anything about your business..." style={{ flex: 1, background: "#111", border: "1px solid #333", borderRadius: 8, padding: "13px 16px", color: "#fff", fontSize: 14, outline: "none", fontFamily: "DM Sans, sans-serif" }} />
+              <button onClick={askAI} disabled={aiLoading || !question.trim()} style={{ background: aiLoading ? "#333" : "linear-gradient(135deg, #E8610A, #C84E06)", border: "none", borderRadius: 8, padding: "13px 28px", color: "#fff", fontWeight: 700, fontSize: 14, cursor: aiLoading ? "not-allowed" : "pointer", fontFamily: "DM Sans, sans-serif", whiteSpace: "nowrap" }}>
                 {aiLoading ? "..." : "Ask AI"}
               </button>
             </div>
             <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
               {["Write a Facebook post about my services", "Give me 5 blog topic ideas", "Write a Google review response", "What makes my business unique?"].map((prompt, i) => (
-                <button key={i} onClick={() => setQuestion(prompt)} style={{ background: "#111", border: "1px solid #333", borderRadius: 20, padding: "6px 14px", color: "#888", fontSize: 12, cursor: "pointer", fontFamily: "DM Sans, sans-serif" }}>
-                  {prompt}
-                </button>
+                <button key={i} onClick={() => setQuestion(prompt)} style={{ background: "#111", border: "1px solid #333", borderRadius: 20, padding: "6px 14px", color: "#888", fontSize: 12, cursor: "pointer", fontFamily: "DM Sans, sans-serif" }}>{prompt}</button>
               ))}
             </div>
           </div>
 
-          {/* Model Performance */}
           <div style={{ background: "#1a1a1a", border: "1px solid #2a2a2a", borderRadius: 16, padding: 28 }}>
-            <h2 style={{ color: "#fff", fontSize: 18, fontWeight: 700, marginBottom: 20, fontFamily: "Playfair Display, serif" }}>
-              \u{1F4CA} Model Readiness
-            </h2>
+            <h2 style={{ color: "#fff", fontSize: 18, fontWeight: 700, marginBottom: 20, fontFamily: "Playfair Display, serif" }}>\u{1F4CA} Model Readiness</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
               {[
                 { label: "Brand Voice Match", pct: accuracyPct },
@@ -276,19 +224,12 @@ Always be helpful, specific to their business, and actionable.\`
 
         </div>
 
-        {/* Lock Overlay */}
         {!isPro && (
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(17,17,17,0.75)", borderRadius: 16, zIndex: 10 }}>
             <div style={{ fontSize: 56, marginBottom: 16 }}>\u{1F512}</div>
-            <h2 style={{ color: "#fff", fontSize: 28, fontWeight: 700, margin: "0 0 12px", fontFamily: "Playfair Display, serif", textAlign: "center" }}>
-              Your Business Deserves Its Own AI
-            </h2>
-            <p style={{ color: "#aaa", fontSize: 16, marginBottom: 32, textAlign: "center", maxWidth: 480, lineHeight: 1.6 }}>
-              The LLM Engine trains a custom AI model on your business data. Every blog, every post, every reply \u2014 sounds exactly like you. No other tool does this.
-            </p>
-            <a href="/pricing" style={{ background: "linear-gradient(135deg, #E8610A, #C84E06)", color: "#fff", padding: "16px 40px", borderRadius: 10, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 24px rgba(232,97,10,0.4)" }}>
-              Upgrade to Pro \u2014 $97/month
-            </a>
+            <h2 style={{ color: "#fff", fontSize: 28, fontWeight: 700, margin: "0 0 12px", fontFamily: "Playfair Display, serif", textAlign: "center" }}>Your Business Deserves Its Own AI</h2>
+            <p style={{ color: "#aaa", fontSize: 16, marginBottom: 32, textAlign: "center", maxWidth: 480, lineHeight: 1.6 }}>The LLM Engine trains a custom AI model on your business data. Every blog, every post, every reply \u2014 sounds exactly like you. No other tool does this.</p>
+            <a href="/pricing" style={{ background: "linear-gradient(135deg, #E8610A, #C84E06)", color: "#fff", padding: "16px 40px", borderRadius: 10, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 24px rgba(232,97,10,0.4)" }}>Upgrade to Pro \u2014 $97/month</a>
             <p style={{ color: "#555", fontSize: 13, marginTop: 16 }}>Cancel anytime. Instant access.</p>
           </div>
         )}
@@ -299,4 +240,4 @@ Always be helpful, specific to their business, and actionable.\`
 `;
 
 fs.writeFileSync(path.join(dir, "page.tsx"), content);
-console.log("SUCCESS - LLM Engine fixed to use users.status!");
+console.log("SUCCESS - LLM Engine updated to use API route!");
