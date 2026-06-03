@@ -55,7 +55,7 @@ export default function DashboardLayout({ children }) {
   const nav = [
     { href: '/dashboard', icon: '🏠', label: 'Dashboard' },
     { isSection: true, label: 'CONTENT' },
-    { href: '/dashboard/blog', icon: '✍️', label: 'Blog Generator' },
+    { href: '/dashboard/content/blog', icon: '✍️', label: 'Blog Generator' },
     { href: '/dashboard/social', icon: '📱', label: 'Social Media' },
     { href: '/dashboard/content/queue', icon: '📋', label: 'Content Queue' },
     { isSection: true, label: 'PLATFORM' },
