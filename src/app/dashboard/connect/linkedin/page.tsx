@@ -1,46 +1,40 @@
 // @ts-nocheck
 'use client'
-import Nav from '@/components/Nav'
-import Footer from '@/components/Footer'
-export default function ConnectLinkedIn() {
+export default function ConnectLinkedin() {
   return (
-    <main suppressHydrationWarning>
-      <Nav />
-      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '80px 32px' }}>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px' }}>Step 6 of 6 — Account Setup</p>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, margin: '0 auto 16px' }}>Connect LinkedIn</h1>
-        <p style={{ fontSize: '17px', color: '#ccc', maxWidth: '520px', margin: '0 auto' }}>Traffikora publishes content to your LinkedIn company page to grow your professional presence.</p>
-      </section>
-      <section style={{ background: '#fff', padding: '60px 32px', maxWidth: '680px', margin: '0 auto' }}>
-        <div style={{ background: '#f7f7f7', border: '2px solid #eee', padding: '16px 20px', borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '32px' }}>
-          <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ccc', flexShrink: 0 }}></div>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#555', margin: 0 }}>Status: <strong>Not connected</strong></p>
-        </div>
-        <div style={{ border: '2px solid #111', borderRadius: '8px', overflow: 'hidden', marginBottom: '32px' }}>
-          <div style={{ background: '#111', padding: '16px 20px' }}>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#fff', margin: 0 }}>Permissions Traffikora will request</p>
+    <div style={{ minHeight:"100vh", background:"#0a0a0a", color:"#fff", fontFamily:"DM Sans, sans-serif" }}>
+      <div style={{ background:"linear-gradient(135deg,#111 0%,#1a0e00 100%)", borderBottom:"1px solid #1e1e1e", padding:"32px 40px", marginBottom:"40px", textAlign:"center" }}>
+        <p style={{ fontSize:"12px", fontWeight:700, color:"#E8610A", textTransform:"uppercase", letterSpacing:"0.12em", marginBottom:"12px" }}>STEP 6 of 6 — ACCOUNT SETUP</p>
+        <div style={{ fontSize:"48px", marginBottom:"16px" }}>💼</div>
+        <h1 style={{ fontFamily:"Playfair Display, serif", fontSize:"36px", fontWeight:900, color:"#fff", margin:"0 0 12px" }}>Connect LinkedIn</h1>
+        <p style={{ color:"#888", fontSize:"16px", maxWidth:"500px", margin:"0 auto" }}>Publish content to your LinkedIn company page</p>
+      </div>
+
+      <div style={{ maxWidth:"600px", margin:"0 auto", padding:"0 40px 60px" }}>
+        <div style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"14px", padding:"28px", marginBottom:"20px" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:"10px", marginBottom:"20px" }}>
+            <div style={{ width:"10px", height:"10px", borderRadius:"50%", background:"#555" }}></div>
+            <span style={{ color:"#888", fontSize:"14px" }}>Status: <strong style={{ color:"#fff" }}>Not connected</strong></span>
           </div>
-          <div style={{ padding: '20px' }}>
-            <div style={{ borderLeft: '3px solid #E8610A', paddingLeft: '14px', marginBottom: '16px' }}>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#111', margin: '0 0 4px' }}>w_member_social</p>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#666', margin: 0 }}>Post content to LinkedIn on your behalf</p>
-            </div>
-            <div style={{ borderLeft: '3px solid #E8610A', paddingLeft: '14px' }}>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 700, color: '#111', margin: '0 0 4px' }}>r_organization_social</p>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#666', margin: 0 }}>Read your LinkedIn company page data and analytics</p>
-            </div>
+          
+          <div style={{ background:"rgba(232,97,10,0.08)", border:"1px solid rgba(232,97,10,0.2)", borderRadius:"10px", padding:"20px", marginBottom:"20px", textAlign:"center" }}>
+            <div style={{ fontSize:32, marginBottom:12 }}>⏳</div>
+            <p style={{ color:"#E8610A", fontWeight:700, fontSize:15, marginBottom:8 }}>Coming Soon</p>
+            <p style={{ color:"#888", fontSize:13 }}>LinkedIn connection available once your company page is established.</p>
+          </div>
+          <button disabled style={{ width:"100%", background:"#2a2a2a", color:"#555", border:"none", borderRadius:"8px", padding:"14px", fontSize:"14px", fontWeight:700, cursor:"not-allowed", fontFamily:"DM Sans, sans-serif" }}>Connect LinkedIn — Coming Soon</button>
+          
+        </div>
+
+        <div style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"14px", padding:"24px" }}>
+          <p style={{ fontSize:"12px", fontWeight:700, color:"#E8610A", textTransform:"uppercase", letterSpacing:"0.1em", marginBottom:"16px" }}>What Traffikora will access</p>
+          
+          <div style={{ display:"flex", flexDirection:"column", gap:"10px" }}>
+            <div style={{ borderLeft:"3px solid #E8610A", paddingLeft:"14px" }}><p style={{ color:"#fff", fontSize:"14px", fontWeight:600, margin:"0 0 2px" }}>w_member_social</p><p style={{ color:"#666", fontSize:"12px", margin:0 }}>Post content to LinkedIn on your behalf</p></div>
+            <div style={{ borderLeft:"3px solid #E8610A", paddingLeft:"14px" }}><p style={{ color:"#fff", fontSize:"14px", fontWeight:600, margin:"0 0 2px" }}>r_organization_social</p><p style={{ color:"#666", fontSize:"12px", margin:0 }}>Read your LinkedIn company page data and analytics</p></div>
           </div>
         </div>
-        <button disabled style={{ display: 'block', width: '100%', background: '#ccc', color: '#fff', padding: '18px', fontSize: '17px', fontWeight: 700, border: 'none', fontFamily: 'DM Sans, sans-serif', marginBottom: '12px', cursor: 'not-allowed' }}>
-          Connect LinkedIn — Coming Soon
-        </button>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', color: '#999', textAlign: 'center', marginBottom: '32px' }}>LinkedIn connection will be available once your company page is established.</p>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <a href="/dashboard/connect/twitter" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888', textDecoration: 'none' }}>&larr; Back</a>
-          <a href="/dashboard/connect/wordpress" style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888', textDecoration: 'none' }}>Skip for now &rarr;</a>
-        </div>
-      </section>
-      <Footer />
-    </main>
+      </div>
+    </div>
   )
 }
