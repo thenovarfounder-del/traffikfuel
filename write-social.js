@@ -38,10 +38,12 @@ export default function BlogGenerator() {
       if (bp) setProfile(bp)
       const { data: userData } = await supabase.from('users').select('status').eq('id', user.id).single()
       if (userData?.status) setUserStatus(userData.status)
-      const now = new Date()
-      const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
-      const { count } = await supabase.from('blog_generations').select('*', { count: 'exact', head: true }).eq('user_id', user.id).gte('created_at', firstOfMonth)
-      setBlogsUsed(count || 0)
+      try {
+        const now = new Date()
+        const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
+        const { count } = await supabase.from('blog_generations').select('*', { count: 'exact', head: true }).eq('user_id', user.id).gte('created_at', firstOfMonth)
+        setBlogsUsed(count || 0)
+      } catch (e) { setBlogsUsed(0) }
     }
     loadData()
   }, [])
@@ -72,9 +74,7 @@ export default function BlogGenerator() {
       if (!data.success) { setError('Generation failed: ' + (data.error || 'unknown error')); setLoading(false); return }
       setPost(data.post)
       if (!isPaid) setBlogsUsed(prev => prev + 1)
-    } catch (e) {
-      setError('Generation failed: ' + e.message)
-    }
+    } catch (e) { setError('Generation failed: ' + e.message) }
     setLoading(false)
   }
 
@@ -87,7 +87,7 @@ export default function BlogGenerator() {
       if (!user) { setPublishMsg('Not logged in.'); setPublishing(false); return }
       const wpRes = await fetch('/api/wordpress?user_id=' + user.id)
       const wpData = await wpRes.json()
-      if (!wpData.connected) { setPublishMsg('No WordPress site connected.'); setPublishing(false); return }
+      if (!wpData.connected) { setPublishMsg('No WordPress site connected. Go to Connections > WordPress to connect your site.'); setPublishing(false); return }
       const res = await fetch('/api/wordpress/publish', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ user_id: user.id, title: post.title, content: post.content, status: 'publish' }) })
       const result = await res.json()
       if (result.success) { setPublishMsg('Published! View post: ' + result.url) } else { setPublishMsg('Publish failed: ' + (result.error || 'Unknown error')) }
@@ -106,24 +106,27 @@ export default function BlogGenerator() {
 
   return (
     <main suppressHydrationWarning>
+
+      {/* HERO - Dark */}
       <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '60px 32px' }}>
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '12px' }}>AI Blog Generator</p>
         <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, margin: '0 auto 16px', maxWidth: '700px' }}>Generate a Blog Post</h1>
         <p style={{ fontSize: '17px', color: '#ccc', maxWidth: '560px', margin: '0 auto' }}>SEO-optimized and AI engine-ready. Every post ranks on Google and gets cited by ChatGPT, Perplexity, and Gemini.</p>
         {!isPaid && (
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginTop: 20, background: 'rgba(232,97,10,0.12)', border: '1px solid rgba(232,97,10,0.3)', borderRadius: 8, padding: '10px 20px' }}>
-            <span style={{ color: '#E8610A', fontWeight: 700, fontSize: 14 }}>{blogsUsed}/{freeLimit} free blogs used this month</span>
-            {freeExceeded && <a href='/pricing' style={{ background: '#E8610A', color: '#fff', padding: '4px 14px', borderRadius: 4, fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>Upgrade</a>}
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginTop: 24, background: 'rgba(232,97,10,0.12)', border: '1px solid rgba(232,97,10,0.3)', borderRadius: 8, padding: '10px 20px' }}>
+            <span style={{ color: '#E8610A', fontWeight: 700, fontSize: 14, fontFamily: 'DM Sans, sans-serif' }}>{blogsUsed}/{freeLimit} free blogs used this month</span>
+            {freeExceeded && <a href='/pricing' style={{ background: '#E8610A', color: '#fff', padding: '4px 14px', borderRadius: 4, fontSize: 12, fontWeight: 700, textDecoration: 'none', fontFamily: 'DM Sans, sans-serif' }}>Upgrade</a>}
           </div>
         )}
       </section>
 
+      {/* INPUT SECTION */}
       <section style={{ background: '#f7f7f7', padding: '40px 32px', borderBottom: '2px solid #111' }}>
         <div style={{ maxWidth: '860px', margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px', gap: '16px', marginBottom: '16px' }}>
             <div>
               <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px', color: '#111' }}>Topic or Keyword</label>
-              <input type='text' placeholder='e.g. Best marketing tips for small businesses' value={topic} onChange={e => setTopic(e.target.value)} style={{ width: '100%', padding: '13px 16px', fontSize: '15px', border: '2px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box', background: '#fff' }} />
+              <input type='text' placeholder='e.g. Best marketing tips for small businesses' value={topic} onChange={e => setTopic(e.target.value)} onKeyDown={e => e.key === 'Enter' && generatePost()} style={{ width: '100%', padding: '13px 16px', fontSize: '15px', border: '2px solid #111', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box', background: '#fff' }} />
             </div>
             <div>
               <label style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px', color: '#111' }}>Tone</label>
@@ -137,11 +140,12 @@ export default function BlogGenerator() {
           </div>
           {error && <p style={{ color: 'red', marginBottom: '12px', fontFamily: 'DM Sans, sans-serif', fontSize: '14px' }}>{error}</p>}
           <button onClick={generatePost} disabled={loading || freeExceeded} style={{ width: '100%', background: freeExceeded ? '#555' : loading ? '#999' : '#E8610A', color: '#fff', padding: '16px', fontSize: '16px', fontWeight: 700, border: 'none', cursor: (loading || freeExceeded) ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif' }}>
-            {freeExceeded ? 'Monthly limit reached — Upgrade to continue' : loading ? 'Generating -- optimizing for Google, ChatGPT, Perplexity...' : 'Generate Blog Post'}
+            {freeExceeded ? 'Monthly limit reached \u2014 Upgrade to continue' : loading ? 'Generating \u2014 optimizing for Google, ChatGPT, Perplexity...' : 'Generate Blog Post'}
           </button>
         </div>
       </section>
 
+      {/* OUTPUT SECTION */}
       {post && (
         <section style={{ background: '#fff', maxWidth: '900px', margin: '0 auto', padding: '0 32px 80px' }}>
           <div style={{ borderBottom: '2px solid #eee', marginBottom: '32px', paddingTop: '32px' }}>
@@ -167,20 +171,20 @@ export default function BlogGenerator() {
                 {isPaid ? (
                   <button onClick={copyPost} style={{ background: '#111', border: 'none', color: '#fff', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', flexShrink: 0 }}>{copied ? 'Copied!' : 'Copy HTML'}</button>
                 ) : (
-                  <a href='/pricing' style={{ background: 'linear-gradient(135deg, #E8610A, #C84E06)', border: 'none', color: '#fff', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', flexShrink: 0, textDecoration: 'none', borderRadius: 4 }}>Upgrade to Copy</a>
+                  <a href='/pricing' style={{ background: 'linear-gradient(135deg, #E8610A, #C84E06)', color: '#fff', padding: '10px 20px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', flexShrink: 0, textDecoration: 'none', borderRadius: 4 }}>Upgrade to Copy</a>
                 )}
               </div>
 
-              {/* Content - blurred for free users */}
+              {/* Content with blur for free users */}
               <div style={{ position: 'relative' }}>
-                <div style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', lineHeight: 2, color: '#222', borderTop: '1px solid #eee', paddingTop: '32px', filter: isPaid ? 'none' : 'blur(4px)', pointerEvents: isPaid ? 'auto' : 'none', maxHeight: isPaid ? 'none' : '300px', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: post.content }} />
+                <div style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '16px', lineHeight: 2, color: '#222', borderTop: '1px solid #eee', paddingTop: '32px', filter: isPaid ? 'none' : 'blur(5px)', pointerEvents: isPaid ? 'auto' : 'none', maxHeight: isPaid ? 'none' : '320px', overflow: 'hidden', userSelect: isPaid ? 'auto' : 'none' }} dangerouslySetInnerHTML={{ __html: post.content }} />
                 {!isPaid && (
-                  <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, #fff 60%)', paddingTop: 80, paddingBottom: 40, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-                    <div style={{ fontSize: 36 }}>\u{1F512}</div>
-                    <p style={{ fontFamily: 'Playfair Display, serif', fontSize: 22, fontWeight: 700, color: '#111', margin: 0, textAlign: 'center' }}>Your blog post is ready</p>
-                    <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 14, color: '#666', margin: 0, textAlign: 'center' }}>Upgrade to Starter to copy, publish, and access unlimited blogs</p>
-                    <a href='/pricing' style={{ background: 'linear-gradient(135deg, #E8610A, #C84E06)', color: '#fff', padding: '14px 32px', borderRadius: 8, fontWeight: 700, fontSize: 15, textDecoration: 'none', boxShadow: '0 4px 20px rgba(232,97,10,0.3)' }}>Upgrade to Starter \u2014 $47/month</a>
-                    <p style={{ color: '#aaa', fontSize: 12, margin: 0 }}>Unlimited blogs \u2022 Social content \u2022 Manual publish</p>
+                  <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, #fff 50%)', paddingTop: 120, paddingBottom: 48, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
+                    <div style={{ fontSize: 40 }}>\u{1F512}</div>
+                    <p style={{ fontFamily: 'Playfair Display, serif', fontSize: 24, fontWeight: 700, color: '#111', margin: 0, textAlign: 'center' }}>Your blog post is ready</p>
+                    <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 14, color: '#666', margin: 0, textAlign: 'center', maxWidth: 400 }}>Upgrade to Starter to copy, publish to WordPress, and generate unlimited blogs</p>
+                    <a href='/pricing' style={{ background: 'linear-gradient(135deg, #E8610A, #C84E06)', color: '#fff', padding: '14px 36px', borderRadius: 8, fontWeight: 700, fontSize: 16, textDecoration: 'none', boxShadow: '0 4px 20px rgba(232,97,10,0.35)', fontFamily: 'DM Sans, sans-serif' }}>Upgrade to Starter \u2014 $47/month</a>
+                    <p style={{ color: '#aaa', fontSize: 12, margin: 0, fontFamily: 'DM Sans, sans-serif' }}>Unlimited blogs \u2022 Social content \u2022 Manual publish</p>
                   </div>
                 )}
               </div>
@@ -239,7 +243,7 @@ export default function BlogGenerator() {
                   <div style={{ fontSize: 48, marginBottom: 16 }}>\u{1F512}</div>
                   <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: 22, color: '#111', marginBottom: 12 }}>Social Caption is a Starter Feature</h3>
                   <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 14, color: '#666', marginBottom: 24 }}>Upgrade to get ready-to-post captions for Facebook, Instagram, X, LinkedIn and TikTok.</p>
-                  <a href='/pricing' style={{ background: 'linear-gradient(135deg, #E8610A, #C84E06)', color: '#fff', padding: '14px 32px', borderRadius: 8, fontWeight: 700, fontSize: 15, textDecoration: 'none' }}>Upgrade to Starter \u2014 $47/month</a>
+                  <a href='/pricing' style={{ background: 'linear-gradient(135deg, #E8610A, #C84E06)', color: '#fff', padding: '14px 32px', borderRadius: 8, fontWeight: 700, fontSize: 15, textDecoration: 'none', fontFamily: 'DM Sans, sans-serif' }}>Upgrade to Starter \u2014 $47/month</a>
                 </div>
               )}
             </div>
@@ -260,7 +264,7 @@ export default function BlogGenerator() {
                   <div style={{ fontSize: 48, marginBottom: 16 }}>\u{1F512}</div>
                   <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: 22, color: '#111', marginBottom: 12 }}>Schema Markup is a Starter Feature</h3>
                   <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 14, color: '#666', marginBottom: 24 }}>Upgrade to get JSON-LD schema markup that helps Google understand and rank your content.</p>
-                  <a href='/pricing' style={{ background: 'linear-gradient(135deg, #E8610A, #C84E06)', color: '#fff', padding: '14px 32px', borderRadius: 8, fontWeight: 700, fontSize: 15, textDecoration: 'none' }}>Upgrade to Starter \u2014 $47/month</a>
+                  <a href='/pricing' style={{ background: 'linear-gradient(135deg, #E8610A, #C84E06)', color: '#fff', padding: '14px 32px', borderRadius: 8, fontWeight: 700, fontSize: 15, textDecoration: 'none', fontFamily: 'DM Sans, sans-serif' }}>Upgrade to Starter \u2014 $47/month</a>
                 </div>
               )}
             </div>
@@ -273,4 +277,4 @@ export default function BlogGenerator() {
 `;
 
 fs.writeFileSync(path.join(dir, "page.tsx"), content);
-console.log("SUCCESS - Blog Generator with free user preview!");
+console.log("SUCCESS - Blog Generator restored with free user locks!");
