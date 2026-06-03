@@ -11,7 +11,7 @@ const supabase = createClient(
 
 export default function LLMEngine() {
   const [user, setUser] = useState(null)
-  const [plan, setPlan] = useState("free")
+  const [status, setStatus] = useState("free")
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [question, setQuestion] = useState("")
@@ -24,12 +24,12 @@ export default function LLMEngine() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { setLoading(false); return }
       setUser(user)
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("plan")
+      const { data: userData } = await supabase
+        .from("users")
+        .select("status")
         .eq("id", user.id)
         .single()
-      if (profile?.plan) setPlan(profile.plan)
+      if (userData?.status) setStatus(userData.status)
       const { data: bp } = await supabase
         .from("business_profiles")
         .select("*")
@@ -45,7 +45,7 @@ export default function LLMEngine() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [chatHistory])
 
-  const isPro = plan === "pro" || plan === "agency" || plan === "enterprise"
+  const isPro = status && status !== "free"
 
   async function askAI() {
     if (!question.trim() || aiLoading) return
@@ -185,8 +185,6 @@ Always be helpful, specific to their business, and actionable.`
             <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
               Ask your custom AI anything about your business. It knows your brand, location, and industry.
             </p>
-
-            {/* Chat Window */}
             <div style={{ background: "#111", border: "1px solid #222", borderRadius: 10, padding: 20, minHeight: 200, maxHeight: 400, overflowY: "auto", marginBottom: 16, display: "flex", flexDirection: "column", gap: 12 }}>
               {chatHistory.length === 0 && (
                 <div style={{ color: "#555", fontSize: 14, textAlign: "center", marginTop: 60 }}>
@@ -221,8 +219,6 @@ Always be helpful, specific to their business, and actionable.`
               )}
               <div ref={chatEndRef} />
             </div>
-
-            {/* Input */}
             <div style={{ display: "flex", gap: 12 }}>
               <input
                 value={question}
@@ -239,8 +235,6 @@ Always be helpful, specific to their business, and actionable.`
                 {aiLoading ? "..." : "Ask AI"}
               </button>
             </div>
-
-            {/* Quick Prompts */}
             <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
               {["Write a Facebook post about my services", "Give me 5 blog topic ideas", "Write a Google review response", "What makes my business unique?"].map((prompt, i) => (
                 <button key={i} onClick={() => setQuestion(prompt)} style={{ background: "#111", border: "1px solid #333", borderRadius: 20, padding: "6px 14px", color: "#888", fontSize: 12, cursor: "pointer", fontFamily: "DM Sans, sans-serif" }}>
