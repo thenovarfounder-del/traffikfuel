@@ -14,6 +14,9 @@ return (
 <meta name="google-site-verification" content="Bq59ihAKck9y8kv3Zv_VcPUh1pUM8D_HtGNDCDCVfMk" />
 <meta name='google-site-verification' content='tDnX1kzbib0Z52zeV6oAH35iohkvNI-4BpV7lz1Yga0' />
 <link rel='canonical' href='https://www.traffikora.com' />
+<link rel='icon' href='/favicon.svg' type='image/svg+xml' />
+<link rel='icon' href='/favicon.ico' sizes='any' />
+<link rel='apple-touch-icon' href='/favicon.svg' />
 <script
   id="cookieyes"
   type="text/javascript"
