@@ -46,16 +46,23 @@ export default function ChatBubble() {
           <stop offset="0%" stopColor="#1a0800"/>
           <stop offset="100%" stopColor="#050200"/>
         </radialGradient>
-        <linearGradient id={\`gT\${size}\`} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#ff8c42"/>
-          <stop offset="40%" stopColor="#E8610A"/>
+        <linearGradient id={\`gT\${size}\`} x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#FFE55C"/>
+          <stop offset="30%" stopColor="#FFD700"/>
+          <stop offset="60%" stopColor="#E8610A"/>
           <stop offset="100%" stopColor="#C84E06"/>
         </linearGradient>
+        <linearGradient id={\`gShine\${size}\`} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#fff" stopOpacity="0.6"/>
+          <stop offset="100%" stopColor="#fff" stopOpacity="0"/>
+        </linearGradient>
       </defs>
+
       <circle cx="110" cy="110" r="108" fill="url(#bg\${size})"/>
       <circle cx="110" cy="110" r="106" fill="none" stroke="#E8610A" strokeWidth="3"/>
       <circle cx="110" cy="110" r="98" fill="none" stroke="#E8610A" strokeWidth="1" strokeDasharray="8 5" opacity="0.5"/>
       <circle cx="110" cy="110" r="88" fill="none" stroke="#ff8c42" strokeWidth="0.6" strokeDasharray="3 9" opacity="0.3"/>
+
       <line x1="110" y1="4" x2="110" y2="20" stroke="#E8610A" strokeWidth="3"/>
       <line x1="110" y1="200" x2="110" y2="216" stroke="#E8610A" strokeWidth="3"/>
       <line x1="4" y1="110" x2="20" y2="110" stroke="#E8610A" strokeWidth="3"/>
@@ -64,10 +71,7 @@ export default function ChatBubble() {
       <line x1="186" y1="25" x2="177" y2="38" stroke="#ff8c42" strokeWidth="2" opacity="0.9"/>
       <line x1="34" y1="195" x2="43" y2="182" stroke="#ff8c42" strokeWidth="2" opacity="0.9"/>
       <line x1="186" y1="195" x2="177" y2="182" stroke="#ff8c42" strokeWidth="2" opacity="0.9"/>
-      <line x1="6" y1="74" x2="18" y2="78" stroke="#E8610A" strokeWidth="1.2" opacity="0.6"/>
-      <line x1="214" y1="74" x2="202" y2="78" stroke="#E8610A" strokeWidth="1.2" opacity="0.6"/>
-      <line x1="6" y1="146" x2="18" y2="142" stroke="#E8610A" strokeWidth="1.2" opacity="0.6"/>
-      <line x1="214" y1="146" x2="202" y2="142" stroke="#E8610A" strokeWidth="1.2" opacity="0.6"/>
+
       <polygon points="110,30 172,65 172,135 110,170 48,135 48,65" fill="none" stroke="#E8610A" strokeWidth="2.2"/>
       <polygon points="110,23 115,30 110,37 105,30" fill="#E8610A"/>
       <polygon points="172,58 179,65 172,72 165,65" fill="#E8610A"/>
@@ -75,28 +79,44 @@ export default function ChatBubble() {
       <polygon points="110,163 115,170 110,177 105,170" fill="#E8610A"/>
       <polygon points="48,128 55,135 48,142 41,135" fill="#E8610A"/>
       <polygon points="48,58 55,65 48,72 41,65" fill="#E8610A"/>
+
       <line x1="110" y1="30" x2="110" y2="20" stroke="#E8610A" strokeWidth="1.5" opacity="0.8"/>
       <line x1="172" y1="65" x2="180" y2="60" stroke="#E8610A" strokeWidth="1.5" opacity="0.8"/>
       <line x1="172" y1="135" x2="180" y2="140" stroke="#E8610A" strokeWidth="1.5" opacity="0.8"/>
       <line x1="110" y1="170" x2="110" y2="180" stroke="#E8610A" strokeWidth="1.5" opacity="0.8"/>
       <line x1="48" y1="135" x2="40" y2="140" stroke="#E8610A" strokeWidth="1.5" opacity="0.8"/>
       <line x1="48" y1="65" x2="40" y2="60" stroke="#E8610A" strokeWidth="1.5" opacity="0.8"/>
+
       <polygon points="110,50 154,74 154,122 110,146 66,122 66,74" fill="#100600"/>
       <polygon points="110,50 154,74 154,122 110,146 66,122 66,74" fill="none" stroke="#C84E06" strokeWidth="1.5" opacity="0.9"/>
       <polygon points="110,62 144,80 144,116 110,134 76,116 76,80" fill="#180a00" stroke="#E8610A" strokeWidth="0.6" opacity="0.4"/>
+
       <line x1="70" y1="94" x2="150" y2="94" stroke="#E8610A" strokeWidth="0.5" opacity="0.2"/>
-      <line x1="68" y1="104" x2="152" y2="104" stroke="#ff8c42" strokeWidth="0.6" opacity="0.3"/>
+      <line x1="68" y1="104" x2="152" y2="104" stroke="#ff8c42" strokeWidth="0.6" opacity="0.25"/>
       <line x1="70" y1="114" x2="150" y2="114" stroke="#E8610A" strokeWidth="0.5" opacity="0.2"/>
-      <rect x="78" y="72" width="64" height="13" rx="3" fill="url(#gT\${size})"/>
-      <rect x="103" y="72" width="14" height="64" rx="3" fill="url(#gT\${size})"/>
-      <rect x="78" y="72" width="64" height="4" rx="3" fill="#ffb070" opacity="0.6"/>
-      <rect x="103" y="76" width="5" height="60" rx="1" fill="#ffb070" opacity="0.3"/>
-      <circle cx="110" cy="46" r="4" fill="#E8610A"/><circle cx="110" cy="46" r="2" fill="#ffb070" opacity="0.8"/>
+
+      {/* BIG BOLD T with gold-to-orange gradient */}
+      <rect x="70" y="66" width="80" height="16" rx="4" fill="url(#gT\${size})"/>
+      <rect x="102" y="66" width="16" height="80" rx="4" fill="url(#gT\${size})"/>
+
+      {/* Gold shine on top of T bar */}
+      <rect x="70" y="66" width="80" height="6" rx="4" fill="url(#gShine\${size})"/>
+      {/* Gold shine on left of T stem */}
+      <rect x="102" y="72" width="6" height="74" rx="2" fill="url(#gShine\${size})"/>
+
+      {/* Gold center highlight line on T bar */}
+      <rect x="74" y="70" width="72" height="3" rx="2" fill="#FFE55C" opacity="0.5"/>
+      {/* Gold center highlight on stem */}
+      <rect x="106" y="74" width="4" height="68" rx="2" fill="#FFE55C" opacity="0.3"/>
+
+      <circle cx="110" cy="46" r="4" fill="#E8610A"/>
+      <circle cx="110" cy="46" r="2" fill="#ffb070" opacity="0.8"/>
       <circle cx="154" cy="74" r="3.5" fill="#C84E06"/>
       <circle cx="154" cy="122" r="3.5" fill="#E8610A"/>
       <circle cx="110" cy="148" r="4" fill="#C84E06"/>
       <circle cx="66" cy="122" r="3.5" fill="#E8610A"/>
       <circle cx="66" cy="74" r="3.5" fill="#C84E06"/>
+
       <text x="110" y="196" fontFamily="Georgia,serif" fontSize="12" fontWeight="700" fill="#E8610A" textAnchor="middle" letterSpacing="8">CYRA</text>
       <line x1="60" y1="200" x2="88" y2="200" stroke="#C84E06" strokeWidth="0.8" opacity="0.7"/>
       <line x1="132" y1="200" x2="160" y2="200" stroke="#C84E06" strokeWidth="0.8" opacity="0.7"/>
@@ -170,4 +190,4 @@ export default function ChatBubble() {
 `;
 
 fs.writeFileSync("C:\\Users\\randy\\traffikfuel\\src\\components\\ChatBubble.tsx", content);
-console.log("SUCCESS - CYRA pure orange icon installed!");
+console.log("SUCCESS - CYRA bigger T with gold center!");
