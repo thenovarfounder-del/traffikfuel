@@ -24,6 +24,8 @@ export default function Billing() {
   const [userPlan, setUserPlan] = useState('free')
   const [loading, setLoading] = useState(true)
   const [upgrading, setUpgrading] = useState(false)
+  const [portalLoading, setPortalLoading] = useState(false)
+  const [portalError, setPortalError] = useState('')
 
   useEffect(() => {
     async function load() {
@@ -96,13 +98,22 @@ export default function Billing() {
               ))}
             </div>
             {userPlan !== 'free' && (
-              <button onClick={async () => {
-                const res = await fetch('/api/stripe/portal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: user.id }) })
-                const data = await res.json()
-                if (data.url) window.location.href = data.url
-              }} style={{ display: 'inline-block', padding: '12px 24px', borderRadius: '10px', border: '1px solid #2a2a2a', color: '#fff', fontSize: '13px', fontWeight: '600', backgroundColor: '#1a1a1a', cursor: 'pointer', fontFamily: 'system-ui, sans-serif' }}>
-                Manage Billing →
-              </button>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px' }}>
+                <button onClick={async () => {
+                  setPortalLoading(true)
+                  setPortalError('')
+                  try {
+                    const res = await fetch('/api/stripe/portal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: user.id, email: user.email }) })
+                    const data = await res.json()
+                    if (data.url) { window.location.href = data.url }
+                    else { setPortalError(data.error || 'Could not open billing portal') }
+                  } catch (err) { setPortalError('Connection error. Please try again.') }
+                  setPortalLoading(false)
+                }} disabled={portalLoading} style={{ display: 'inline-block', padding: '12px 24px', borderRadius: '10px', border: '1px solid #2a2a2a', color: '#fff', fontSize: '13px', fontWeight: '600', backgroundColor: '#1a1a1a', cursor: portalLoading ? 'not-allowed' : 'pointer', fontFamily: 'system-ui, sans-serif' }}>
+                  {portalLoading ? 'Opening...' : 'Manage Billing →'}
+                </button>
+                {portalError && <div style={{ fontSize: '12px', color: '#f87171', fontFamily: 'system-ui, sans-serif' }}>{portalError}</div>}
+              </div>
             )}
           </div>
         </div>
