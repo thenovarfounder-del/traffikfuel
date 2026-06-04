@@ -1,47 +1,61 @@
 const fs = require('fs');
+const path = require('path');
 
-const content = `// @ts-nocheck
-'use client'
-import './globals.css'
-import { Playfair_Display, DM_Sans } from 'next/font/google'
-import CookieBanner from '@/components/CookieBanner'
-import ScrollToTop from '@/components/ScrollToTop'
-import ChatBubble from '@/components/ChatBubble'
-const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400','700','900'], display: 'swap', variable: '--font-playfair' })
-const dmSans = DM_Sans({ subsets: ['latin'], weight: ['300','400','500','600','700'], display: 'swap', variable: '--font-dm-sans' })
-export default function RootLayout({ children }) {
-return (
-<html lang='en' className={\`\${playfair.variable} \${dmSans.variable}\`} suppressHydrationWarning>
-<head>
-<meta name="google-site-verification" content="Bq59ihAKck9y8kv3Zv_VcPUh1pUM8D_HtGNDCDCVfMk" />
-<meta name='google-site-verification' content='tDnX1kzbib0Z52zeV6oAH35iohkvNI-4BpV7lz1Yga0' />
-<link rel='canonical' href='https://www.traffikora.com' />
-<link rel='icon' href='/favicon.svg' type='image/svg+xml' />
-<link rel='icon' href='/favicon.ico' sizes='any' />
-<link rel='apple-touch-icon' href='/favicon.svg' />
-<script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/a2449444538b162a3443686343550cec/script.js" />
-<meta property='og:title' content='Traffikora - AI Marketing Automation for Small Businesses' />
-<meta property='og:description' content='Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine.' />
-<meta property='og:image' content='https://www.traffikora.com/og-image.png' />
-<meta property='og:image:width' content='1200' />
-<meta property='og:image:height' content='630' />
-<meta property='og:url' content='https://www.traffikora.com' />
-<meta property='og:type' content='website' />
-<meta property='og:site_name' content='Traffikora' />
-<meta name='twitter:card' content='summary_large_image' />
-<meta name='twitter:title' content='Traffikora - AI Marketing Automation for Small Businesses' />
-<meta name='twitter:description' content='Set it once. It markets forever.' />
-</head>
-<body suppressHydrationWarning>
-{children}
-<CookieBanner />
-<ScrollToTop />
-<ChatBubble />
-</body>
-</html>
-)
+const base = 'C:\\Users\\randy\\traffikfuel\\src\\app';
+
+// Compare and VS pages already have visible HTML FAQ sections
+// Remove FAQPage from their layout.tsx — keep SoftwareApplication only
+const compareslugs = [
+  'traffikora-vs-birdeye',
+  'traffikora-vs-brightlocal',
+  'traffikora-vs-constant-contact',
+  'traffikora-vs-hootsuite',
+  'traffikora-vs-hubspot',
+  'traffikora-vs-later',
+  'traffikora-vs-mailchimp',
+  'traffikora-vs-reputation-com',
+  'traffikora-vs-semrush',
+  'traffikora-vs-sprout-social',
+  'traffikora-vs-vendasta',
+  'traffikora-vs-yext',
+];
+
+const vsSlugs = ['hubspot', 'hootsuite', 'buffer', 'later'];
+
+function removeFaqFromLayout(layoutPath, slug) {
+  if (!fs.existsSync(layoutPath)) {
+    console.log('SKIPPED (no layout):', slug);
+    return;
+  }
+  let content = fs.readFileSync(layoutPath, 'utf8');
+  // Remove any JSON.stringify block that contains FAQPage
+  content = content.replace(/,?\s*\{\\n\s*"@context":\s*"https:\\\/\\\/schema\.org",[^}]*"@type":\s*"FAQPage"[\s\S]*?\}(?=\s*\]|\s*\))/g, '');
+  // Simpler approach — rebuild without FAQPage entirely
+  // Find all ld+json script tags and filter out FAQPage ones
+  const scriptRegex = /<script type="application\/ld\+json" dangerouslySetInnerHTML=\{\{ __html: ("[^"]*") \}\} \/>/g;
+  let match;
+  let newContent = content;
+  const toRemove = [];
+  while ((match = scriptRegex.exec(content)) !== null) {
+    const jsonStr = JSON.parse(match[1]);
+    const obj = JSON.parse(jsonStr);
+    if (obj['@type'] === 'FAQPage') {
+      toRemove.push(match[0]);
+    }
+  }
+  toRemove.forEach(tag => {
+    newContent = newContent.replace(tag, '');
+  });
+  fs.writeFileSync(layoutPath, newContent, 'utf8');
+  console.log('FAQPage removed from layout:', slug);
 }
-`;
 
-fs.writeFileSync('src/app/layout.tsx', content, 'utf8');
-console.log('layout.tsx restored successfully');
+compareslugs.forEach(slug => {
+  removeFaqFromLayout(path.join(base, 'compare', slug, 'layout.tsx'), slug);
+});
+
+vsSlugs.forEach(slug => {
+  removeFaqFromLayout(path.join(base, 'vs', slug, 'layout.tsx'), slug);
+});
+
+console.log('\nDONE — FAQPage schema removed from all compare and vs page layouts');
