@@ -18,25 +18,36 @@ const BUSINESS_TYPES = [
   { label: 'Other', value: 'other' },
 ]
 
+const BUSINESS_LABELS = BUSINESS_TYPES.map(b => b.label.toLowerCase())
+
 function extractEmail(text) {
   const match = text.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/)
   return match ? match[0] : null
 }
 
-function extractName(messages) {
-  for (const m of messages) {
-    if (m.role === 'user') {
-      const text = m.content.trim()
-      if (text.split(' ').length <= 3 && text.length < 40 && /^[A-Za-z]/.test(text) && !text.includes('@')) {
-        return text
-      }
-    }
+function detectName(text, prevAssistantMsg) {
+  if (!prevAssistantMsg) return null
+  const lower = prevAssistantMsg.toLowerCase()
+  if (!lower.includes('first name') && !lower.includes('your name')) return null
+  const trimmed = text.trim()
+  if (
+    trimmed.length < 30 &&
+    trimmed.split(' ').length <= 3 &&
+    /^[A-Za-z]/.test(trimmed) &&
+    !trimmed.includes('@') &&
+    !BUSINESS_LABELS.includes(trimmed.toLowerCase())
+  ) {
+    return trimmed
   }
   return null
 }
 
 function renderMarkdown(text) {
   return text
+    .replace(/https?:\/\/[^\s<]+/g, url => {
+      const display = url.replace(/^https?:\/\//, '')
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:#E8610A;text-decoration:underline;font-weight:600;">${display}</a>`
+    })
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
     .replace(/^### (.+)$/gm, '<div style="color:#E8610A;font-weight:700;font-size:13px;margin:10px 0 4px;">$1</div>')
@@ -51,6 +62,7 @@ function renderMarkdown(text) {
 export default function ChatBubble() {
   const [open, setOpen] = useState(false)
   const [businessType, setBusinessType] = useState(null)
+  const [visitorName, setVisitorName] = useState(null)
   const [leadCaptured, setLeadCaptured] = useState(false)
   const [messages, setMessages] = useState([
     { role: 'assistant', content: "Hi! I\u2019m Eva, your Traffikora AI guide \u26a1 I\u2019ll help you find the perfect plan and get your marketing running on autopilot. First\u2014what type of business do you run?", showButtons: true }
@@ -63,25 +75,24 @@ export default function ChatBubble() {
     if (bottomRef.current) bottomRef.current.scrollIntoView({ behavior: 'smooth' })
   }, [messages, loading])
 
-  async function fireLead(email, biz, allMessages) {
+  async function fireLead(email, biz, name) {
     try {
-      const visitorName = extractName(allMessages)
       await fetch('/api/chat/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ visitorEmail: email, businessType: biz, visitorName })
+        body: JSON.stringify({ visitorEmail: email, businessType: biz, visitorName: name })
       })
     } catch (e) {
       console.error('Lead fire failed:', e)
     }
   }
 
-  function checkForEmail(text, biz, allMessages) {
+  function checkForEmail(text, biz, name) {
     if (leadCaptured) return
     const email = extractEmail(text)
     if (email) {
       setLeadCaptured(true)
-      fireLead(email, biz, allMessages)
+      fireLead(email, biz, name)
     }
   }
 
@@ -90,20 +101,33 @@ export default function ChatBubble() {
     const userMsg = { role: 'user', content: biz.label }
     const next = [...messages.map(m => ({ ...m, showButtons: false })), userMsg]
     setMessages(next)
-    sendToAPI(next, biz.value)
+    sendToAPI(next, biz.value, null)
   }
 
   async function send() {
     if (!input.trim() || loading) return
-    const userMsg = { role: 'user', content: input.trim() }
+    const trimmed = input.trim()
+    const userMsg = { role: 'user', content: trimmed }
     const next = [...messages.map(m => ({ ...m, showButtons: false })), userMsg]
-    checkForEmail(input.trim(), businessType, next)
+
+    // Detect name from response to Eva's name question
+    let currentName = visitorName
+    if (!currentName && messages.length > 0) {
+      const lastAssistant = [...messages].reverse().find(m => m.role === 'assistant')
+      const detected = detectName(trimmed, lastAssistant?.content || '')
+      if (detected) {
+        currentName = detected
+        setVisitorName(detected)
+      }
+    }
+
+    checkForEmail(trimmed, businessType, currentName)
     setMessages(next)
     setInput('')
-    sendToAPI(next, businessType)
+    sendToAPI(next, businessType, currentName)
   }
 
-  async function sendToAPI(next, biz) {
+  async function sendToAPI(next, biz, name) {
     setLoading(true)
     try {
       const apiMessages = next.map(({ role, content }) => ({ role, content }))
@@ -115,7 +139,7 @@ export default function ChatBubble() {
       const data = await res.json()
       const reply = data.message
       const updatedMessages = [...next, { role: 'assistant', content: reply }]
-      checkForEmail(reply, biz, updatedMessages)
+      checkForEmail(reply, biz, name)
       setMessages(updatedMessages)
     } catch {
       setMessages([...next, { role: 'assistant', content: 'Something went wrong. Please try again.' }])
