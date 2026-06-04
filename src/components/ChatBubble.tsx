@@ -40,7 +40,7 @@ function extractNameFromMessages(msgs) {
       !t.includes('@') &&
       !BUSINESS_LABELS.has(t.toLowerCase())
     ) {
-      return t
+      return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase()
     }
   }
   return null
@@ -65,29 +65,34 @@ function renderMarkdown(text) {
 
 export default function ChatBubble() {
   const [open, setOpen] = useState(false)
-  const [businessType, setBusinessType] = useState(null)
   const [leadCaptured, setLeadCaptured] = useState(false)
   const [messages, setMessages] = useState([
     { role: 'assistant', content: "Hi! I\u2019m Eva, your Traffikora AI guide \u26a1 I\u2019ll help you find the perfect plan and get your marketing running on autopilot. First\u2014what type of business do you run?", showButtons: true }
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
-  const bottomRef = useRef(null)
+  const scrollRef = useRef(null)
+  const lastAssistantRef = useRef(null)
   const visitorNameRef = useRef(null)
   const businessTypeRef = useRef(null)
   const leadCapturedRef = useRef(false)
 
+  // Scroll to TOP of latest assistant message
   useEffect(() => {
-    if (bottomRef.current) bottomRef.current.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, loading])
+    if (lastAssistantRef.current) {
+      lastAssistantRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [messages])
 
   async function fireLead(email, biz, name) {
     try {
-      await fetch('/api/chat/lead', {
+      const res = await fetch('/api/chat/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ visitorEmail: email, businessType: biz, visitorName: name })
       })
+      const data = await res.json()
+      console.log('Lead fire result:', JSON.stringify(data))
     } catch (e) {
       console.error('Lead fire failed:', e)
     }
@@ -95,19 +100,20 @@ export default function ChatBubble() {
 
   function checkForEmailInMessages(msgs) {
     if (leadCapturedRef.current) return
-    const allText = msgs.map(m => m.content).join(' ')
-    const email = extractEmail(allText)
+    const userMessages = msgs.filter(m => m.role === 'user')
+    const userText = userMessages.map(m => m.content).join(' ')
+    const email = extractEmail(userText)
     if (email) {
       leadCapturedRef.current = true
       setLeadCaptured(true)
       const name = visitorNameRef.current || extractNameFromMessages(msgs)
+      console.log('Firing lead with name:', name, 'email:', email, 'biz:', businessTypeRef.current)
       fireLead(email, businessTypeRef.current, name)
     }
   }
 
   function selectBusiness(biz) {
     businessTypeRef.current = biz.value
-    setBusinessType(biz.value)
     const userMsg = { role: 'user', content: biz.label }
     const next = [...messages.map(m => ({ ...m, showButtons: false })), userMsg]
     setMessages(next)
@@ -120,10 +126,12 @@ export default function ChatBubble() {
     const userMsg = { role: 'user', content: trimmed }
     const next = [...messages.map(m => ({ ...m, showButtons: false })), userMsg]
 
-    // Detect name immediately using ref — always current
     if (!visitorNameRef.current) {
       const name = extractNameFromMessages(next)
-      if (name) visitorNameRef.current = name
+      if (name) {
+        visitorNameRef.current = name
+        console.log('Name captured:', name)
+      }
     }
 
     setMessages(next)
@@ -144,10 +152,12 @@ export default function ChatBubble() {
       const reply = data.message
       const updatedMessages = [...next, { role: 'assistant', content: reply }]
 
-      // Check name again after reply in case it appears in assistant context
       if (!visitorNameRef.current) {
         const name = extractNameFromMessages(updatedMessages)
-        if (name) visitorNameRef.current = name
+        if (name) {
+          visitorNameRef.current = name
+          console.log('Name captured from context:', name)
+        }
       }
 
       setMessages(updatedMessages)
@@ -164,6 +174,9 @@ export default function ChatBubble() {
       <text x="16" y="24" fontFamily="Georgia, serif" fontSize="24" fontWeight="900" fill="#E8610A" textAnchor="middle">T</text>
     </svg>
   )
+
+  const assistantCount = messages.filter(m => m.role === 'assistant').length
+  let assistantIndex = 0
 
   return (
     <>
@@ -185,33 +198,36 @@ export default function ChatBubble() {
             <button onClick={() => setOpen(false)} style={{ background:'none', border:'none', color:'#888', fontSize:'24px', cursor:'pointer', lineHeight:1, padding:'4px 8px', display:'flex', alignItems:'center', justifyContent:'center' }}>&times;</button>
           </div>
 
-          <div style={{ flex:1, overflowY:'auto', padding:'16px', display:'flex', flexDirection:'column', gap:'12px' }}>
-            {messages.map((m, i) => (
-              <div key={i}>
-                <div style={{ display:'flex', justifyContent:m.role==='user'?'flex-end':'flex-start', alignItems:'flex-end', gap:'8px' }}>
-                  {m.role === 'assistant' && (
-                    <div style={{ width:'28px', height:'28px', borderRadius:'50%', overflow:'hidden', flexShrink:0, border:'1px solid #E8610A', background:'#050200', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                      <EvaIcon size="26" />
+          <div ref={scrollRef} style={{ flex:1, overflowY:'auto', padding:'16px', display:'flex', flexDirection:'column', gap:'12px' }}>
+            {messages.map((m, i) => {
+              const isLastAssistant = m.role === 'assistant' && (() => { assistantIndex++; return assistantIndex === assistantCount })()
+              return (
+                <div key={i} ref={isLastAssistant ? lastAssistantRef : null}>
+                  <div style={{ display:'flex', justifyContent:m.role==='user'?'flex-end':'flex-start', alignItems:'flex-end', gap:'8px' }}>
+                    {m.role === 'assistant' && (
+                      <div style={{ width:'28px', height:'28px', borderRadius:'50%', overflow:'hidden', flexShrink:0, border:'1px solid #E8610A', background:'#050200', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                        <EvaIcon size="26" />
+                      </div>
+                    )}
+                    <div style={{ maxWidth:'78%', padding:'10px 14px', borderRadius:m.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px', background:m.role==='user'?'linear-gradient(135deg,#E8610A,#ff8c42)':'#1e1e1e', color:'#fff', fontSize:'13px', lineHeight:1.6, border:m.role==='assistant'?'1px solid #2a2a2a':'none' }}
+                      dangerouslySetInnerHTML={{ __html: m.role === 'assistant' ? renderMarkdown(m.content) : m.content }}
+                    />
+                  </div>
+                  {m.showButtons && (
+                    <div style={{ marginTop:'10px', marginLeft:'36px', display:'flex', flexWrap:'wrap', gap:'6px' }}>
+                      {BUSINESS_TYPES.map(biz => (
+                        <button key={biz.value} onClick={() => selectBusiness(biz)}
+                          style={{ background:'#1a1a1a', border:'1px solid #333', borderRadius:'20px', color:'#ccc', padding:'5px 12px', fontSize:'12px', cursor:'pointer', fontFamily:'inherit' }}
+                          onMouseEnter={e => { e.target.style.borderColor='#E8610A'; e.target.style.color='#E8610A' }}
+                          onMouseLeave={e => { e.target.style.borderColor='#333'; e.target.style.color='#ccc' }}>
+                          {biz.label}
+                        </button>
+                      ))}
                     </div>
                   )}
-                  <div style={{ maxWidth:'78%', padding:'10px 14px', borderRadius:m.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px', background:m.role==='user'?'linear-gradient(135deg,#E8610A,#ff8c42)':'#1e1e1e', color:'#fff', fontSize:'13px', lineHeight:1.6, border:m.role==='assistant'?'1px solid #2a2a2a':'none' }}
-                    dangerouslySetInnerHTML={{ __html: m.role === 'assistant' ? renderMarkdown(m.content) : m.content }}
-                  />
                 </div>
-                {m.showButtons && (
-                  <div style={{ marginTop:'10px', marginLeft:'36px', display:'flex', flexWrap:'wrap', gap:'6px' }}>
-                    {BUSINESS_TYPES.map(biz => (
-                      <button key={biz.value} onClick={() => selectBusiness(biz)}
-                        style={{ background:'#1a1a1a', border:'1px solid #333', borderRadius:'20px', color:'#ccc', padding:'5px 12px', fontSize:'12px', cursor:'pointer', fontFamily:'inherit' }}
-                        onMouseEnter={e => { e.target.style.borderColor='#E8610A'; e.target.style.color='#E8610A' }}
-                        onMouseLeave={e => { e.target.style.borderColor='#333'; e.target.style.color='#ccc' }}>
-                        {biz.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+              )
+            })}
             {loading && (
               <div style={{ display:'flex', alignItems:'flex-end', gap:'8px' }}>
                 <div style={{ width:'28px', height:'28px', borderRadius:'50%', overflow:'hidden', flexShrink:0, border:'1px solid #E8610A', background:'#050200', display:'flex', alignItems:'center', justifyContent:'center' }}>
@@ -222,7 +238,6 @@ export default function ChatBubble() {
                 </div>
               </div>
             )}
-            <div ref={bottomRef} />
           </div>
 
           <div style={{ padding:'12px 16px', borderTop:'1px solid #1e1e1e', display:'flex', gap:'8px', background:'#0f0f0f', borderRadius:'0 0 20px 20px' }}>
