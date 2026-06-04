@@ -18,33 +18,37 @@ const BUSINESS_TYPES = [
   { label: 'Other', value: 'other' },
 ]
 
-const BUSINESS_LABELS = BUSINESS_TYPES.map(b => b.label.toLowerCase())
+const BUSINESS_LABELS = new Set(BUSINESS_TYPES.map(b => b.label.toLowerCase()))
 
 function extractEmail(text) {
   const match = text.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/)
   return match ? match[0] : null
 }
 
-function detectName(text, prevAssistantMsg) {
-  if (!prevAssistantMsg) return null
-  const lower = prevAssistantMsg.toLowerCase()
-  if (!lower.includes('first name') && !lower.includes('your name')) return null
-  const trimmed = text.trim()
-  if (
-    trimmed.length < 30 &&
-    trimmed.split(' ').length <= 3 &&
-    /^[A-Za-z]/.test(trimmed) &&
-    !trimmed.includes('@') &&
-    !BUSINESS_LABELS.includes(trimmed.toLowerCase())
-  ) {
-    return trimmed
+function extractNameFromMessages(msgs) {
+  for (let i = 1; i < msgs.length; i++) {
+    const m = msgs[i]
+    const prev = msgs[i - 1]
+    if (m.role !== 'user' || prev.role !== 'assistant') continue
+    const prevLower = (prev.content || '').toLowerCase()
+    if (!prevLower.includes('first name') && !prevLower.includes('your name')) continue
+    const t = m.content.trim()
+    if (
+      t.length < 30 &&
+      t.split(' ').length <= 3 &&
+      /^[A-Za-z]/.test(t) &&
+      !t.includes('@') &&
+      !BUSINESS_LABELS.has(t.toLowerCase())
+    ) {
+      return t
+    }
   }
   return null
 }
 
 function renderMarkdown(text) {
   return text
-    .replace(/https?:\/\/[^\s<]+/g, url => {
+    .replace(/https?:\/\/[^\s<>"]+/g, url => {
       const display = url.replace(/^https?:\/\//, '')
       return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:#E8610A;text-decoration:underline;font-weight:600;">${display}</a>`
     })
@@ -62,7 +66,6 @@ function renderMarkdown(text) {
 export default function ChatBubble() {
   const [open, setOpen] = useState(false)
   const [businessType, setBusinessType] = useState(null)
-  const [visitorName, setVisitorName] = useState(null)
   const [leadCaptured, setLeadCaptured] = useState(false)
   const [messages, setMessages] = useState([
     { role: 'assistant', content: "Hi! I\u2019m Eva, your Traffikora AI guide \u26a1 I\u2019ll help you find the perfect plan and get your marketing running on autopilot. First\u2014what type of business do you run?", showButtons: true }
@@ -70,6 +73,9 @@ export default function ChatBubble() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef(null)
+  const visitorNameRef = useRef(null)
+  const businessTypeRef = useRef(null)
+  const leadCapturedRef = useRef(false)
 
   useEffect(() => {
     if (bottomRef.current) bottomRef.current.scrollIntoView({ behavior: 'smooth' })
@@ -87,21 +93,25 @@ export default function ChatBubble() {
     }
   }
 
-  function checkForEmail(text, biz, name) {
-    if (leadCaptured) return
-    const email = extractEmail(text)
+  function checkForEmailInMessages(msgs) {
+    if (leadCapturedRef.current) return
+    const allText = msgs.map(m => m.content).join(' ')
+    const email = extractEmail(allText)
     if (email) {
+      leadCapturedRef.current = true
       setLeadCaptured(true)
-      fireLead(email, biz, name)
+      const name = visitorNameRef.current || extractNameFromMessages(msgs)
+      fireLead(email, businessTypeRef.current, name)
     }
   }
 
   function selectBusiness(biz) {
+    businessTypeRef.current = biz.value
     setBusinessType(biz.value)
     const userMsg = { role: 'user', content: biz.label }
     const next = [...messages.map(m => ({ ...m, showButtons: false })), userMsg]
     setMessages(next)
-    sendToAPI(next, biz.value, null)
+    sendToAPI(next, biz.value)
   }
 
   async function send() {
@@ -110,24 +120,18 @@ export default function ChatBubble() {
     const userMsg = { role: 'user', content: trimmed }
     const next = [...messages.map(m => ({ ...m, showButtons: false })), userMsg]
 
-    // Detect name from response to Eva's name question
-    let currentName = visitorName
-    if (!currentName && messages.length > 0) {
-      const lastAssistant = [...messages].reverse().find(m => m.role === 'assistant')
-      const detected = detectName(trimmed, lastAssistant?.content || '')
-      if (detected) {
-        currentName = detected
-        setVisitorName(detected)
-      }
+    // Detect name immediately using ref — always current
+    if (!visitorNameRef.current) {
+      const name = extractNameFromMessages(next)
+      if (name) visitorNameRef.current = name
     }
 
-    checkForEmail(trimmed, businessType, currentName)
     setMessages(next)
     setInput('')
-    sendToAPI(next, businessType, currentName)
+    sendToAPI(next, businessTypeRef.current)
   }
 
-  async function sendToAPI(next, biz, name) {
+  async function sendToAPI(next, biz) {
     setLoading(true)
     try {
       const apiMessages = next.map(({ role, content }) => ({ role, content }))
@@ -139,8 +143,15 @@ export default function ChatBubble() {
       const data = await res.json()
       const reply = data.message
       const updatedMessages = [...next, { role: 'assistant', content: reply }]
-      checkForEmail(reply, biz, name)
+
+      // Check name again after reply in case it appears in assistant context
+      if (!visitorNameRef.current) {
+        const name = extractNameFromMessages(updatedMessages)
+        if (name) visitorNameRef.current = name
+      }
+
       setMessages(updatedMessages)
+      checkForEmailInMessages(updatedMessages)
     } catch {
       setMessages([...next, { role: 'assistant', content: 'Something went wrong. Please try again.' }])
     }
