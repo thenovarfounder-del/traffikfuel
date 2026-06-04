@@ -25,7 +25,7 @@ export default function ChatBubble() {
   const [open, setOpen] = useState(false)
   const [businessType, setBusinessType] = useState(null)
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: "Hi! I\\u2019m CYRA, your Traffikora AI guide \\u26a1 I\\u2019ll help you find the perfect plan and get your marketing running on autopilot. First\\u2014what type of business do you run?", showButtons: true }
+    { role: 'assistant', content: "Hi! I\u2019m CYRA, your Traffikora AI guide \u26a1 I\u2019ll help you find the perfect plan and get your marketing running on autopilot. First\u2014what type of business do you run?", showButtons: true }
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -90,10 +90,10 @@ export default function ChatBubble() {
               </div>
               <div>
                 <div style={{ color:'#E8610A', fontWeight:'700', fontSize:'15px', fontFamily:'Georgia,serif' }}>CYRA</div>
-                <div style={{ color:'#22c55e', fontSize:'11px', fontWeight:'500' }}>\\u25cf Online \\u2014 Traffikora AI Guide</div>
+                <div style={{ color:'#22c55e', fontSize:'11px', fontWeight:'500' }}>&bull; Online &mdash; Traffikora AI Guide</div>
               </div>
             </div>
-            <button onClick={() => setOpen(false)} style={{ background:'none', border:'none', color:'#555', fontSize:'22px', cursor:'pointer', lineHeight:1, padding:'4px' }}>\\u00d7</button>
+            <button onClick={() => setOpen(false)} style={{ background:'none', border:'none', color:'#888', fontSize:'24px', cursor:'pointer', lineHeight:1, padding:'4px 8px', display:'flex', alignItems:'center', justifyContent:'center' }}>&times;</button>
           </div>
 
           <div style={{ flex:1, overflowY:'auto', padding:'16px', display:'flex', flexDirection:'column', gap:'12px' }}>
@@ -113,7 +113,7 @@ export default function ChatBubble() {
                   <div style={{ marginTop:'10px', marginLeft:'36px', display:'flex', flexWrap:'wrap', gap:'6px' }}>
                     {BUSINESS_TYPES.map(biz => (
                       <button key={biz.value} onClick={() => selectBusiness(biz)}
-                        style={{ background:'#1a1a1a', border:'1px solid #333', borderRadius:'20px', color:'#ccc', padding:'5px 12px', fontSize:'12px', cursor:'pointer', transition:'all 0.15s', fontFamily:'inherit' }}
+                        style={{ background:'#1a1a1a', border:'1px solid #333', borderRadius:'20px', color:'#ccc', padding:'5px 12px', fontSize:'12px', cursor:'pointer', fontFamily:'inherit' }}
                         onMouseEnter={e => { e.target.style.borderColor='#E8610A'; e.target.style.color='#E8610A' }}
                         onMouseLeave={e => { e.target.style.borderColor='#333'; e.target.style.color='#ccc' }}>
                         {biz.label}
@@ -129,7 +129,7 @@ export default function ChatBubble() {
                   <CyraIcon size="26" />
                 </div>
                 <div style={{ background:'#1e1e1e', border:'1px solid #2a2a2a', borderRadius:'16px 16px 16px 4px', padding:'10px 16px', display:'flex', gap:'5px', alignItems:'center' }}>
-                  {[0,1,2].map(i => <div key={i} style={{ width:'7px', height:'7px', borderRadius:'50%', background:'#E8610A', animation:'pulse 1.2s ease-in-out infinite', animationDelay: i * 0.2 + 's' }} />)}
+                  {[0,1,2].map(i => <div key={i} style={{ width:'7px', height:'7px', borderRadius:'50%', background:'#E8610A', animation:'cyraPulse 1.2s ease-in-out infinite', animationDelay: i * 0.2 + 's' }} />)}
                 </div>
               </div>
             )}
@@ -149,11 +149,11 @@ export default function ChatBubble() {
 
       <button onClick={() => setOpen(!open)}
         style={{ position:'fixed', bottom:'24px', right:'24px', width:'52px', height:'52px', borderRadius:'50%', background:'#050200', border:'2px solid #E8610A', cursor:'pointer', zIndex:9999, boxShadow:'0 4px 24px rgba(232,97,10,0.6), 0 0 40px rgba(232,97,10,0.2)', display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden', padding:0 }}>
-        {open ? <span style={{ color:'#E8610A', fontSize:'26px', lineHeight:1 }}>\\u00d7</span> : <CyraIcon size="62" />}
+        {open ? <span style={{ color:'#E8610A', fontSize:'26px', lineHeight:1 }}>&times;</span> : <CyraIcon size="62" />}
       </button>
 
       <style>{\`
-        @keyframes pulse {
+        @keyframes cyraPulse {
           0%, 100% { opacity: 0.3; transform: scale(0.8); }
           50% { opacity: 1; transform: scale(1); }
         }
