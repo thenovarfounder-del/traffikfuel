@@ -55,6 +55,10 @@ export async function POST(req: NextRequest) {
     if (saveError) {
       return NextResponse.json({ error: "Failed to save post" }, { status: 500 })
     }
+
+    // Track blog generation for free tier limit
+    await supabase.from("blog_generations").insert({ user_id: userId })
+
     return NextResponse.json(saved)
   } catch (error) {
     console.error("Blog generation error:", error)

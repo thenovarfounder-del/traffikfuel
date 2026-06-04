@@ -1,36 +1,22 @@
 const fs = require('fs')
 const path = require('path')
 
-const filePath = path.join('src', 'app', 'signup', 'page.tsx')
+const filePath = path.join('src', 'app', 'api', 'content', 'blog', 'route.ts')
 let content = fs.readFileSync(filePath, 'utf8')
 
-const oldCode = `      if (data.user) {
-        await supabase.from('business_profiles').insert({
-          user_id: data.user.id,
-          business_name: form.businessName,
-          industry: form.industry,
-          city: form.city,
-          phone: form.phone
-        })`
+const oldCode = `    if (saveError) {
+      return NextResponse.json({ error: "Failed to save post" }, { status: 500 })
+    }
+    return NextResponse.json(saved)`
 
-const newCode = `      if (data.user) {
-        // Insert into users table — this is what the app reads for plan/status
-        await supabase.from('users').upsert({
-          id: data.user.id,
-          full_name: form.fullName,
-          email: form.email,
-          status: 'free',
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        }, { onConflict: 'id' })
+const newCode = `    if (saveError) {
+      return NextResponse.json({ error: "Failed to save post" }, { status: 500 })
+    }
 
-        await supabase.from('business_profiles').insert({
-          user_id: data.user.id,
-          business_name: form.businessName,
-          industry: form.industry,
-          city: form.city,
-          phone: form.phone
-        })`
+    // Track blog generation for free tier limit
+    await supabase.from("blog_generations").insert({ user_id: userId })
+
+    return NextResponse.json(saved)`
 
 if (!content.includes(oldCode)) {
   console.log('ERROR: Could not find target code. Content may have changed.')
@@ -39,4 +25,4 @@ if (!content.includes(oldCode)) {
 
 content = content.replace(oldCode, newCode)
 fs.writeFileSync(filePath, content)
-console.log('SUCCESS: signup/page.tsx updated — users table insert added')
+console.log('SUCCESS: blog route updated — blog_generations insert added')
