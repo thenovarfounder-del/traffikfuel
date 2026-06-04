@@ -1,350 +1,112 @@
 const fs = require('fs')
 const path = require('path')
 
-const content = `// @ts-nocheck
-'use client'
+const filePath = path.join('src', 'app', 'page.tsx')
+let content = fs.readFileSync(filePath, 'utf8')
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { createClient } from '@supabase/supabase-js'
+// ─── CHANGE 1: Hero right column ─────────────────────────────
+const oldHeroRight = `<div class="hero-right"><div class="hero-stats"><div class="hstat"><div class="hstat-num">9+</div><div class="hstat-lbl">Platforms automated simultaneously</div></div><div class="hstat"><div class="hstat-num">24/7</div><div class="hstat-lbl">Marketing running while you sleep</div></div><div class="hstat"><div class="hstat-num">6x</div><div class="hstat-lbl">More platforms than the average competitor</div></div></div><div class="hplat"><div class="hplat-lbl">Platforms covered</div><div class="hchips"><span class="hchip">Google</span><span class="hchip">TikTok</span><span class="hchip">YouTube</span><span class="hchip">ChatGPT</span><span class="hchip">Claude</span><span class="hchip">Gemini</span><span class="hchip">Instagram</span><span class="hchip">Facebook</span><span class="hchip">Reddit</span></div></div></div>`
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-)
-
-// ─── Password strength checker ────────────────────────────────
-function getPasswordStrength(password) {
-  const checks = {
-    length:    password.length >= 8,
-    uppercase: /[A-Z]/.test(password),
-    lowercase: /[a-z]/.test(password),
-    number:    /[0-9]/.test(password),
-    special:   /[^A-Za-z0-9]/.test(password),
-  }
-  const score = Object.values(checks).filter(Boolean).length
-  const strength =
-    score <= 1 ? { label: 'Very Weak', color: '#ef4444', width: '10%' } :
-    score === 2 ? { label: 'Weak',      color: '#f97316', width: '30%' } :
-    score === 3 ? { label: 'Fair',      color: '#eab308', width: '55%' } :
-    score === 4 ? { label: 'Strong',    color: '#22c55e', width: '80%' } :
-                  { label: 'Very Strong', color: '#16a34a', width: '100%' }
-  return { checks, score, ...strength }
-}
-
-export default function Signup() {
-  const router = useRouter()
-  const [step, setStep] = useState(1)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [plan, setPlan] = useState('free')
-  const [showPassword, setShowPassword] = useState(false)
-  const [passwordFocused, setPasswordFocused] = useState(false)
-  const [form, setForm] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-    phone: '',
-    businessName: '',
-    industry: '',
-    city: ''
-  })
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const p = params.get('plan')
-    if (p) setPlan(p)
-  }, [])
-
-  function update(field, value) {
-    setForm(prev => ({ ...prev, [field]: value }))
-  }
-
-  const strength = getPasswordStrength(form.password)
-  const passwordReady = strength.score >= 4
-
-  async function handleSignup() {
-    setLoading(true)
-    setError('')
-    try {
-      const { data, error: signUpError } = await supabase.auth.signUp({
-        email: form.email,
-        password: form.password,
-        options: {
-          data: {
-            full_name: form.fullName,
-            phone: form.phone,
-            business_name: form.businessName
-          }
-        }
-      })
-      if (signUpError) throw signUpError
-      if (data.user) {
-        await supabase.from('users').upsert({
-          id: data.user.id,
-          full_name: form.fullName,
-          email: form.email,
-          status: 'free',
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        }, { onConflict: 'id' })
-
-        await supabase.from('business_profiles').insert({
-          user_id: data.user.id,
-          business_name: form.businessName,
-          industry: form.industry,
-          city: form.city,
-          phone: form.phone
-        })
-
-        if (plan === 'free') {
-          router.push('/check-email')
-        } else {
-          const res = await fetch('/api/stripe/checkout', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ plan, email: form.email, userId: data.user.id })
-          })
-          const result = await res.json()
-          if (result.url) {
-            window.location.href = result.url
-          } else {
-            throw new Error(result.error || 'Checkout failed')
-          }
-        }
-      }
-    } catch (err) {
-      setError(err.message)
-    }
-    setLoading(false)
-  }
-
-  const planLabels = {
-    free: 'Free Plan',
-    starter: 'Starter \u2014 $47/mo',
-    pro: 'Pro \u2014 $97/mo',
-    agency: 'Agency \u2014 $297/mo',
-    enterprise: 'Enterprise \u2014 $997/mo'
-  }
-
-  const inputStyle = {
-    width: '100%',
-    padding: '16px 20px',
-    borderRadius: '12px',
-    border: '1px solid #2a2a2a',
-    backgroundColor: '#111',
-    color: '#fff',
-    fontSize: '15px',
-    outline: 'none',
-    boxSizing: 'border-box',
-    fontFamily: 'inherit',
-    transition: 'border-color 0.2s'
-  }
-
-  const labelStyle = {
-    display: 'block',
-    fontSize: '12px',
-    fontWeight: '600',
-    color: '#94a3b8',
-    textTransform: 'uppercase',
-    letterSpacing: '0.08em',
-    marginBottom: '8px'
-  }
-
-  const requirementItem = (met, text) => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: met ? '#22c55e' : '#64748b', fontFamily: 'system-ui, sans-serif', transition: 'color 0.2s' }}>
-      <span style={{ fontSize: '14px' }}>{met ? '\u2713' : '\u25cb'}</span>
-      {text}
-    </div>
-  )
-
-  return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#050505', color: '#fff', fontFamily: "'Georgia', serif", display: 'flex' }}>
-
-      {/* LEFT PANEL */}
-      <div style={{ width: '45%', background: 'linear-gradient(135deg, #0a0a0a 0%, #111 50%, #0f0a00 100%)', padding: '60px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRight: '1px solid #1a1a1a', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '-100px', right: '-100px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, #f9731615 0%, transparent 70%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: '-50px', left: '-50px', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, #f9731608 0%, transparent 70%)', pointerEvents: 'none' }} />
-        <div>
-          <a href="/" style={{ textDecoration: 'none' }}>
-            <div style={{ fontSize: '22px', fontWeight: '800', color: '#fff', letterSpacing: '-0.5px', fontFamily: 'system-ui, sans-serif' }}>
-              Traffik<span style={{ color: '#f97316' }}>ora</span>
-              <span style={{ fontSize: '11px', color: '#f97316', verticalAlign: 'super' }}>\u2122</span>
-            </div>
-          </a>
-        </div>
-        <div>
-          <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '20px', fontFamily: 'system-ui, sans-serif' }}>Start Free Today</div>
-          <h1 style={{ fontSize: '42px', fontWeight: '400', lineHeight: '1.2', margin: '0 0 24px 0', color: '#fff' }}>
-            Your marketing.<br />
-            <em style={{ color: '#f97316', fontStyle: 'italic' }}>Automated forever.</em>
-          </h1>
-          <p style={{ fontSize: '16px', color: '#64748b', lineHeight: '1.7', margin: '0 0 48px 0', fontFamily: 'system-ui, sans-serif' }}>
-            Join hundreds of businesses letting AI handle their marketing while they focus on what matters most.
-          </p>
-          {plan !== 'free' && (
-            <div style={{ backgroundColor: '#f9731615', border: '1px solid #f9731640', borderRadius: '12px', padding: '16px 20px', marginBottom: '32px', fontFamily: 'system-ui, sans-serif' }}>
-              <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>Selected Plan</div>
-              <div style={{ fontSize: '18px', color: '#fff', fontWeight: '700' }}>{planLabels[plan]}</div>
-              <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>You\u2019ll be taken to secure checkout after signup</div>
-            </div>
-          )}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {[
-              { icon: '\u26a1', text: 'Live in under 5 minutes' },
-              { icon: '\ud83e\udd16', text: 'AI agents running 24/7' },
-              { icon: '\ud83d\udee1', text: 'Free plan \u2014 no credit card needed' },
-              { icon: '\u2715', text: 'Cancel anytime, one click' }
-            ].map(item => (
-              <div key={item.text} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#f9731615', border: '1px solid #f9731630', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>{item.icon}</div>
-                <span style={{ fontSize: '14px', color: '#94a3b8', fontFamily: 'system-ui, sans-serif' }}>{item.text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div style={{ fontSize: '13px', color: '#2a2a2a', fontFamily: 'system-ui, sans-serif' }}>\u00a9 2026 Traffikora. All rights reserved.</div>
+const newHeroRight = `<div class="hero-right">
+<div style="background:#0f0f0f;border:1px solid #2a2a2a;border-radius:14px;overflow:hidden;box-shadow:0 0 40px rgba(232,97,10,0.12)">
+  <div style="background:#1a1a1a;border-bottom:1px solid #2a2a2a;padding:10px 16px;display:flex;align-items:center;gap:8px">
+    <div style="width:8px;height:8px;border-radius:50%;background:#ff5f56"></div>
+    <div style="width:8px;height:8px;border-radius:50%;background:#ffbd2e"></div>
+    <div style="width:8px;height:8px;border-radius:50%;background:#27c93f"></div>
+    <div style="flex:1;background:#111;border-radius:4px;padding:3px 10px;font-size:10px;color:#555;margin:0 8px">traffikora.com &#8212; AI generating content...</div>
+    <div style="width:8px;height:8px;border-radius:50%;background:#E8610A;animation:blink 1.5s ease-in-out infinite"></div>
+  </div>
+  <div style="padding:16px">
+    <div style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px">&#9889; Live Content Generation</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="background:#141414;border:1px solid #1e1e1e;border-radius:8px;padding:10px 14px">
+        <div style="font-size:10px;color:#E8610A;font-weight:700;margin-bottom:4px">&#10003; BLOG POST &#8212; WordPress</div>
+        <div style="font-size:12px;color:#ccc">"5 HVAC Tips for Tampa Homeowners This Summer"</div>
+        <div style="font-size:10px;color:#555;margin-top:3px">SEO optimized &middot; 900 words &middot; Schema injected</div>
       </div>
-
-      {/* RIGHT PANEL */}
-      <div style={{ flex: 1, padding: '60px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'center', overflowY: 'auto' }}>
-        <div style={{ maxWidth: '420px', width: '100%', margin: '0 auto' }}>
-
-          <div style={{ marginBottom: '40px' }}>
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '32px' }}>
-              {[1, 2].map(s => (
-                <div key={s} style={{ flex: 1, height: '3px', borderRadius: '2px', backgroundColor: step >= s ? '#f97316' : '#1a1a1a', transition: 'background-color 0.3s' }} />
-              ))}
-            </div>
-            <div style={{ fontSize: '12px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px', fontFamily: 'system-ui, sans-serif' }}>Step {step} of 2</div>
-            <h2 style={{ fontSize: '28px', fontWeight: '400', margin: '0 0 8px 0' }}>
-              {step === 1 ? 'Create your account' : 'Tell us about your business'}
-            </h2>
-            <p style={{ fontSize: '14px', color: '#64748b', margin: 0, fontFamily: 'system-ui, sans-serif' }}>
-              {step === 1 ? 'Your information is encrypted and secure.' : 'This helps us personalize your content.'}
-            </p>
-          </div>
-
-          {error && (
-            <div style={{ backgroundColor: '#ef444415', border: '1px solid #ef4444', borderRadius: '10px', padding: '12px 16px', marginBottom: '20px', fontSize: '13px', color: '#ef4444', fontFamily: 'system-ui, sans-serif' }}>
-              {error}
-            </div>
-          )}
-
-          {step === 1 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div>
-                <label style={labelStyle}>Full Name</label>
-                <input style={inputStyle} placeholder="John Smith" value={form.fullName} onChange={e => update('fullName', e.target.value)} />
-              </div>
-              <div>
-                <label style={labelStyle}>Email Address</label>
-                <input style={inputStyle} type="email" placeholder="john@yourbusiness.com" value={form.email} onChange={e => update('email', e.target.value)} />
-              </div>
-
-              {/* PASSWORD WITH STRENGTH METER */}
-              <div>
-                <label style={labelStyle}>Password</label>
-                <div style={{ position: 'relative' }}>
-                  <input
-                    style={{ ...inputStyle, paddingRight: '52px' }}
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Min 8 characters"
-                    value={form.password}
-                    onChange={e => update('password', e.target.value)}
-                    onFocus={() => setPasswordFocused(true)}
-                    onBlur={() => setPasswordFocused(false)}
-                  />
-                  <button
-                    onClick={() => setShowPassword(!showPassword)}
-                    style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: '18px', padding: 0, lineHeight: 1 }}>
-                    {showPassword ? '\ud83d\ude48' : '\ud83d\udc41'}
-                  </button>
-                </div>
-
-                {/* Strength bar */}
-                {form.password.length > 0 && (
-                  <div style={{ marginTop: '10px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                      <span style={{ fontSize: '11px', color: '#64748b', fontFamily: 'system-ui, sans-serif' }}>Password strength</span>
-                      <span style={{ fontSize: '11px', fontWeight: '700', color: strength.color, fontFamily: 'system-ui, sans-serif' }}>{strength.label}</span>
-                    </div>
-                    <div style={{ height: '4px', background: '#1a1a1a', borderRadius: '99px', overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: strength.width, background: strength.color, borderRadius: '99px', transition: 'width 0.3s, background 0.3s' }} />
-                    </div>
-                  </div>
-                )}
-
-                {/* Requirements checklist */}
-                {(passwordFocused || form.password.length > 0) && (
-                  <div style={{ marginTop: '12px', background: '#0f0f0f', border: '1px solid #1e1e1e', borderRadius: '10px', padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                    {requirementItem(strength.checks.length,    'At least 8 characters')}
-                    {requirementItem(strength.checks.uppercase, 'One uppercase letter (A-Z)')}
-                    {requirementItem(strength.checks.lowercase, 'One lowercase letter (a-z)')}
-                    {requirementItem(strength.checks.number,    'One number (0-9)')}
-                    {requirementItem(strength.checks.special,   'One special character (!@#$%...)')}
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <label style={labelStyle}>Phone Number</label>
-                <input style={inputStyle} placeholder="+1 (305) 555-1234" value={form.phone} onChange={e => update('phone', e.target.value)} />
-              </div>
-
-              <button
-                onClick={() => {
-                  if (!form.fullName || !form.email || !form.password) { setError('Please fill in all fields'); return }
-                  if (!passwordReady) { setError('Please create a stronger password — use 8+ characters with uppercase, lowercase, number and special character.'); return }
-                  setError('')
-                  setStep(2)
-                }}
-                style={{ width: '100%', padding: '16px', borderRadius: '12px', border: 'none', background: passwordReady ? 'linear-gradient(135deg, #f97316, #ea6a0a)' : '#1a1a1a', color: passwordReady ? '#fff' : '#555', fontSize: '15px', fontWeight: '700', cursor: 'pointer', fontFamily: 'system-ui, sans-serif', letterSpacing: '0.02em', transition: 'all 0.2s' }}>
-                Continue \u2192
-              </button>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div>
-                <label style={labelStyle}>Business Name</label>
-                <input style={inputStyle} placeholder="Acme Marketing Co." value={form.businessName} onChange={e => update('businessName', e.target.value)} />
-              </div>
-              <div>
-                <label style={labelStyle}>Industry</label>
-                <select style={{ ...inputStyle, cursor: 'pointer' }} value={form.industry} onChange={e => update('industry', e.target.value)}>
-                  <option value="">Select your industry</option>
-                  {['Marketing Agency', 'Restaurant', 'Real Estate', 'HVAC', 'Dental', 'Law Firm', 'Salon & Spa', 'Gym & Fitness', 'Auto Repair', 'Med Spa', 'Plumbing', 'Chiropractic', 'Other'].map(i => (
-                    <option key={i} value={i}>{i}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label style={labelStyle}>City & State</label>
-                <input style={inputStyle} placeholder="Fort Pierce, FL" value={form.city} onChange={e => update('city', e.target.value)} />
-              </div>
-              <button
-                onClick={handleSignup}
-                disabled={loading}
-                style={{ width: '100%', padding: '16px', borderRadius: '12px', border: 'none', background: loading ? '#333' : 'linear-gradient(135deg, #f97316, #ea6a0a)', color: '#fff', fontSize: '15px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'system-ui, sans-serif', letterSpacing: '0.02em' }}>
-                {loading ? 'Creating your account...' : plan === 'free' ? 'Start Free Today \u2192' : 'Continue to Checkout \u2192'}
-              </button>
-              <button onClick={() => setStep(1)} style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #1a1a1a', backgroundColor: 'transparent', color: '#64748b', fontSize: '14px', cursor: 'pointer', fontFamily: 'system-ui, sans-serif' }}>
-                \u2190 Back
-              </button>
-            </div>
-          )}
-
-          <div style={{ textAlign: 'center', marginTop: '28px', fontSize: '13px', color: '#64748b', fontFamily: 'system-ui, sans-serif' }}>
-            Already have an account?{' '}
-            <a href="/login" style={{ color: '#f97316', textDecoration: 'none', fontWeight: '600' }}>Log in</a>
-          </div>
-
-        </div>
+      <div style="background:#141414;border:1px solid #1e1e1e;border-radius:8px;padding:10px 14px;opacity:0;animation:fadeInUp 0.5s ease 1.2s forwards">
+        <div style="font-size:10px;color:#1877F2;font-weight:700;margin-bottom:4px">&#10003; FACEBOOK &#8212; Published</div>
+        <div style="font-size:12px;color:#ccc">"Summer is here! Is your AC ready? We're booking fast..."</div>
+        <div style="font-size:10px;color:#555;margin-top:3px">Engagement optimized &middot; Posted 2 min ago</div>
+      </div>
+      <div style="background:#141414;border:1px solid #1e1e1e;border-radius:8px;padding:10px 14px;opacity:0;animation:fadeInUp 0.5s ease 2.2s forwards">
+        <div style="font-size:10px;color:#E1306C;font-weight:700;margin-bottom:4px">&#10003; INSTAGRAM &#8212; Published</div>
+        <div style="font-size:12px;color:#ccc">"Beat the heat! Our team is ready for same-day AC repair..."</div>
+        <div style="font-size:10px;color:#555;margin-top:3px">Hashtags added &middot; Story variant generated</div>
+      </div>
+      <div style="background:#141414;border:1px solid #1e1e1e;border-radius:8px;padding:10px 14px;opacity:0;animation:fadeInUp 0.5s ease 3.2s forwards">
+        <div style="font-size:10px;color:#10A37F;font-weight:700;margin-bottom:4px">&#10003; CHATGPT &#8212; Citation Detected</div>
+        <div style="font-size:12px;color:#ccc">"Best HVAC in Tampa" &#8212; Your business recommended</div>
+        <div style="font-size:10px;color:#555;margin-top:3px">LLM Engine active &middot; AI citation confirmed</div>
+      </div>
+      <div style="background:#141414;border:1px solid #1e1e1e;border-radius:8px;padding:10px 14px;opacity:0;animation:fadeInUp 0.5s ease 4.2s forwards">
+        <div style="font-size:10px;color:#0A66C2;font-weight:700;margin-bottom:4px">&#10003; LINKEDIN &#8212; Published</div>
+        <div style="font-size:12px;color:#ccc">"Why proactive HVAC maintenance saves businesses thousands..."</div>
+        <div style="font-size:10px;color:#555;margin-top:3px">B2B optimized &middot; 847 impressions</div>
       </div>
     </div>
-  )
-}
-`
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid #1e1e1e;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:11px;color:#555">Running automatically &middot; 24/7 &middot; Zero manual work</div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#22c55e;font-weight:700">
+        <div style="width:6px;height:6px;border-radius:50%;background:#22c55e;animation:blink 1.5s ease-in-out infinite"></div>
+        LIVE
+      </div>
+    </div>
+  </div>
+</div>
+<style>@keyframes fadeInUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}</style>
+</div>`
 
-fs.writeFileSync(path.join('src', 'app', 'signup', 'page.tsx'), content)
-console.log('SUCCESS: signup/page.tsx — password strength meter added')
+if (!content.includes(oldHeroRight)) {
+  console.log('ERROR: Could not find hero right section')
+  process.exit(1)
+}
+content = content.replace(oldHeroRight, newHeroRight)
+console.log('SUCCESS: Hero right column — live demo added')
+
+// ─── CHANGE 2: Industries section — dark cards ────────────────
+const oldIndustrySection = `<div class="industry-section"><div class="industry-head"><span class="section-label">Trusted across industries</span><div class="industry-title">Works for <em style="color:#E8610A;font-style:italic">your</em> business &mdash; whatever it is.</div></div><div class="industry-grid"><div class="industry-card"><div class="industry-card-icon">&#128135;</div><div class="industry-card-name">Salons &amp; Spas</div></div><div class="industry-card"><div class="industry-card-icon">&#128295;</div><div class="industry-card-name">HVAC Companies</div></div><div class="industry-card"><div class="industry-card-icon">&#9878;</div><div class="industry-card-name">Law Firms</div></div><div class="industry-card"><div class="industry-card-icon">&#129463;</div><div class="industry-card-name">Dental Offices</div></div><div class="industry-card"><div class="industry-card-icon">&#127869;</div><div class="industry-card-name">Restaurants</div></div><div class="industry-card"><div class="industry-card-icon">&#127968;</div><div class="industry-card-name">Real Estate</div></div><div class="industry-card"><div class="industry-card-icon">&#128170;</div><div class="industry-card-name">Gyms &amp; Fitness</div></div><div class="industry-card"><div class="industry-card-icon">&#128663;</div><div class="industry-card-name">Auto Repair</div></div><div class="industry-card"><div class="industry-card-icon">&#127973;</div><div class="industry-card-name">Med Spas</div></div><div class="industry-card"><div class="industry-card-icon">&#128694;</div><div class="industry-card-name">Plumbers</div></div><div class="industry-card"><div class="industry-card-icon">&#128226;</div><div class="industry-card-name">Agencies</div></div><div class="industry-card"><div class="industry-card-icon">&#129658;</div><div class="industry-card-name">Chiropractors</div></div></div></div>`
+
+const industries = [
+  { icon: '&#128135;', name: 'Salons &amp; Spas',    detail: 'Bookings + reviews on autopilot' },
+  { icon: '&#128295;', name: 'HVAC Companies',        detail: 'Dominate local search year-round' },
+  { icon: '&#9878;',   name: 'Law Firms',             detail: 'Authority content that converts' },
+  { icon: '&#129463;', name: 'Dental Offices',        detail: 'New patient content daily' },
+  { icon: '&#127869;', name: 'Restaurants',           detail: 'Specials, events, reviews automated' },
+  { icon: '&#127968;', name: 'Real Estate',           detail: 'Listings found on every AI engine' },
+  { icon: '&#128170;', name: 'Gyms &amp; Fitness',    detail: 'Membership growth content' },
+  { icon: '&#128663;', name: 'Auto Repair',           detail: 'Local SEO that drives walk-ins' },
+  { icon: '&#127973;', name: 'Med Spas',              detail: 'Premium content for premium clients' },
+  { icon: '&#128694;', name: 'Plumbers',              detail: 'Emergency leads around the clock' },
+  { icon: '&#128226;', name: 'Agencies',              detail: 'White-label for all your clients' },
+  { icon: '&#129658;', name: 'Chiropractors',         detail: 'Patient education that ranks' },
+]
+
+const industryCards = industries.map(ind =>
+  `<div style="background:#141414;border:1px solid #2a2a2a;border-radius:12px;padding:18px 12px;text-align:center;cursor:default" onmouseover="this.style.borderColor='#E8610A';this.style.background='#1a1a1a'" onmouseout="this.style.borderColor='#2a2a2a';this.style.background='#141414'">` +
+  `<div style="font-size:26px;margin-bottom:8px">${ind.icon}</div>` +
+  `<div style="font-size:12px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:4px">${ind.name}</div>` +
+  `<div style="font-size:10px;color:#555;line-height:1.4">${ind.detail}</div>` +
+  `</div>`
+).join('')
+
+const newIndustrySection =
+  `<div style="background:#0d0d0d;border-top:2.5px solid #111;border-bottom:2.5px solid #111;padding:40px">` +
+  `<div style="text-align:center;margin-bottom:28px">` +
+  `<span style="font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#E8610A;display:block;margin-bottom:8px">Trusted across industries</span>` +
+  `<div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#fff">Works for <em style="color:#E8610A;font-style:italic">your</em> business &mdash; whatever it is.</div>` +
+  `<p style="font-size:14px;color:#666;margin-top:8px;font-weight:300">Every piece of content tailored to your industry, your city, and your customers.</p>` +
+  `</div>` +
+  `<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;max-width:1100px;margin:0 auto">` +
+  industryCards +
+  `</div></div>`
+
+if (!content.includes(oldIndustrySection)) {
+  console.log('ERROR: Could not find industry section')
+  process.exit(1)
+}
+content = content.replace(oldIndustrySection, newIndustrySection)
+console.log('SUCCESS: Industries section — dark cards on black background')
+
+fs.writeFileSync(filePath, content)
+console.log('\nAll done. Run: npx next build')
