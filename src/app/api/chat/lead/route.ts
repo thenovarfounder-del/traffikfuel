@@ -267,7 +267,7 @@ export async function POST(request) {
 
     const biz = industryData[businessType] || industryData.other
     const firstName = visitorName ? capitalize(visitorName.split(' ')[0]) : null
-    const greeting = firstName || 'Friend'
+    const greeting = firstName || 'there'
 
     const visitorEmailHtml = `<!DOCTYPE html>
 <html>

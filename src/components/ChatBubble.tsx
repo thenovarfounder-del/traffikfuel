@@ -77,12 +77,26 @@ export default function ChatBubble() {
   const businessTypeRef = useRef(null)
   const leadCapturedRef = useRef(false)
 
-  // Scroll to TOP of latest assistant message
+  // Scroll to bottom only when loading starts (show typing dots)
+  // When message arrives, scroll to top of new assistant message only if it's taller than the window
   useEffect(() => {
-    if (lastAssistantRef.current) {
-      lastAssistantRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (loading) {
+      if (lastAssistantRef.current) {
+        lastAssistantRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    } else if (lastAssistantRef.current) {
+      const el = lastAssistantRef.current
+      const container = scrollRef.current
+      if (!container) return
+      const elTop = el.offsetTop
+      const containerScrollTop = container.scrollTop
+      const containerHeight = container.clientHeight
+      // Only scroll if the top of the new message is above current view
+      if (elTop < containerScrollTop || elTop > containerScrollTop + containerHeight) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
     }
-  }, [messages])
+  }, [messages, loading])
 
   async function fireLead(email, biz, name) {
     try {
