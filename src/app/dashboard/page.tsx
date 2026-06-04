@@ -33,7 +33,7 @@ const CARDS = [
   { title: 'Content Calendar', desc: 'See all your scheduled content on a monthly calendar view.', href: '/dashboard/calendar', label: 'Open Calendar', color: '#3b82f6', icon: '📅' },
   { title: 'AI Agents', desc: 'Your 4 AI agents running 24/7 — strategist, creator, publisher, monitor.', href: '/dashboard/agents', label: 'View Agents', color: '#a855f7', icon: '🤖' },
   { title: 'LLM Engine', desc: 'Optimize your content to be cited by ChatGPT, Gemini, and Perplexity.', href: '/dashboard/llm-engine', label: 'Open Engine', color: '#a855f7', icon: '🧠' },
-  { title: 'Business Brain', desc: 'AI builds your complete marketing profile from your website URL.', href: '/dashboard/brain', label: 'Build Brain', color: '#22c55e', icon: '🧠' },
+  { title: 'Business Brain', desc: 'AI builds your complete marketing profile from your website URL.', href: '/dashboard/scrape', label: 'Build Brain', color: '#22c55e', icon: '🧠' },
   { title: 'Business Settings', desc: 'Set up your business name, category, city, platforms and publishing mode.', href: '/dashboard/settings', label: 'Go to Settings', color: '#22c55e', icon: '⚙️' },
   { title: 'Analytics', desc: 'Track your content performance across all platforms with real data.', href: '/dashboard/analytics', label: 'View Analytics', color: '#22c55e', icon: '📊' },
   { title: 'Billing', desc: 'Manage your subscription, view invoices, and update payment details.', href: '/dashboard/billing', label: 'View Billing', color: '#64748b', icon: '💳' },
