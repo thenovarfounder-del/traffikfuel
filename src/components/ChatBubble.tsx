@@ -70,8 +70,8 @@ export default function ChatBubble() {
   const leadCapturedRef = useRef(false)
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, loading])
+    if (loading) bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [loading])
 
   async function fireLead(email, biz, name) {
     try {
