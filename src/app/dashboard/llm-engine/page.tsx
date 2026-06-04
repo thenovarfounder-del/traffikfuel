@@ -3,6 +3,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import { createClient } from "@supabase/supabase-js"
+import PlanGate from "@/components/PlanGate"
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -219,15 +220,9 @@ Always be helpful, specific to their business, and actionable.`
 
         </div>
 
-        {!isPro && (
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(17,17,17,0.75)", borderRadius: 16, zIndex: 10 }}>
-            <div style={{ fontSize: 56, marginBottom: 16 }}>🔒</div>
-            <h2 style={{ color: "#fff", fontSize: 28, fontWeight: 700, margin: "0 0 12px", fontFamily: "Playfair Display, serif", textAlign: "center" }}>Your Business Deserves Its Own AI</h2>
-            <p style={{ color: "#aaa", fontSize: 16, marginBottom: 32, textAlign: "center", maxWidth: 480, lineHeight: 1.6 }}>The LLM Engine trains a custom AI model on your business data. Every blog, every post, every reply — sounds exactly like you. No other tool does this.</p>
-            <a href="/pricing" style={{ background: "linear-gradient(135deg, #E8610A, #C84E06)", color: "#fff", padding: "16px 40px", borderRadius: 10, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 24px rgba(232,97,10,0.4)" }}>Upgrade to Pro — $97/month</a>
-            <p style={{ color: "#555", fontSize: 13, marginTop: 16 }}>Cancel anytime. Instant access.</p>
-          </div>
-        )}
+        <PlanGate userPlan={status} feature="llmEngine" mode="overlay">
+          <span style={{display:"none"}} />
+        </PlanGate>
       </div>
     </div>
   )

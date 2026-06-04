@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic'
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
+import PlanGate from '@/components/PlanGate'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -68,7 +69,7 @@ export default function AgentDashboard() {
     setLoading(false)
   }
 
-  const isPro = userStatus && userStatus !== 'free'
+  const isPro = userStatus && userStatus !== 'free' && userStatus !== 'starter'
 
   async function runAllAgents() {
     if (!isPro) { setShowUpgrade(true); return }

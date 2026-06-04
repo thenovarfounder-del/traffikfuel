@@ -2,6 +2,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
+import PlanGate from '@/components/PlanGate'
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
@@ -24,11 +25,14 @@ export default function SocialGenerator() {
       if (bp) setProfile(bp)
       const { data: userData } = await supabase.from('users').select('status').eq('id', user.id).single()
       if (userData?.status) setUserStatus(userData.status)
-    }
+        </PlanGate>
+  )
+}
     loadData()
   }, [])
 
   const isPaid = userStatus && userStatus !== 'free'
+  const plan = userStatus || 'free'
   const businessName = profile?.business_name || 'My Business'
   const industry = profile?.industry || 'Business'
   const city = profile?.phone || ''
@@ -51,6 +55,7 @@ export default function SocialGenerator() {
   const platformColors = { Facebook: '#1877F2', Instagram: '#E1306C', TikTok: '#010101', X: '#000000', LinkedIn: '#0A66C2' }
 
   return (
+    <PlanGate userPlan={plan} feature="socialGenerator" mode="overlay">
     <div style={{ minHeight:"100vh", background:"#0a0a0a", color:"#fff", fontFamily:"DM Sans, sans-serif" }}>
 
       {/* Header */}

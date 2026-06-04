@@ -30,8 +30,8 @@ export default function Billing() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
       setUser(user)
-      const { data } = await supabase.from('users').select('plan').eq('id', user.id).single()
-      if (data?.plan) setUserPlan(data.plan)
+      const { data } = await supabase.from('users').select('status').eq('id', user.id).single()
+      if (data?.status) setUserPlan(data.status)
       setLoading(false)
     }
     load()
