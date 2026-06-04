@@ -11,7 +11,8 @@ const industryData = {
     benefit1: 'Your Instagram, Facebook, and Google presence runs itself — no more manual posting',
     benefit2: 'AI agents publish fresh content every morning at 6am while you focus on clients',
     benefit3: 'Show up when people search “salon near me” on Google AND ChatGPT',
-    testimonial: '“I set it up on a Monday. By Thursday I had 4 new booking requests from Google.” — Melissa R., Salon Owner, Nashville',
+    testimonial: 'I set it up on a Monday. By Thursday I had 4 new booking requests from Google.',
+    testimonialAuthor: 'Melissa R., Salon Owner, Nashville',
     plan: 'Starter at $47/mo',
     planDetail: 'Unlimited posts across every platform. Review before anything goes live.',
     ctaText: 'Start My Free Salon Marketing Plan →',
@@ -31,7 +32,8 @@ const industryData = {
     benefit1: 'Show up first when someone searches “emergency HVAC near me” on Google or ChatGPT',
     benefit2: 'AI agents publish hyperlocal SEO content every morning — no work on your end',
     benefit3: 'Outrank competitors who are spending thousands on ads — organically',
-    testimonial: '“We went from page 3 to page 1 on Google in 6 weeks. Phone hasn’t stopped.” — Dave K., HVAC Owner, Phoenix',
+    testimonial: 'We went from page 3 to page 1 on Google in 6 weeks. Phone hasn’t stopped.',
+    testimonialAuthor: 'Dave K., HVAC Owner, Phoenix',
     plan: 'Pro at $97/mo',
     planDetail: 'AI Engine Optimization covers Google, ChatGPT, Gemini, Claude & Perplexity. Fully hands-off.',
     ctaText: 'Start My Free HVAC Marketing Plan →',
@@ -51,7 +53,8 @@ const industryData = {
     benefit1: 'Clients find your firm first — on Google AND ChatGPT, Gemini, Claude & Perplexity',
     benefit2: 'Daily content published automatically — never think about marketing again',
     benefit3: 'Build authority and trust before a client ever calls you',
-    testimonial: '“We rank on page 1 for 14 keywords now. Traffikora did that in 90 days.” — James T., Personal Injury Attorney, Atlanta',
+    testimonial: 'We rank on page 1 for 14 keywords now. Traffikora did that in 90 days.',
+    testimonialAuthor: 'James T., Personal Injury Attorney, Atlanta',
     plan: 'Pro at $97/mo',
     planDetail: 'AI Engine Optimization + Auto Mode. Your marketing runs itself while you focus on cases.',
     ctaText: 'Start My Free Law Firm Marketing Plan →',
@@ -71,7 +74,8 @@ const industryData = {
     benefit1: 'Daily SEO content published automatically — zero time investment from you',
     benefit2: 'Show up when patients search for dentists on Google and AI assistants',
     benefit3: 'Consistent content drives new patient inquiries every single month',
-    testimonial: '“I had 11 new patient inquiries in my first 60 days. I didn’t touch a thing.” — Dr. Sarah M., Dentist, Chicago',
+    testimonial: 'I had 11 new patient inquiries in my first 60 days. I didn’t touch a thing.',
+    testimonialAuthor: 'Dr. Sarah M., Dentist, Chicago',
     plan: 'Pro at $97/mo',
     planDetail: 'Auto Mode means you never touch it. AI runs every morning at 6am.',
     ctaText: 'Start My Free Dental Marketing Plan →',
@@ -91,7 +95,8 @@ const industryData = {
     benefit1: 'Daily specials, events, and promos posted automatically across every platform',
     benefit2: 'Build a loyal local following without spending hours on social media',
     benefit3: 'Show up when hungry customers search locally on Google and AI engines',
-    testimonial: '“Our Instagram following doubled in 8 weeks. Foot traffic is up 30%.” — Tony R., Restaurant Owner, Miami',
+    testimonial: 'Our Instagram following doubled in 8 weeks. Foot traffic is up 30%.',
+    testimonialAuthor: 'Tony R., Restaurant Owner, Miami',
     plan: 'Starter at $47/mo',
     planDetail: 'Unlimited posts across Facebook, Instagram, LinkedIn & X. Upgrade to Pro for full automation.',
     ctaText: 'Start My Free Restaurant Marketing Plan →',
@@ -111,7 +116,8 @@ const industryData = {
     benefit1: 'Listings, market updates, and neighborhood guides published automatically every day',
     benefit2: 'Get recommended when buyers ask ChatGPT for a local agent',
     benefit3: 'Build organic leads without paid ads — content works for you 24/7',
-    testimonial: '“I closed 2 deals last quarter from clients who found me through Google. Never ran an ad.” — Lisa P., Realtor, Dallas',
+    testimonial: 'I closed 2 deals last quarter from clients who found me through Google. Never ran an ad.',
+    testimonialAuthor: 'Lisa P., Realtor, Dallas',
     plan: 'Pro at $97/mo',
     planDetail: 'AI Engine Optimization + fully automated daily content. Focus on closing, not posting.',
     ctaText: 'Start My Free Real Estate Marketing Plan →',
@@ -131,7 +137,8 @@ const industryData = {
     benefit1: 'Workout tips, class schedules, and challenges posted automatically every day',
     benefit2: 'TikTok and YouTube Shorts publishing included — huge for fitness brands',
     benefit3: 'Build an online community that drives consistent new member signups',
-    testimonial: '“I set it up on a Tuesday. By Friday I had 3 new membership inquiries from Google.” — Marcus T., Gym Owner, Atlanta',
+    testimonial: 'I set it up on a Tuesday. By Friday I had 3 new membership inquiries from Google.',
+    testimonialAuthor: 'Marcus T., Gym Owner, Atlanta',
     plan: 'Pro at $97/mo',
     planDetail: 'TikTok + YouTube Shorts + Auto Mode. Your gym stays active online around the clock.',
     ctaText: 'Start My Free Gym Marketing Plan →',
@@ -151,7 +158,8 @@ const industryData = {
     benefit1: 'Treatment spotlights, promotions, and educational content published automatically',
     benefit2: 'Rank above larger competitors with daily, consistent, SEO-optimized content',
     benefit3: 'Get recommended when someone asks ChatGPT or Gemini for med spas nearby',
-    testimonial: '“We outrank two larger med spas in our city now. Our bookings are up 40%.” — Dr. Amanda K., Med Spa Owner, Scottsdale',
+    testimonial: 'We outrank two larger med spas in our city now. Our bookings are up 40%.',
+    testimonialAuthor: 'Dr. Amanda K., Med Spa Owner, Scottsdale',
     plan: 'Pro at $97/mo',
     planDetail: 'AI Engine Optimization makes you visible everywhere your clients are searching.',
     ctaText: 'Start My Free Med Spa Marketing Plan →',
@@ -171,7 +179,8 @@ const industryData = {
     benefit1: 'Manage up to 10 clients from one white-label dashboard — your brand, not ours',
     benefit2: 'Bulk content generation across all clients — the AI does the work',
     benefit3: 'Agencies on Traffikora typically 3x their client capacity without hiring',
-    testimonial: '“I went from 6 clients to 14 in 3 months without hiring anyone. Traffikora is the reason.” — Kevin M., Agency Owner, Austin',
+    testimonial: 'I went from 6 clients to 14 in 3 months without hiring anyone. Traffikora is the reason.',
+    testimonialAuthor: 'Kevin M., Agency Owner, Austin',
     plan: 'Agency at $297/mo',
     planDetail: '10 client accounts, white-label dashboard, bulk generation, separate calendars per client.',
     ctaText: 'Start My Free Agency Trial →',
@@ -191,7 +200,8 @@ const industryData = {
     benefit1: 'Show up when patients search “chiropractor near me” on Google and ChatGPT',
     benefit2: 'Daily content published automatically — no time investment required',
     benefit3: 'Build trust and authority in your local market with consistent SEO content',
-    testimonial: '“New patient calls went up 60% in 90 days. I haven’t touched the marketing once.” — Dr. Ryan S., Chiropractor, Denver',
+    testimonial: 'New patient calls went up 60% in 90 days. I haven’t touched the marketing once.',
+    testimonialAuthor: 'Dr. Ryan S., Chiropractor, Denver',
     plan: 'Pro at $97/mo',
     planDetail: 'AI Engine Optimization + Auto Mode. Set it up once, it runs forever.',
     ctaText: 'Start My Free Chiropractic Marketing Plan →',
@@ -211,7 +221,8 @@ const industryData = {
     benefit1: 'Show up when someone searches for a trusted shop nearby on Google or ChatGPT',
     benefit2: 'Outrank dealerships and chains with hyperlocal SEO content published daily',
     benefit3: 'Get recommended on AI assistants — your competitors probably aren’t there yet',
-    testimonial: '“We outrank the dealership two miles away on Google now. Bays are booked out 2 weeks.” — Frank D., Auto Shop Owner, Houston',
+    testimonial: 'We outrank the dealership two miles away on Google now. Bays are booked out 2 weeks.',
+    testimonialAuthor: 'Frank D., Auto Shop Owner, Houston',
     plan: 'Pro at $97/mo',
     planDetail: 'Hyperlocal SEO + AI Engine Optimization. Fully hands-off once set up.',
     ctaText: 'Start My Free Auto Shop Marketing Plan →',
@@ -231,7 +242,8 @@ const industryData = {
     benefit1: 'AI writes and publishes your blogs, social content, and SEO automatically every day',
     benefit2: 'Show up on Google AND AI engines like ChatGPT, Gemini, and Perplexity',
     benefit3: 'Set it up in 5 minutes — the AI handles everything from there',
-    testimonial: '“I had no marketing strategy before Traffikora. Now I rank on page 1 and get leads every week.” — Sandra W., Small Business Owner, Orlando',
+    testimonial: 'I had no marketing strategy before Traffikora. Now I rank on page 1 and get leads every week.',
+    testimonialAuthor: 'Sandra W., Small Business Owner, Orlando',
     plan: 'Free Plan to start',
     planDetail: 'No card needed. 3 blogs a month. See exactly how it works before spending a cent.',
     ctaText: 'Start My Free Marketing Plan →',
@@ -244,12 +256,17 @@ const industryData = {
   }
 }
 
+function capitalize(str) {
+  if (!str) return ''
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+}
+
 export async function POST(request) {
   try {
     const { visitorEmail, businessType, visitorName } = await request.json()
 
     const biz = industryData[businessType] || industryData.other
-    const firstName = visitorName ? visitorName.split(' ')[0] : null
+    const firstName = visitorName ? capitalize(visitorName.split(' ')[0]) : null
     const greeting = firstName || 'Friend'
 
     const visitorEmailHtml = `<!DOCTYPE html>
@@ -260,7 +277,6 @@ export async function POST(request) {
     <tr><td align="center">
       <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
 
-        <!-- Header -->
         <tr><td style="background:linear-gradient(135deg,#1a0800,#0d0400);border-radius:16px 16px 0 0;padding:36px 40px;text-align:center;border:1px solid #2a1500;border-bottom:none;">
           <div style="width:60px;height:60px;background:#111;border-radius:12px;margin:0 auto 20px;display:inline-flex;align-items:center;justify-content:center;border:2px solid #E8610A;">
             <span style="font-family:Georgia,serif;font-size:38px;font-weight:900;color:#E8610A;line-height:1;display:block;padding-top:4px;">T</span>
@@ -269,54 +285,42 @@ export async function POST(request) {
           <h1 style="color:#ffffff;font-size:28px;font-weight:700;margin:0;line-height:1.3;">${biz.headline}</h1>
         </td></tr>
 
-        <!-- Body -->
         <tr><td style="background:#111111;padding:36px 40px;border:1px solid #1e1e1e;border-top:none;border-bottom:none;">
-
           <p style="color:#cccccc;font-size:16px;line-height:1.7;margin:0 0 8px;">Hey ${greeting},</p>
           <p style="color:#cccccc;font-size:16px;line-height:1.7;margin:0 0 28px;">I want to be straight with you — ${biz.opener}</p>
 
-          <!-- Stat bar -->
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
             <tr><td style="background:linear-gradient(135deg,#0d0500,#1a0800);border:1px solid #3a1a00;border-radius:10px;padding:14px 20px;text-align:center;">
               <span style="color:#E8610A;font-size:14px;font-weight:700;">⚡ ${biz.stat}</span>
             </td></tr>
           </table>
 
-          <!-- Competitor urgency -->
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
             <tr><td style="background:#1a1a1a;border-left:3px solid #E8610A;border-radius:0 8px 8px 0;padding:14px 18px;">
               <p style="color:#aaaaaa;font-size:14px;line-height:1.6;margin:0;font-style:italic;">${biz.competitor}</p>
             </td></tr>
           </table>
 
-          <!-- Benefits -->
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
             <tr><td style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:24px;">
               <div style="color:#E8610A;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px;">What Traffikora Does For Your ${biz.label}</div>
               <table width="100%" cellpadding="0" cellspacing="0">
-                <tr><td style="padding-bottom:14px;">
-                  <table cellpadding="0" cellspacing="0"><tr>
-                    <td style="width:24px;vertical-align:top;padding-top:1px;"><span style="color:#E8610A;font-size:16px;font-weight:700;">&#10003;</span></td>
-                    <td style="color:#e0e0e0;font-size:15px;line-height:1.6;">${biz.benefit1}</td>
-                  </tr></table>
-                </td></tr>
-                <tr><td style="padding-bottom:14px;">
-                  <table cellpadding="0" cellspacing="0"><tr>
-                    <td style="width:24px;vertical-align:top;padding-top:1px;"><span style="color:#E8610A;font-size:16px;font-weight:700;">&#10003;</span></td>
-                    <td style="color:#e0e0e0;font-size:15px;line-height:1.6;">${biz.benefit2}</td>
-                  </tr></table>
-                </td></tr>
-                <tr><td>
-                  <table cellpadding="0" cellspacing="0"><tr>
-                    <td style="width:24px;vertical-align:top;padding-top:1px;"><span style="color:#E8610A;font-size:16px;font-weight:700;">&#10003;</span></td>
-                    <td style="color:#e0e0e0;font-size:15px;line-height:1.6;">${biz.benefit3}</td>
-                  </tr></table>
-                </td></tr>
+                <tr><td style="padding-bottom:14px;"><table cellpadding="0" cellspacing="0"><tr>
+                  <td style="width:24px;vertical-align:top;padding-top:1px;"><span style="color:#E8610A;font-size:16px;font-weight:700;">&#10003;</span></td>
+                  <td style="color:#e0e0e0;font-size:15px;line-height:1.6;">${biz.benefit1}</td>
+                </tr></table></td></tr>
+                <tr><td style="padding-bottom:14px;"><table cellpadding="0" cellspacing="0"><tr>
+                  <td style="width:24px;vertical-align:top;padding-top:1px;"><span style="color:#E8610A;font-size:16px;font-weight:700;">&#10003;</span></td>
+                  <td style="color:#e0e0e0;font-size:15px;line-height:1.6;">${biz.benefit2}</td>
+                </tr></table></td></tr>
+                <tr><td><table cellpadding="0" cellspacing="0"><tr>
+                  <td style="width:24px;vertical-align:top;padding-top:1px;"><span style="color:#E8610A;font-size:16px;font-weight:700;">&#10003;</span></td>
+                  <td style="color:#e0e0e0;font-size:15px;line-height:1.6;">${biz.benefit3}</td>
+                </tr></table></td></tr>
               </table>
             </td></tr>
           </table>
 
-          <!-- Free vs Pro comparison -->
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
             <tr>
               <td width="48%" style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:20px;vertical-align:top;">
@@ -333,7 +337,6 @@ export async function POST(request) {
             </tr>
           </table>
 
-          <!-- Plan recommendation -->
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
             <tr><td style="background:linear-gradient(135deg,#1a0800,#0d0500);border:1px solid #E8610A;border-radius:12px;padding:24px;">
               <div style="color:#E8610A;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">Eva’s Recommendation For You</div>
@@ -342,16 +345,14 @@ export async function POST(request) {
             </td></tr>
           </table>
 
-          <!-- Testimonial -->
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
             <tr><td style="background:#161616;border:1px solid #222;border-radius:12px;padding:22px 24px;">
               <div style="color:#E8610A;font-size:20px;margin-bottom:10px;">&ldquo;</div>
-              <p style="color:#cccccc;font-size:15px;line-height:1.7;margin:0 0 12px;font-style:italic;">${biz.testimonial.replace(/“|”/g, '').replace(/ — .+/, '')}</p>
-              <div style="color:#666;font-size:12px;">${biz.testimonial.match(/— (.+)/) ? biz.testimonial.match(/— (.+)/)[1] : ''}</div>
+              <p style="color:#cccccc;font-size:15px;line-height:1.7;margin:0 0 12px;font-style:italic;">${biz.testimonial}</p>
+              <div style="color:#666;font-size:12px;">${biz.testimonialAuthor}</div>
             </td></tr>
           </table>
 
-          <!-- CTA -->
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
             <tr><td align="center">
               <a href="https://traffikora.com/signup" style="display:inline-block;background:linear-gradient(135deg,#E8610A,#C84E06);color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;padding:20px 40px;border-radius:12px;letter-spacing:0.3px;">${biz.ctaText}</a>
@@ -360,27 +361,22 @@ export async function POST(request) {
 
           <p style="color:#666;font-size:13px;text-align:center;margin:0 0 32px;">No credit card required &nbsp;&bull;&nbsp; Cancel anytime &nbsp;&bull;&nbsp; Setup in 5 minutes</p>
 
-          <!-- Reply encouragement -->
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px;">
             <tr><td style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:18px 20px;">
               <p style="color:#aaaaaa;font-size:14px;line-height:1.7;margin:0;">Have questions? Just hit reply — I read every single message and I’ll get back to you personally. No bots, no support tickets. Just me.</p>
               <p style="color:#E8610A;font-size:14px;font-weight:600;margin:8px 0 0;">Eva, Traffikora AI Guide</p>
             </td></tr>
           </table>
-
         </td></tr>
 
-        <!-- PS + Footer -->
         <tr><td style="background:#0d0d0d;border:1px solid #1e1e1e;border-top:none;border-radius:0 0 16px 16px;padding:28px 40px;">
           <p style="color:#777;font-size:14px;line-height:1.7;margin:0 0 20px;"><strong style="color:#999;">P.S.</strong> The free plan takes 5 minutes to set up and requires no credit card. Your competitors aren’t waiting — and neither should you.</p>
           <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #1e1e1e;padding-top:20px;margin-top:4px;">
-            <tr>
-              <td style="color:#444;font-size:12px;line-height:1.8;">
-                Traffikora — AI-Powered Marketing for Local Businesses<br>
-                Trusted by 1,000+ local businesses across 16+ industries<br>
-                <a href="https://traffikora.com" style="color:#E8610A;text-decoration:none;">traffikora.com</a> &nbsp;&bull;&nbsp; <a href="mailto:support@traffikora.com" style="color:#E8610A;text-decoration:none;">support@traffikora.com</a>
-              </td>
-            </tr>
+            <tr><td style="color:#444;font-size:12px;line-height:1.8;">
+              Traffikora — AI-Powered Marketing for Local Businesses<br>
+              Trusted by 1,000+ local businesses across 16+ industries<br>
+              <a href="https://traffikora.com" style="color:#E8610A;text-decoration:none;">traffikora.com</a> &nbsp;&bull;&nbsp; <a href="mailto:support@traffikora.com" style="color:#E8610A;text-decoration:none;">support@traffikora.com</a>
+            </td></tr>
             <tr><td style="padding-top:12px;color:#333;font-size:11px;">No spam, ever. You received this because you chatted with Eva on Traffikora.com. <a href="https://traffikora.com" style="color:#444;text-decoration:none;">Unsubscribe</a></td></tr>
           </table>
         </td></tr>
@@ -402,7 +398,7 @@ export async function POST(request) {
         <tr><td style="padding-bottom:14px;"><span style="color:#888;font-size:12px;text-transform:uppercase;letter-spacing:1px;">Email</span><br><a href="mailto:${visitorEmail}" style="color:#E8610A;font-size:17px;font-weight:700;text-decoration:none;">${visitorEmail}</a></td></tr>
         <tr><td style="padding-bottom:14px;"><span style="color:#888;font-size:12px;text-transform:uppercase;letter-spacing:1px;">Industry</span><br><span style="color:#111;font-size:16px;font-weight:700;">${biz.label}</span></td></tr>
         <tr><td style="padding-bottom:14px;"><span style="color:#888;font-size:12px;text-transform:uppercase;letter-spacing:1px;">Recommended Plan</span><br><span style="color:#E8610A;font-size:16px;font-weight:700;">${biz.plan}</span></td></tr>
-        ${visitorName ? `<tr><td><span style="color:#888;font-size:12px;text-transform:uppercase;letter-spacing:1px;">Name</span><br><span style="color:#111;font-size:16px;font-weight:700;">${visitorName}</span></td></tr>` : ''}
+        ${greeting !== 'Friend' ? `<tr><td><span style="color:#888;font-size:12px;text-transform:uppercase;letter-spacing:1px;">Name</span><br><span style="color:#111;font-size:16px;font-weight:700;">${greeting}</span></td></tr>` : ''}
       </table>
       <a href="mailto:${visitorEmail}" style="display:inline-block;background:#E8610A;color:#fff;font-size:15px;font-weight:700;text-decoration:none;padding:14px 28px;border-radius:8px;">Reply to This Lead</a>
     </td></tr>
@@ -410,31 +406,37 @@ export async function POST(request) {
 </body>
 </html>`
 
-    await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        from: 'Eva at Traffikora <support@traffikora.com>',
-        to: [visitorEmail],
-        subject: `${greeting}, here’s your personalized Traffikora plan ⚡`,
-        html: visitorEmailHtml
+    const [visitorRes, notifyRes] = await Promise.all([
+      fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: 'Eva at Traffikora <support@traffikora.com>',
+          to: [visitorEmail],
+          subject: `${greeting}, here’s your personalized Traffikora plan ⚡`,
+          html: visitorEmailHtml
+        })
+      }),
+      fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: 'Eva at Traffikora <support@traffikora.com>',
+          to: ['support@traffikora.com'],
+          subject: `🔥 New Lead: ${biz.label} — ${visitorEmail}`,
+          html: notifyHtml
+        })
       })
-    })
+    ])
 
-    await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        from: 'Eva at Traffikora <support@traffikora.com>',
-        to: ['support@traffikora.com'],
-        subject: `🔥 New Lead: ${biz.label} — ${visitorEmail}`,
-        html: notifyHtml
-      })
-    })
+    const visitorData = await visitorRes.json()
+    const notifyData = await notifyRes.json()
+    console.log('Visitor email result:', JSON.stringify(visitorData))
+    console.log('Notify email result:', JSON.stringify(notifyData))
 
-    return Response.json({ success: true })
+    return Response.json({ success: true, visitorEmailId: visitorData.id, notifyEmailId: notifyData.id })
   } catch (err) {
     console.error('Lead email error:', err)
-    return Response.json({ success: false }, { status: 500 })
+    return Response.json({ success: false, error: err.message }, { status: 500 })
   }
 }
