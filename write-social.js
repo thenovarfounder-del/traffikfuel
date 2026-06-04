@@ -2,167 +2,198 @@ const fs = require('fs')
 const path = require('path')
 
 const content = `// @ts-nocheck
-'use client'
+export const dynamic = 'force-dynamic'
 
-import { useState, useRef, useEffect } from 'react'
+export async function POST(request) {
+  try {
+    const { messages, businessType } = await request.json()
 
-const BUSINESS_TYPES = [
-  { label: 'Salon / Spa', value: 'salon' },
-  { label: 'HVAC / Plumber', value: 'hvac' },
-  { label: 'Law Firm', value: 'law' },
-  { label: 'Dental Office', value: 'dental' },
-  { label: 'Restaurant', value: 'restaurant' },
-  { label: 'Real Estate', value: 'realestate' },
-  { label: 'Gym / Fitness', value: 'gym' },
-  { label: 'Med Spa', value: 'medspa' },
-  { label: 'Marketing Agency', value: 'agency' },
-  { label: 'Chiropractor', value: 'chiro' },
-  { label: 'Auto Repair', value: 'auto' },
-  { label: 'Other', value: 'other' },
-]
-
-export default function ChatBubble() {
-  const [open, setOpen] = useState(false)
-  const [businessType, setBusinessType] = useState(null)
-  const [messages, setMessages] = useState([
-    { role: 'assistant', content: "Hi! I\u2019m CYRA, your Traffikora AI guide \u26a1 I\u2019ll help you find the perfect plan and get your marketing running on autopilot. First\u2014what type of business do you run?", showButtons: true }
-  ])
-  const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
-  const bottomRef = useRef(null)
-
-  useEffect(() => {
-    if (bottomRef.current) bottomRef.current.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, loading])
-
-  function selectBusiness(biz) {
-    setBusinessType(biz.value)
-    const userMsg = { role: 'user', content: biz.label }
-    const next = [...messages.map(m => ({ ...m, showButtons: false })), userMsg]
-    setMessages(next)
-    sendToAPI(next, biz.value)
-  }
-
-  async function send() {
-    if (!input.trim() || loading) return
-    const userMsg = { role: 'user', content: input.trim() }
-    const next = [...messages.map(m => ({ ...m, showButtons: false })), userMsg]
-    setMessages(next)
-    setInput('')
-    sendToAPI(next, businessType)
-  }
-
-  async function sendToAPI(next, biz) {
-    setLoading(true)
-    try {
-      const apiMessages = next.map(({ role, content }) => ({ role, content }))
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: apiMessages, businessType: biz })
-      })
-      const data = await res.json()
-      setMessages([...next, { role: 'assistant', content: data.message }])
-    } catch {
-      setMessages([...next, { role: 'assistant', content: 'Something went wrong. Please try again.' }])
+    const industryContext = {
+      salon: {
+        label: 'Salon / Spa',
+        pain: 'spending hours posting manually on Instagram and Facebook instead of focusing on clients',
+        hook: 'Most salons waste 5+ hours a week on social media. With Traffikora, your Instagram, Facebook, and Google presence runs itself \u2014 while you focus on your clients.',
+        proof: 'We have hundreds of salons and spas on the platform. They typically see their Google visibility double within 60 days.',
+        recommend: 'Starter at $47/mo is perfect for a solo salon. If you want it fully hands-off, Pro at $97/mo turns on Auto Mode and your AI agents run every morning at 6am without you touching anything.'
+      },
+      hvac: {
+        label: 'HVAC / Plumbing',
+        pain: 'losing jobs to competitors who show up first on Google and AI search',
+        hook: 'When someone searches \u201cemergency HVAC near me\u201d or asks ChatGPT for a recommendation \u2014 Traffikora makes sure your name comes up. Not your competitor\u2019s.',
+        proof: 'HVAC and plumbing companies on Traffikora typically rank on page 1 within 60 days and get found on ChatGPT, Google, and every major AI engine.',
+        recommend: 'Pro at $97/mo is the sweet spot for HVAC \u2014 you get AI Engine Optimization so you rank on Google AND ChatGPT, Gemini, and Perplexity. Fully hands-off.'
+      },
+      law: {
+        label: 'Law Firm',
+        pain: 'losing potential clients to firms that show up first when people research lawyers online',
+        hook: 'Clients research lawyers online before ever calling. Traffikora keeps your firm visible on Google and every AI engine 24/7 \u2014 so when someone needs an attorney, your name is what they find.',
+        proof: 'Law firms on Traffikora consistently outrank competitors on Google and get recommended by AI assistants like ChatGPT and Gemini.',
+        recommend: 'Pro at $97/mo is built for law firms \u2014 AI Engine Optimization means you\u2019re visible everywhere clients are searching, not just Google.'
+      },
+      dental: {
+        label: 'Dental Office',
+        pain: 'struggling to stay consistent with content while running a full patient schedule',
+        hook: 'Your schedule is full \u2014 you shouldn\u2019t have to think about marketing. Traffikora writes and publishes your blog posts, social content, and SEO automatically every single day.',
+        proof: 'Dental practices on Traffikora see consistent new patient inquiries from organic search within the first 90 days.',
+        recommend: 'Pro at $97/mo is ideal \u2014 Auto Mode means you never touch it. Your AI runs every morning at 6am and keeps your practice visible around the clock.'
+      },
+      restaurant: {
+        label: 'Restaurant',
+        pain: 'not having time to post daily specials, events, and promotions across every platform',
+        hook: 'Daily specials, events, seasonal menus, reviews \u2014 Traffikora posts it all automatically across Facebook, Instagram, and Google. You focus on the kitchen.',
+        proof: 'Restaurants on Traffikora consistently grow their local following and see more foot traffic from organic search and social.',
+        recommend: 'Starter at $47/mo works great to start \u2014 unlimited posts across all platforms. Upgrade to Pro if you want it 100% hands-off with Auto Mode.'
+      },
+      realestate: {
+        label: 'Real Estate',
+        pain: 'not having consistent content while juggling listings, showings, and closings',
+        hook: 'Listings, market updates, neighborhood guides, buyer tips \u2014 published automatically every day while you focus on closing deals.',
+        proof: 'Real estate agents on Traffikora build authority in their market fast. Consistent content means more organic leads without paid ads.',
+        recommend: 'Pro at $97/mo is perfect \u2014 fully automated, AI agents run daily, and you get AI Engine Optimization so you show up when buyers ask ChatGPT for local agent recommendations.'
+      },
+      gym: {
+        label: 'Gym / Fitness',
+        pain: 'losing members to competitors with stronger social media and online presence',
+        hook: 'Workout tips, class schedules, member spotlights, challenges \u2014 Traffikora keeps your gym active online every single day without you lifting a finger.',
+        proof: 'Gyms and fitness studios on Traffikora see consistent membership growth from organic content within the first 60 days.',
+        recommend: 'Starter at $47/mo is a great entry point. Pro at $97/mo adds TikTok and YouTube Shorts \u2014 huge for fitness brands.'
+      },
+      medspa: {
+        label: 'Med Spa',
+        pain: 'competing against larger med spas with bigger marketing budgets',
+        hook: 'Treatment spotlights, before/afters, promotions, educational content \u2014 Traffikora runs your entire content strategy automatically so you compete with anyone.',
+        proof: 'Med spas on Traffikora consistently rank above larger competitors because of daily, consistent, SEO-optimized content.',
+        recommend: 'Pro at $97/mo \u2014 AI Engine Optimization means you show up on Google AND when someone asks ChatGPT or Gemini for med spa recommendations near them.'
+      },
+      agency: {
+        label: 'Marketing Agency',
+        pain: 'spending too much time manually creating content for every client',
+        hook: 'Stop doing it manually for every client. Traffikora lets you manage up to 10 clients from one dashboard, generate bulk content, and white-label the whole platform as your own.',
+        proof: 'Agencies on Traffikora typically 3x their client capacity without adding headcount \u2014 because the AI does the content work.',
+        recommend: 'Agency plan at $297/mo \u2014 10 client accounts, white-label dashboard, bulk content generation, and a separate content calendar per client. Built exactly for what you do.'
+      },
+      chiro: {
+        label: 'Chiropractor',
+        pain: 'not showing up when patients search for chiropractors online or ask AI assistants',
+        hook: 'When someone searches \u201cchiropractor near me\u201d or asks ChatGPT for a recommendation \u2014 Traffikora makes sure your practice is what comes up.',
+        proof: 'Chiropractic practices on Traffikora see their Google rankings improve within 60 days and get recommended across AI search engines.',
+        recommend: 'Pro at $97/mo \u2014 AI Engine Optimization covers Google, ChatGPT, Gemini, Claude, and Perplexity. Fully hands-off with Auto Mode.'
+      },
+      auto: {
+        label: 'Auto Repair',
+        pain: 'losing customers to dealerships and chains with bigger marketing budgets',
+        hook: 'When someone\u2019s car breaks down and they ask Google or ChatGPT for a trustworthy shop nearby \u2014 Traffikora makes sure your shop is the answer.',
+        proof: 'Auto repair shops on Traffikora consistently outrank chains locally because of daily, consistent, hyperlocal SEO content.',
+        recommend: 'Pro at $97/mo \u2014 hyperlocal SEO + AI Engine Optimization means you show up everywhere your customers are searching.'
+      },
+      other: {
+        label: 'Business',
+        pain: 'spending too much time on marketing instead of running your business',
+        hook: 'Whatever your business does, Traffikora handles your entire content marketing automatically \u2014 blogs, social media, SEO \u2014 so you can focus on what you actually do.',
+        proof: 'We support 16+ industries. If you have a local business and need consistent online visibility, Traffikora works for you.',
+        recommend: 'Start with the Free plan \u2014 no card needed, 3 blogs a month, see exactly how it works for your business before spending a cent.'
+      }
     }
-    setLoading(false)
+
+    const biz = industryContext[businessType] || industryContext.other
+
+    const systemPrompt = \`You are Eva, a warm, intelligent, and persuasive sales guide for Traffikora. You speak like a real, confident woman who genuinely cares about helping business owners succeed. You are not robotic. You are charming, sharp, and deeply knowledgeable. You ask smart questions and give personalized recommendations.
+
+YOUR PERSONALITY:
+- Warm, friendly, confident, and conversational
+- You celebrate the business owner's goals and make them feel understood
+- You handle objections gracefully — never pushy, always genuinely helpful
+- You keep answers concise and punchy unless deep detail is needed
+- You use occasional light emphasis like "honestly" or "here's the thing" to sound human
+- You always move the conversation toward a clear next step — either a signup or a lead capture
+
+BUSINESS CONTEXT — THIS VISITOR IS A: \${biz.label}
+Their likely pain point: \${biz.pain}
+Your opening hook for this industry: \${biz.hook}
+Social proof to use: \${biz.proof}
+Plan recommendation for this industry: \${biz.recommend}
+
+Use this context to make every response feel personally tailored to their business. Reference their industry specifically. Never give generic answers.
+
+CLOSING STRATEGY — CRITICAL:
+- After 2-3 exchanges, start moving toward a close
+- Your two goals: (1) get them to signup at traffikora.com/signup, or (2) capture their email by offering to send a personalized plan summary
+- Use this email capture offer after 3+ messages: "One thing I can do — let me send you a personalized summary of exactly how Traffikora would work for your \${biz.label} business. What's the best email to send it to?"
+- If they give an email, confirm it warmly and tell them to expect it within a few minutes, then encourage them to start the free plan while they wait
+- Always end with either a signup link or the email capture offer — never leave the conversation open-ended
+
+URGENCY & SOCIAL PROOF:
+- Reference that hundreds of businesses in their industry are already on Traffikora
+- Mention that competitors in their market may already be using it
+- The free plan has no risk — no card, no commitment, takes 5 minutes to set up
+- Pro plan at $97/mo is less than most businesses spend on one Facebook ad boost
+
+ABOUT TRAFFIKORA:
+Traffikora is an AI-powered content marketing platform that automates blog writing, social media content, Google SEO, and publishing for local businesses and agencies. It runs 24/7 so business owners never have to think about marketing again.
+
+PLANS & PRICING:
+FREE — $0/forever, no credit card. 3 AI blogs/month, content dashboard, upgrade anytime.
+STARTER — $47/month. Unlimited blogs, social content (Facebook, Instagram, LinkedIn, X), One-Push Publish to WordPress, Content Calendar, manual controls.
+PRO — $97/month (MOST POPULAR). Everything in Starter + AI Agents running daily at 6am, Auto Mode (fully hands-off), TikTok + YouTube Shorts, Google SEO + AI Engine Optimization (rank on ChatGPT, Claude, Gemini, Perplexity), Reddit amplifier.
+AGENCY — $297/month. Everything in Pro + 10 client accounts, white-label dashboard, client portal, bulk content generation.
+ENTERPRISE — $997/month. Everything in Agency + unlimited clients, custom AI training, dedicated account manager, onboarding call.
+
+KEY DIFFERENTIATORS:
+- ONLY platform that optimizes for Google AND AI engines (ChatGPT, Claude, Gemini, Perplexity) — competitors only do Google
+- AI Agents run every morning at 6am — no login needed ever
+- Auto Mode = fully hands-off, set it and forget it
+- Content Queue lets owners review before anything goes live
+- Setup takes under 5 minutes
+
+COMMON OBJECTIONS:
+- "Too expensive" → Free plan costs nothing. Starter at $47 is less than one hour of agency time.
+- "No time to set up" → Takes 5 minutes. AI takes over immediately.
+- "Already have someone doing social" → Traffikora handles the volume so your person can focus on strategy.
+- "Not sure about AI content" → Content Queue lets you approve everything before it goes live.
+- "What if I don't like it?" → Start free, no card. Cancel anytime in one click.
+
+COMPETITOR COMPARISON:
+- vs Agencies: They charge $2,000-$10,000/month. Traffikora starts free.
+- vs Hootsuite/Buffer: Those are schedulers — you still write the content. Traffikora writes AND publishes.
+- vs Hiring staff: Part-time social media person = $1,500+/month. Traffikora Pro = $97.
+
+LINKS:
+- Signup: traffikora.com/signup
+- Pricing: traffikora.com/pricing
+- Support: support@traffikora.com
+
+RULES:
+- Never make up features or pricing not listed above
+- Never be pushy — be genuinely helpful
+- Always end with a question, a signup link, or the email capture offer
+- You are Eva — introduce yourself by name if asked\`
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-opus-4-5',
+        max_tokens: 1024,
+        system: systemPrompt,
+        messages: messages
+      })
+    })
+
+    const data = await response.json()
+    const text = data.content?.filter(b => b.type === 'text').map(b => b.text).join('') || "I'm sorry, I couldn't get a response. Please try again!"
+
+    return Response.json({ message: text })
+  } catch (err) {
+    console.error('Chat error:', err)
+    return Response.json({ message: 'Something went wrong. Please try again.' }, { status: 500 })
   }
-
-  const CyraIcon = ({ size }) => (
-    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style={{ width: size, height: size }}>
-      <rect width="32" height="32" rx="6" fill="#111111"/>
-      <text x="16" y="24" fontFamily="Georgia, serif" fontSize="24" fontWeight="900" fill="#E8610A" textAnchor="middle">T</text>
-    </svg>
-  )
-
-  return (
-    <>
-      {open && (
-        <div style={{ position:'fixed', bottom:'88px', right:'24px', width:'360px', height:'500px', background:'#0f0f0f', border:'1px solid #2a2a2a', borderRadius:'20px', display:'flex', flexDirection:'column', zIndex:9999, boxShadow:'0 12px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(232,97,10,0.15)' }}>
-          <div style={{ padding:'16px 18px', borderBottom:'1px solid #1e1e1e', display:'flex', alignItems:'center', justifyContent:'space-between', background:'linear-gradient(135deg,#1a0800,#0a0400)', borderRadius:'20px 20px 0 0' }}>
-            <div style={{ display:'flex', alignItems:'center', gap:'12px' }}>
-              <div style={{ position:'relative', flexShrink:0 }}>
-                <div style={{ width:'48px', height:'48px', borderRadius:'50%', overflow:'hidden', border:'2px solid #E8610A', boxShadow:'0 0 16px rgba(232,97,10,0.5)', background:'#050200', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                  <CyraIcon size="44" />
-                </div>
-                <div style={{ position:'absolute', bottom:'1px', right:'1px', width:'10px', height:'10px', borderRadius:'50%', background:'#22c55e', border:'2px solid #111' }} />
-              </div>
-              <div>
-                <div style={{ color:'#E8610A', fontWeight:'700', fontSize:'15px', fontFamily:'Georgia,serif' }}>CYRA</div>
-                <div style={{ color:'#22c55e', fontSize:'11px', fontWeight:'500' }}>&bull; Online &mdash; Traffikora AI Guide</div>
-              </div>
-            </div>
-            <button onClick={() => setOpen(false)} style={{ background:'none', border:'none', color:'#888', fontSize:'24px', cursor:'pointer', lineHeight:1, padding:'4px 8px', display:'flex', alignItems:'center', justifyContent:'center' }}>&times;</button>
-          </div>
-
-          <div style={{ flex:1, overflowY:'auto', padding:'16px', display:'flex', flexDirection:'column', gap:'12px' }}>
-            {messages.map((m, i) => (
-              <div key={i}>
-                <div style={{ display:'flex', justifyContent:m.role==='user'?'flex-end':'flex-start', alignItems:'flex-end', gap:'8px' }}>
-                  {m.role === 'assistant' && (
-                    <div style={{ width:'28px', height:'28px', borderRadius:'50%', overflow:'hidden', flexShrink:0, border:'1px solid #E8610A', background:'#050200', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                      <CyraIcon size="26" />
-                    </div>
-                  )}
-                  <div style={{ maxWidth:'78%', padding:'10px 14px', borderRadius:m.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px', background:m.role==='user'?'linear-gradient(135deg,#E8610A,#ff8c42)':'#1e1e1e', color:'#fff', fontSize:'13px', lineHeight:1.6, border:m.role==='assistant'?'1px solid #2a2a2a':'none' }}>
-                    {m.content}
-                  </div>
-                </div>
-                {m.showButtons && (
-                  <div style={{ marginTop:'10px', marginLeft:'36px', display:'flex', flexWrap:'wrap', gap:'6px' }}>
-                    {BUSINESS_TYPES.map(biz => (
-                      <button key={biz.value} onClick={() => selectBusiness(biz)}
-                        style={{ background:'#1a1a1a', border:'1px solid #333', borderRadius:'20px', color:'#ccc', padding:'5px 12px', fontSize:'12px', cursor:'pointer', fontFamily:'inherit' }}
-                        onMouseEnter={e => { e.target.style.borderColor='#E8610A'; e.target.style.color='#E8610A' }}
-                        onMouseLeave={e => { e.target.style.borderColor='#333'; e.target.style.color='#ccc' }}>
-                        {biz.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-            {loading && (
-              <div style={{ display:'flex', alignItems:'flex-end', gap:'8px' }}>
-                <div style={{ width:'28px', height:'28px', borderRadius:'50%', overflow:'hidden', flexShrink:0, border:'1px solid #E8610A', background:'#050200', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                  <CyraIcon size="26" />
-                </div>
-                <div style={{ background:'#1e1e1e', border:'1px solid #2a2a2a', borderRadius:'16px 16px 16px 4px', padding:'10px 16px', display:'flex', gap:'5px', alignItems:'center' }}>
-                  {[0,1,2].map(i => <div key={i} style={{ width:'7px', height:'7px', borderRadius:'50%', background:'#E8610A', animation:'cyraPulse 1.2s ease-in-out infinite', animationDelay: i * 0.2 + 's' }} />)}
-                </div>
-              </div>
-            )}
-            <div ref={bottomRef} />
-          </div>
-
-          <div style={{ padding:'12px 16px', borderTop:'1px solid #1e1e1e', display:'flex', gap:'8px', background:'#0f0f0f', borderRadius:'0 0 20px 20px' }}>
-            <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==='Enter' && send()} placeholder="Ask CYRA anything..."
-              style={{ flex:1, background:'#1a1a1a', border:'1px solid #2a2a2a', borderRadius:'10px', color:'#fff', padding:'11px 14px', fontSize:'13px', outline:'none', fontFamily:'inherit' }} />
-            <button onClick={send} disabled={loading || !input.trim()}
-              style={{ background:loading||!input.trim()?'#333':'linear-gradient(135deg,#E8610A,#C84E06)', border:'none', borderRadius:'10px', padding:'11px 18px', color:'#fff', fontWeight:'700', cursor:loading||!input.trim()?'not-allowed':'pointer', fontSize:'13px' }}>
-              Send
-            </button>
-          </div>
-        </div>
-      )}
-
-      <button onClick={() => setOpen(!open)}
-        style={{ position:'fixed', bottom:'24px', right:'24px', width:'52px', height:'52px', borderRadius:'50%', background:'#050200', border:'2px solid #E8610A', cursor:'pointer', zIndex:9999, boxShadow:'0 4px 24px rgba(232,97,10,0.6), 0 0 40px rgba(232,97,10,0.2)', display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden', padding:0 }}>
-        {open ? <span style={{ color:'#E8610A', fontSize:'26px', lineHeight:1 }}>&times;</span> : <CyraIcon size="62" />}
-      </button>
-
-      <style>{\`
-        @keyframes cyraPulse {
-          0%, 100% { opacity: 0.3; transform: scale(0.8); }
-          50% { opacity: 1; transform: scale(1); }
-        }
-      \`}</style>
-    </>
-  )
 }
 `
 
-const filePath = path.join('C:\\\\', 'Users', 'randy', 'traffikfuel', 'src', 'components', 'ChatBubble.tsx')
+const filePath = path.join('C:\\\\', 'Users', 'randy', 'traffikfuel', 'src', 'app', 'api', 'chat', 'route.ts')
 fs.writeFileSync(filePath, content, 'utf8')
-console.log('SUCCESS: ChatBubble.tsx written')
+console.log('SUCCESS: route.ts written')
