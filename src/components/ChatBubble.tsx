@@ -18,11 +18,30 @@ const BUSINESS_TYPES = [
   { label: 'Other', value: 'other' },
 ]
 
+function extractEmail(text) {
+  const match = text.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/)
+  return match ? match[0] : null
+}
+
+function renderMarkdown(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^### (.+)$/gm, '<div style="color:#E8610A;font-weight:700;font-size:13px;margin:10px 0 4px;">$1</div>')
+    .replace(/^## (.+)$/gm, '<div style="color:#E8610A;font-weight:700;font-size:14px;margin:10px 0 4px;">$1</div>')
+    .replace(/^# (.+)$/gm, '<div style="color:#E8610A;font-weight:700;font-size:15px;margin:10px 0 4px;">$1</div>')
+    .replace(/^[\-\*] (.+)$/gm, '<div style="display:flex;gap:6px;margin:3px 0;"><span style="color:#E8610A;flex-shrink:0;">\u2022</span><span>$1</span></div>')
+    .replace(/^\d+\. (.+)$/gm, '<div style="margin:3px 0;">$1</div>')
+    .replace(/\n\n/g, '<br/><br/>')
+    .replace(/\n/g, '<br/>')
+}
+
 export default function ChatBubble() {
   const [open, setOpen] = useState(false)
   const [businessType, setBusinessType] = useState(null)
+  const [leadCaptured, setLeadCaptured] = useState(false)
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: "Hi! I’m CYRA, your Traffikora AI guide ⚡ I’ll help you find the perfect plan and get your marketing running on autopilot. First—what type of business do you run?", showButtons: true }
+    { role: 'assistant', content: "Hi! I\u2019m Eva, your Traffikora AI guide \u26a1 I\u2019ll help you find the perfect plan and get your marketing running on autopilot. First\u2014what type of business do you run?", showButtons: true }
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -31,6 +50,27 @@ export default function ChatBubble() {
   useEffect(() => {
     if (bottomRef.current) bottomRef.current.scrollIntoView({ behavior: 'smooth' })
   }, [messages, loading])
+
+  async function fireLead(email, biz) {
+    try {
+      await fetch('/api/chat/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ visitorEmail: email, businessType: biz })
+      })
+    } catch (e) {
+      console.error('Lead fire failed:', e)
+    }
+  }
+
+  function checkForEmail(text, biz) {
+    if (leadCaptured) return
+    const email = extractEmail(text)
+    if (email) {
+      setLeadCaptured(true)
+      fireLead(email, biz)
+    }
+  }
 
   function selectBusiness(biz) {
     setBusinessType(biz.value)
@@ -43,6 +83,7 @@ export default function ChatBubble() {
   async function send() {
     if (!input.trim() || loading) return
     const userMsg = { role: 'user', content: input.trim() }
+    checkForEmail(input.trim(), businessType)
     const next = [...messages.map(m => ({ ...m, showButtons: false })), userMsg]
     setMessages(next)
     setInput('')
@@ -59,14 +100,16 @@ export default function ChatBubble() {
         body: JSON.stringify({ messages: apiMessages, businessType: biz })
       })
       const data = await res.json()
-      setMessages([...next, { role: 'assistant', content: data.message }])
+      const reply = data.message
+      checkForEmail(reply, biz)
+      setMessages([...next, { role: 'assistant', content: reply }])
     } catch {
       setMessages([...next, { role: 'assistant', content: 'Something went wrong. Please try again.' }])
     }
     setLoading(false)
   }
 
-  const CyraIcon = ({ size }) => (
+  const EvaIcon = ({ size }) => (
     <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style={{ width: size, height: size }}>
       <rect width="32" height="32" rx="6" fill="#111111"/>
       <text x="16" y="24" fontFamily="Georgia, serif" fontSize="24" fontWeight="900" fill="#E8610A" textAnchor="middle">T</text>
@@ -81,12 +124,12 @@ export default function ChatBubble() {
             <div style={{ display:'flex', alignItems:'center', gap:'12px' }}>
               <div style={{ position:'relative', flexShrink:0 }}>
                 <div style={{ width:'48px', height:'48px', borderRadius:'50%', overflow:'hidden', border:'2px solid #E8610A', boxShadow:'0 0 16px rgba(232,97,10,0.5)', background:'#050200', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                  <CyraIcon size="44" />
+                  <EvaIcon size="44" />
                 </div>
                 <div style={{ position:'absolute', bottom:'1px', right:'1px', width:'10px', height:'10px', borderRadius:'50%', background:'#22c55e', border:'2px solid #111' }} />
               </div>
               <div>
-                <div style={{ color:'#E8610A', fontWeight:'700', fontSize:'15px', fontFamily:'Georgia,serif' }}>CYRA</div>
+                <div style={{ color:'#E8610A', fontWeight:'700', fontSize:'15px', fontFamily:'Georgia,serif' }}>Eva</div>
                 <div style={{ color:'#22c55e', fontSize:'11px', fontWeight:'500' }}>&bull; Online &mdash; Traffikora AI Guide</div>
               </div>
             </div>
@@ -99,12 +142,12 @@ export default function ChatBubble() {
                 <div style={{ display:'flex', justifyContent:m.role==='user'?'flex-end':'flex-start', alignItems:'flex-end', gap:'8px' }}>
                   {m.role === 'assistant' && (
                     <div style={{ width:'28px', height:'28px', borderRadius:'50%', overflow:'hidden', flexShrink:0, border:'1px solid #E8610A', background:'#050200', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                      <CyraIcon size="26" />
+                      <EvaIcon size="26" />
                     </div>
                   )}
-                  <div style={{ maxWidth:'78%', padding:'10px 14px', borderRadius:m.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px', background:m.role==='user'?'linear-gradient(135deg,#E8610A,#ff8c42)':'#1e1e1e', color:'#fff', fontSize:'13px', lineHeight:1.6, border:m.role==='assistant'?'1px solid #2a2a2a':'none' }}>
-                    {m.content}
-                  </div>
+                  <div style={{ maxWidth:'78%', padding:'10px 14px', borderRadius:m.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px', background:m.role==='user'?'linear-gradient(135deg,#E8610A,#ff8c42)':'#1e1e1e', color:'#fff', fontSize:'13px', lineHeight:1.6, border:m.role==='assistant'?'1px solid #2a2a2a':'none' }}
+                    dangerouslySetInnerHTML={{ __html: m.role === 'assistant' ? renderMarkdown(m.content) : m.content }}
+                  />
                 </div>
                 {m.showButtons && (
                   <div style={{ marginTop:'10px', marginLeft:'36px', display:'flex', flexWrap:'wrap', gap:'6px' }}>
@@ -123,7 +166,7 @@ export default function ChatBubble() {
             {loading && (
               <div style={{ display:'flex', alignItems:'flex-end', gap:'8px' }}>
                 <div style={{ width:'28px', height:'28px', borderRadius:'50%', overflow:'hidden', flexShrink:0, border:'1px solid #E8610A', background:'#050200', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                  <CyraIcon size="26" />
+                  <EvaIcon size="26" />
                 </div>
                 <div style={{ background:'#1e1e1e', border:'1px solid #2a2a2a', borderRadius:'16px 16px 16px 4px', padding:'10px 16px', display:'flex', gap:'5px', alignItems:'center' }}>
                   {[0,1,2].map(i => <div key={i} style={{ width:'7px', height:'7px', borderRadius:'50%', background:'#E8610A', animation:'cyraPulse 1.2s ease-in-out infinite', animationDelay: i * 0.2 + 's' }} />)}
@@ -134,7 +177,7 @@ export default function ChatBubble() {
           </div>
 
           <div style={{ padding:'12px 16px', borderTop:'1px solid #1e1e1e', display:'flex', gap:'8px', background:'#0f0f0f', borderRadius:'0 0 20px 20px' }}>
-            <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==='Enter' && send()} placeholder="Ask CYRA anything..."
+            <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==='Enter' && send()} placeholder="Ask Eva anything..."
               style={{ flex:1, background:'#1a1a1a', border:'1px solid #2a2a2a', borderRadius:'10px', color:'#fff', padding:'11px 14px', fontSize:'13px', outline:'none', fontFamily:'inherit' }} />
             <button onClick={send} disabled={loading || !input.trim()}
               style={{ background:loading||!input.trim()?'#333':'linear-gradient(135deg,#E8610A,#C84E06)', border:'none', borderRadius:'10px', padding:'11px 18px', color:'#fff', fontWeight:'700', cursor:loading||!input.trim()?'not-allowed':'pointer', fontSize:'13px' }}>
@@ -146,7 +189,7 @@ export default function ChatBubble() {
 
       <button onClick={() => setOpen(!open)}
         style={{ position:'fixed', bottom:'24px', right:'24px', width:'52px', height:'52px', borderRadius:'50%', background:'#050200', border:'2px solid #E8610A', cursor:'pointer', zIndex:9999, boxShadow:'0 4px 24px rgba(232,97,10,0.6), 0 0 40px rgba(232,97,10,0.2)', display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden', padding:0 }}>
-        {open ? <span style={{ color:'#E8610A', fontSize:'26px', lineHeight:1 }}>&times;</span> : <CyraIcon size="62" />}
+        {open ? <span style={{ color:'#E8610A', fontSize:'26px', lineHeight:1 }}>&times;</span> : <EvaIcon size="62" />}
       </button>
 
       <style>{`
