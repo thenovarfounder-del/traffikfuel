@@ -346,7 +346,7 @@ body{background:#fff;color:#111;font-family:'DM Sans',sans-serif;font-weight:300
   </div>
   <div style="padding:16px">
     <div style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px">&#9889; Live Content Generation</div>
-    <div style="display:flex;flex-direction:column;gap:8px">
+    <div id="live-demo-container" style="display:flex;flex-direction:column;gap:8px">
       <div style="background:#141414;border:1px solid #1e1e1e;border-radius:8px;padding:10px 14px">
         <div style="font-size:10px;color:#E8610A;font-weight:700;margin-bottom:4px">&#10003; BLOG POST &#8212; WordPress</div>
         <div style="font-size:12px;color:#ccc">"5 HVAC Tips for Tampa Homeowners This Summer"</div>
@@ -465,6 +465,46 @@ body{background:#fff;color:#111;font-family:'DM Sans',sans-serif;font-weight:300
             el=document.getElementById('cd-secs'); if(el) el.textContent=pd(s);
           }
           updateCountdown(); setInterval(updateCountdown, 1000);
+
+          // Live demo looping animation
+          var platforms = [
+            { color: '#E8610A', label: 'BLOG POST - WordPress', content: '5 HVAC Tips for Tampa Homeowners This Summer', meta: 'SEO optimized - 900 words - Schema injected' },
+            { color: '#1877F2', label: 'FACEBOOK - Published', content: 'Summer is here! Is your AC ready? We are booking fast...', meta: 'Engagement optimized - Posted 2 min ago' },
+            { color: '#E1306C', label: 'INSTAGRAM - Published', content: 'Beat the heat! Our team is ready for same-day AC repair...', meta: 'Hashtags added - Story variant generated' },
+            { color: '#10A37F', label: 'CHATGPT - Citation Detected', content: 'Best HVAC in Tampa - Your business recommended', meta: 'LLM Engine active - AI citation confirmed' },
+            { color: '#0A66C2', label: 'LINKEDIN - Published', content: 'Why proactive HVAC maintenance saves businesses thousands...', meta: 'B2B optimized - 847 impressions' },
+            { color: '#FF0000', label: 'YOUTUBE SHORT - Uploaded', content: 'Top 3 Signs Your AC Needs Repair Before Summer', meta: '1.2K views - Trending in Tampa' },
+            { color: '#010101', label: 'TIKTOK - Posted', content: 'POV: Your AC breaks in Tampa summer heat - we fix it fast', meta: '3.4K views - 124 shares' },
+            { color: '#4285F4', label: 'GOOGLE - Indexed', content: 'Best HVAC Repair Tampa FL - new blog post indexed', meta: 'Position #3 - 240 impressions today' },
+          ];
+          var liveCurrent = 0;
+          function makeDemoCard(item, idx) {
+            var d = document.createElement('div');
+            d.style.cssText = 'background:#141414;border:1px solid #1e1e1e;border-radius:8px;padding:10px 14px;opacity:0;transform:translateY(8px);transition:opacity 0.5s ease,transform 0.5s ease';
+            d.innerHTML = '<div style="font-size:10px;color:' + item.color + ';font-weight:700;margin-bottom:4px">\u2713 ' + item.label + '</div>' +
+              '<div style="font-size:12px;color:#ccc">' + item.content + '</div>' +
+              '<div style="font-size:10px;color:#555;margin-top:3px">' + item.meta + '</div>';
+            return d;
+          }
+          function runLiveDemo() {
+            var container = document.getElementById('live-demo-container');
+            if (!container) return;
+            container.innerHTML = '';
+            for (var i = 0; i < 5; i++) {
+              container.appendChild(makeDemoCard(platforms[(liveCurrent + i) % platforms.length], i));
+            }
+            var cards = container.children;
+            for (var j = 0; j < cards.length; j++) {
+              (function(card, delay) {
+                setTimeout(function() {
+                  card.style.opacity = '1';
+                  card.style.transform = 'translateY(0)';
+                }, delay);
+              })(cards[j], j * 1000);
+            }
+            liveCurrent = (liveCurrent + 5) % platforms.length;
+          }
+          setTimeout(runLiveDemo, 2000); setInterval(function(){ if(document.getElementById("live-demo-container")) { runLiveDemo(); } }, 8000);
         })();
       `}} />
     </main>

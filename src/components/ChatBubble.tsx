@@ -47,7 +47,7 @@ export default function ChatBubble() {
   return (
     <>
       {open && (
-        <div style={{ position:'fixed', bottom:'144px', right:'24px', width:'360px', height:'480px', background:'#0f0f0f', border:'1px solid #2a2a2a', borderRadius:'20px', display:'flex', flexDirection:'column', zIndex:9999, boxShadow:'0 12px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(232,97,10,0.15)' }}>
+        <div style={{ position:'fixed', bottom:'88px', right:'24px', width:'360px', height:'480px', background:'#0f0f0f', border:'1px solid #2a2a2a', borderRadius:'20px', display:'flex', flexDirection:'column', zIndex:9999, boxShadow:'0 12px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(232,97,10,0.15)' }}>
           <div style={{ padding:'16px 18px', borderBottom:'1px solid #1e1e1e', display:'flex', alignItems:'center', justifyContent:'space-between', background:'linear-gradient(135deg,#1a0800,#0a0400)', borderRadius:'20px 20px 0 0' }}>
             <div style={{ display:'flex', alignItems:'center', gap:'12px' }}>
               <div style={{ position:'relative', flexShrink:0 }}>
@@ -102,7 +102,7 @@ export default function ChatBubble() {
       )}
 
       <button onClick={() => setOpen(!open)}
-        style={{ position:'fixed', bottom:'80px', right:'24px', width:'52px', height:'52px', borderRadius:'50%', background:'#050200', border:'2px solid #E8610A', cursor:'pointer', zIndex:9999, boxShadow:'0 4px 24px rgba(232,97,10,0.6), 0 0 40px rgba(232,97,10,0.2)', display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden', padding:0 }}>
+        style={{ position:'fixed', bottom:'24px', right:'24px', width:'52px', height:'52px', borderRadius:'50%', background:'#050200', border:'2px solid #E8610A', cursor:'pointer', zIndex:9999, boxShadow:'0 4px 24px rgba(232,97,10,0.6), 0 0 40px rgba(232,97,10,0.2)', display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden', padding:0 }}>
         {open ? <span style={{ color:'#E8610A', fontSize:'26px', lineHeight:1 }}>×</span> : <CyraIcon size="62" />}
       </button>
     </>
