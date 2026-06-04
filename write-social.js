@@ -1,110 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-// ─── 1. BILLING PAGE — fix plan column + add status read ─────
-const billingPath = path.join('src', 'app', 'dashboard', 'billing', 'page.tsx')
-let billing = fs.readFileSync(billingPath, 'utf8')
-billing = billing.replace(
-  `const { data } = await supabase.from('users').select('plan').eq('id', user.id).single()
-      if (data?.plan) setUserPlan(data.plan)`,
-  `const { data } = await supabase.from('users').select('status').eq('id', user.id).single()
-      if (data?.status) setUserPlan(data.status)`
-)
-fs.writeFileSync(billingPath, billing)
-console.log('SUCCESS: billing/page.tsx — fixed status column read')
-
-// ─── 2. SOCIAL PAGE — gate for starter+ ──────────────────────
-const socialPath = path.join('src', 'app', 'dashboard', 'social', 'page.tsx')
-let social = fs.readFileSync(socialPath, 'utf8')
-social = social.replace(
-  `import { useState, useEffect } from 'react'
-import { createClient } from '@supabase/supabase-js'`,
-  `import { useState, useEffect } from 'react'
-import { createClient } from '@supabase/supabase-js'
-import PlanGate from '@/components/PlanGate'`
-)
-social = social.replace(
-  `  const isPaid = userStatus && userStatus !== 'free'`,
-  `  const isPaid = userStatus && userStatus !== 'free'
-  const plan = userStatus || 'free'`
-)
-// Wrap the return content with PlanGate
-social = social.replace(
-  `  return (
-    <div style={{ minHeight:"100vh", background:"#0a0a0a", color:"#fff", fontFamily:"DM Sans, sans-serif" }}>`,
-  `  return (
-    <PlanGate userPlan={plan} feature="socialGenerator" mode="overlay">
-    <div style={{ minHeight:"100vh", background:"#0a0a0a", color:"#fff", fontFamily:"DM Sans, sans-serif" }}>`
-)
-social = social.replace(
-  `}
-`,
-  `    </PlanGate>
-  )
-}
-`
-)
-// Fix the duplicate closing
-social = social.replace(`    </PlanGate>
-  )
-}
-
-`, `    </PlanGate>
-  )
-}
-`)
-fs.writeFileSync(socialPath, social)
-console.log('SUCCESS: social/page.tsx — PlanGate added for starter+')
-
-// ─── 3. LLM ENGINE — gate for pro+ ───────────────────────────
-const llmPath = path.join('src', 'app', 'dashboard', 'llm-engine', 'page.tsx')
-let llm = fs.readFileSync(llmPath, 'utf8')
-llm = llm.replace(
-  `import { useEffect, useState, useRef } from "react"
-import { createClient } from "@supabase/supabase-js"`,
-  `import { useEffect, useState, useRef } from "react"
-import { createClient } from "@supabase/supabase-js"
-import PlanGate from "@/components/PlanGate"`
-)
-// Replace the existing manual overlay with PlanGate
-llm = llm.replace(
-  `      {!isPro && (
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(17,17,17,0.75)", borderRadius: 16, zIndex: 10 }}>
-            <div style={{ fontSize: 56, marginBottom: 16 }}>🔒</div>
-            <h2 style={{ color: "#fff", fontSize: 28, fontWeight: 700, margin: "0 0 12px", fontFamily: "Playfair Display, serif", textAlign: "center" }}>Your Business Deserves Its Own AI</h2>
-            <p style={{ color: "#aaa", fontSize: 16, marginBottom: 32, textAlign: "center", maxWidth: 480, lineHeight: 1.6 }}>The LLM Engine trains a custom AI model on your business data. Every blog, every post, every reply — sounds exactly like you. No other tool does this.</p>
-            <a href="/pricing" style={{ background: "linear-gradient(135deg, #E8610A, #C84E06)", color: "#fff", padding: "16px 40px", borderRadius: 10, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 24px rgba(232,97,10,0.4)" }}>Upgrade to Pro — $97/month</a>
-            <p style={{ color: "#555", fontSize: 13, marginTop: 16 }}>Cancel anytime. Instant access.</p>
-          </div>
-        )}`,
-  `      <PlanGate userPlan={status} feature="llmEngine" mode="overlay">
-          <span style={{display:"none"}} />
-        </PlanGate>`
-)
-fs.writeFileSync(llmPath, llm)
-console.log('SUCCESS: llm-engine/page.tsx — PlanGate added for pro+')
-
-// ─── 4. AI AGENTS — gate for pro+ ────────────────────────────
-const agentsPath = path.join('src', 'app', 'dashboard', 'agents', 'page.tsx')
-let agents = fs.readFileSync(agentsPath, 'utf8')
-agents = agents.replace(
-  `import { useState, useEffect } from 'react'
-import { createClient } from '@supabase/supabase-js'`,
-  `import { useState, useEffect } from 'react'
-import { createClient } from '@supabase/supabase-js'
-import PlanGate from '@/components/PlanGate'`
-)
-agents = agents.replace(
-  `  const isPro = userStatus && userStatus !== 'free'`,
-  `  const isPro = userStatus && userStatus !== 'free' && userStatus !== 'starter'`
-)
-fs.writeFileSync(agentsPath, agents)
-console.log('SUCCESS: agents/page.tsx — isPro tightened to pro+ only')
-
-// ─── 5. CONNECT TIKTOK — gate for pro+ ───────────────────────
-const tiktokPath = path.join('src', 'app', 'dashboard', 'connect', 'tiktok', 'page.tsx')
-let tiktok = fs.readFileSync(tiktokPath, 'utf8')
-tiktok = `// @ts-nocheck
+const content = `// @ts-nocheck
 'use client'
 import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
@@ -112,44 +9,128 @@ import PlanGate from '@/components/PlanGate'
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
-export default function ConnectTiktok() {
-  const [plan, setPlan] = useState('free')
+export default function SocialGenerator() {
+  const [topic, setTopic] = useState('')
+  const [platform, setPlatform] = useState('All Platforms')
+  const [tone, setTone] = useState('Professional')
+  const [loading, setLoading] = useState(false)
+  const [posts, setPosts] = useState(null)
+  const [error, setError] = useState('')
+  const [copied, setCopied] = useState('')
+  const [profile, setProfile] = useState(null)
+  const [userStatus, setUserStatus] = useState('free')
 
   useEffect(() => {
-    async function load() {
+    async function loadData() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
-      const { data } = await supabase.from('users').select('status').eq('id', user.id).single()
-      if (data?.status) setPlan(data.status)
+      const { data: bp } = await supabase.from('business_profiles').select('business_name, industry, phone, website').eq('user_id', user.id).single()
+      if (bp) setProfile(bp)
+      const { data: userData } = await supabase.from('users').select('status').eq('id', user.id).single()
+      if (userData?.status) setUserStatus(userData.status)
     }
-    load()
+    loadData()
   }, [])
 
+  const isPaid = userStatus && userStatus !== 'free'
+  const plan = userStatus || 'free'
+  const businessName = profile?.business_name || 'My Business'
+  const industry = profile?.industry || 'Business'
+  const city = profile?.phone || ''
+  const websiteUrl = profile?.website || ''
+
+  async function generatePosts() {
+    if (!topic) { setError('Please enter a topic or keyword.'); return }
+    setLoading(true); setError(''); setPosts(null)
+    try {
+      const response = await fetch('/api/generate-social', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic, platform, tone, businessName, industry, city, websiteUrl }) })
+      const data = await response.json()
+      if (!data.success) { setError('Generation failed: ' + (data.error || 'unknown error')); setLoading(false); return }
+      setPosts(data.posts)
+    } catch (e) { setError('Generation failed: ' + e.message) }
+    setLoading(false)
+  }
+
+  function copyPost(text, key) { navigator.clipboard.writeText(text); setCopied(key); setTimeout(() => setCopied(''), 2000) }
+
+  const platformColors = { Facebook: '#1877F2', Instagram: '#E1306C', TikTok: '#010101', X: '#000000', LinkedIn: '#0A66C2' }
+
   return (
-    <PlanGate userPlan={plan} feature="connectTiktok" mode="overlay">
-    <div style={{ minHeight:"100vh", background:"#0a0a0a", color:"#fff", fontFamily:"DM Sans, sans-serif" }}>
-      <div style={{ background:"linear-gradient(135deg,#111 0%,#1a0e00 100%)", borderBottom:"1px solid #1e1e1e", padding:"32px 40px", marginBottom:"40px", textAlign:"center" }}>
-        <p style={{ fontSize:"12px", fontWeight:700, color:"#E8610A", textTransform:"uppercase", letterSpacing:"0.12em", marginBottom:"12px" }}>CONNECTIONS</p>
-        <div style={{ fontSize:"48px", marginBottom:"16px" }}>🎵</div>
-        <h1 style={{ fontFamily:"Playfair Display, serif", fontSize:"36px", fontWeight:900, color:"#fff", margin:"0 0 12px" }}>Connect TikTok</h1>
-        <p style={{ color:"#888", fontSize:"16px", maxWidth:"500px", margin:"0 auto" }}>Publish videos and track TikTok performance automatically</p>
-      </div>
-      <div style={{ maxWidth:"600px", margin:"0 auto", padding:"0 40px 60px" }}>
-        <div style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"14px", padding:"28px", marginBottom:"20px" }}>
-          <div style={{ background:"rgba(232,97,10,0.08)", border:"1px solid rgba(232,97,10,0.2)", borderRadius:"10px", padding:"20px", marginBottom:"20px", textAlign:"center" }}>
-            <div style={{ fontSize:32, marginBottom:12 }}>⏳</div>
-            <p style={{ color:"#E8610A", fontWeight:700, fontSize:15, marginBottom:8 }}>Coming Soon</p>
-            <p style={{ color:"#888", fontSize:13 }}>TikTok API application is pending approval. You will be notified when available.</p>
+    <PlanGate userPlan={plan} feature="socialGenerator" mode="block">
+      <div style={{ minHeight:"100vh", background:"#0a0a0a", color:"#fff", fontFamily:"DM Sans, sans-serif" }}>
+
+        <div style={{ background:"linear-gradient(135deg,#111 0%,#1a0e00 100%)", borderBottom:"1px solid #1e1e1e", padding:"32px 40px", marginBottom:"32px" }}>
+          <div style={{ maxWidth:"900px", margin:"0 auto", display:"flex", alignItems:"center", gap:"14px" }}>
+            <div style={{ width:"44px", height:"44px", background:"linear-gradient(135deg,#E8610A,#ff8c42)", borderRadius:"10px", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"22px" }}>📱</div>
+            <div>
+              <h1 style={{ fontFamily:"Playfair Display, serif", fontSize:"26px", fontWeight:900, color:"#fff", margin:0 }}>Social Media Generator</h1>
+              <p style={{ color:"#666", fontSize:"13px", margin:0 }}>One topic. Five platforms. Every post optimized for maximum reach.</p>
+            </div>
+            {profile?.business_name && (
+              <div style={{ marginLeft:"auto", display:"inline-flex", alignItems:"center", gap:"6px", background:"rgba(232,97,10,0.1)", border:"1px solid rgba(232,97,10,0.3)", borderRadius:"20px", padding:"4px 14px" }}>
+                <div style={{ width:"6px", height:"6px", borderRadius:"50%", background:"#E8610A" }}></div>
+                <span style={{ fontSize:"12px", color:"#E8610A", fontWeight:600 }}>{profile.business_name}</span>
+              </div>
+            )}
           </div>
-          <button disabled style={{ width:"100%", background:"#2a2a2a", color:"#555", border:"none", borderRadius:"8px", padding:"14px", fontSize:"14px", fontWeight:700, cursor:"not-allowed", fontFamily:"DM Sans, sans-serif" }}>Connect TikTok — Coming Soon</button>
+        </div>
+
+        <div style={{ maxWidth:"900px", margin:"0 auto", padding:"0 40px 40px" }}>
+          <div style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"14px", padding:"28px", marginBottom:"24px" }}>
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 200px 180px", gap:"16px", marginBottom:"16px" }}>
+              <div>
+                <label style={{ display:"block", fontSize:"12px", fontWeight:700, color:"#aaa", marginBottom:"8px", textTransform:"uppercase", letterSpacing:"0.08em" }}>Topic or Keyword</label>
+                <input value={topic} onChange={e => setTopic(e.target.value)} placeholder="e.g. 5 marketing tips for small businesses"
+                  style={{ width:"100%", background:"#0a0a0a", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"11px 14px", fontSize:"14px", color:"#fff", outline:"none", fontFamily:"DM Sans, sans-serif", boxSizing:"border-box" }}
+                  onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
+              </div>
+              <div>
+                <label style={{ display:"block", fontSize:"12px", fontWeight:700, color:"#aaa", marginBottom:"8px", textTransform:"uppercase", letterSpacing:"0.08em" }}>Platform</label>
+                <select value={platform} onChange={e => setPlatform(e.target.value)}
+                  style={{ width:"100%", background:"#0a0a0a", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"11px 14px", fontSize:"14px", color:"#fff", outline:"none", fontFamily:"DM Sans, sans-serif", boxSizing:"border-box" }}>
+                  {['All Platforms','Facebook','Instagram','TikTok','X / Twitter','LinkedIn'].map(p => <option key={p}>{p}</option>)}
+                </select>
+              </div>
+              <div>
+                <label style={{ display:"block", fontSize:"12px", fontWeight:700, color:"#aaa", marginBottom:"8px", textTransform:"uppercase", letterSpacing:"0.08em" }}>Tone</label>
+                <select value={tone} onChange={e => setTone(e.target.value)}
+                  style={{ width:"100%", background:"#0a0a0a", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"11px 14px", fontSize:"14px", color:"#fff", outline:"none", fontFamily:"DM Sans, sans-serif", boxSizing:"border-box" }}>
+                  {['Professional','Friendly','Bold','Conversational'].map(t => <option key={t}>{t}</option>)}
+                </select>
+              </div>
+            </div>
+            {error && <p style={{ color:"#f87171", marginBottom:"12px", fontSize:"14px" }}>{error}</p>}
+            <button onClick={generatePosts} disabled={loading}
+              style={{ width:"100%", background:loading?"#2a2a2a":"linear-gradient(135deg,#E8610A,#C84E06)", color:loading?"#666":"#fff", padding:"14px", fontSize:"15px", fontWeight:700, border:"none", cursor:loading?"not-allowed":"pointer", fontFamily:"DM Sans, sans-serif", borderRadius:"8px", boxShadow:loading?"none":"0 4px 20px rgba(232,97,10,0.35)" }}>
+              {loading ? 'Generating posts for all platforms...' : '\u26a1 Generate Social Posts'}
+            </button>
+          </div>
+
+          {posts && (
+            <div style={{ display:"flex", flexDirection:"column", gap:"16px" }}>
+              {Object.entries(posts).map(([plat, post]) => (
+                <div key={plat} style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"12px", overflow:"hidden" }}>
+                  <div style={{ background:platformColors[plat] || "#333", padding:"14px 20px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+                    <p style={{ fontSize:"14px", fontWeight:700, color:"#fff", margin:0 }}>{plat}</p>
+                    <button onClick={() => copyPost(post, plat)}
+                      style={{ background:"rgba(255,255,255,0.2)", border:"1px solid rgba(255,255,255,0.4)", color:"#fff", padding:"6px 14px", fontSize:"12px", fontWeight:600, cursor:"pointer", fontFamily:"DM Sans, sans-serif", borderRadius:"4px" }}>
+                      {copied === plat ? 'Copied!' : 'Copy'}
+                    </button>
+                  </div>
+                  <div style={{ padding:"20px" }}>
+                    <p style={{ fontSize:"15px", color:"#ccc", lineHeight:1.8, margin:0 }}>{post}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
-    </div>
     </PlanGate>
   )
 }
 `
-fs.writeFileSync(tiktokPath, tiktok)
-console.log('SUCCESS: connect/tiktok/page.tsx — PlanGate added for pro+')
 
-console.log('\nAll 5 files updated. Run: npx next build')
+const filePath = path.join('src', 'app', 'dashboard', 'social', 'page.tsx')
+fs.writeFileSync(filePath, content)
+console.log('SUCCESS: social/page.tsx — clean rewrite with PlanGate')
