@@ -10,12 +10,33 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
 
+// ─── Password strength checker ────────────────────────────────
+function getPasswordStrength(password) {
+  const checks = {
+    length:    password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    lowercase: /[a-z]/.test(password),
+    number:    /[0-9]/.test(password),
+    special:   /[^A-Za-z0-9]/.test(password),
+  }
+  const score = Object.values(checks).filter(Boolean).length
+  const strength =
+    score <= 1 ? { label: 'Very Weak', color: '#ef4444', width: '10%' } :
+    score === 2 ? { label: 'Weak',      color: '#f97316', width: '30%' } :
+    score === 3 ? { label: 'Fair',      color: '#eab308', width: '55%' } :
+    score === 4 ? { label: 'Strong',    color: '#22c55e', width: '80%' } :
+                  { label: 'Very Strong', color: '#16a34a', width: '100%' }
+  return { checks, score, ...strength }
+}
+
 export default function Signup() {
   const router = useRouter()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [plan, setPlan] = useState('free')
+  const [showPassword, setShowPassword] = useState(false)
+  const [passwordFocused, setPasswordFocused] = useState(false)
   const [form, setForm] = useState({
     fullName: '',
     email: '',
@@ -36,6 +57,9 @@ export default function Signup() {
     setForm(prev => ({ ...prev, [field]: value }))
   }
 
+  const strength = getPasswordStrength(form.password)
+  const passwordReady = strength.score >= 4
+
   async function handleSignup() {
     setLoading(true)
     setError('')
@@ -53,7 +77,6 @@ export default function Signup() {
       })
       if (signUpError) throw signUpError
       if (data.user) {
-        // Insert into users table — this is what the app reads for plan/status
         await supabase.from('users').upsert({
           id: data.user.id,
           full_name: form.fullName,
@@ -125,15 +148,20 @@ export default function Signup() {
     marginBottom: '8px'
   }
 
+  const requirementItem = (met, text) => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: met ? '#22c55e' : '#64748b', fontFamily: 'system-ui, sans-serif', transition: 'color 0.2s' }}>
+      <span style={{ fontSize: '14px' }}>{met ? '✓' : '○'}</span>
+      {text}
+    </div>
+  )
+
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#050505', color: '#fff', fontFamily: "'Georgia', serif", display: 'flex' }}>
 
       {/* LEFT PANEL */}
       <div style={{ width: '45%', background: 'linear-gradient(135deg, #0a0a0a 0%, #111 50%, #0f0a00 100%)', padding: '60px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRight: '1px solid #1a1a1a', position: 'relative', overflow: 'hidden' }}>
-
         <div style={{ position: 'absolute', top: '-100px', right: '-100px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, #f9731615 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: '-50px', left: '-50px', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, #f9731608 0%, transparent 70%)', pointerEvents: 'none' }} />
-
         <div>
           <a href="/" style={{ textDecoration: 'none' }}>
             <div style={{ fontSize: '22px', fontWeight: '800', color: '#fff', letterSpacing: '-0.5px', fontFamily: 'system-ui, sans-serif' }}>
@@ -142,7 +170,6 @@ export default function Signup() {
             </div>
           </a>
         </div>
-
         <div>
           <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '20px', fontFamily: 'system-ui, sans-serif' }}>Start Free Today</div>
           <h1 style={{ fontSize: '42px', fontWeight: '400', lineHeight: '1.2', margin: '0 0 24px 0', color: '#fff' }}>
@@ -152,7 +179,6 @@ export default function Signup() {
           <p style={{ fontSize: '16px', color: '#64748b', lineHeight: '1.7', margin: '0 0 48px 0', fontFamily: 'system-ui, sans-serif' }}>
             Join hundreds of businesses letting AI handle their marketing while they focus on what matters most.
           </p>
-
           {plan !== 'free' && (
             <div style={{ backgroundColor: '#f9731615', border: '1px solid #f9731640', borderRadius: '12px', padding: '16px 20px', marginBottom: '32px', fontFamily: 'system-ui, sans-serif' }}>
               <div style={{ fontSize: '11px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>Selected Plan</div>
@@ -160,7 +186,6 @@ export default function Signup() {
               <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>You’ll be taken to secure checkout after signup</div>
             </div>
           )}
-
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {[
               { icon: '⚡', text: 'Live in under 5 minutes' },
@@ -175,15 +200,11 @@ export default function Signup() {
             ))}
           </div>
         </div>
-
-        <div style={{ fontSize: '13px', color: '#2a2a2a', fontFamily: 'system-ui, sans-serif' }}>
-          © 2026 Traffikora. All rights reserved.
-        </div>
+        <div style={{ fontSize: '13px', color: '#2a2a2a', fontFamily: 'system-ui, sans-serif' }}>© 2026 Traffikora. All rights reserved.</div>
       </div>
 
       {/* RIGHT PANEL */}
       <div style={{ flex: 1, padding: '60px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'center', overflowY: 'auto' }}>
-
         <div style={{ maxWidth: '420px', width: '100%', margin: '0 auto' }}>
 
           <div style={{ marginBottom: '40px' }}>
@@ -192,9 +213,7 @@ export default function Signup() {
                 <div key={s} style={{ flex: 1, height: '3px', borderRadius: '2px', backgroundColor: step >= s ? '#f97316' : '#1a1a1a', transition: 'background-color 0.3s' }} />
               ))}
             </div>
-            <div style={{ fontSize: '12px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px', fontFamily: 'system-ui, sans-serif' }}>
-              Step {step} of 2
-            </div>
+            <div style={{ fontSize: '12px', color: '#f97316', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px', fontFamily: 'system-ui, sans-serif' }}>Step {step} of 2</div>
             <h2 style={{ fontSize: '28px', fontWeight: '400', margin: '0 0 8px 0' }}>
               {step === 1 ? 'Create your account' : 'Tell us about your business'}
             </h2>
@@ -219,21 +238,65 @@ export default function Signup() {
                 <label style={labelStyle}>Email Address</label>
                 <input style={inputStyle} type="email" placeholder="john@yourbusiness.com" value={form.email} onChange={e => update('email', e.target.value)} />
               </div>
+
+              {/* PASSWORD WITH STRENGTH METER */}
               <div>
                 <label style={labelStyle}>Password</label>
-                <input style={inputStyle} type="password" placeholder="Min 6 characters" value={form.password} onChange={e => update('password', e.target.value)} />
+                <div style={{ position: 'relative' }}>
+                  <input
+                    style={{ ...inputStyle, paddingRight: '52px' }}
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Min 8 characters"
+                    value={form.password}
+                    onChange={e => update('password', e.target.value)}
+                    onFocus={() => setPasswordFocused(true)}
+                    onBlur={() => setPasswordFocused(false)}
+                  />
+                  <button
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: '18px', padding: 0, lineHeight: 1 }}>
+                    {showPassword ? '🙈' : '👁'}
+                  </button>
+                </div>
+
+                {/* Strength bar */}
+                {form.password.length > 0 && (
+                  <div style={{ marginTop: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                      <span style={{ fontSize: '11px', color: '#64748b', fontFamily: 'system-ui, sans-serif' }}>Password strength</span>
+                      <span style={{ fontSize: '11px', fontWeight: '700', color: strength.color, fontFamily: 'system-ui, sans-serif' }}>{strength.label}</span>
+                    </div>
+                    <div style={{ height: '4px', background: '#1a1a1a', borderRadius: '99px', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: strength.width, background: strength.color, borderRadius: '99px', transition: 'width 0.3s, background 0.3s' }} />
+                    </div>
+                  </div>
+                )}
+
+                {/* Requirements checklist */}
+                {(passwordFocused || form.password.length > 0) && (
+                  <div style={{ marginTop: '12px', background: '#0f0f0f', border: '1px solid #1e1e1e', borderRadius: '10px', padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    {requirementItem(strength.checks.length,    'At least 8 characters')}
+                    {requirementItem(strength.checks.uppercase, 'One uppercase letter (A-Z)')}
+                    {requirementItem(strength.checks.lowercase, 'One lowercase letter (a-z)')}
+                    {requirementItem(strength.checks.number,    'One number (0-9)')}
+                    {requirementItem(strength.checks.special,   'One special character (!@#$%...)')}
+                  </div>
+                )}
               </div>
+
               <div>
                 <label style={labelStyle}>Phone Number</label>
                 <input style={inputStyle} placeholder="+1 (305) 555-1234" value={form.phone} onChange={e => update('phone', e.target.value)} />
               </div>
+
               <button
                 onClick={() => {
                   if (!form.fullName || !form.email || !form.password) { setError('Please fill in all fields'); return }
+                  if (!passwordReady) { setError('Please create a stronger password — use 8+ characters with uppercase, lowercase, number and special character.'); return }
                   setError('')
                   setStep(2)
                 }}
-                style={{ width: '100%', padding: '16px', borderRadius: '12px', border: 'none', background: 'linear-gradient(135deg, #f97316, #ea6a0a)', color: '#fff', fontSize: '15px', fontWeight: '700', cursor: 'pointer', fontFamily: 'system-ui, sans-serif', letterSpacing: '0.02em' }}>
+                style={{ width: '100%', padding: '16px', borderRadius: '12px', border: 'none', background: passwordReady ? 'linear-gradient(135deg, #f97316, #ea6a0a)' : '#1a1a1a', color: passwordReady ? '#fff' : '#555', fontSize: '15px', fontWeight: '700', cursor: 'pointer', fontFamily: 'system-ui, sans-serif', letterSpacing: '0.02em', transition: 'all 0.2s' }}>
                 Continue →
               </button>
             </div>
