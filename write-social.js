@@ -1,136 +1,237 @@
 const fs = require('fs')
 const path = require('path')
 
-const content = `// @ts-nocheck
+// ─── 1. SIDEBAR LAYOUT — add plan badge + upgrade CTA ────────
+const layoutContent = `// @ts-nocheck
 'use client'
-import { useState, useEffect } from 'react'
+
+import { useEffect, useState } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
+import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
-import PlanGate from '@/components/PlanGate'
+import { PLAN_META } from '@/lib/plans'
 
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+)
 
-export default function SocialGenerator() {
-  const [topic, setTopic] = useState('')
-  const [platform, setPlatform] = useState('All Platforms')
-  const [tone, setTone] = useState('Professional')
-  const [loading, setLoading] = useState(false)
-  const [posts, setPosts] = useState(null)
-  const [error, setError] = useState('')
-  const [copied, setCopied] = useState('')
-  const [profile, setProfile] = useState(null)
-  const [userStatus, setUserStatus] = useState('free')
+export default function DashboardLayout({ children }) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const [email, setEmail] = useState('')
+  const [userPlan, setUserPlan] = useState('free')
+  const [collapsed, setCollapsed] = useState(false)
 
   useEffect(() => {
-    async function loadData() {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
-      const { data: bp } = await supabase.from('business_profiles').select('business_name, industry, phone, website').eq('user_id', user.id).single()
-      if (bp) setProfile(bp)
-      const { data: userData } = await supabase.from('users').select('status').eq('id', user.id).single()
-      if (userData?.status) setUserStatus(userData.status)
-    }
-    loadData()
-  }, [])
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (!session) { router.push('/login') }
+      else {
+        setEmail(session.user.email ?? '')
+        const { data } = await supabase.from('users').select('status').eq('id', session.user.id).single()
+        if (data?.status) setUserPlan(data.status)
+      }
+    })
+  }, [router])
 
-  const isPaid = userStatus && userStatus !== 'free'
-  const plan = userStatus || 'free'
-  const businessName = profile?.business_name || 'My Business'
-  const industry = profile?.industry || 'Business'
-  const city = profile?.phone || ''
-  const websiteUrl = profile?.website || ''
-
-  async function generatePosts() {
-    if (!topic) { setError('Please enter a topic or keyword.'); return }
-    setLoading(true); setError(''); setPosts(null)
-    try {
-      const response = await fetch('/api/generate-social', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic, platform, tone, businessName, industry, city, websiteUrl }) })
-      const data = await response.json()
-      if (!data.success) { setError('Generation failed: ' + (data.error || 'unknown error')); setLoading(false); return }
-      setPosts(data.posts)
-    } catch (e) { setError('Generation failed: ' + e.message) }
-    setLoading(false)
+  async function handleSignOut() {
+    await supabase.auth.signOut()
+    router.push('/login')
   }
 
-  function copyPost(text, key) { navigator.clipboard.writeText(text); setCopied(key); setTimeout(() => setCopied(''), 2000) }
+  const isActive = (href) => pathname === href
 
-  const platformColors = { Facebook: '#1877F2', Instagram: '#E1306C', TikTok: '#010101', X: '#000000', LinkedIn: '#0A66C2' }
+  const linkStyle = (href) => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    padding: '9px 20px',
+    color: isActive(href) ? '#E8610A' : '#aaa',
+    background: isActive(href) ? 'rgba(232,97,10,0.08)' : 'transparent',
+    textDecoration: 'none',
+    fontSize: '13px',
+    fontFamily: 'DM Sans, sans-serif',
+    fontWeight: isActive(href) ? 700 : 400,
+    borderLeft: isActive(href) ? '3px solid #E8610A' : '3px solid transparent',
+    transition: 'all 0.15s',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+  })
+
+  const nav = [
+    { href: '/dashboard', icon: '🏠', label: 'Dashboard' },
+    { isSection: true, label: 'CONTENT' },
+    { href: '/dashboard/content/blog', icon: '✏️', label: 'Blog Generator' },
+    { href: '/dashboard/social', icon: '📱', label: 'Social Media' },
+    { href: '/dashboard/content/queue', icon: '📋', label: 'Content Queue' },
+    { isSection: true, label: 'PLATFORM' },
+    { href: '/dashboard/scrape', icon: '🧠', label: 'Business Brain' },
+    { href: '/dashboard/llm-engine', icon: '⚡', label: 'LLM Engine' },
+    { href: '/dashboard/settings', icon: '⚙️', label: 'Business Settings' },
+    { isSection: true, label: 'CONNECTIONS' },
+    { href: '/dashboard/connect/google', icon: '🔵', label: 'Google' },
+    { href: '/dashboard/connect/facebook', icon: '📘', label: 'Facebook' },
+    { href: '/dashboard/connect/instagram', icon: '📸', label: 'Instagram' },
+    { href: '/dashboard/connect/tiktok', icon: '🎵', label: 'TikTok' },
+    { href: '/dashboard/connect/twitter', icon: '🐦', label: 'X / Twitter' },
+    { href: '/dashboard/connect/linkedin', icon: '💼', label: 'LinkedIn' },
+    { href: '/dashboard/connect/wordpress', icon: '🌐', label: 'WordPress' },
+    { isSection: true, label: 'ACCOUNT' },
+    { href: '/dashboard/billing', icon: '💳', label: 'Billing' },
+    { href: '/dashboard/referral', icon: '🎁', label: 'Refer & Earn' },
+    { href: '/dashboard/agents', icon: '🤖', label: 'AI Agents' },
+    { href: '/dashboard/support', icon: '💬', label: 'Support' },
+  ]
+
+  const planMeta = PLAN_META[userPlan] || PLAN_META.free
 
   return (
-    <PlanGate userPlan={plan} feature="socialGenerator" mode="block">
-      <div style={{ minHeight:"100vh", background:"#0a0a0a", color:"#fff", fontFamily:"DM Sans, sans-serif" }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f7f7f7' }}>
 
-        <div style={{ background:"linear-gradient(135deg,#111 0%,#1a0e00 100%)", borderBottom:"1px solid #1e1e1e", padding:"32px 40px", marginBottom:"32px" }}>
-          <div style={{ maxWidth:"900px", margin:"0 auto", display:"flex", alignItems:"center", gap:"14px" }}>
-            <div style={{ width:"44px", height:"44px", background:"linear-gradient(135deg,#E8610A,#ff8c42)", borderRadius:"10px", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"22px" }}>📱</div>
-            <div>
-              <h1 style={{ fontFamily:"Playfair Display, serif", fontSize:"26px", fontWeight:900, color:"#fff", margin:0 }}>Social Media Generator</h1>
-              <p style={{ color:"#666", fontSize:"13px", margin:0 }}>One topic. Five platforms. Every post optimized for maximum reach.</p>
-            </div>
-            {profile?.business_name && (
-              <div style={{ marginLeft:"auto", display:"inline-flex", alignItems:"center", gap:"6px", background:"rgba(232,97,10,0.1)", border:"1px solid rgba(232,97,10,0.3)", borderRadius:"20px", padding:"4px 14px" }}>
-                <div style={{ width:"6px", height:"6px", borderRadius:"50%", background:"#E8610A" }}></div>
-                <span style={{ fontSize:"12px", color:"#E8610A", fontWeight:600 }}>{profile.business_name}</span>
-              </div>
-            )}
-          </div>
+      {/* SIDEBAR */}
+      <div style={{ width: collapsed ? '56px' : '220px', minHeight: '100vh', background: '#111', display: 'flex', flexDirection: 'column', borderRight: '1px solid #222', transition: 'width 0.2s', flexShrink: 0, position: 'sticky', top: 0, height: '100vh', overflowY: 'auto', overflowX: 'hidden' }}>
+
+        {/* Logo */}
+        <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid #1e1e1e', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+          {!collapsed && <span style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: 700, color: '#fff' }}>Traffik<span style={{ color: '#E8610A' }}>ora</span></span>}
+          <button onClick={() => setCollapsed(!collapsed)} style={{ background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: '16px', padding: '2px 4px', marginLeft: collapsed ? 'auto' : 0, marginRight: collapsed ? 'auto' : 0 }}>
+            {collapsed ? '\u2192' : '\u2190'}
+          </button>
         </div>
 
-        <div style={{ maxWidth:"900px", margin:"0 auto", padding:"0 40px 40px" }}>
-          <div style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"14px", padding:"28px", marginBottom:"24px" }}>
-            <div style={{ display:"grid", gridTemplateColumns:"1fr 200px 180px", gap:"16px", marginBottom:"16px" }}>
-              <div>
-                <label style={{ display:"block", fontSize:"12px", fontWeight:700, color:"#aaa", marginBottom:"8px", textTransform:"uppercase", letterSpacing:"0.08em" }}>Topic or Keyword</label>
-                <input value={topic} onChange={e => setTopic(e.target.value)} placeholder="e.g. 5 marketing tips for small businesses"
-                  style={{ width:"100%", background:"#0a0a0a", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"11px 14px", fontSize:"14px", color:"#fff", outline:"none", fontFamily:"DM Sans, sans-serif", boxSizing:"border-box" }}
-                  onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
-              </div>
-              <div>
-                <label style={{ display:"block", fontSize:"12px", fontWeight:700, color:"#aaa", marginBottom:"8px", textTransform:"uppercase", letterSpacing:"0.08em" }}>Platform</label>
-                <select value={platform} onChange={e => setPlatform(e.target.value)}
-                  style={{ width:"100%", background:"#0a0a0a", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"11px 14px", fontSize:"14px", color:"#fff", outline:"none", fontFamily:"DM Sans, sans-serif", boxSizing:"border-box" }}>
-                  {['All Platforms','Facebook','Instagram','TikTok','X / Twitter','LinkedIn'].map(p => <option key={p}>{p}</option>)}
-                </select>
-              </div>
-              <div>
-                <label style={{ display:"block", fontSize:"12px", fontWeight:700, color:"#aaa", marginBottom:"8px", textTransform:"uppercase", letterSpacing:"0.08em" }}>Tone</label>
-                <select value={tone} onChange={e => setTone(e.target.value)}
-                  style={{ width:"100%", background:"#0a0a0a", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"11px 14px", fontSize:"14px", color:"#fff", outline:"none", fontFamily:"DM Sans, sans-serif", boxSizing:"border-box" }}>
-                  {['Professional','Friendly','Bold','Conversational'].map(t => <option key={t}>{t}</option>)}
-                </select>
-              </div>
-            </div>
-            {error && <p style={{ color:"#f87171", marginBottom:"12px", fontSize:"14px" }}>{error}</p>}
-            <button onClick={generatePosts} disabled={loading}
-              style={{ width:"100%", background:loading?"#2a2a2a":"linear-gradient(135deg,#E8610A,#C84E06)", color:loading?"#666":"#fff", padding:"14px", fontSize:"15px", fontWeight:700, border:"none", cursor:loading?"not-allowed":"pointer", fontFamily:"DM Sans, sans-serif", borderRadius:"8px", boxShadow:loading?"none":"0 4px 20px rgba(232,97,10,0.35)" }}>
-              {loading ? 'Generating posts for all platforms...' : '\u26a1 Generate Social Posts'}
-            </button>
-          </div>
+        {/* Nav */}
+        <nav style={{ flex: 1, paddingTop: '8px' }}>
+          {nav.map((item, i) => {
+            if (item.isSection) {
+              if (collapsed) return null
+              return <div key={i} style={{ padding: '14px 20px 4px', fontSize: '10px', fontFamily: 'DM Sans, sans-serif', fontWeight: 700, letterSpacing: '0.12em', color: '#444', textTransform: 'uppercase' }}>{item.label}</div>
+            }
+            return (
+              <Link key={item.href} href={item.href} style={linkStyle(item.href)} title={collapsed ? item.label : undefined}>
+                <span style={{ fontSize: '15px', flexShrink: 0 }}>{item.icon}</span>
+                {!collapsed && <span>{item.label}</span>}
+              </Link>
+            )
+          })}
+        </nav>
 
-          {posts && (
-            <div style={{ display:"flex", flexDirection:"column", gap:"16px" }}>
-              {Object.entries(posts).map(([plat, post]) => (
-                <div key={plat} style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"12px", overflow:"hidden" }}>
-                  <div style={{ background:platformColors[plat] || "#333", padding:"14px 20px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-                    <p style={{ fontSize:"14px", fontWeight:700, color:"#fff", margin:0 }}>{plat}</p>
-                    <button onClick={() => copyPost(post, plat)}
-                      style={{ background:"rgba(255,255,255,0.2)", border:"1px solid rgba(255,255,255,0.4)", color:"#fff", padding:"6px 14px", fontSize:"12px", fontWeight:600, cursor:"pointer", fontFamily:"DM Sans, sans-serif", borderRadius:"4px" }}>
-                      {copied === plat ? 'Copied!' : 'Copy'}
-                    </button>
-                  </div>
-                  <div style={{ padding:"20px" }}>
-                    <p style={{ fontSize:"15px", color:"#ccc", lineHeight:1.8, margin:0 }}>{post}</p>
-                  </div>
+        {/* User footer */}
+        <div style={{ padding: '16px', borderTop: '1px solid #1e1e1e', flexShrink: 0 }}>
+          {!collapsed && (
+            <>
+              {/* Email */}
+              <div style={{ fontSize: '11px', color: '#555', marginBottom: '8px', fontFamily: 'DM Sans, sans-serif', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{email}</div>
+
+              {/* Plan badge */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: planMeta.color + '22', border: '1px solid ' + planMeta.color + '55', borderRadius: '20px', padding: '3px 10px' }}>
+                  <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: planMeta.color }} />
+                  <span style={{ fontSize: '11px', fontWeight: 700, color: planMeta.color, fontFamily: 'DM Sans, sans-serif', letterSpacing: '0.06em' }}>{planMeta.label.toUpperCase()}</span>
                 </div>
-              ))}
-            </div>
+                {planMeta.upgradeHref && (
+                  <Link href={planMeta.upgradeHref} style={{ fontSize: '10px', color: '#E8610A', fontFamily: 'DM Sans, sans-serif', fontWeight: 700, textDecoration: 'none', letterSpacing: '0.04em' }}>
+                    UPGRADE \u2192
+                  </Link>
+                )}
+              </div>
+
+              {/* Upgrade CTA for free users */}
+              {userPlan === 'free' && (
+                <Link href="/pricing" style={{ display: 'block', background: 'linear-gradient(135deg, #E8610A, #C84E06)', color: '#fff', padding: '8px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, textAlign: 'center', textDecoration: 'none', fontFamily: 'DM Sans, sans-serif', marginBottom: '8px', boxShadow: '0 2px 10px rgba(232,97,10,0.3)' }}>
+                  \u26a1 Upgrade to Starter \u2014 $47/mo
+                </Link>
+              )}
+              {userPlan === 'starter' && (
+                <Link href="/pricing" style={{ display: 'block', background: 'linear-gradient(135deg, #E8610A, #C84E06)', color: '#fff', padding: '8px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, textAlign: 'center', textDecoration: 'none', fontFamily: 'DM Sans, sans-serif', marginBottom: '8px', boxShadow: '0 2px 10px rgba(232,97,10,0.3)' }}>
+                  \u26a1 Upgrade to Pro \u2014 $97/mo
+                </Link>
+              )}
+            </>
           )}
+          <button onClick={handleSignOut} style={{ background: '#1a1a1a', color: '#666', border: '1px solid #2a2a2a', padding: collapsed ? '8px' : '8px 16px', cursor: 'pointer', fontSize: '12px', fontFamily: 'DM Sans, sans-serif', fontWeight: 600, width: '100%', borderRadius: '4px' }}>
+            {collapsed ? '\u21a9' : 'Sign Out'}
+          </button>
         </div>
       </div>
-    </PlanGate>
+
+      {/* MAIN CONTENT */}
+      <main style={{ flex: 1, overflowY: 'auto', minHeight: '100vh' }}>
+        {children}
+      </main>
+
+    </div>
   )
 }
 `
 
-const filePath = path.join('src', 'app', 'dashboard', 'social', 'page.tsx')
-fs.writeFileSync(filePath, content)
-console.log('SUCCESS: social/page.tsx — clean rewrite with PlanGate')
+fs.writeFileSync(path.join('src', 'app', 'dashboard', 'layout.tsx'), layoutContent)
+console.log('SUCCESS: layout.tsx — plan badge + upgrade CTA added to sidebar')
+
+// ─── 2. BILLING PAGE — fix Manage Billing button ─────────────
+const billingPath = path.join('src', 'app', 'dashboard', 'billing', 'page.tsx')
+let billing = fs.readFileSync(billingPath, 'utf8')
+billing = billing.replace(
+  `            {userPlan !== 'free' && (
+              <a href="https://billing.stripe.com/p/login/test_00g000000000000" target="_blank" style={{ display: 'inline-block', padding: '12px 24px', borderRadius: '10px', border: '1px solid #2a2a2a', color: '#fff', fontSize: '13px', fontWeight: '600', textDecoration: 'none', backgroundColor: '#1a1a1a', cursor: 'pointer' }}>
+                Manage Billing \u2192
+              </a>
+            )}`,
+  `            {userPlan !== 'free' && (
+              <button onClick={async () => {
+                const res = await fetch('/api/stripe/portal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: user.id }) })
+                const data = await res.json()
+                if (data.url) window.location.href = data.url
+              }} style={{ display: 'inline-block', padding: '12px 24px', borderRadius: '10px', border: '1px solid #2a2a2a', color: '#fff', fontSize: '13px', fontWeight: '600', backgroundColor: '#1a1a1a', cursor: 'pointer', fontFamily: 'system-ui, sans-serif' }}>
+                Manage Billing \u2192
+              </button>
+            )}`
+)
+fs.writeFileSync(billingPath, billing)
+console.log('SUCCESS: billing/page.tsx — Manage Billing wired to portal API')
+
+// ─── 3. STRIPE PORTAL API ROUTE ──────────────────────────────
+const portalContent = `// @ts-nocheck
+import { NextResponse } from 'next/server'
+import Stripe from 'stripe'
+import { createClient } from '@supabase/supabase-js'
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' })
+
+export async function POST(req) {
+  try {
+    const { userId } = await req.json()
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    )
+
+    // Get stripe_customer_id from users table
+    const { data: userData } = await supabase
+      .from('users')
+      .select('stripe_customer_id')
+      .eq('id', userId)
+      .single()
+
+    if (!userData?.stripe_customer_id) {
+      return NextResponse.json({ error: 'No billing account found' }, { status: 404 })
+    }
+
+    const session = await stripe.billingPortal.sessions.create({
+      customer: userData.stripe_customer_id,
+      return_url: 'https://www.traffikora.com/dashboard/billing',
+    })
+
+    return NextResponse.json({ url: session.url })
+  } catch (err) {
+    console.error('Portal error:', err.message)
+    return NextResponse.json({ error: err.message }, { status: 500 })
+  }
+}
+`
+
+const portalDir = path.join('src', 'app', 'api', 'stripe', 'portal')
+fs.mkdirSync(portalDir, { recursive: true })
+fs.writeFileSync(path.join(portalDir, 'route.ts'), portalContent)
+console.log('SUCCESS: api/stripe/portal/route.ts created')
+
+console.log('\nAll done. Run: npx next build')

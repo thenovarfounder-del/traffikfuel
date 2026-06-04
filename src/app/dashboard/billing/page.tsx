@@ -96,9 +96,13 @@ export default function Billing() {
               ))}
             </div>
             {userPlan !== 'free' && (
-              <a href="https://billing.stripe.com/p/login/test_00g000000000000" target="_blank" style={{ display: 'inline-block', padding: '12px 24px', borderRadius: '10px', border: '1px solid #2a2a2a', color: '#fff', fontSize: '13px', fontWeight: '600', textDecoration: 'none', backgroundColor: '#1a1a1a', cursor: 'pointer' }}>
+              <button onClick={async () => {
+                const res = await fetch('/api/stripe/portal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: user.id }) })
+                const data = await res.json()
+                if (data.url) window.location.href = data.url
+              }} style={{ display: 'inline-block', padding: '12px 24px', borderRadius: '10px', border: '1px solid #2a2a2a', color: '#fff', fontSize: '13px', fontWeight: '600', backgroundColor: '#1a1a1a', cursor: 'pointer', fontFamily: 'system-ui, sans-serif' }}>
                 Manage Billing →
-              </a>
+              </button>
             )}
           </div>
         </div>

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
+import { PLAN_META } from '@/lib/plans'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -15,12 +16,17 @@ export default function DashboardLayout({ children }) {
   const router = useRouter()
   const pathname = usePathname()
   const [email, setEmail] = useState('')
+  const [userPlan, setUserPlan] = useState('free')
   const [collapsed, setCollapsed] = useState(false)
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (!session) { router.push('/login') }
-      else { setEmail(session.user.email ?? '') }
+      else {
+        setEmail(session.user.email ?? '')
+        const { data } = await supabase.from('users').select('status').eq('id', session.user.id).single()
+        if (data?.status) setUserPlan(data.status)
+      }
     })
   }, [router])
 
@@ -48,14 +54,10 @@ export default function DashboardLayout({ children }) {
     overflow: 'hidden',
   })
 
-  const sectionLabel = (text) => (
-    { label: text, isSection: true }
-  )
-
   const nav = [
     { href: '/dashboard', icon: '🏠', label: 'Dashboard' },
     { isSection: true, label: 'CONTENT' },
-    { href: '/dashboard/content/blog', icon: '✍️', label: 'Blog Generator' },
+    { href: '/dashboard/content/blog', icon: '✏️', label: 'Blog Generator' },
     { href: '/dashboard/social', icon: '📱', label: 'Social Media' },
     { href: '/dashboard/content/queue', icon: '📋', label: 'Content Queue' },
     { isSection: true, label: 'PLATFORM' },
@@ -76,6 +78,8 @@ export default function DashboardLayout({ children }) {
     { href: '/dashboard/agents', icon: '🤖', label: 'AI Agents' },
     { href: '/dashboard/support', icon: '💬', label: 'Support' },
   ]
+
+  const planMeta = PLAN_META[userPlan] || PLAN_META.free
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f7f7f7' }}>
@@ -109,8 +113,38 @@ export default function DashboardLayout({ children }) {
 
         {/* User footer */}
         <div style={{ padding: '16px', borderTop: '1px solid #1e1e1e', flexShrink: 0 }}>
-          {!collapsed && <div style={{ fontSize: '11px', color: '#555', marginBottom: '10px', fontFamily: 'DM Sans, sans-serif', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{email}</div>}
-          <button onClick={handleSignOut} style={{ background: '#E8610A', color: '#fff', border: 'none', padding: collapsed ? '8px' : '8px 16px', cursor: 'pointer', fontSize: '12px', fontFamily: 'DM Sans, sans-serif', fontWeight: 600, width: '100%', borderRadius: '4px' }}>
+          {!collapsed && (
+            <>
+              {/* Email */}
+              <div style={{ fontSize: '11px', color: '#555', marginBottom: '8px', fontFamily: 'DM Sans, sans-serif', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{email}</div>
+
+              {/* Plan badge */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: planMeta.color + '22', border: '1px solid ' + planMeta.color + '55', borderRadius: '20px', padding: '3px 10px' }}>
+                  <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: planMeta.color }} />
+                  <span style={{ fontSize: '11px', fontWeight: 700, color: planMeta.color, fontFamily: 'DM Sans, sans-serif', letterSpacing: '0.06em' }}>{planMeta.label.toUpperCase()}</span>
+                </div>
+                {planMeta.upgradeHref && (
+                  <Link href={planMeta.upgradeHref} style={{ fontSize: '10px', color: '#E8610A', fontFamily: 'DM Sans, sans-serif', fontWeight: 700, textDecoration: 'none', letterSpacing: '0.04em' }}>
+                    UPGRADE →
+                  </Link>
+                )}
+              </div>
+
+              {/* Upgrade CTA for free users */}
+              {userPlan === 'free' && (
+                <Link href="/pricing" style={{ display: 'block', background: 'linear-gradient(135deg, #E8610A, #C84E06)', color: '#fff', padding: '8px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, textAlign: 'center', textDecoration: 'none', fontFamily: 'DM Sans, sans-serif', marginBottom: '8px', boxShadow: '0 2px 10px rgba(232,97,10,0.3)' }}>
+                  ⚡ Upgrade to Starter — $47/mo
+                </Link>
+              )}
+              {userPlan === 'starter' && (
+                <Link href="/pricing" style={{ display: 'block', background: 'linear-gradient(135deg, #E8610A, #C84E06)', color: '#fff', padding: '8px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, textAlign: 'center', textDecoration: 'none', fontFamily: 'DM Sans, sans-serif', marginBottom: '8px', boxShadow: '0 2px 10px rgba(232,97,10,0.3)' }}>
+                  ⚡ Upgrade to Pro — $97/mo
+                </Link>
+              )}
+            </>
+          )}
+          <button onClick={handleSignOut} style={{ background: '#1a1a1a', color: '#666', border: '1px solid #2a2a2a', padding: collapsed ? '8px' : '8px 16px', cursor: 'pointer', fontSize: '12px', fontFamily: 'DM Sans, sans-serif', fontWeight: 600, width: '100%', borderRadius: '4px' }}>
             {collapsed ? '↩' : 'Sign Out'}
           </button>
         </div>
