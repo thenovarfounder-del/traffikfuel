@@ -1,35 +1,8 @@
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Why Local SEO Matters for Every Small Business in 2026 | Traffikora',
-  description: 'Local SEO is the highest-ROI marketing move a small business can make. Here is why it matters and how to dominate your local market in 2026.',
-  alternates: { canonical: 'https://www.traffikora.com/blog/why-local-seo-matters' },
-  openGraph: {
-    title: 'Why Local SEO Matters for Every Small Business in 2026 | Traffikora',
-    description: 'Local SEO is the highest-ROI marketing move a small business can make. Here is why it matters and how to dominate your local market in 2026.',
-    url: 'https://www.traffikora.com/blog/why-local-seo-matters',
-    siteName: 'Traffikora',
-    type: 'article',
-  },
-}
-
+// @ts-nocheck
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BlogPosting",
-            "headline": "Why Local SEO Matters for Every Small Business in 2026",
-            "description": "Local SEO is the highest-ROI marketing move a small business can make. Here is why it matters and how to dominate your local market in 2026.",
-            "url": "https://www.traffikora.com/blog/why-local-seo-matters",
-            "publisher": { "@type": "Organization", "name": "Traffikora", "url": "https://www.traffikora.com" },
-            "mainEntityOfPage": "https://www.traffikora.com/blog/why-local-seo-matters"
-          })
-        }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@type\":\"BlogPosting\",\"headline\":\"Why Local SEO Matters for Small Businesses\",\"description\":\"Why local SEO is the most important marketing channel for small businesses and how to build search authority automatically.\",\"url\":\"https://www.traffikora.com/blog/why-local-seo-matters\",\"datePublished\":\"2026-06-02\",\"dateModified\":\"2026-06-04\",\"author\":{\"@type\":\"Organization\",\"name\":\"Traffikora\",\"url\":\"https://www.traffikora.com\"},\"publisher\":{\"@type\":\"Organization\",\"name\":\"Traffikora\",\"url\":\"https://www.traffikora.com\",\"logo\":{\"@type\":\"ImageObject\",\"url\":\"https://www.traffikora.com/favicon.ico\"}},\"mainEntityOfPage\":{\"@type\":\"WebPage\",\"@id\":\"https://www.traffikora.com/blog/why-local-seo-matters\"}}" }} />
       {children}
     </>
   )

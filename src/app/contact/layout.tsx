@@ -1,10 +1,9 @@
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Contact Traffikora — We are Here to Help',
-  description: 'Get in touch with the Traffikora team. We are ready to help you automate your marketing and grow your business.',
-}
-
+// @ts-nocheck
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"Traffikora\",\"url\":\"https://www.traffikora.com/contact\",\"contactPoint\":{\"@type\":\"ContactPoint\",\"email\":\"support@traffikora.com\",\"contactType\":\"customer support\"}}" }} />
+      {children}
+    </>
+  )
 }

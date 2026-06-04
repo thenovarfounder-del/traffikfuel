@@ -1,35 +1,8 @@
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'How Traffikora Is Different From Every Other Marketing Tool | Traffikora',
-  description: 'Traffikora is not another dashboard. It is a fully automated marketing system built specifically for small businesses that runs 24/7 without your input.',
-  alternates: { canonical: 'https://www.traffikora.com/blog/how-traffikora-is-different' },
-  openGraph: {
-    title: 'How Traffikora Is Different From Every Other Marketing Tool | Traffikora',
-    description: 'Traffikora is not another dashboard. It is a fully automated marketing system built specifically for small businesses that runs 24/7 without your input.',
-    url: 'https://www.traffikora.com/blog/how-traffikora-is-different',
-    siteName: 'Traffikora',
-    type: 'article',
-  },
-}
-
+// @ts-nocheck
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BlogPosting",
-            "headline": "How Traffikora Is Different From Every Other Marketing Tool",
-            "description": "Traffikora is not another dashboard. It is a fully automated marketing system built specifically for small businesses that runs 24/7 without your input.",
-            "url": "https://www.traffikora.com/blog/how-traffikora-is-different",
-            "publisher": { "@type": "Organization", "name": "Traffikora", "url": "https://www.traffikora.com" },
-            "mainEntityOfPage": "https://www.traffikora.com/blog/how-traffikora-is-different"
-          })
-        }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@type\":\"BlogPosting\",\"headline\":\"How Traffikora Is Different\",\"description\":\"Traffikora is the only AI marketing platform that automates SEO content, social media, and AI engine optimization simultaneously for local businesses.\",\"url\":\"https://www.traffikora.com/blog/how-traffikora-is-different\",\"datePublished\":\"2026-06-02\",\"dateModified\":\"2026-06-04\",\"author\":{\"@type\":\"Organization\",\"name\":\"Traffikora\",\"url\":\"https://www.traffikora.com\"},\"publisher\":{\"@type\":\"Organization\",\"name\":\"Traffikora\",\"url\":\"https://www.traffikora.com\",\"logo\":{\"@type\":\"ImageObject\",\"url\":\"https://www.traffikora.com/favicon.ico\"}},\"mainEntityOfPage\":{\"@type\":\"WebPage\",\"@id\":\"https://www.traffikora.com/blog/how-traffikora-is-different\"}}" }} />
       {children}
     </>
   )

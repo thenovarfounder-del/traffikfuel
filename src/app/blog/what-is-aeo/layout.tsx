@@ -1,35 +1,8 @@
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'What Is AEO? Answer Engine Optimization Explained | Traffikora',
-  description: 'AEO stands for Answer Engine Optimization. Learn what it is, why it matters for small businesses, and how to optimize your content for AI-powered search.',
-  alternates: { canonical: 'https://www.traffikora.com/blog/what-is-aeo' },
-  openGraph: {
-    title: 'What Is AEO? Answer Engine Optimization Explained | Traffikora',
-    description: 'AEO stands for Answer Engine Optimization. Learn what it is, why it matters for small businesses, and how to optimize your content for AI-powered search.',
-    url: 'https://www.traffikora.com/blog/what-is-aeo',
-    siteName: 'Traffikora',
-    type: 'article',
-  },
-}
-
+// @ts-nocheck
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BlogPosting",
-            "headline": "What Is AEO? Answer Engine Optimization Explained",
-            "description": "AEO stands for Answer Engine Optimization. Learn what it is, why it matters for small businesses, and how to optimize your content for AI-powered search.",
-            "url": "https://www.traffikora.com/blog/what-is-aeo",
-            "publisher": { "@type": "Organization", "name": "Traffikora", "url": "https://www.traffikora.com" },
-            "mainEntityOfPage": "https://www.traffikora.com/blog/what-is-aeo"
-          })
-        }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@type\":\"BlogPosting\",\"headline\":\"What Is AI Engine Optimization (AEO)?\",\"description\":\"AEO is the practice of optimizing your business to be recommended by AI engines like ChatGPT, Gemini, and Perplexity — the next evolution of local SEO.\",\"url\":\"https://www.traffikora.com/blog/what-is-aeo\",\"datePublished\":\"2026-06-02\",\"dateModified\":\"2026-06-04\",\"author\":{\"@type\":\"Organization\",\"name\":\"Traffikora\",\"url\":\"https://www.traffikora.com\"},\"publisher\":{\"@type\":\"Organization\",\"name\":\"Traffikora\",\"url\":\"https://www.traffikora.com\",\"logo\":{\"@type\":\"ImageObject\",\"url\":\"https://www.traffikora.com/favicon.ico\"}},\"mainEntityOfPage\":{\"@type\":\"WebPage\",\"@id\":\"https://www.traffikora.com/blog/what-is-aeo\"}}" }} />
       {children}
     </>
   )

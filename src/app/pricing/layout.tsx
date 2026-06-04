@@ -1,38 +1,9 @@
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Pricing — Marketing Automation for Small Businesses | Traffikora',
-  description: 'Traffikora plans start at $97/month. Social media, local SEO, Google Business Profile, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini — all automated. Free 7-day trial, no credit card.',
-}
-
+// @ts-nocheck
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            "name": "Traffikora",
-            "url": "https://www.traffikora.com",
-            "applicationCategory": "BusinessApplication",
-            "description": "Traffikora is an AI-powered marketing automation platform for small businesses. Plans start at $97/month. Automates social media, local SEO, Google Business Profile, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini.",
-            "offers": [
-              { "@type": "Offer", "name": "Starter", "price": "97", "priceCurrency": "USD" },
-              { "@type": "Offer", "name": "Pro", "price": "197", "priceCurrency": "USD" },
-              { "@type": "Offer", "name": "Agency", "price": "797", "priceCurrency": "USD" },
-              { "@type": "Offer", "name": "Enterprise", "price": "1497", "priceCurrency": "USD" }
-            ],
-            "operatingSystem": "Web",
-            "provider": {
-              "@type": "Organization",
-              "name": "Traffikora",
-              "url": "https://www.traffikora.com"
-            }
-          })
-        }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareApplication\",\"name\":\"Traffikora\",\"applicationCategory\":\"BusinessApplication\",\"operatingSystem\":\"Web\",\"url\":\"https://www.traffikora.com/pricing\",\"description\":\"AI marketing automation platform for local businesses. Plans from free to enterprise.\",\"offers\":[{\"@type\":\"Offer\",\"name\":\"Free Plan\",\"price\":\"0\",\"priceCurrency\":\"USD\",\"description\":\"3 AI blog posts per month, no credit card required.\"},{\"@type\":\"Offer\",\"name\":\"Starter\",\"price\":\"47\",\"priceCurrency\":\"USD\",\"description\":\"Unlimited blogs, social content, manual publish.\"},{\"@type\":\"Offer\",\"name\":\"Pro\",\"price\":\"97\",\"priceCurrency\":\"USD\",\"description\":\"AI Agents, Auto Mode, TikTok/YouTube, AI SEO.\"},{\"@type\":\"Offer\",\"name\":\"Agency\",\"price\":\"297\",\"priceCurrency\":\"USD\",\"description\":\"10 clients, white-label.\"},{\"@type\":\"Offer\",\"name\":\"Enterprise\",\"price\":\"997\",\"priceCurrency\":\"USD\",\"description\":\"Unlimited clients, custom AI training.\"}]}" }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"Is there a free plan for Traffikora?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Yes. Traffikora offers a free plan forever with no credit card required — includes 3 AI blog posts per month.\"}},{\"@type\":\"Question\",\"name\":\"Can I cancel my Traffikora subscription anytime?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Yes. Cancel with one click, no questions asked. You keep access until the end of your billing period.\"}},{\"@type\":\"Question\",\"name\":\"What is included in the Pro plan?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"The Pro plan at $97/month includes AI Agents that run daily, Auto Mode, TikTok and YouTube publishing, and full AI engine optimization for ChatGPT, Gemini, and more.\"}},{\"@type\":\"Question\",\"name\":\"What is the Agency plan?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"The Agency plan at $297/month supports up to 10 client accounts with white-label reporting and bulk content generation.\"}}]}" }} />
       {children}
     </>
   )

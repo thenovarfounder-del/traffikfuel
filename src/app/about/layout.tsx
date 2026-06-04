@@ -1,10 +1,9 @@
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'About Traffikora — The Automated Marketing Platform Built for Small Business',
-  description: 'Learn how Traffikora helps small businesses get found on Google, ChatGPT, Gemini, and every major AI engine — automatically, 24/7.',
-}
-
+// @ts-nocheck
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"Traffikora\",\"url\":\"https://www.traffikora.com\",\"description\":\"Traffikora is an AI marketing automation company built to help local small businesses compete online without agencies or manual work.\",\"foundingDate\":\"2025\",\"sameAs\":[\"https://www.facebook.com/profile.php?id=61590075525966\",\"https://www.instagram.com/traffikora/\",\"https://x.com/traffikora\"]}" }} />
+      {children}
+    </>
+  )
 }

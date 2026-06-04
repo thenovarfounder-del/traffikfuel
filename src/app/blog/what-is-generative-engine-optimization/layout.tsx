@@ -1,35 +1,8 @@
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'What Is Generative Engine Optimization (GEO)? | Traffikora',
-  description: 'Generative Engine Optimization is how you get your business cited by AI search engines like ChatGPT and Perplexity. Here is what you need to know.',
-  alternates: { canonical: 'https://www.traffikora.com/blog/what-is-generative-engine-optimization' },
-  openGraph: {
-    title: 'What Is Generative Engine Optimization (GEO)? | Traffikora',
-    description: 'Generative Engine Optimization is how you get your business cited by AI search engines like ChatGPT and Perplexity. Here is what you need to know.',
-    url: 'https://www.traffikora.com/blog/what-is-generative-engine-optimization',
-    siteName: 'Traffikora',
-    type: 'article',
-  },
-}
-
+// @ts-nocheck
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BlogPosting",
-            "headline": "What Is Generative Engine Optimization (GEO)?",
-            "description": "Generative Engine Optimization is how you get your business cited by AI search engines like ChatGPT and Perplexity. Here is what you need to know.",
-            "url": "https://www.traffikora.com/blog/what-is-generative-engine-optimization",
-            "publisher": { "@type": "Organization", "name": "Traffikora", "url": "https://www.traffikora.com" },
-            "mainEntityOfPage": "https://www.traffikora.com/blog/what-is-generative-engine-optimization"
-          })
-        }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@type\":\"BlogPosting\",\"headline\":\"What Is Generative Engine Optimization?\",\"description\":\"Generative engine optimization (GEO) explained — how to optimize your local business content for generative AI search results.\",\"url\":\"https://www.traffikora.com/blog/what-is-generative-engine-optimization\",\"datePublished\":\"2026-06-02\",\"dateModified\":\"2026-06-04\",\"author\":{\"@type\":\"Organization\",\"name\":\"Traffikora\",\"url\":\"https://www.traffikora.com\"},\"publisher\":{\"@type\":\"Organization\",\"name\":\"Traffikora\",\"url\":\"https://www.traffikora.com\",\"logo\":{\"@type\":\"ImageObject\",\"url\":\"https://www.traffikora.com/favicon.ico\"}},\"mainEntityOfPage\":{\"@type\":\"WebPage\",\"@id\":\"https://www.traffikora.com/blog/what-is-generative-engine-optimization\"}}" }} />
       {children}
     </>
   )

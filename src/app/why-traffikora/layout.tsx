@@ -1,37 +1,9 @@
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Why Traffikora — AI Marketing Automation for Local Businesses',
-  description: 'Traffikora is the only platform that automates Google, social media, AND Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini for small businesses. See why owners choose Traffikora over every alternative.',
-}
-
+// @ts-nocheck
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            "name": "Traffikora",
-            "url": "https://www.traffikora.com",
-            "applicationCategory": "BusinessApplication",
-            "description": "Traffikora is an AI-powered marketing automation platform for small businesses. The only platform that optimizes for Google AND every major AI engine simultaneously.",
-            "offers": {
-              "@type": "Offer",
-              "price": "97",
-              "priceCurrency": "USD"
-            },
-            "operatingSystem": "Web",
-            "provider": {
-              "@type": "Organization",
-              "name": "Traffikora",
-              "url": "https://www.traffikora.com"
-            }
-          })
-        }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareApplication\",\"name\":\"Traffikora\",\"applicationCategory\":\"BusinessApplication\",\"operatingSystem\":\"Web\",\"url\":\"https://www.traffikora.com/why-traffikora\",\"description\":\"Traffikora is the only AI marketing platform that automates both Google SEO and AI engine optimization for local businesses simultaneously.\"}" }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"Why choose Traffikora over a marketing agency?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Traffikora automates what agencies do manually at a fraction of the cost — starting at $47/month versus $2,000-$10,000/month for agencies — with no contracts and instant setup.\"}},{\"@type\":\"Question\",\"name\":\"What makes Traffikora different from other marketing tools?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Traffikora is the only platform that simultaneously automates Google SEO, social media, and AI engine optimization for local businesses — getting you found on Google, ChatGPT, Gemini, and Perplexity automatically.\"}}]}" }} />
       {children}
     </>
   )

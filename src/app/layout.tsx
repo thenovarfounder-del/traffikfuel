@@ -1,45 +1,12 @@
 // @ts-nocheck
-'use client'
-import './globals.css'
-import { Playfair_Display, DM_Sans } from 'next/font/google'
-import CookieBanner from '@/components/CookieBanner'
-import ScrollToTop from '@/components/ScrollToTop'
-import ChatBubble from '@/components/ChatBubble'
-const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400','700','900'], display: 'swap', variable: '--font-playfair' })
-const dmSans = DM_Sans({ subsets: ['latin'], weight: ['300','400','500','600','700'], display: 'swap', variable: '--font-dm-sans' })
-export default function RootLayout({ children }) {
-return (
-<html lang='en' className={`${playfair.variable} ${dmSans.variable}`} suppressHydrationWarning>
-<head>
-<meta name="google-site-verification" content="Bq59ihAKck9y8kv3Zv_VcPUh1pUM8D_HtGNDCDCVfMk" />
-<meta name='google-site-verification' content='tDnX1kzbib0Z52zeV6oAH35iohkvNI-4BpV7lz1Yga0' />
-<link rel='canonical' href='https://www.traffikora.com' />
-<link rel='icon' href='/favicon.svg' type='image/svg+xml' />
-<link rel='icon' href='/favicon.ico' sizes='any' />
-<link rel='apple-touch-icon' href='/favicon.svg' />
-<script
-  id="cookieyes"
-  type="text/javascript"
-  src="https://cdn-cookieyes.com/client_data/a2449444538b162a3443686343550cec/script.js"
-/>
-<meta property='og:title' content='Traffikora - AI Marketing Automation for Small Businesses' />
-<meta property='og:description' content='Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine.' />
-<meta property='og:image' content='https://www.traffikora.com/og-image.png' />
-<meta property='og:image:width' content='1200' />
-<meta property='og:image:height' content='630' />
-<meta property='og:url' content='https://www.traffikora.com' />
-<meta property='og:type' content='website' />
-<meta property='og:site_name' content='Traffikora' />
-<meta name='twitter:card' content='summary_large_image' />
-<meta name='twitter:title' content='Traffikora - AI Marketing Automation for Small Businesses' />
-<meta name='twitter:description' content='Set it once. It markets forever.' />
-</head>
-<body suppressHydrationWarning>
-{children}
-<CookieBanner />
-<ScrollToTop />
-<ChatBubble />
-</body>
-</html>
-)
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"Traffikora\",\"url\":\"https://www.traffikora.com\",\"logo\":\"https://www.traffikora.com/favicon.ico\",\"description\":\"Traffikora is an AI marketing automation platform for local small businesses. Automates SEO content, social media, and AI engine optimization daily.\",\"sameAs\":[\"https://www.facebook.com/profile.php?id=61590075525966\",\"https://www.instagram.com/traffikora/\",\"https://x.com/traffikora\",\"https://www.youtube.com/@traffikora\",\"https://www.tiktok.com/@traffikora\"]}" }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareApplication\",\"name\":\"Traffikora\",\"applicationCategory\":\"BusinessApplication\",\"operatingSystem\":\"Web\",\"url\":\"https://www.traffikora.com\",\"description\":\"AI marketing automation platform for local businesses. Automates blog content, social media, and AI engine optimization.\",\"offers\":[{\"@type\":\"Offer\",\"name\":\"Free\",\"price\":\"0\",\"priceCurrency\":\"USD\"},{\"@type\":\"Offer\",\"name\":\"Starter\",\"price\":\"47\",\"priceCurrency\":\"USD\"},{\"@type\":\"Offer\",\"name\":\"Pro\",\"price\":\"97\",\"priceCurrency\":\"USD\"},{\"@type\":\"Offer\",\"name\":\"Agency\",\"price\":\"297\",\"priceCurrency\":\"USD\"},{\"@type\":\"Offer\",\"name\":\"Enterprise\",\"price\":\"997\",\"priceCurrency\":\"USD\"}]}" }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Traffikora\",\"url\":\"https://www.traffikora.com\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":\"https://www.traffikora.com/?s={search_term_string}\",\"query-input\":\"required name=search_term_string\"}}" }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"Do I need any technical skills to use Traffikora?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"None at all. If you can fill out a form, you can use Traffikora. You will be live in under 5 minutes.\"}},{\"@type\":\"Question\",\"name\":\"What social media platforms does Traffikora support?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Traffikora publishes to Facebook, Instagram, TikTok, YouTube, LinkedIn, X, and more — 9+ platforms automatically.\"}},{\"@type\":\"Question\",\"name\":\"How much does Traffikora cost?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Traffikora offers a free plan with no credit card required. Paid plans start at $47 per month.\"}},{\"@type\":\"Question\",\"name\":\"Will Traffikora help my business show up on ChatGPT?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Yes. Traffikora optimizes your content for AI engine citation so your business is recommended when people ask ChatGPT, Gemini, or Perplexity for local business recommendations.\"}},{\"@type\":\"Question\",\"name\":\"What happens when I cancel?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Cancel any time with one click. No questions asked. You keep access until the end of your billing period.\"}},{\"@type\":\"Question\",\"name\":\"Is Traffikora a replacement for a marketing agency?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"For most local businesses, yes. Traffikora automates what agencies do manually — at a fraction of the cost and with no long-term contracts.\"}}]}" }} />
+      {children}
+    </>
+  )
 }

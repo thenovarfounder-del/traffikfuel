@@ -1,29 +1,8 @@
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'FAQ — Frequently Asked Questions | Traffikora',
-  description: 'Got questions about Traffikora? Find answers about setup, features, pricing, and how Traffikora automates marketing for local businesses. Free 7-day trial.',
-}
-
+// @ts-nocheck
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": [
-              { "@type": "Question", "name": "What is Traffikora?", "acceptedAnswer": { "@type": "Answer", "text": "Traffikora is an AI-powered marketing automation platform for small and mid-size businesses. Connect your accounts once and Traffikora handles social media, Google Business Profile, local SEO, and Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini automatically." } },
-              { "@type": "Question", "name": "How much does Traffikora cost?", "acceptedAnswer": { "@type": "Answer", "text": "Traffikora starts at $97 per month for the Starter plan. Pro is $197/month, Agency is $797/month, and Enterprise is $1,497/month. All plans include a free 7-day trial." } },
-              { "@type": "Question", "name": "Do I need a credit card to start the free trial?", "acceptedAnswer": { "@type": "Answer", "text": "No. You can start your Free plan available with just your email address. No no credit card required." } },
-              { "@type": "Question", "name": "What is Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini?", "acceptedAnswer": { "@type": "Answer", "text": "Google SEO + Google SEO + all AI engines — Google, Bing, ChatGPT, Claude, Gemini means getting your business recommended when people ask ChatGPT, Claude, Gemini, or Perplexity for suggestions. Traffikora is the only platform that automates this for small businesses." } },
-              { "@type": "Question", "name": "Can I cancel anytime?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Cancel anytime from your dashboard with one click. No cancellation fees and no contracts." } }
-            ]
-          })
-        }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"What is Traffikora?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Traffikora is an AI marketing automation platform that publishes SEO content, social media posts, and AI engine optimization daily for local businesses — automatically.\"}},{\"@type\":\"Question\",\"name\":\"How does Traffikora work?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"You connect your accounts once. Traffikora's AI agents generate and publish content across your website, social media, and AI engines every day without any manual work.\"}},{\"@type\":\"Question\",\"name\":\"What platforms does Traffikora publish to?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Traffikora publishes to Google, WordPress, Facebook, Instagram, TikTok, YouTube, LinkedIn, X, and optimizes for AI engines including ChatGPT, Gemini, and Perplexity.\"}},{\"@type\":\"Question\",\"name\":\"How much does Traffikora cost?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Traffikora has a free plan with no credit card required. Paid plans start at $47/month for Starter, $97/month for Pro, $297/month for Agency, and $997/month for Enterprise.\"}},{\"@type\":\"Question\",\"name\":\"Does Traffikora work for my industry?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Traffikora works for 12+ local business industries including HVAC, dental, law firms, salons, restaurants, real estate, gyms, auto repair, med spas, plumbers, marketing agencies, and chiropractors.\"}},{\"@type\":\"Question\",\"name\":\"Is Traffikora HIPAA compliant for healthcare businesses?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Traffikora generates informational marketing content. Healthcare businesses should review content before publishing to ensure compliance with their specific regulations.\"}}]}" }} />
       {children}
     </>
   )
