@@ -26,6 +26,18 @@ function extractEmail(text) {
   return match ? match[0] : null
 }
 
+function extractName(messages) {
+  for (const m of messages) {
+    if (m.role === 'user') {
+      const text = m.content.trim()
+      if (text.split(' ').length <= 3 && text.length < 40 && /^[A-Za-z]/.test(text) && !text.includes('@')) {
+        return text
+      }
+    }
+  }
+  return null
+}
+
 function renderMarkdown(text) {
   return text
     .replace(/\\*\\*(.+?)\\*\\*/g, '<strong>$1</strong>')
@@ -54,24 +66,25 @@ export default function ChatBubble() {
     if (bottomRef.current) bottomRef.current.scrollIntoView({ behavior: 'smooth' })
   }, [messages, loading])
 
-  async function fireLead(email, biz) {
+  async function fireLead(email, biz, allMessages) {
     try {
+      const visitorName = extractName(allMessages)
       await fetch('/api/chat/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ visitorEmail: email, businessType: biz })
+        body: JSON.stringify({ visitorEmail: email, businessType: biz, visitorName })
       })
     } catch (e) {
       console.error('Lead fire failed:', e)
     }
   }
 
-  function checkForEmail(text, biz) {
+  function checkForEmail(text, biz, allMessages) {
     if (leadCaptured) return
     const email = extractEmail(text)
     if (email) {
       setLeadCaptured(true)
-      fireLead(email, biz)
+      fireLead(email, biz, allMessages)
     }
   }
 
@@ -86,8 +99,8 @@ export default function ChatBubble() {
   async function send() {
     if (!input.trim() || loading) return
     const userMsg = { role: 'user', content: input.trim() }
-    checkForEmail(input.trim(), businessType)
     const next = [...messages.map(m => ({ ...m, showButtons: false })), userMsg]
+    checkForEmail(input.trim(), businessType, next)
     setMessages(next)
     setInput('')
     sendToAPI(next, businessType)
@@ -104,8 +117,9 @@ export default function ChatBubble() {
       })
       const data = await res.json()
       const reply = data.message
-      checkForEmail(reply, biz)
-      setMessages([...next, { role: 'assistant', content: reply }])
+      const updatedMessages = [...next, { role: 'assistant', content: reply }]
+      checkForEmail(reply, biz, updatedMessages)
+      setMessages(updatedMessages)
     } catch {
       setMessages([...next, { role: 'assistant', content: 'Something went wrong. Please try again.' }])
     }
