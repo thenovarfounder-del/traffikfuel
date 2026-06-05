@@ -6,9 +6,22 @@ import PlanGate from '@/components/PlanGate'
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
+const PLATFORMS = [
+  { key: 'All', label: 'All Platforms', color: '#E8610A', icon: '🌐' },
+  { key: 'Facebook', label: 'Facebook', color: '#1877F2', icon: '📵' },
+  { key: 'Instagram', label: 'Instagram', color: '#E1306C', icon: '📸' },
+  { key: 'TikTok', label: 'TikTok', color: '#ffffff', icon: '🎵' },
+  { key: 'X / Twitter', label: 'X / Twitter', color: '#ffffff', icon: '✕' },
+  { key: 'LinkedIn', label: 'LinkedIn', color: '#0A66C2', icon: '💼' },
+]
+
+const TONES = ['Professional', 'Friendly', 'Bold', 'Conversational']
+
+const platformColors = { Facebook: '#1877F2', Instagram: '#E1306C', TikTok: '#333', 'X / Twitter': '#333', LinkedIn: '#0A66C2' }
+
 export default function SocialGenerator() {
   const [topic, setTopic] = useState('')
-  const [platform, setPlatform] = useState('All Platforms')
+  const [platform, setPlatform] = useState('All')
   const [tone, setTone] = useState('Professional')
   const [loading, setLoading] = useState(false)
   const [posts, setPosts] = useState(null)
@@ -39,8 +52,13 @@ export default function SocialGenerator() {
   async function generatePosts() {
     if (!topic) { setError('Please enter a topic or keyword.'); return }
     setLoading(true); setError(''); setPosts(null)
+    const apiPlatform = platform === 'All' ? 'All Platforms' : platform
     try {
-      const response = await fetch('/api/generate-social', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic, platform, tone, businessName, industry, city, websiteUrl }) })
+      const response = await fetch('/api/generate-social', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic, platform: apiPlatform, tone, businessName, industry, city, websiteUrl })
+      })
       const data = await response.json()
       if (!data.success) { setError('Generation failed: ' + (data.error || 'unknown error')); setLoading(false); return }
       setPosts(data.posts)
@@ -50,72 +68,149 @@ export default function SocialGenerator() {
 
   function copyPost(text, key) { navigator.clipboard.writeText(text); setCopied(key); setTimeout(() => setCopied(''), 2000) }
 
-  const platformColors = { Facebook: '#1877F2', Instagram: '#E1306C', TikTok: '#010101', X: '#000000', LinkedIn: '#0A66C2' }
+  const selectedPlatform = PLATFORMS.find(p => p.key === platform)
 
   return (
     <PlanGate userPlan={plan} feature="socialGenerator" mode="block">
-      <div style={{ minHeight:"100vh", background:"#0a0a0a", color:"#fff", fontFamily:"DM Sans, sans-serif" }}>
+      <div style={{ minHeight: '100vh', background: '#080808', color: '#fff', fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600;700;800&display=swap');
+          @keyframes slideIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+          .plat-btn { transition: all 0.18s; cursor: pointer; }
+          .plat-btn:hover { transform: translateY(-2px); }
+          .gen-btn { transition: all 0.2s; }
+          .gen-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(232,97,10,0.4) !important; }
+        `}</style>
 
-        <div style={{ background:"linear-gradient(135deg,#111 0%,#1a0e00 100%)", borderBottom:"1px solid #1e1e1e", padding:"32px 40px", marginBottom:"32px" }}>
-          <div style={{ maxWidth:"900px", margin:"0 auto", display:"flex", alignItems:"center", gap:"14px" }}>
-            <div style={{ width:"44px", height:"44px", background:"linear-gradient(135deg,#E8610A,#ff8c42)", borderRadius:"10px", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"22px" }}>📱</div>
+        {/* HEADER */}
+        <div style={{ background: 'linear-gradient(135deg, #111 0%, #1a0e00 100%)', borderBottom: '1px solid #1e1e1e', padding: '32px 40px', marginBottom: '32px' }}>
+          <div style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ width: '44px', height: '44px', background: 'linear-gradient(135deg, #E8610A, #ff8c42)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px' }}>📱</div>
             <div>
-              <h1 style={{ fontFamily:"Playfair Display, serif", fontSize:"26px", fontWeight:900, color:"#fff", margin:0 }}>Social Media Generator</h1>
-              <p style={{ color:"#666", fontSize:"13px", margin:0 }}>One topic. Five platforms. Every post optimized for maximum reach.</p>
+              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '26px', fontWeight: 900, color: '#fff', margin: 0 }}>Social Media Generator</h1>
+              <p style={{ color: '#666', fontSize: '13px', margin: 0 }}>Pick your platform. One topic. Posts optimized for maximum reach.</p>
             </div>
             {profile?.business_name && (
-              <div style={{ marginLeft:"auto", display:"inline-flex", alignItems:"center", gap:"6px", background:"rgba(232,97,10,0.1)", border:"1px solid rgba(232,97,10,0.3)", borderRadius:"20px", padding:"4px 14px" }}>
-                <div style={{ width:"6px", height:"6px", borderRadius:"50%", background:"#E8610A" }}></div>
-                <span style={{ fontSize:"12px", color:"#E8610A", fontWeight:600 }}>{profile.business_name}</span>
+              <div style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(232,97,10,0.1)', border: '1px solid rgba(232,97,10,0.3)', borderRadius: '20px', padding: '4px 14px' }}>
+                <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#E8610A' }} />
+                <span style={{ fontSize: '12px', color: '#E8610A', fontWeight: 600 }}>{profile.business_name}</span>
               </div>
             )}
           </div>
         </div>
 
-        <div style={{ maxWidth:"900px", margin:"0 auto", padding:"0 40px 40px" }}>
-          <div style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"14px", padding:"28px", marginBottom:"24px" }}>
-            <div style={{ display:"grid", gridTemplateColumns:"1fr 200px 180px", gap:"16px", marginBottom:"16px" }}>
-              <div>
-                <label style={{ display:"block", fontSize:"12px", fontWeight:700, color:"#aaa", marginBottom:"8px", textTransform:"uppercase", letterSpacing:"0.08em" }}>Topic or Keyword</label>
-                <input value={topic} onChange={e => setTopic(e.target.value)} placeholder="e.g. 5 marketing tips for small businesses"
-                  style={{ width:"100%", background:"#0a0a0a", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"11px 14px", fontSize:"14px", color:"#fff", outline:"none", fontFamily:"DM Sans, sans-serif", boxSizing:"border-box" }}
-                  onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
-              </div>
-              <div>
-                <label style={{ display:"block", fontSize:"12px", fontWeight:700, color:"#aaa", marginBottom:"8px", textTransform:"uppercase", letterSpacing:"0.08em" }}>Platform</label>
-                <select value={platform} onChange={e => setPlatform(e.target.value)}
-                  style={{ width:"100%", background:"#0a0a0a", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"11px 14px", fontSize:"14px", color:"#fff", outline:"none", fontFamily:"DM Sans, sans-serif", boxSizing:"border-box" }}>
-                  {['All Platforms','Facebook','Instagram','TikTok','X / Twitter','LinkedIn'].map(p => <option key={p}>{p}</option>)}
-                </select>
-              </div>
-              <div>
-                <label style={{ display:"block", fontSize:"12px", fontWeight:700, color:"#aaa", marginBottom:"8px", textTransform:"uppercase", letterSpacing:"0.08em" }}>Tone</label>
-                <select value={tone} onChange={e => setTone(e.target.value)}
-                  style={{ width:"100%", background:"#0a0a0a", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"11px 14px", fontSize:"14px", color:"#fff", outline:"none", fontFamily:"DM Sans, sans-serif", boxSizing:"border-box" }}>
-                  {['Professional','Friendly','Bold','Conversational'].map(t => <option key={t}>{t}</option>)}
-                </select>
+        <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 40px 60px', animation: 'slideIn 0.4s ease' }}>
+
+          {/* INPUT CARD */}
+          <div style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: '16px', padding: '28px', marginBottom: '24px' }}>
+
+            {/* TOPIC */}
+            <div style={{ marginBottom: '24px' }}>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#666', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Topic or Keyword</label>
+              <input value={topic} onChange={e => setTopic(e.target.value)}
+                placeholder="e.g. 5 marketing tips for small businesses"
+                onKeyDown={e => e.key === 'Enter' && generatePosts()}
+                style={{ width: '100%', background: '#0a0a0a', border: '1px solid #2a2a2a', borderRadius: '10px', padding: '13px 16px', fontSize: '14px', color: '#fff', outline: 'none', fontFamily: "'DM Sans', sans-serif", boxSizing: 'border-box' }}
+                onFocus={e => e.target.style.borderColor = '#E8610A'}
+                onBlur={e => e.target.style.borderColor = '#2a2a2a'} />
+            </div>
+
+            {/* PLATFORM BUTTONS */}
+            <div style={{ marginBottom: '24px' }}>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#666', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Platform</label>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                {PLATFORMS.map(p => {
+                  const isSelected = platform === p.key
+                  return (
+                    <button key={p.key} className="plat-btn"
+                      onClick={() => setPlatform(p.key)}
+                      style={{
+                        background: isSelected ? p.color : '#0a0a0a',
+                        border: '1px solid ' + (isSelected ? p.color : '#2a2a2a'),
+                        borderRadius: '10px',
+                        padding: '10px 18px',
+                        color: isSelected ? '#fff' : '#888',
+                        fontSize: '13px',
+                        fontWeight: isSelected ? 700 : 500,
+                        fontFamily: "'DM Sans', sans-serif",
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '7px',
+                        boxShadow: isSelected ? '0 4px 16px ' + p.color + '40' : 'none',
+                      }}>
+                      <span style={{ fontSize: '15px' }}>{p.icon}</span>
+                      {p.label}
+                    </button>
+                  )
+                })}
               </div>
             </div>
-            {error && <p style={{ color:"#f87171", marginBottom:"12px", fontSize:"14px" }}>{error}</p>}
-            <button onClick={generatePosts} disabled={loading}
-              style={{ width:"100%", background:loading?"#2a2a2a":"linear-gradient(135deg,#E8610A,#C84E06)", color:loading?"#666":"#fff", padding:"14px", fontSize:"15px", fontWeight:700, border:"none", cursor:loading?"not-allowed":"pointer", fontFamily:"DM Sans, sans-serif", borderRadius:"8px", boxShadow:loading?"none":"0 4px 20px rgba(232,97,10,0.35)" }}>
-              {loading ? 'Generating posts for all platforms...' : '⚡ Generate Social Posts'}
+
+            {/* TONE */}
+            <div style={{ marginBottom: '24px' }}>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#666', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Tone</label>
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                {TONES.map(t => (
+                  <button key={t} className="plat-btn"
+                    onClick={() => setTone(t)}
+                    style={{
+                      background: tone === t ? 'rgba(232,97,10,0.15)' : '#0a0a0a',
+                      border: '1px solid ' + (tone === t ? '#E8610A' : '#2a2a2a'),
+                      borderRadius: '10px',
+                      padding: '9px 18px',
+                      color: tone === t ? '#E8610A' : '#666',
+                      fontSize: '13px',
+                      fontWeight: tone === t ? 700 : 400,
+                      fontFamily: "'DM Sans', sans-serif",
+                      cursor: 'pointer',
+                    }}>
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {error && <p style={{ color: '#f87171', marginBottom: '16px', fontSize: '14px' }}>{error}</p>}
+
+            {/* GENERATE BUTTON */}
+            <button className="gen-btn" onClick={generatePosts} disabled={loading}
+              style={{
+                width: '100%',
+                background: loading ? '#1a1a1a' : 'linear-gradient(135deg, #E8610A, #C84E06)',
+                color: loading ? '#555' : '#fff',
+                padding: '15px',
+                fontSize: '15px',
+                fontWeight: 700,
+                border: 'none',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                fontFamily: "'DM Sans', sans-serif",
+                borderRadius: '10px',
+                boxShadow: loading ? 'none' : '0 4px 20px rgba(232,97,10,0.35)',
+                letterSpacing: '0.02em',
+              }}>
+              {loading
+                ? (platform === 'All' ? 'Generating posts for all platforms...' : 'Generating ' + platform + ' post...')
+                : '⚡ Generate ' + (platform === 'All' ? 'All Platform Posts' : platform + ' Post')}
             </button>
           </div>
 
+          {/* RESULTS */}
           {posts && (
-            <div style={{ display:"flex", flexDirection:"column", gap:"16px" }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', animation: 'slideIn 0.4s ease' }}>
+              <div style={{ fontSize: '11px', color: '#555', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '4px' }}>
+                {Object.keys(posts).length} post{Object.keys(posts).length !== 1 ? 's' : ''} generated
+              </div>
               {Object.entries(posts).map(([plat, post]) => (
-                <div key={plat} style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"12px", overflow:"hidden" }}>
-                  <div style={{ background:platformColors[plat] || "#333", padding:"14px 20px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-                    <p style={{ fontSize:"14px", fontWeight:700, color:"#fff", margin:0 }}>{plat}</p>
+                <div key={plat} style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: '14px', overflow: 'hidden' }}>
+                  <div style={{ background: platformColors[plat] || '#E8610A', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '14px', fontWeight: 700, color: '#fff' }}>{plat}</span>
                     <button onClick={() => copyPost(post, plat)}
-                      style={{ background:"rgba(255,255,255,0.2)", border:"1px solid rgba(255,255,255,0.4)", color:"#fff", padding:"6px 14px", fontSize:"12px", fontWeight:600, cursor:"pointer", fontFamily:"DM Sans, sans-serif", borderRadius:"4px" }}>
-                      {copied === plat ? 'Copied!' : 'Copy'}
+                      style={{ background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.4)', color: '#fff', padding: '6px 16px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", borderRadius: '6px' }}>
+                      {copied === plat ? '✓ Copied!' : 'Copy'}
                     </button>
                   </div>
-                  <div style={{ padding:"20px" }}>
-                    <p style={{ fontSize:"15px", color:"#ccc", lineHeight:1.8, margin:0 }}>{post}</p>
+                  <div style={{ padding: '20px 24px' }}>
+                    <p style={{ fontSize: '15px', color: '#ccc', lineHeight: 1.85, margin: 0, whiteSpace: 'pre-wrap' }}>{post}</p>
                   </div>
                 </div>
               ))}
