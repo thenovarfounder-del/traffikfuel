@@ -7,21 +7,20 @@ import PlanGate from '@/components/PlanGate'
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
 const PLATFORMS = [
-  { key: 'All', label: 'All Platforms', color: '#E8610A', icon: '🌐' },
   { key: 'Facebook', label: 'Facebook', color: '#1877F2', icon: '📵' },
   { key: 'Instagram', label: 'Instagram', color: '#E1306C', icon: '📸' },
-  { key: 'TikTok', label: 'TikTok', color: '#ffffff', icon: '🎵' },
-  { key: 'X / Twitter', label: 'X / Twitter', color: '#ffffff', icon: '✕' },
+  { key: 'TikTok', label: 'TikTok', color: '#888', icon: '🎵' },
+  { key: 'X / Twitter', label: 'X / Twitter', color: '#555', icon: '✕' },
   { key: 'LinkedIn', label: 'LinkedIn', color: '#0A66C2', icon: '💼' },
 ]
 
 const TONES = ['Professional', 'Friendly', 'Bold', 'Conversational']
 
-const platformColors = { Facebook: '#1877F2', Instagram: '#E1306C', TikTok: '#333', 'X / Twitter': '#333', LinkedIn: '#0A66C2' }
+const platformColors = { Facebook: '#1877F2', Instagram: '#E1306C', TikTok: '#555', 'X / Twitter': '#444', LinkedIn: '#0A66C2' }
 
 export default function SocialGenerator() {
   const [topic, setTopic] = useState('')
-  const [platform, setPlatform] = useState('All')
+  const [selected, setSelected] = useState(['Facebook', 'Instagram', 'TikTok', 'X / Twitter', 'LinkedIn'])
   const [tone, setTone] = useState('Professional')
   const [loading, setLoading] = useState(false)
   const [posts, setPosts] = useState(null)
@@ -42,33 +41,51 @@ export default function SocialGenerator() {
     loadData()
   }, [])
 
-  const isPaid = userStatus && userStatus !== 'free'
   const plan = userStatus || 'free'
   const businessName = profile?.business_name || 'My Business'
   const industry = profile?.industry || 'Business'
   const city = profile?.phone || ''
   const websiteUrl = profile?.website || ''
 
+  function togglePlatform(key) {
+    setSelected(prev =>
+      prev.includes(key)
+        ? prev.length === 1 ? prev : prev.filter(k => k !== key)
+        : [...prev, key]
+    )
+  }
+
+  function selectAll() { setSelected(PLATFORMS.map(p => p.key)) }
+  function clearAll() { setSelected([PLATFORMS[0].key]) }
+
   async function generatePosts() {
     if (!topic) { setError('Please enter a topic or keyword.'); return }
+    if (selected.length === 0) { setError('Please select at least one platform.'); return }
     setLoading(true); setError(''); setPosts(null)
-    const apiPlatform = platform === 'All' ? 'All Platforms' : platform
+    const platformParam = selected.length === PLATFORMS.length ? 'All Platforms' : selected.join(',')
     try {
       const response = await fetch('/api/generate-social', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic, platform: apiPlatform, tone, businessName, industry, city, websiteUrl })
+        body: JSON.stringify({ topic, platform: platformParam, tone, businessName, industry, city, websiteUrl })
       })
       const data = await response.json()
       if (!data.success) { setError('Generation failed: ' + (data.error || 'unknown error')); setLoading(false); return }
-      setPosts(data.posts)
+      // Filter results to only selected platforms
+      const filtered = {}
+      Object.entries(data.posts).forEach(([plat, post]) => {
+        if (selected.some(s => plat.toLowerCase().includes(s.toLowerCase()) || s.toLowerCase().includes(plat.toLowerCase()))) {
+          filtered[plat] = post
+        }
+      })
+      setPosts(Object.keys(filtered).length > 0 ? filtered : data.posts)
     } catch (e) { setError('Generation failed: ' + e.message) }
     setLoading(false)
   }
 
   function copyPost(text, key) { navigator.clipboard.writeText(text); setCopied(key); setTimeout(() => setCopied(''), 2000) }
 
-  const selectedPlatform = PLATFORMS.find(p => p.key === platform)
+  const allSelected = selected.length === PLATFORMS.length
 
   return (
     <PlanGate userPlan={plan} feature="socialGenerator" mode="block">
@@ -88,7 +105,7 @@ export default function SocialGenerator() {
             <div style={{ width: '44px', height: '44px', background: 'linear-gradient(135deg, #E8610A, #ff8c42)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px' }}>📱</div>
             <div>
               <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '26px', fontWeight: 900, color: '#fff', margin: 0 }}>Social Media Generator</h1>
-              <p style={{ color: '#666', fontSize: '13px', margin: 0 }}>Pick your platform. One topic. Posts optimized for maximum reach.</p>
+              <p style={{ color: '#666', fontSize: '13px', margin: 0 }}>Select your platforms. One topic. Posts optimized for each.</p>
             </div>
             {profile?.business_name && (
               <div style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(232,97,10,0.1)', border: '1px solid rgba(232,97,10,0.3)', borderRadius: '20px', padding: '4px 14px' }}>
@@ -100,8 +117,6 @@ export default function SocialGenerator() {
         </div>
 
         <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 40px 60px', animation: 'slideIn 0.4s ease' }}>
-
-          {/* INPUT CARD */}
           <div style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: '16px', padding: '28px', marginBottom: '24px' }}>
 
             {/* TOPIC */}
@@ -115,35 +130,48 @@ export default function SocialGenerator() {
                 onBlur={e => e.target.style.borderColor = '#2a2a2a'} />
             </div>
 
-            {/* PLATFORM BUTTONS */}
+            {/* PLATFORM MULTI-SELECT */}
             <div style={{ marginBottom: '24px' }}>
-              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#666', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Platform</label>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#666', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+                  Platforms <span style={{ color: '#E8610A', fontWeight: 800 }}>{selected.length} selected</span>
+                </label>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button onClick={selectAll} style={{ background: 'none', border: '1px solid #2a2a2a', borderRadius: '6px', padding: '4px 12px', fontSize: '11px', color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Select All</button>
+                  <button onClick={clearAll} style={{ background: 'none', border: '1px solid #2a2a2a', borderRadius: '6px', padding: '4px 12px', fontSize: '11px', color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Clear</button>
+                </div>
+              </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                 {PLATFORMS.map(p => {
-                  const isSelected = platform === p.key
+                  const isSelected = selected.includes(p.key)
                   return (
                     <button key={p.key} className="plat-btn"
-                      onClick={() => setPlatform(p.key)}
+                      onClick={() => togglePlatform(p.key)}
                       style={{
                         background: isSelected ? p.color : '#0a0a0a',
-                        border: '1px solid ' + (isSelected ? p.color : '#2a2a2a'),
+                        border: '2px solid ' + (isSelected ? p.color : '#2a2a2a'),
                         borderRadius: '10px',
-                        padding: '10px 18px',
-                        color: isSelected ? '#fff' : '#888',
+                        padding: '10px 20px',
+                        color: isSelected ? '#fff' : '#555',
                         fontSize: '13px',
                         fontWeight: isSelected ? 700 : 500,
                         fontFamily: "'DM Sans', sans-serif",
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '7px',
-                        boxShadow: isSelected ? '0 4px 16px ' + p.color + '40' : 'none',
+                        gap: '8px',
+                        boxShadow: isSelected ? '0 4px 16px ' + p.color + '50' : 'none',
+                        position: 'relative',
                       }}>
                       <span style={{ fontSize: '15px' }}>{p.icon}</span>
                       {p.label}
+                      {isSelected && (
+                        <span style={{ marginLeft: '4px', fontSize: '11px', background: 'rgba(255,255,255,0.25)', borderRadius: '50%', width: '16px', height: '16px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900 }}>✓</span>
+                      )}
                     </button>
                   )
                 })}
               </div>
+              <p style={{ fontSize: '11px', color: '#444', margin: '10px 0 0 0' }}>Tap to select or deselect. You must keep at least one selected.</p>
             </div>
 
             {/* TONE */}
@@ -158,7 +186,7 @@ export default function SocialGenerator() {
                       border: '1px solid ' + (tone === t ? '#E8610A' : '#2a2a2a'),
                       borderRadius: '10px',
                       padding: '9px 18px',
-                      color: tone === t ? '#E8610A' : '#666',
+                      color: tone === t ? '#E8610A' : '#555',
                       fontSize: '13px',
                       fontWeight: tone === t ? 700 : 400,
                       fontFamily: "'DM Sans', sans-serif",
@@ -189,8 +217,8 @@ export default function SocialGenerator() {
                 letterSpacing: '0.02em',
               }}>
               {loading
-                ? (platform === 'All' ? 'Generating posts for all platforms...' : 'Generating ' + platform + ' post...')
-                : '⚡ Generate ' + (platform === 'All' ? 'All Platform Posts' : platform + ' Post')}
+                ? 'Generating posts...'
+                : '⚡ Generate ' + (allSelected ? 'All Platform Posts' : selected.length + ' Platform Post' + (selected.length > 1 ? 's' : ''))}
             </button>
           </div>
 
