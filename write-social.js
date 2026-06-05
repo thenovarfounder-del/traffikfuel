@@ -2,7 +2,8 @@ const fs = require('fs')
 
 const content = `// @ts-nocheck
 'use client'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
@@ -10,43 +11,69 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
 
-const TONES = ['Professional', 'Friendly', 'Authoritative', 'Conversational']
+const PLATFORMS = [
+  { id: 'facebook', label: 'Facebook', color: '#1877F2', icon: '\ud83d\udcf5' },
+  { id: 'instagram', label: 'Instagram', color: '#E1306C', icon: '\ud83d\udcf8' },
+  { id: 'tiktok', label: 'TikTok', color: '#888', icon: '\ud83c\udfb5' },
+  { id: 'twitter', label: 'X / Twitter', color: '#555', icon: '\u2715' },
+  { id: 'linkedin', label: 'LinkedIn', color: '#0A66C2', icon: '\ud83d\udcbc' },
+  { id: 'google', label: 'Google Business', color: '#4285F4', icon: '\ud83d\udd0d' },
+]
 
 const RADIUS = 54
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS
 
-export default function OnePushPublish() {
-  const [topic, setTopic] = useState('')
-  const [tone, setTone] = useState('Professional')
+export default function Onboarding() {
+  const router = useRouter()
+  const [step, setStep] = useState(1)
+  const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
-  const [step, setStep] = useState('idle')
+  const [platforms, setPlatforms] = useState([])
   const [progress, setProgress] = useState(0)
   const [currentMsg, setCurrentMsg] = useState('')
-  const [results, setResults] = useState(null)
-  const [error, setError] = useState('')
   const [logs, setLogs] = useState([])
+  const [generatedTitle, setGeneratedTitle] = useState('')
+  const [error, setError] = useState('')
 
   useEffect(() => {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
-      const { data } = await supabase.from('business_profiles').select('*').eq('user_id', user.id).single()
-      if (data) setProfile(data)
+      if (!user) { router.push('/login'); return }
+      setUser(user)
+      const { data: userData } = await supabase.from('users').select('onboarding_complete').eq('id', user.id).single()
+      if (userData?.onboarding_complete) { router.push('/dashboard'); return }
+      const { data: bp } = await supabase.from('business_profiles').select('*').eq('user_id', user.id).single()
+      if (bp) setProfile(bp)
     }
     load()
   }, [])
+
+  function togglePlatform(id) {
+    setPlatforms(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
+  }
 
   function addLog(msg, status) {
     setLogs(prev => [...prev, { msg, status, time: new Date().toLocaleTimeString() }])
   }
 
-  async function handlePublish() {
-    if (!topic) { setError('Please enter a topic.'); return }
+  async function savePlatformsAndGenerate() {
+    if (platforms.length === 0) { setError('Please select at least one platform.'); return }
     setError('')
-    setStep('running')
-    setLogs([])
-    setResults(null)
+
+    // Save platforms to business_profiles
+    await supabase.from('business_profiles').upsert({
+      user_id: user.id,
+      business_name: profile?.business_name || 'My Business',
+      industry: profile?.industry || 'Business',
+      phone: profile?.phone || '',
+      website: profile?.website || '',
+      platforms,
+      auto_mode: false,
+    }, { onConflict: 'user_id' })
+
+    setStep(3)
     setProgress(0)
+    setLogs([])
 
     try {
       const businessName = profile?.business_name || 'My Business'
@@ -54,245 +81,255 @@ export default function OnePushPublish() {
       const city = profile?.phone || ''
       const websiteUrl = profile?.website || ''
 
-      setCurrentMsg('Generating blog post...')
-      setProgress(15)
-      addLog('Generating blog post...', 'working')
+      setCurrentMsg('Generating your first blog post...')
+      setProgress(20)
+      addLog('Generating your first blog post...', 'working')
+
       const blogRes = await fetch('/api/generate-blog', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic, tone, businessName, industry, city, websiteUrl })
+        body: JSON.stringify({
+          topic: 'Why ' + businessName + ' is the best ' + industry + ' in ' + city,
+          tone: 'Professional',
+          businessName,
+          industry,
+          city,
+          websiteUrl
+        })
       })
       const blogData = await blogRes.json()
-      if (!blogData.success) { addLog('Blog generation failed', 'error'); setStep('error'); return }
-      addLog('Blog post generated: ' + blogData.post.title, 'done')
-      setProgress(35)
+      if (blogData.success) {
+        setGeneratedTitle(blogData.post.title)
+        addLog('Blog post created: ' + blogData.post.title, 'done')
+        await supabase.from('content_calendar').insert({
+          user_id: user.id,
+          title: blogData.post.title,
+          content_type: 'blog',
+          platform: 'blog',
+          status: 'draft',
+          scheduled_at: new Date().toISOString(),
+          content: blogData.post.content,
+        })
+      }
+      setProgress(50)
 
-      setCurrentMsg('Creating social media posts...')
-      addLog('Generating social media posts...', 'working')
+      setCurrentMsg('Creating your first social posts...')
+      addLog('Creating social posts for your platforms...', 'working')
+
       const socialRes = await fetch('/api/generate-social', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic, tone, businessName, industry, city, websiteUrl, platform: 'All Platforms' })
+        body: JSON.stringify({
+          topic: 'Why ' + businessName + ' is the best ' + industry + ' in ' + city,
+          tone: 'Professional',
+          businessName,
+          industry,
+          city,
+          websiteUrl,
+          platform: 'All Platforms'
+        })
       })
       const socialData = await socialRes.json()
-      if (socialData.success) addLog('Social posts generated', 'done')
-      setProgress(55)
-
-      const { data: { user } } = await supabase.auth.getUser()
-
-      setCurrentMsg('Publishing to WordPress...')
-      addLog('Publishing to WordPress...', 'working')
-      let wpUrl = null
-      const wpCheck = await fetch('/api/wordpress?user_id=' + user.id)
-      const wpData = await wpCheck.json()
-      if (!wpData.connected) {
-        addLog('WordPress not connected \u2014 skipping', 'skip')
-      } else {
-        const wpRes = await fetch('/api/wordpress/publish', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user_id: user.id, title: blogData.post.title, content: blogData.post.content, status: 'publish' })
-        })
-        const wpResult = await wpRes.json()
-        if (wpResult.success) { wpUrl = wpResult.url; addLog('Published to WordPress', 'done') }
-        else addLog('WordPress publish failed', 'error')
-      }
-      setProgress(70)
-
-      setCurrentMsg('Saving to content queue...')
-      addLog('Saving blog to queue...', 'working')
-      await supabase.from('content_calendar').insert({
-        user_id: user.id,
-        title: blogData.post.title,
-        content_type: 'blog',
-        platform: 'blog',
-        status: wpUrl ? 'published' : 'draft',
-        scheduled_at: new Date().toISOString(),
-        published_at: wpUrl ? new Date().toISOString() : null,
-        post_url: wpUrl,
-        content: blogData.post.content,
-      })
-      addLog('Blog saved', 'done')
-      setProgress(85)
-
       if (socialData.success) {
-        const userPlatforms = (profile?.platforms || []).filter(p => p !== 'wordpress' && p !== 'google')
-        for (const pid of userPlatforms) {
+        addLog('Social posts created for all your platforms', 'done')
+        for (const pid of platforms) {
           const platformKey = pid.charAt(0).toUpperCase() + pid.slice(1)
           const postContent = socialData.posts[platformKey] || socialData.posts[Object.keys(socialData.posts)[0]]
           if (postContent) {
             await supabase.from('content_calendar').insert({
               user_id: user.id,
-              title: topic + ' \u2014 ' + pid,
+              title: businessName + ' \u2014 ' + pid,
               content_type: 'social',
               platform: pid,
               status: 'scheduled',
               scheduled_at: new Date().toISOString(),
               content: postContent,
             })
-            addLog(pid + ' post saved to queue', 'done')
           }
         }
       }
+      setProgress(85)
 
+      setCurrentMsg('Setting up your account...')
+      addLog('Finalizing your account...', 'working')
+      await supabase.from('users').update({ onboarding_complete: true }).eq('id', user.id)
+      addLog('Account ready!', 'done')
       setProgress(100)
-      setCurrentMsg('All done!')
-      addLog('All done!', 'done')
-      setResults({ blog: blogData.post, social: socialData.posts, wpUrl })
-      setTimeout(() => setStep('done'), 800)
+      setCurrentMsg('You\u2019re live!')
+
+      setTimeout(() => setStep(4), 1000)
 
     } catch(e) {
       addLog('Error: ' + e.message, 'error')
-      setStep('error')
     }
   }
 
-  const isRunning = step === 'running'
-  const isDone = step === 'done'
   const strokeDashoffset = CIRCUMFERENCE - (progress / 100) * CIRCUMFERENCE
 
   return (
-    <div style={{ minHeight: '100vh', background: '#080808', color: '#fff', fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: '#080808', color: '#fff', fontFamily: "'DM Sans', system-ui, sans-serif", display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
       <style>{\`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600;700;800&display=swap');
-        @keyframes slideIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes slideIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        @keyframes spin { to{transform:rotate(360deg)} }
-        .tone-btn { transition: all 0.18s; cursor: pointer; }
-        .tone-btn:hover { transform: translateY(-1px); }
+        .plat-btn { transition: all 0.18s; cursor: pointer; }
+        .plat-btn:hover { transform: translateY(-2px); }
       \`}</style>
 
-      {/* HEADER */}
-      <div style={{ background: 'linear-gradient(135deg, #111 0%, #1a0e00 100%)', borderBottom: '1px solid #1e1e1e', padding: '32px 40px', marginBottom: '40px' }}>
-        <div style={{ maxWidth: '700px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <div style={{ width: '44px', height: '44px', background: 'linear-gradient(135deg, #E8610A, #ff8c42)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px' }}>\ud83d\ude80</div>
-          <div>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '26px', fontWeight: 900, color: '#fff', margin: 0 }}>One-Push Publish</h1>
-            <p style={{ color: '#666', fontSize: '13px', margin: 0 }}>One topic. Blog + all your platforms. One button.</p>
+      <div style={{ width: '100%', maxWidth: '560px', animation: 'slideIn 0.4s ease' }}>
+
+        {/* LOGO */}
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{ fontSize: '28px', fontWeight: 800, color: '#fff', letterSpacing: '-0.5px' }}>
+            Traffik<span style={{ color: '#E8610A' }}>ora</span>
           </div>
-          {profile?.business_name && (
-            <div style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(232,97,10,0.1)', border: '1px solid rgba(232,97,10,0.3)', borderRadius: '20px', padding: '4px 14px' }}>
-              <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#E8610A' }} />
-              <span style={{ fontSize: '12px', color: '#E8610A', fontWeight: 600 }}>{profile.business_name}</span>
+        </div>
+
+        {/* PROGRESS BAR */}
+        <div style={{ display: 'flex', gap: '6px', marginBottom: '40px' }}>
+          {[1,2,3,4].map(s => (
+            <div key={s} style={{ flex: 1, height: '3px', borderRadius: '2px', background: s <= step ? '#E8610A' : '#1e1e1e', transition: 'background 0.3s' }} />
+          ))}
+        </div>
+
+        <div style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: '20px', padding: '40px', boxShadow: '0 0 60px rgba(232,97,10,0.06)' }}>
+
+          {/* STEP 1 — WELCOME */}
+          {step === 1 && (
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '52px', marginBottom: '20px' }}>\ud83d\ude80</div>
+              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', fontWeight: 700, color: '#fff', margin: '0 0 14px' }}>Welcome to Traffikora!</h1>
+              <p style={{ color: '#555', fontSize: '15px', lineHeight: 1.7, margin: '0 0 32px' }}>
+                Let\u2019s get you set up in 60 seconds. Your first piece of AI content will be ready before you finish.
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px', textAlign: 'left' }}>
+                {[
+                  { icon: '\ud83d\udcf1', text: 'Choose your social platforms' },
+                  { icon: '\u26a1', text: 'Watch your first content generate live' },
+                  { icon: '\u2705', text: 'Land in your dashboard ready to go' },
+                ].map(item => (
+                  <div key={item.text} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#0a0a0a', border: '1px solid #1e1e1e', borderRadius: '10px', padding: '12px 16px' }}>
+                    <span style={{ fontSize: '18px' }}>{item.icon}</span>
+                    <span style={{ fontSize: '14px', color: '#aaa' }}>{item.text}</span>
+                  </div>
+                ))}
+              </div>
+              <button onClick={() => setStep(2)}
+                style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #E8610A, #C84E06)', color: '#fff', border: 'none', borderRadius: '12px', fontSize: '16px', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", boxShadow: '0 4px 24px rgba(232,97,10,0.35)' }}>
+                Let\u2019s Go \u2192
+              </button>
             </div>
           )}
-        </div>
-      </div>
 
-      <div style={{ maxWidth: '700px', margin: '0 auto', padding: '0 40px 60px', animation: 'slideIn 0.4s ease' }}>
+          {/* STEP 2 — PLATFORMS */}
+          {step === 2 && (
+            <div>
+              <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+                <div style={{ fontSize: '44px', marginBottom: '16px' }}>\ud83d\udcf1</div>
+                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '24px', fontWeight: 700, color: '#fff', margin: '0 0 10px' }}>Select Your Platforms</h2>
+                <p style={{ color: '#555', fontSize: '14px', margin: 0 }}>Traffikora will create content for these platforms automatically.</p>
+              </div>
 
-        {/* INPUT CARD */}
-        {step === 'idle' && (
-          <div style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: '16px', padding: '32px', marginBottom: '24px' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '24px', justifyContent: 'center' }}>
+                {PLATFORMS.map(p => {
+                  const isSelected = platforms.includes(p.id)
+                  return (
+                    <button key={p.id} className="plat-btn" onClick={() => togglePlatform(p.id)}
+                      style={{
+                        background: isSelected ? p.color : '#0a0a0a',
+                        border: '2px solid ' + (isSelected ? p.color : '#2a2a2a'),
+                        borderRadius: '10px', padding: '11px 20px',
+                        color: isSelected ? '#fff' : '#555',
+                        fontSize: '13px', fontWeight: isSelected ? 700 : 500,
+                        fontFamily: "'DM Sans', sans-serif",
+                        display: 'flex', alignItems: 'center', gap: '8px',
+                        boxShadow: isSelected ? '0 4px 16px ' + p.color + '50' : 'none',
+                      }}>
+                      <span style={{ fontSize: '16px' }}>{p.icon}</span>
+                      {p.label}
+                      {isSelected && <span style={{ fontSize: '11px', background: 'rgba(255,255,255,0.25)', borderRadius: '50%', width: '16px', height: '16px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900 }}>\u2713</span>}
+                    </button>
+                  )
+                })}
+              </div>
 
-            <div style={{ marginBottom: '28px' }}>
-              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#666', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Topic or Keyword</label>
-              <input value={topic} onChange={e => setTopic(e.target.value)}
-                placeholder="e.g. 5 reasons to hire a marketing agency in 2026"
-                onKeyDown={e => e.key === 'Enter' && handlePublish()}
-                style={{ width: '100%', background: '#0a0a0a', border: '1px solid #2a2a2a', borderRadius: '10px', padding: '14px 16px', fontSize: '15px', color: '#fff', outline: 'none', fontFamily: "'DM Sans', sans-serif", boxSizing: 'border-box' }}
-                onFocus={e => e.target.style.borderColor = '#E8610A'}
-                onBlur={e => e.target.style.borderColor = '#2a2a2a'} />
+              {platforms.length > 0 && (
+                <p style={{ textAlign: 'center', fontSize: '12px', color: '#E8610A', fontWeight: 700, marginBottom: '20px' }}>
+                  {platforms.length} platform{platforms.length > 1 ? 's' : ''} selected
+                </p>
+              )}
+
+              {error && <p style={{ color: '#f87171', fontSize: '13px', textAlign: 'center', marginBottom: '16px' }}>{error}</p>}
+
+              <button onClick={savePlatformsAndGenerate}
+                style={{ width: '100%', padding: '16px', background: platforms.length > 0 ? 'linear-gradient(135deg, #E8610A, #C84E06)' : '#1a1a1a', color: platforms.length > 0 ? '#fff' : '#444', border: 'none', borderRadius: '12px', fontSize: '16px', fontWeight: 700, cursor: platforms.length > 0 ? 'pointer' : 'not-allowed', fontFamily: "'DM Sans', sans-serif", boxShadow: platforms.length > 0 ? '0 4px 24px rgba(232,97,10,0.35)' : 'none' }}>
+                \u26a1 Generate My First Content
+              </button>
             </div>
+          )}
 
-            <div style={{ marginBottom: '32px' }}>
-              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#666', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Tone</label>
-              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                {TONES.map(t => (
-                  <button key={t} className="tone-btn" onClick={() => setTone(t)}
-                    style={{
-                      background: tone === t ? 'rgba(232,97,10,0.15)' : '#0a0a0a',
-                      border: '1px solid ' + (tone === t ? '#E8610A' : '#2a2a2a'),
-                      borderRadius: '10px', padding: '10px 20px',
-                      color: tone === t ? '#E8610A' : '#555',
-                      fontSize: '13px', fontWeight: tone === t ? 700 : 400,
-                      fontFamily: "'DM Sans', sans-serif",
-                    }}>
-                    {t}
-                  </button>
+          {/* STEP 3 — GENERATING */}
+          {step === 3 && (
+            <div style={{ textAlign: 'center' }}>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '24px', fontWeight: 700, color: '#fff', margin: '0 0 8px' }}>Creating Your Content</h2>
+              <p style={{ color: '#555', fontSize: '13px', margin: '0 0 32px' }}>Sit tight \u2014 this takes about 30 seconds.</p>
+
+              <div style={{ position: 'relative', width: '140px', height: '140px', margin: '0 auto 28px' }}>
+                <svg width="140" height="140" style={{ transform: 'rotate(-90deg)' }}>
+                  <circle cx="70" cy="70" r={RADIUS} fill="none" stroke="#1a1a1a" strokeWidth="10" />
+                  <circle cx="70" cy="70" r={RADIUS} fill="none" stroke="#E8610A" strokeWidth="10"
+                    strokeDasharray={CIRCUMFERENCE}
+                    strokeDashoffset={strokeDashoffset}
+                    strokeLinecap="round"
+                    style={{ transition: 'stroke-dashoffset 0.8s ease' }} />
+                </svg>
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ fontSize: '24px', fontWeight: 800, color: '#E8610A', fontFamily: "'Playfair Display', serif" }}>{progress}%</span>
+                </div>
+              </div>
+
+              <div style={{ fontSize: '14px', fontWeight: 600, color: '#fff', marginBottom: '24px' }}>{currentMsg}</div>
+
+              <div style={{ background: '#0a0a0a', border: '1px solid #1e1e1e', borderRadius: '12px', padding: '16px 20px', textAlign: 'left' }}>
+                {logs.map((log, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: i < logs.length - 1 ? '8px' : 0 }}>
+                    <span style={{ fontSize: '13px' }}>{log.status === 'done' ? '\u2705' : log.status === 'error' ? '\u274c' : '\u23f3'}</span>
+                    <span style={{ fontSize: '13px', color: log.status === 'done' ? '#86efac' : log.status === 'error' ? '#f87171' : '#ccc', flex: 1 }}>{log.msg}</span>
+                  </div>
                 ))}
               </div>
             </div>
+          )}
 
-            {error && <p style={{ color: '#f87171', marginBottom: '16px', fontSize: '14px' }}>{error}</p>}
-
-            <button onClick={handlePublish}
-              style={{ width: '100%', padding: '18px', background: 'linear-gradient(135deg, #E8610A, #C84E06)', color: '#fff', border: 'none', borderRadius: '12px', fontSize: '17px', fontWeight: 800, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", boxShadow: '0 4px 24px rgba(232,97,10,0.4)', letterSpacing: '0.02em' }}>
-              \ud83d\ude80 One-Push Publish
-            </button>
-          </div>
-        )}
-
-        {/* PROGRESS RING */}
-        {(isRunning || step === 'error') && (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 0', animation: 'slideIn 0.4s ease' }}>
-            <div style={{ position: 'relative', width: '140px', height: '140px', marginBottom: '28px' }}>
-              <svg width="140" height="140" style={{ transform: 'rotate(-90deg)' }}>
-                <circle cx="70" cy="70" r={RADIUS} fill="none" stroke="#1a1a1a" strokeWidth="10" />
-                <circle cx="70" cy="70" r={RADIUS} fill="none" stroke="#E8610A" strokeWidth="10"
-                  strokeDasharray={CIRCUMFERENCE}
-                  strokeDashoffset={strokeDashoffset}
-                  strokeLinecap="round"
-                  style={{ transition: 'stroke-dashoffset 0.6s ease' }} />
-              </svg>
-              <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontSize: '26px', fontWeight: 800, color: '#E8610A', fontFamily: "'Playfair Display', serif" }}>{progress}%</span>
-              </div>
-            </div>
-            <div style={{ fontSize: '15px', fontWeight: 600, color: '#fff', marginBottom: '8px' }}>{currentMsg}</div>
-            <div style={{ fontSize: '12px', color: '#555' }}>Do not close this page</div>
-
-            <div style={{ width: '100%', marginTop: '32px', background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '14px', padding: '20px 24px' }}>
-              {logs.map((log, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '13px' }}>{log.status === 'done' ? '\u2705' : log.status === 'error' ? '\u274c' : log.status === 'skip' ? '\u23ed\ufe0f' : '\u23f3'}</span>
-                  <span style={{ fontSize: '13px', color: log.status === 'done' ? '#86efac' : log.status === 'error' ? '#f87171' : log.status === 'skip' ? '#888' : '#ccc', flex: 1 }}>{log.msg}</span>
-                  <span style={{ fontSize: '11px', color: '#444' }}>{log.time}</span>
+          {/* STEP 4 — DONE */}
+          {step === 4 && (
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '52px', marginBottom: '20px' }}>\u2705</div>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', fontWeight: 700, color: '#fff', margin: '0 0 14px' }}>You\u2019re Live!</h2>
+              <p style={{ color: '#555', fontSize: '15px', lineHeight: 1.7, margin: '0 0 24px' }}>
+                Your first content is ready and waiting in your dashboard.
+              </p>
+              {generatedTitle && (
+                <div style={{ background: '#0a0a0a', border: '1px solid #1e1e1e', borderLeft: '3px solid #E8610A', borderRadius: '10px', padding: '14px 18px', marginBottom: '28px', textAlign: 'left' }}>
+                  <div style={{ fontSize: '11px', fontWeight: 700, color: '#E8610A', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '6px' }}>First Blog Post Ready</div>
+                  <div style={{ fontSize: '14px', color: '#ccc' }}>{generatedTitle}</div>
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* DONE */}
-        {isDone && results && (
-          <div style={{ animation: 'slideIn 0.4s ease' }}>
-            <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-              <div style={{ fontSize: '52px', marginBottom: '12px' }}>\u2705</div>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', fontWeight: 700, color: '#fff', margin: '0 0 8px' }}>Published Successfully</h2>
-              <p style={{ color: '#555', fontSize: '14px', margin: 0 }}>Your blog and social posts are live and queued.</p>
-            </div>
-
-            <div style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: '14px', padding: '20px 24px', marginBottom: '16px', borderLeft: '3px solid #E8610A' }}>
-              <div style={{ fontSize: '11px', fontWeight: 700, color: '#E8610A', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '6px' }}>Blog Post</div>
-              <div style={{ color: '#ccc', fontSize: '14px', marginBottom: results.wpUrl ? '10px' : 0 }}>{results.blog.title}</div>
-              {results.wpUrl && <a href={results.wpUrl} target="_blank" style={{ color: '#E8610A', fontSize: '13px', fontWeight: 600, textDecoration: 'none' }}>View on WordPress \u2192</a>}
-            </div>
-
-            <div style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: '14px', padding: '20px 24px', marginBottom: '28px', borderLeft: '3px solid #a855f7' }}>
-              <div style={{ fontSize: '11px', fontWeight: 700, color: '#a855f7', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '10px' }}>Social Posts \u2014 Saved to Queue</div>
-              {results.social && Object.keys(results.social).map(plat => (
-                <div key={plat} style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>\u2713 {plat}</div>
-              ))}
-            </div>
-
-            <div style={{ display: 'flex', gap: '12px' }}>
-              <button onClick={() => { setStep('idle'); setLogs([]); setResults(null); setTopic(''); setProgress(0) }}
-                style={{ flex: 1, padding: '14px', background: 'linear-gradient(135deg, #E8610A, #C84E06)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '15px', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
-                Publish Another
+              )}
+              <button onClick={() => router.push('/dashboard')}
+                style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #E8610A, #C84E06)', color: '#fff', border: 'none', borderRadius: '12px', fontSize: '16px', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", boxShadow: '0 4px 24px rgba(232,97,10,0.35)' }}>
+                Go to My Dashboard \u2192
               </button>
-              <a href="/dashboard/content/queue"
-                style={{ flex: 1, padding: '14px', background: '#1a1a1a', color: '#fff', border: '1px solid #2a2a2a', borderRadius: '10px', fontSize: '15px', fontWeight: 700, textDecoration: 'none', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'DM Sans', sans-serif" }}>
-                View Content Queue
-              </a>
             </div>
-          </div>
-        )}
+          )}
+
+        </div>
+
+        <p style={{ textAlign: 'center', color: '#333', fontSize: '12px', marginTop: '20px' }}>Step {step} of 4</p>
       </div>
     </div>
   )
 }
 `
 
-fs.writeFileSync('C:\\\\Users\\\\randy\\\\traffikfuel\\\\src\\\\app\\\\dashboard\\\\publish\\\\page.tsx', content, 'utf8')
-console.log('SUCCESS: One-Push Publish page rebuilt with progress ring')
+fs.writeFileSync('C:\\\\Users\\\\randy\\\\traffikfuel\\\\src\\\\app\\\\onboarding\\\\page.tsx', content, 'utf8')
+console.log('SUCCESS: onboarding page rebuilt - 4 steps with live content generation')
