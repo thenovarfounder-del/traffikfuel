@@ -1,144 +1,95 @@
 const fs = require('fs');
 
 const content = `// @ts-nocheck
-import { NextResponse } from 'next/server'
+import './globals.css'
+import { Playfair_Display, DM_Sans } from 'next/font/google'
+import CookieBanner from '@/components/CookieBanner'
+import ScrollToTop from '@/components/ScrollToTop'
+import ChatBubble from '@/components/ChatBubble'
 
-export async function POST(req) {
-  try {
-    const { url } = await req.json()
-    if (!url) return NextResponse.json({ error: 'URL required' }, { status: 400 })
+const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400','700','900'], display: 'swap', variable: '--font-playfair' })
+const dmSans = DM_Sans({ subsets: ['latin'], weight: ['300','400','500','600','700'], display: 'swap', variable: '--font-dm-sans' })
 
-    const apiKey = process.env.GOOGLE_PAGESPEED_API_KEY
-    const encoded = encodeURIComponent(url)
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+}
 
-    const categories = 'performance,accessibility,seo,best-practices'
+export const metadata = {
+  title: 'Traffikora \u2014 AI Marketing Automation for Local Businesses',
+  description: 'Set it once. It markets forever. Traffikora automates your blogs, social media, and SEO across Google, TikTok, YouTube, Facebook, Instagram and LinkedIn \u2014 24/7, no agency needed.',
+  keywords: 'AI marketing automation, local business marketing, automated social media, SEO automation, content generation, small business marketing',
+  metadataBase: new URL('https://www.traffikora.com'),
+  openGraph: {
+    title: 'Traffikora \u2014 AI Marketing Automation for Local Businesses',
+    description: 'Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine.',
+    url: 'https://www.traffikora.com',
+    siteName: 'Traffikora',
+    images: [{ url: 'https://www.traffikora.com/og-image.png', width: 1200, height: 630, alt: 'Traffikora AI Marketing Platform' }],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Traffikora \u2014 AI Marketing Automation for Local Businesses',
+    description: 'Set it once. It markets forever.',
+  },
+}
 
-    const [mobileRes, desktopRes] = await Promise.all([
-      fetch(\`https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=\${encoded}&strategy=mobile&category=performance&category=accessibility&category=seo&category=best-practices&key=\${apiKey}\`),
-      fetch(\`https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=\${encoded}&strategy=desktop&category=performance&key=\${apiKey}\`)
-    ])
+const schemaOrg = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Traffikora',
+  url: 'https://www.traffikora.com',
+  description: 'AI-powered marketing automation platform that generates and publishes blogs, social media posts, and SEO content for local businesses automatically.',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+    description: 'Free plan available. Paid plans from $47/month.',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Traffikora',
+    url: 'https://www.traffikora.com',
+    logo: { '@type': 'ImageObject', url: 'https://www.traffikora.com/favicon.svg' },
+    sameAs: [
+      'https://www.facebook.com/profile.php?id=61590075525966',
+      'https://www.instagram.com/traffikora/',
+      'https://x.com/traffikora',
+      'https://www.youtube.com/@traffikora',
+      'https://www.tiktok.com/@traffikora',
+    ],
+  },
+}
 
-    const mobile = await mobileRes.json()
-    const desktop = await desktopRes.json()
-
-    console.log('Mobile categories:', JSON.stringify(mobile?.lighthouseResult?.categories))
-    console.log('Mobile audits keys:', Object.keys(mobile?.lighthouseResult?.audits || {}).slice(0, 20))
-
-    const cats = mobile?.lighthouseResult?.categories || {}
-    const audits = mobile?.lighthouseResult?.audits || {}
-
-    const performance = Math.round((cats?.performance?.score ?? 0) * 100)
-    const accessibility = Math.round((cats?.accessibility?.score ?? 0) * 100)
-    const seo = Math.round((cats?.seo?.score ?? 0) * 100)
-    const bestPractices = Math.round((cats?.['best-practices']?.score ?? 0) * 100)
-    const desktopPerf = Math.round((desktop?.lighthouseResult?.categories?.performance?.score ?? 0) * 100)
-
-    const isHttps = url.startsWith('https')
-
-    // Viewport check
-    const viewportAudit = audits?.['viewport']
-    const mobile_ok = viewportAudit?.score === 1 || viewportAudit?.score === null
-
-    // Meta title
-    const titleAudit = audits?.['document-title']
-    const metaTitle = titleAudit?.score === 1 || titleAudit?.score === null
-
-    // Meta description
-    const descAudit = audits?.['meta-description']
-    const metaDesc = descAudit?.score === 1 || descAudit?.score === null
-
-    // Schema — multiple possible audit IDs
-    const schemaAudit = audits?.['structured-data'] || audits?.['schema-org'] || audits?.['structured-data-automatic']
-    const hasSchema = !schemaAudit || schemaAudit?.score === 1 || schemaAudit?.score === null
-
-    // H1 / heading order
-    const headingAudit = audits?.['heading-order']
-    const h1 = headingAudit?.score === 1 || headingAudit?.score === null
-
-    // Image alts
-    const imageAudit = audits?.['image-alt']
-    const imageAlts = imageAudit?.score === 1 || imageAudit?.score === null
-
-    // Crawlable links
-    const linksAudit = audits?.['crawlable-anchors']
-    const links = !linksAudit || linksAudit?.score === 1 || linksAudit?.score === null
-
-    // Sitemap — fetch directly
-    let sitemapExists = false
-    try {
-      const sitemapUrl = new URL(url)
-      const sitemapRes = await fetch(\`\${sitemapUrl.origin}/sitemap.xml\`, { method: 'HEAD', signal: AbortSignal.timeout(5000) })
-      sitemapExists = sitemapRes.ok
-    } catch {}
-
-    const checks = {
-      pagespeed: {
-        pass: performance >= 70,
-        score: performance,
-        message: performance >= 70
-          ? \`Page speed score is \${performance}/100 \u2014 good performance\`
-          : \`Page speed score is \${performance}/100 \u2014 slow load times hurt rankings. Desktop: \${desktopPerf}/100\`,
-        impact: 'high'
-      },
-      ssl: {
-        pass: isHttps,
-        message: isHttps ? 'SSL certificate valid and active \u2014 site is secure' : 'No SSL certificate \u2014 site is not secure',
-        impact: 'high'
-      },
-      mobile: {
-        pass: mobile_ok,
-        message: mobile_ok ? 'Site is mobile responsive' : 'Viewport not configured \u2014 site may not be mobile friendly',
-        impact: 'medium'
-      },
-      meta_title: {
-        pass: metaTitle,
-        message: metaTitle ? 'Meta title present and optimized' : 'Meta title missing or poorly optimized',
-        impact: 'high'
-      },
-      meta_desc: {
-        pass: metaDesc,
-        message: metaDesc ? 'Meta description present and optimized' : 'Meta description missing \u2014 Google will auto-generate one',
-        impact: 'high'
-      },
-      sitemap: {
-        pass: sitemapExists,
-        message: sitemapExists ? 'Sitemap.xml found \u2014 Google can crawl efficiently' : 'No sitemap.xml detected \u2014 Google cannot crawl efficiently',
-        impact: 'medium'
-      },
-      schema: {
-        pass: hasSchema,
-        message: hasSchema ? 'Schema markup detected' : 'No schema markup found \u2014 missing rich snippet opportunities',
-        impact: 'medium'
-      },
-      h1: {
-        pass: h1,
-        message: h1 ? 'Heading structure is properly organized' : 'Heading order issues detected \u2014 affects SEO and accessibility',
-        impact: 'medium'
-      },
-      images: {
-        pass: imageAlts,
-        message: imageAlts ? 'All images have alt tags' : 'Images missing alt tags \u2014 accessibility and SEO risk',
-        impact: 'low'
-      },
-      links: {
-        pass: links,
-        message: links ? 'Internal link structure looks healthy' : 'Some links are not crawlable \u2014 Google may miss pages',
-        impact: 'low'
-      },
-    }
-
-    const passed = Object.values(checks).filter(c => c.pass).length
-    const total = Object.keys(checks).length
-    const score = Math.round((passed / total) * 100)
-
-    return NextResponse.json({ score, checks, passed, total, performance, accessibility, seo, bestPractices, desktopPerf })
-
-  } catch (err) {
-    console.error('SEO analyze error:', err)
-    return NextResponse.json({ error: err.message }, { status: 500 })
-  }
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en" className={\`\${playfair.variable} \${dmSans.variable}\`} suppressHydrationWarning>
+      <head>
+        <meta name="google-site-verification" content="Bq59ihAKck9y8kv3Zv_VcPUh1pUM8D_HtGNDCDCVfMk" />
+        <meta name="google-site-verification" content="tDnX1kzbib0Z52zeV6oAH35iohkvNI-4BpV7lz1Yga0" />
+        <link rel="canonical" href="https://www.traffikora.com" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/favicon.svg" />
+        <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/a2449444538b162a3443686343550cec/script.js" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }}
+        />
+      </head>
+      <body suppressHydrationWarning>
+        {children}
+        <CookieBanner />
+        <ScrollToTop />
+        <ChatBubble />
+      </body>
+    </html>
+  )
 }
 `;
 
-fs.writeFileSync('C:\\\\Users\\\\randy\\\\traffikfuel\\\\src\\\\app\\\\api\\\\seo-analyze\\\\route.ts', content, 'utf8');
-console.log('SUCCESS: seo-analyze route fixed — correct Lighthouse audit field names');
+fs.writeFileSync('C:\\\\Users\\\\randy\\\\traffikfuel\\\\src\\\\app\\\\layout.tsx', content, 'utf8');
+console.log('SUCCESS: layout.tsx — viewport export added correctly');
