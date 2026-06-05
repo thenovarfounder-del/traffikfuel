@@ -6,16 +6,26 @@ export const dynamic = 'force-dynamic'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@supabase/supabase-js'
+import { canAccess } from '@/lib/plans'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
 
-const QUICK_ACTIONS = [
-  { title: 'Generate Blog Post', desc: 'SEO content in 30 seconds', href: '/dashboard/content/blog', icon: '✏️', color: '#E8610A' },
-  { title: 'Create Social Posts', desc: '9 platforms at once', href: '/dashboard/social', icon: '📱', color: '#E8610A' },
-  { title: 'One-Push Publish', desc: 'Blog + social simultaneously', href: '/dashboard/publish', icon: '🚀', color: '#E8610A' },
+const CARDS = [
+  { title: 'Blog Generator', desc: 'Generate SEO blog posts that rank on Google and get cited by ChatGPT.', href: '/dashboard/content/blog', label: 'Generate Post', color: '#E8610A', icon: '✏️', feature: 'blogGenerator', upgradeLabel: 'Free — 3/mo' },
+  { title: 'Social Media', desc: 'Create platform-specific posts for Facebook, Instagram, TikTok, LinkedIn and more.', href: '/dashboard/social', label: 'Create Posts', color: '#E8610A', icon: '📱', feature: 'socialGenerator', upgradeLabel: 'Starter+' },
+  { title: 'One-Push Publish', desc: 'Enter one topic and publish blog + all social posts simultaneously.', href: '/dashboard/publish', label: 'Publish Now', color: '#E8610A', icon: '🚀', feature: 'socialSchedule', upgradeLabel: 'Starter+' },
+  { title: 'Content Queue', desc: 'View and manage all your scheduled and published social posts.', href: '/dashboard/content/queue', label: 'View Queue', color: '#3b82f6', icon: '📋', feature: 'contentQueue', upgradeLabel: 'Starter+' },
+  { title: 'Content Calendar', desc: 'See all your scheduled content on a monthly calendar view.', href: '/dashboard/calendar', label: 'Open Calendar', color: '#3b82f6', icon: '📅', feature: 'contentQueue', upgradeLabel: 'Starter+' },
+  { title: 'AI Agents', desc: 'Your 4 AI agents running 24/7 — strategist, creator, publisher, monitor.', href: '/dashboard/agents', label: 'View Agents', color: '#a855f7', icon: '🤖', feature: 'aiAgents', upgradeLabel: 'Pro+' },
+  { title: 'LLM Engine', desc: 'Optimize your content to be cited by ChatGPT, Gemini, and Perplexity.', href: '/dashboard/llm-engine', label: 'Open Engine', color: '#a855f7', icon: '🧠', feature: 'llmEngine', upgradeLabel: 'Pro+' },
+  { title: 'Business Brain', desc: 'AI builds your complete marketing profile from your website URL.', href: '/dashboard/scrape', label: 'Build Brain', color: '#22c55e', icon: '🧠', feature: 'businessBrain', upgradeLabel: null },
+  { title: 'Business Settings', desc: 'Set up your business name, category, city, platforms and publishing mode.', href: '/dashboard/settings', label: 'Go to Settings', color: '#22c55e', icon: '⚙️', feature: null, upgradeLabel: null },
+  { title: 'Analytics', desc: 'Track your content performance across all platforms with real data.', href: '/dashboard/analytics', label: 'View Analytics', color: '#22c55e', icon: '📊', feature: null, upgradeLabel: null },
+  { title: 'Billing', desc: 'Manage your subscription, view invoices, and update payment details.', href: '/dashboard/billing', label: 'View Billing', color: '#64748b', icon: '💳', feature: null, upgradeLabel: null },
+  { title: 'Support', desc: 'Need help? Our team is standing by to assist you with anything.', href: '/dashboard/support', label: 'Get Help', color: '#64748b', icon: '💬', feature: null, upgradeLabel: null },
 ]
 
 const AGENTS = [
@@ -23,21 +33,6 @@ const AGENTS = [
   { name: 'Creator Agent', desc: 'Generating SEO content', status: 'active' },
   { name: 'Publisher Agent', desc: 'Scheduling and publishing', status: 'active' },
   { name: 'Monitor Agent', desc: 'Tracking performance signals', status: 'active' },
-]
-
-const CARDS = [
-  { title: 'Blog Generator', desc: 'Generate SEO blog posts that rank on Google and get cited by ChatGPT.', href: '/dashboard/content/blog', label: 'Generate Post', color: '#E8610A', icon: '✏️' },
-  { title: 'Social Media', desc: 'Create platform-specific posts for Facebook, Instagram, TikTok, LinkedIn and more.', href: '/dashboard/social', label: 'Create Posts', color: '#E8610A', icon: '📱' },
-  { title: 'One-Push Publish', desc: 'Enter one topic and publish blog + all social posts simultaneously.', href: '/dashboard/publish', label: 'Publish Now', color: '#E8610A', icon: '🚀' },
-  { title: 'Content Queue', desc: 'View and manage all your scheduled and published social posts.', href: '/dashboard/content/queue', label: 'View Queue', color: '#3b82f6', icon: '📋' },
-  { title: 'Content Calendar', desc: 'See all your scheduled content on a monthly calendar view.', href: '/dashboard/calendar', label: 'Open Calendar', color: '#3b82f6', icon: '📅' },
-  { title: 'AI Agents', desc: 'Your 4 AI agents running 24/7 — strategist, creator, publisher, monitor.', href: '/dashboard/agents', label: 'View Agents', color: '#a855f7', icon: '🤖' },
-  { title: 'LLM Engine', desc: 'Optimize your content to be cited by ChatGPT, Gemini, and Perplexity.', href: '/dashboard/llm-engine', label: 'Open Engine', color: '#a855f7', icon: '🧠' },
-  { title: 'Business Brain', desc: 'AI builds your complete marketing profile from your website URL.', href: '/dashboard/scrape', label: 'Build Brain', color: '#22c55e', icon: '🧠' },
-  { title: 'Business Settings', desc: 'Set up your business name, category, city, platforms and publishing mode.', href: '/dashboard/settings', label: 'Go to Settings', color: '#22c55e', icon: '⚙️' },
-  { title: 'Analytics', desc: 'Track your content performance across all platforms with real data.', href: '/dashboard/analytics', label: 'View Analytics', color: '#22c55e', icon: '📊' },
-  { title: 'Billing', desc: 'Manage your subscription, view invoices, and update payment details.', href: '/dashboard/billing', label: 'View Billing', color: '#64748b', icon: '💳' },
-  { title: 'Support', desc: 'Need help? Our team is standing by to assist you with anything.', href: '/dashboard/support', label: 'Get Help', color: '#64748b', icon: '💬' },
 ]
 
 function getGreeting() {
@@ -53,7 +48,6 @@ export default function Dashboard() {
   const [userStatus, setUserStatus] = useState('free')
   const [blogsUsed, setBlogsUsed] = useState(0)
   const [stats, setStats] = useState({ total: 0, published: 0, scheduled: 0 })
-  const [pulse, setPulse] = useState(true)
 
   useEffect(() => {
     async function load() {
@@ -82,14 +76,24 @@ export default function Dashboard() {
       }
     }
     load()
-    const interval = setInterval(() => setPulse(p => !p), 1500)
-    return () => clearInterval(interval)
   }, [])
 
   const firstName = user?.email?.split('@')[0] || 'there'
-  const isFree = userStatus === 'free'
+  const isFree = userStatus === 'free' || userStatus === 'past_due'
   const blogsLeft = Math.max(0, 3 - blogsUsed)
-  const allBlogsUsed = isFree && blogsUsed >= 3
+  const allBlogsUsed = userStatus === 'free' && blogsUsed >= 3
+
+  function handleCardClick(card) {
+    if (card.feature && !canAccess(userStatus, card.feature)) {
+      router.push('/pricing')
+      return
+    }
+    router.push(card.href)
+  }
+
+  function isLocked(card) {
+    return card.feature && !canAccess(userStatus, card.feature)
+  }
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#080808', color: '#fff', fontFamily: "'DM Sans', system-ui, sans-serif" }}>
@@ -99,8 +103,6 @@ export default function Dashboard() {
         @keyframes slideIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
         .dash-card { transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
         .dash-card:hover { transform: translateY(-2px); }
-        .quick-btn { transition: all 0.2s; }
-        .quick-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(232,97,10,0.25); }
       `}</style>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 32px', animation: 'slideIn 0.4s ease' }}>
@@ -139,74 +141,42 @@ export default function Dashboard() {
           ))}
         </div>
 
-        {/* FREE PLAN BLOG COUNTDOWN — only shown to free users */}
-        {isFree && (
+        {/* FREE PLAN BLOG COUNTDOWN */}
+        {userStatus === 'free' && (
           <div style={{ marginBottom: '24px', background: allBlogsUsed ? 'rgba(239,68,68,0.06)' : 'rgba(232,97,10,0.06)', border: '1px solid ' + (allBlogsUsed ? 'rgba(239,68,68,0.25)' : 'rgba(232,97,10,0.25)'), borderRadius: '14px', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ fontSize: '28px' }}>{allBlogsUsed ? '🔐' : '✏️'}</div>
+              <div style={{ fontSize: '28px' }}>{allBlogsUsed ? '🔒' : '✏️'}</div>
               <div>
-                <div style={{ fontSize: '14px', fontWeight: 700, color: allBlogsUsed ? '#ef4444' : '#E8610A', marginBottom: '4px', fontFamily: 'DM Sans, sans-serif' }}>
+                <div style={{ fontSize: '14px', fontWeight: 700, color: allBlogsUsed ? '#ef4444' : '#E8610A', marginBottom: '4px' }}>
                   {allBlogsUsed ? 'Monthly blog limit reached' : blogsLeft + ' of 3 free blogs remaining this month'}
                 </div>
                 <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
                   {[0, 1, 2].map(i => (
                     <div key={i} style={{ width: '28px', height: '6px', borderRadius: '3px', background: i < blogsUsed ? (allBlogsUsed ? '#ef4444' : '#E8610A') : '#2a2a2a' }} />
                   ))}
-                  <span style={{ fontSize: '12px', color: '#555', marginLeft: '4px', fontFamily: 'DM Sans, sans-serif' }}>{blogsUsed}/3 used</span>
+                  <span style={{ fontSize: '12px', color: '#555', marginLeft: '4px' }}>{blogsUsed}/3 used</span>
                 </div>
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-              {!allBlogsUsed && (
-                <button onClick={() => router.push('/dashboard/content/blog')}
-                  style={{ background: 'transparent', border: '1px solid rgba(232,97,10,0.4)', color: '#E8610A', padding: '9px 18px', borderRadius: '7px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>
-                  Use a Blog
-                </button>
-              )}
-              <a href="/pricing" style={{ background: 'linear-gradient(135deg,#E8610A,#C84E06)', color: '#fff', padding: '9px 20px', borderRadius: '7px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', fontFamily: 'DM Sans, sans-serif', whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(232,97,10,0.3)' }}>
-                Upgrade to Starter — $47/mo
-              </a>
-            </div>
+            <a href="/pricing" style={{ background: 'linear-gradient(135deg,#E8610A,#C84E06)', color: '#fff', padding: '9px 20px', borderRadius: '7px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(232,97,10,0.3)' }}>
+              Upgrade to Starter — $47/mo
+            </a>
           </div>
         )}
 
-        {/* QUICK ACTIONS */}
-        <div style={{ marginBottom: '32px' }}>
-          <div style={{ fontSize: '11px', color: '#555', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '14px' }}>Quick Actions</div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
-            {QUICK_ACTIONS.map(a => (
-              <button key={a.title} className="quick-btn" onClick={() => router.push(a.href)}
-                style={{ background: 'linear-gradient(135deg, #1a1a1a, #111)', border: '1px solid #E8610A30', borderRadius: '12px', padding: '18px 20px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#E8610A18', border: '1px solid #E8610A35', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', flexShrink: 0 }}>{a.icon}</div>
-                <div>
-                  <div style={{ fontSize: '14px', fontWeight: 700, color: '#fff', marginBottom: '2px' }}>{a.title}</div>
-                  <div style={{ fontSize: '12px', color: '#555', fontWeight: 300 }}>{a.desc}</div>
-                </div>
-                <div style={{ marginLeft: 'auto', color: '#E8610A', fontSize: '18px', flexShrink: 0 }}>→</div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* FREE PLAN UPGRADE BANNER — shown after quick actions if limit hit */}
-        {allBlogsUsed && (
-          <div style={{ marginBottom: '32px', background: 'linear-gradient(135deg, rgba(232,97,10,0.1), rgba(200,78,6,0.05))', border: '1px solid rgba(232,97,10,0.3)', borderRadius: '14px', padding: '28px 32px', display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
-            <div style={{ flex: 1, minWidth: '220px' }}>
-              <div style={{ fontSize: '11px', color: '#E8610A', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '8px', fontFamily: 'DM Sans, sans-serif' }}>Ready to grow faster?</div>
-              <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#fff', marginBottom: '8px', lineHeight: 1.2 }}>Unlock unlimited blogs + social content</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: '12px' }}>
-                {['✓ Unlimited blog posts every month', '✓ Social media generator for 9 platforms', '✓ Manual publish to WordPress', '✓ Content queue + scheduling'].map(f => (
-                  <div key={f} style={{ fontSize: '13px', color: '#888', fontFamily: 'DM Sans, sans-serif' }}>{f}</div>
-                ))}
+        {/* PAST DUE BANNER */}
+        {userStatus === 'past_due' && (
+          <div style={{ marginBottom: '24px', background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: '14px', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{ fontSize: '28px' }}>⚠️</div>
+              <div>
+                <div style={{ fontSize: '14px', fontWeight: 700, color: '#ef4444', marginBottom: '4px' }}>Payment failed — your account is restricted</div>
+                <div style={{ fontSize: '12px', color: '#888' }}>Update your payment method to restore full access.</div>
               </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', minWidth: '180px' }}>
-              <a href="/pricing" style={{ display: 'block', background: 'linear-gradient(135deg,#E8610A,#C84E06)', color: '#fff', padding: '14px 32px', borderRadius: '8px', fontWeight: 700, fontSize: '15px', textDecoration: 'none', boxShadow: '0 4px 20px rgba(232,97,10,0.4)', fontFamily: 'DM Sans, sans-serif', textAlign: 'center', whiteSpace: 'nowrap' }}>
-                Upgrade to Starter
-              </a>
-              <div style={{ fontSize: '18px', fontWeight: 800, color: '#E8610A', fontFamily: 'Playfair Display, serif' }}>$47/month</div>
-              <div style={{ fontSize: '11px', color: '#555', fontFamily: 'DM Sans, sans-serif' }}>Cancel anytime</div>
-            </div>
+            <a href="/dashboard/billing" style={{ background: '#ef4444', color: '#fff', padding: '9px 20px', borderRadius: '7px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+              Update Payment Method
+            </a>
           </div>
         )}
 
@@ -235,21 +205,29 @@ export default function Dashboard() {
         {/* ALL FEATURES GRID */}
         <div style={{ fontSize: '11px', color: '#555', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '14px' }}>All Features</div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '14px' }}>
-          {CARDS.map(card => (
-            <div key={card.title} className="dash-card"
-              onClick={() => router.push(card.href)}
-              style={{ background: '#0d0d0d', borderRadius: '14px', border: '1px solid #1a1a1a', padding: '24px', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = card.color + '50'; e.currentTarget.style.boxShadow = '0 8px 32px ' + card.color + '12'; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = '#1a1a1a'; e.currentTarget.style.boxShadow = 'none'; }}>
-              <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '100px', height: '100px', borderRadius: '50%', background: card.color + '06', pointerEvents: 'none' }} />
-              <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: card.color + '15', border: '1px solid ' + card.color + '30', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', marginBottom: '14px' }}>{card.icon}</div>
-              <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '6px', color: '#fff' }}>{card.title}</div>
-              <div style={{ fontSize: '12px', color: '#555', lineHeight: 1.7, marginBottom: '16px', fontWeight: 300 }}>{card.desc}</div>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', fontWeight: 700, color: card.color }}>
-                {card.label} <span>→</span>
+          {CARDS.map(card => {
+            const locked = isLocked(card)
+            return (
+              <div key={card.title} className="dash-card"
+                onClick={() => handleCardClick(card)}
+                style={{ background: '#0d0d0d', borderRadius: '14px', border: '1px solid ' + (locked ? '#2a1a1a' : '#1a1a1a'), padding: '24px', cursor: 'pointer', position: 'relative', overflow: 'hidden', opacity: locked ? 0.7 : 1 }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = locked ? '#ef444430' : card.color + '50'; e.currentTarget.style.boxShadow = '0 8px 32px ' + (locked ? '#ef444412' : card.color + '12'); }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = locked ? '#2a1a1a' : '#1a1a1a'; e.currentTarget.style.boxShadow = 'none'; }}>
+                <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '100px', height: '100px', borderRadius: '50%', background: (locked ? '#ef4444' : card.color) + '06', pointerEvents: 'none' }} />
+                {locked && (
+                  <div style={{ position: 'absolute', top: '14px', right: '14px', background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: '6px', padding: '3px 9px', fontSize: '10px', fontWeight: 700, color: '#ef4444', letterSpacing: '0.08em' }}>
+                    🔒 {card.upgradeLabel}
+                  </div>
+                )}
+                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: (locked ? '#ef4444' : card.color) + '15', border: '1px solid ' + (locked ? '#ef4444' : card.color) + '30', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', marginBottom: '14px' }}>{card.icon}</div>
+                <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '6px', color: locked ? '#666' : '#fff' }}>{card.title}</div>
+                <div style={{ fontSize: '12px', color: '#555', lineHeight: 1.7, marginBottom: '16px', fontWeight: 300 }}>{card.desc}</div>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', fontWeight: 700, color: locked ? '#ef4444' : card.color }}>
+                  {locked ? 'Upgrade to unlock →' : card.label + ' →'}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
       </div>
