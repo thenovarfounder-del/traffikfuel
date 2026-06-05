@@ -9,39 +9,63 @@ export async function POST(req) {
     const apiKey = process.env.GOOGLE_PAGESPEED_API_KEY
     const encoded = encodeURIComponent(url)
 
-    // Fetch mobile and desktop scores
+    const categories = 'performance,accessibility,seo,best-practices'
+
     const [mobileRes, desktopRes] = await Promise.all([
-      fetch(`https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encoded}&strategy=mobile&key=${apiKey}`),
-      fetch(`https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encoded}&strategy=desktop&key=${apiKey}`)
+      fetch(`https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encoded}&strategy=mobile&category=performance&category=accessibility&category=seo&category=best-practices&key=${apiKey}`),
+      fetch(`https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encoded}&strategy=desktop&category=performance&key=${apiKey}`)
     ])
 
     const mobile = await mobileRes.json()
     const desktop = await desktopRes.json()
 
-    const cats = mobile?.lighthouseResult?.categories
-    const audits = mobile?.lighthouseResult?.audits
+    console.log('Mobile categories:', JSON.stringify(mobile?.lighthouseResult?.categories))
+    console.log('Mobile audits keys:', Object.keys(mobile?.lighthouseResult?.audits || {}).slice(0, 20))
 
-    const performance = Math.round((cats?.performance?.score || 0) * 100)
-    const accessibility = Math.round((cats?.accessibility?.score || 0) * 100)
-    const seo = Math.round((cats?.seo?.score || 0) * 100)
-    const bestPractices = Math.round((cats?.['best-practices']?.score || 0) * 100)
-    const desktopPerf = Math.round((desktop?.lighthouseResult?.categories?.performance?.score || 0) * 100)
+    const cats = mobile?.lighthouseResult?.categories || {}
+    const audits = mobile?.lighthouseResult?.audits || {}
+
+    const performance = Math.round((cats?.performance?.score ?? 0) * 100)
+    const accessibility = Math.round((cats?.accessibility?.score ?? 0) * 100)
+    const seo = Math.round((cats?.seo?.score ?? 0) * 100)
+    const bestPractices = Math.round((cats?.['best-practices']?.score ?? 0) * 100)
+    const desktopPerf = Math.round((desktop?.lighthouseResult?.categories?.performance?.score ?? 0) * 100)
 
     const isHttps = url.startsWith('https')
-    const hasSitemap = audits?.['link-text'] !== undefined
-    const hasSchema = (audits?.['structured-data']?.score === 1) || (audits?.['structured-data']?.score === null)
-    const metaDesc = audits?.['meta-description']?.score === 1
-    const metaTitle = audits?.['document-title']?.score === 1
-    const h1 = audits?.['heading-order']?.score === 1
-    const imageAlts = audits?.['image-alt']?.score === 1
-    const links = audits?.['crawlable-anchors']?.score !== 0
-    const mobile_ok = audits?.['viewport']?.score === 1
 
-    // Check sitemap by fetching
+    // Viewport check
+    const viewportAudit = audits?.['viewport']
+    const mobile_ok = viewportAudit?.score === 1 || viewportAudit?.score === null
+
+    // Meta title
+    const titleAudit = audits?.['document-title']
+    const metaTitle = titleAudit?.score === 1 || titleAudit?.score === null
+
+    // Meta description
+    const descAudit = audits?.['meta-description']
+    const metaDesc = descAudit?.score === 1 || descAudit?.score === null
+
+    // Schema — multiple possible audit IDs
+    const schemaAudit = audits?.['structured-data'] || audits?.['schema-org'] || audits?.['structured-data-automatic']
+    const hasSchema = !schemaAudit || schemaAudit?.score === 1 || schemaAudit?.score === null
+
+    // H1 / heading order
+    const headingAudit = audits?.['heading-order']
+    const h1 = headingAudit?.score === 1 || headingAudit?.score === null
+
+    // Image alts
+    const imageAudit = audits?.['image-alt']
+    const imageAlts = imageAudit?.score === 1 || imageAudit?.score === null
+
+    // Crawlable links
+    const linksAudit = audits?.['crawlable-anchors']
+    const links = !linksAudit || linksAudit?.score === 1 || linksAudit?.score === null
+
+    // Sitemap — fetch directly
     let sitemapExists = false
     try {
       const sitemapUrl = new URL(url)
-      const sitemapRes = await fetch(`${sitemapUrl.origin}/sitemap.xml`, { method: 'HEAD' })
+      const sitemapRes = await fetch(`${sitemapUrl.origin}/sitemap.xml`, { method: 'HEAD', signal: AbortSignal.timeout(5000) })
       sitemapExists = sitemapRes.ok
     } catch {}
 
