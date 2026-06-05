@@ -31,7 +31,7 @@ const CARDS = [
   { title: 'One-Push Publish', desc: 'Enter one topic and publish blog + all social posts simultaneously.', href: '/dashboard/publish', label: 'Publish Now', color: '#E8610A', icon: '🚀' },
   { title: 'Content Queue', desc: 'View and manage all your scheduled and published social posts.', href: '/dashboard/content/queue', label: 'View Queue', color: '#3b82f6', icon: '📋' },
   { title: 'Content Calendar', desc: 'See all your scheduled content on a monthly calendar view.', href: '/dashboard/calendar', label: 'Open Calendar', color: '#3b82f6', icon: '📅' },
-  { title: 'AI Agents', desc: 'Your 4 AI agents running 24/7 — strategist, creator, publisher, monitor.', href: '/dashboard/agents', label: 'View Agents', color: '#a855f7', icon: '🤖' },
+  { title: 'AI Agents', desc: 'Your 4 AI agents running 24/7 – strategist, creator, publisher, monitor.', href: '/dashboard/agents', label: 'View Agents', color: '#a855f7', icon: '🤖' },
   { title: 'LLM Engine', desc: 'Optimize your content to be cited by ChatGPT, Gemini, and Perplexity.', href: '/dashboard/llm-engine', label: 'Open Engine', color: '#a855f7', icon: '🧠' },
   { title: 'Business Brain', desc: 'AI builds your complete marketing profile from your website URL.', href: '/dashboard/scrape', label: 'Build Brain', color: '#22c55e', icon: '🧠' },
   { title: 'Business Settings', desc: 'Set up your business name, category, city, platforms and publishing mode.', href: '/dashboard/settings', label: 'Go to Settings', color: '#22c55e', icon: '⚙️' },
@@ -110,7 +110,7 @@ export default function Dashboard() {
         {/* STATS BAR */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '32px' }}>
           {[
-            { label: 'Total Content', value: stats.total, color: '#E8610A', icon: '📝' },
+            { label: 'Total Content', value: stats.total, color: '#E8610A', icon: '📄' },
             { label: 'Published', value: stats.published, color: '#22c55e', icon: '✅' },
             { label: 'Scheduled', value: stats.scheduled, color: '#3b82f6', icon: '🕒' },
             { label: 'Platforms Active', value: '9+', color: '#a855f7', icon: '🌐' },
