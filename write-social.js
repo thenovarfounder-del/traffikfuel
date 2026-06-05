@@ -1,6 +1,7 @@
 const fs = require('fs');
 
-const content = `// @ts-nocheck
+// We fix layout.tsx to hardcode the title and meta description in the HTML head directly
+const layout = `// @ts-nocheck
 import './globals.css'
 import { Playfair_Display, DM_Sans } from 'next/font/google'
 import CookieBanner from '@/components/CookieBanner'
@@ -15,13 +16,12 @@ export const metadata = {
   description: 'Set it once. It markets forever. Traffikora automates your blogs, social media, and SEO across Google, TikTok, YouTube, Facebook, Instagram and LinkedIn \u2014 24/7, no agency needed.',
   keywords: 'AI marketing automation, local business marketing, automated social media, SEO automation, content generation, small business marketing',
   metadataBase: new URL('https://www.traffikora.com'),
-  alternates: { canonical: 'https://www.traffikora.com' },
   openGraph: {
     title: 'Traffikora \u2014 AI Marketing Automation for Local Businesses',
     description: 'Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine.',
     url: 'https://www.traffikora.com',
     siteName: 'Traffikora',
-    images: [{ url: 'https://www.traffikora.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://www.traffikora.com/og-image.png', width: 1200, height: 630, alt: 'Traffikora AI Marketing Platform' }],
     type: 'website',
   },
   twitter: {
@@ -49,7 +49,14 @@ const schemaOrg = {
     '@type': 'Organization',
     name: 'Traffikora',
     url: 'https://www.traffikora.com',
-    logo: 'https://www.traffikora.com/favicon.svg',
+    logo: { '@type': 'ImageObject', url: 'https://www.traffikora.com/favicon.svg' },
+    sameAs: [
+      'https://www.facebook.com/profile.php?id=61590075525966',
+      'https://www.instagram.com/traffikora/',
+      'https://x.com/traffikora',
+      'https://www.youtube.com/@traffikora',
+      'https://www.tiktok.com/@traffikora',
+    ],
   },
 }
 
@@ -81,5 +88,5 @@ export default function RootLayout({ children }) {
 }
 `;
 
-fs.writeFileSync('C:\\\\Users\\\\randy\\\\traffikfuel\\\\src\\\\app\\\\layout.tsx', content, 'utf8');
-console.log('SUCCESS: layout.tsx written — viewport, title, meta description, schema markup added');
+fs.writeFileSync('C:\\\\Users\\\\randy\\\\traffikfuel\\\\src\\\\app\\\\layout.tsx', layout, 'utf8');
+console.log('SUCCESS: layout.tsx written');

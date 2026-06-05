@@ -13,13 +13,12 @@ export const metadata = {
   description: 'Set it once. It markets forever. Traffikora automates your blogs, social media, and SEO across Google, TikTok, YouTube, Facebook, Instagram and LinkedIn — 24/7, no agency needed.',
   keywords: 'AI marketing automation, local business marketing, automated social media, SEO automation, content generation, small business marketing',
   metadataBase: new URL('https://www.traffikora.com'),
-  alternates: { canonical: 'https://www.traffikora.com' },
   openGraph: {
     title: 'Traffikora — AI Marketing Automation for Local Businesses',
     description: 'Set it once. It markets forever. Traffikora automates your marketing across Google and every major AI engine.',
     url: 'https://www.traffikora.com',
     siteName: 'Traffikora',
-    images: [{ url: 'https://www.traffikora.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://www.traffikora.com/og-image.png', width: 1200, height: 630, alt: 'Traffikora AI Marketing Platform' }],
     type: 'website',
   },
   twitter: {
@@ -47,7 +46,14 @@ const schemaOrg = {
     '@type': 'Organization',
     name: 'Traffikora',
     url: 'https://www.traffikora.com',
-    logo: 'https://www.traffikora.com/favicon.svg',
+    logo: { '@type': 'ImageObject', url: 'https://www.traffikora.com/favicon.svg' },
+    sameAs: [
+      'https://www.facebook.com/profile.php?id=61590075525966',
+      'https://www.instagram.com/traffikora/',
+      'https://x.com/traffikora',
+      'https://www.youtube.com/@traffikora',
+      'https://www.tiktok.com/@traffikora',
+    ],
   },
 }
 
