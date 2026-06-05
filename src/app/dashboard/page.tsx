@@ -31,7 +31,7 @@ const CARDS = [
   { title: 'One-Push Publish', desc: 'Enter one topic and publish blog + all social posts simultaneously.', href: '/dashboard/publish', label: 'Publish Now', color: '#E8610A', icon: '🚀' },
   { title: 'Content Queue', desc: 'View and manage all your scheduled and published social posts.', href: '/dashboard/content/queue', label: 'View Queue', color: '#3b82f6', icon: '📋' },
   { title: 'Content Calendar', desc: 'See all your scheduled content on a monthly calendar view.', href: '/dashboard/calendar', label: 'Open Calendar', color: '#3b82f6', icon: '📅' },
-  { title: 'AI Agents', desc: 'Your 4 AI agents running 24/7 – strategist, creator, publisher, monitor.', href: '/dashboard/agents', label: 'View Agents', color: '#a855f7', icon: '🤖' },
+  { title: 'AI Agents', desc: 'Your 4 AI agents running 24/7 — strategist, creator, publisher, monitor.', href: '/dashboard/agents', label: 'View Agents', color: '#a855f7', icon: '🤖' },
   { title: 'LLM Engine', desc: 'Optimize your content to be cited by ChatGPT, Gemini, and Perplexity.', href: '/dashboard/llm-engine', label: 'Open Engine', color: '#a855f7', icon: '🧠' },
   { title: 'Business Brain', desc: 'AI builds your complete marketing profile from your website URL.', href: '/dashboard/scrape', label: 'Build Brain', color: '#22c55e', icon: '🧠' },
   { title: 'Business Settings', desc: 'Set up your business name, category, city, platforms and publishing mode.', href: '/dashboard/settings', label: 'Go to Settings', color: '#22c55e', icon: '⚙️' },
@@ -50,6 +50,8 @@ function getGreeting() {
 export default function Dashboard() {
   const router = useRouter()
   const [user, setUser] = useState(null)
+  const [userStatus, setUserStatus] = useState('free')
+  const [blogsUsed, setBlogsUsed] = useState(0)
   const [stats, setStats] = useState({ total: 0, published: 0, scheduled: 0 })
   const [pulse, setPulse] = useState(true)
 
@@ -58,10 +60,19 @@ export default function Dashboard() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
       setUser(user)
-      const { data } = await supabase
-        .from('content_calendar')
-        .select('status')
-        .eq('user_id', user.id)
+
+      const { data: userData } = await supabase.from('users').select('status').eq('id', user.id).single()
+      const status = userData?.status || 'free'
+      setUserStatus(status)
+
+      if (status === 'free') {
+        const now = new Date()
+        const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
+        const { count } = await supabase.from('blog_generations').select('*', { count: 'exact', head: true }).eq('user_id', user.id).gte('created_at', firstOfMonth)
+        setBlogsUsed(count || 0)
+      }
+
+      const { data } = await supabase.from('content_calendar').select('status').eq('user_id', user.id)
       if (data) {
         setStats({
           total: data.length,
@@ -76,6 +87,9 @@ export default function Dashboard() {
   }, [])
 
   const firstName = user?.email?.split('@')[0] || 'there'
+  const isFree = userStatus === 'free'
+  const blogsLeft = Math.max(0, 3 - blogsUsed)
+  const allBlogsUsed = isFree && blogsUsed >= 3
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#080808', color: '#fff', fontFamily: "'DM Sans', system-ui, sans-serif" }}>
@@ -125,6 +139,37 @@ export default function Dashboard() {
           ))}
         </div>
 
+        {/* FREE PLAN BLOG COUNTDOWN — only shown to free users */}
+        {isFree && (
+          <div style={{ marginBottom: '24px', background: allBlogsUsed ? 'rgba(239,68,68,0.06)' : 'rgba(232,97,10,0.06)', border: '1px solid ' + (allBlogsUsed ? 'rgba(239,68,68,0.25)' : 'rgba(232,97,10,0.25)'), borderRadius: '14px', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{ fontSize: '28px' }}>{allBlogsUsed ? '🔐' : '✏️'}</div>
+              <div>
+                <div style={{ fontSize: '14px', fontWeight: 700, color: allBlogsUsed ? '#ef4444' : '#E8610A', marginBottom: '4px', fontFamily: 'DM Sans, sans-serif' }}>
+                  {allBlogsUsed ? 'Monthly blog limit reached' : blogsLeft + ' of 3 free blogs remaining this month'}
+                </div>
+                <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                  {[0, 1, 2].map(i => (
+                    <div key={i} style={{ width: '28px', height: '6px', borderRadius: '3px', background: i < blogsUsed ? (allBlogsUsed ? '#ef4444' : '#E8610A') : '#2a2a2a' }} />
+                  ))}
+                  <span style={{ fontSize: '12px', color: '#555', marginLeft: '4px', fontFamily: 'DM Sans, sans-serif' }}>{blogsUsed}/3 used</span>
+                </div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+              {!allBlogsUsed && (
+                <button onClick={() => router.push('/dashboard/content/blog')}
+                  style={{ background: 'transparent', border: '1px solid rgba(232,97,10,0.4)', color: '#E8610A', padding: '9px 18px', borderRadius: '7px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>
+                  Use a Blog
+                </button>
+              )}
+              <a href="/pricing" style={{ background: 'linear-gradient(135deg,#E8610A,#C84E06)', color: '#fff', padding: '9px 20px', borderRadius: '7px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', fontFamily: 'DM Sans, sans-serif', whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(232,97,10,0.3)' }}>
+                Upgrade to Starter — $47/mo
+              </a>
+            </div>
+          </div>
+        )}
+
         {/* QUICK ACTIONS */}
         <div style={{ marginBottom: '32px' }}>
           <div style={{ fontSize: '11px', color: '#555', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '14px' }}>Quick Actions</div>
@@ -142,6 +187,28 @@ export default function Dashboard() {
             ))}
           </div>
         </div>
+
+        {/* FREE PLAN UPGRADE BANNER — shown after quick actions if limit hit */}
+        {allBlogsUsed && (
+          <div style={{ marginBottom: '32px', background: 'linear-gradient(135deg, rgba(232,97,10,0.1), rgba(200,78,6,0.05))', border: '1px solid rgba(232,97,10,0.3)', borderRadius: '14px', padding: '28px 32px', display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
+            <div style={{ flex: 1, minWidth: '220px' }}>
+              <div style={{ fontSize: '11px', color: '#E8610A', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '8px', fontFamily: 'DM Sans, sans-serif' }}>Ready to grow faster?</div>
+              <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#fff', marginBottom: '8px', lineHeight: 1.2 }}>Unlock unlimited blogs + social content</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: '12px' }}>
+                {['✓ Unlimited blog posts every month', '✓ Social media generator for 9 platforms', '✓ Manual publish to WordPress', '✓ Content queue + scheduling'].map(f => (
+                  <div key={f} style={{ fontSize: '13px', color: '#888', fontFamily: 'DM Sans, sans-serif' }}>{f}</div>
+                ))}
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', minWidth: '180px' }}>
+              <a href="/pricing" style={{ display: 'block', background: 'linear-gradient(135deg,#E8610A,#C84E06)', color: '#fff', padding: '14px 32px', borderRadius: '8px', fontWeight: 700, fontSize: '15px', textDecoration: 'none', boxShadow: '0 4px 20px rgba(232,97,10,0.4)', fontFamily: 'DM Sans, sans-serif', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                Upgrade to Starter
+              </a>
+              <div style={{ fontSize: '18px', fontWeight: 800, color: '#E8610A', fontFamily: 'Playfair Display, serif' }}>$47/month</div>
+              <div style={{ fontSize: '11px', color: '#555', fontFamily: 'DM Sans, sans-serif' }}>Cancel anytime</div>
+            </div>
+          </div>
+        )}
 
         {/* AI AGENTS STATUS */}
         <div style={{ marginBottom: '32px', background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '16px', padding: '24px' }}>
