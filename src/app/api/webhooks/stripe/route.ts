@@ -6,7 +6,6 @@ import { getPlanFromPriceId } from '@/lib/plans'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' })
 
-// Always use service role for webhook — bypasses RLS
 function getSupabase() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -14,7 +13,6 @@ function getSupabase() {
   )
 }
 
-// ─── Core: update users.status from a subscription object ────
 async function syncUserPlan(subscription) {
   const supabase = getSupabase()
   const userId = subscription.metadata?.userId
@@ -29,7 +27,6 @@ async function syncUserPlan(subscription) {
 
   console.log('WEBHOOK: Syncing userId=' + userId + ' priceId=' + priceId + ' plan=' + finalPlan + ' subStatus=' + subscription.status)
 
-  // 1. Upsert into subscriptions table
   const { error: subError } = await supabase.from('subscriptions').upsert({
     user_id: userId,
     stripe_subscription_id: subscription.id,
@@ -44,7 +41,6 @@ async function syncUserPlan(subscription) {
 
   if (subError) console.error('WEBHOOK: subscriptions upsert error', subError.message)
 
-  // 2. Update users.status — this is what the app reads
   const { error: userError } = await supabase
     .from('users')
     .update({ status: finalPlan, updated_at: new Date().toISOString() })
@@ -54,34 +50,42 @@ async function syncUserPlan(subscription) {
   else console.log('WEBHOOK: users.status updated to ' + finalPlan + ' for userId=' + userId)
 }
 
-// ─── Handle checkout.session.completed ───────────────────────
+async function handlePaymentFailed(invoice) {
+  const supabase = getSupabase()
+  if (!invoice.subscription) return
+  const sub = await stripe.subscriptions.retrieve(invoice.subscription)
+  const userId = sub.metadata?.userId
+  if (!userId) {
+    console.error('WEBHOOK: payment_failed — no userId in subscription metadata', sub.id)
+    return
+  }
+  const { error } = await supabase
+    .from('users')
+    .update({ status: 'past_due', updated_at: new Date().toISOString() })
+    .eq('id', userId)
+  if (error) console.error('WEBHOOK: past_due update error', error.message)
+  else console.log('WEBHOOK: Marked userId=' + userId + ' as past_due')
+}
+
 async function handleCheckoutComplete(session) {
   const supabase = getSupabase()
   const userId = session.metadata?.userId || session.client_reference_id
   if (!userId) { console.error('WEBHOOK: No userId in checkout session', session.id); return }
 
-  // Retrieve the full subscription object
   if (session.subscription) {
     const subscription = await stripe.subscriptions.retrieve(session.subscription)
-    // Inject userId into metadata if missing (first-time purchase)
     if (!subscription.metadata?.userId) {
-      await stripe.subscriptions.update(session.subscription, {
-        metadata: { userId }
-      })
+      await stripe.subscriptions.update(session.subscription, { metadata: { userId } })
       subscription.metadata = { userId }
     }
     await syncUserPlan(subscription)
   }
 
-  // Also upsert customer record
   if (session.customer) {
-    await supabase.from('users').update({
-      stripe_customer_id: session.customer
-    }).eq('id', userId)
+    await supabase.from('users').update({ stripe_customer_id: session.customer }).eq('id', userId)
   }
 }
 
-// ─── POST handler ─────────────────────────────────────────────
 export async function POST(req) {
   const body = await req.text()
   const sig = req.headers.get('stripe-signature')
@@ -109,12 +113,10 @@ export async function POST(req) {
         break
 
       case 'customer.subscription.deleted':
-        // Subscription cancelled — drop user back to free
         await syncUserPlan({ ...event.data.object, status: 'canceled' })
         break
 
       case 'invoice.payment_succeeded':
-        // Renewal — re-sync to keep status current
         if (event.data.object.subscription) {
           const sub = await stripe.subscriptions.retrieve(event.data.object.subscription)
           await syncUserPlan(sub)
@@ -122,8 +124,7 @@ export async function POST(req) {
         break
 
       case 'invoice.payment_failed':
-        console.log('WEBHOOK: Payment failed for invoice', event.data.object.id)
-        // Could add email alert here in future
+        await handlePaymentFailed(event.data.object)
         break
 
       default:
@@ -131,7 +132,6 @@ export async function POST(req) {
     }
   } catch (err) {
     console.error('WEBHOOK: Handler error for', event.type, err.message)
-    // Still return 200 so Stripe does not retry endlessly
     return NextResponse.json({ received: true, warning: err.message }, { status: 200 })
   }
 
