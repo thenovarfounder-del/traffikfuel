@@ -1,85 +1,38 @@
 // @ts-nocheck
-'use client'
-
-import { useEffect, useState } from 'react'
 import Footer from '@/components/Footer'
 import ProofWall from '@/components/ProofWall'
 import Nav from '@/components/Nav'
 import Link from 'next/link'
+import FaqAccordion from '@/components/FaqAccordion'
+import LiveDemo from '@/components/LiveDemo'
+
+const industries = [
+  { icon: '💅', name: 'Salons & Spas', desc: 'Bookings + reviews on autopilot', href: '/solutions/salons' },
+  { icon: '🔧', name: 'HVAC Companies', desc: 'Dominate local search year-round', href: '/solutions/hvac' },
+  { icon: '⚖️', name: 'Law Firms', desc: 'Authority content that converts', href: '/solutions/lawyers' },
+  { icon: '🦷', name: 'Dental Offices', desc: 'New patient content daily', href: '/solutions/dentists' },
+  { icon: '🍽️', name: 'Restaurants', desc: 'Specials, events, reviews automated', href: '/solutions/restaurants' },
+  { icon: '🏠', name: 'Real Estate', desc: 'Listings found on every AI engine', href: '/solutions/real-estate' },
+  { icon: '💪', name: 'Gyms & Fitness', desc: 'Membership growth content', href: '/solutions/gyms' },
+  { icon: '🚗', name: 'Auto Repair', desc: 'Local SEO that drives walk-ins', href: '/solutions/auto-repair' },
+  { icon: '🏥', name: 'Med Spas', desc: 'Premium content for premium clients', href: '/solutions/med-spas' },
+  { icon: '🚰', name: 'Plumbers', desc: 'Emergency leads around the clock', href: '/solutions/plumbers' },
+  { icon: '📢', name: 'Agencies', desc: 'White-label for all your clients', href: '/solutions/marketing-agencies' },
+  { icon: '🦴', name: 'Chiropractors', desc: 'Patient education that ranks', href: '/solutions/chiropractors' },
+]
+
+const plans = [
+  { name: 'Free', price: '0', sub: '/forever', desc: 'Try Traffikora with no credit card. Get a real taste of AI content before you commit.', features: ['3 AI blog posts per month', 'Preview content before publish', 'Access to content dashboard', 'No credit card required', 'Upgrade anytime'], btn: 'Start Free — No Card', href: '/signup?plan=free', featured: false },
+  { name: 'Starter', price: '47', sub: '/mo', desc: 'Automate your marketing and show up online every single day.', features: ['Unlimited AI blog posts', 'AI social content for Facebook, Instagram, LinkedIn & X', 'One-Push Publish to WordPress', 'Content Calendar & Queue', 'Manual publishing controls', '1 website connected'], btn: 'Get Started', href: '/signup?plan=starter', featured: false },
+  { name: 'Pro', price: '97', sub: '/mo', desc: 'Fully hands-off. AI agents run every morning and handle everything.', features: ['Everything in Starter', 'AI Agents run daily automatically', 'Auto Mode — fully hands-off', 'TikTok + YouTube Shorts publishing', 'Google SEO + AI Engine Optimization', 'Advanced analytics'], btn: 'Start Pro', href: '/signup?plan=pro', featured: true },
+  { name: 'Agency', price: '297', sub: '/mo', desc: 'Manage up to 10 clients. White-label it and bill whatever you want.', features: ['Everything in Pro', 'Up to 10 client accounts', 'White-label dashboard', 'Client management portal', 'Bulk content generation', 'Agency analytics overview'], btn: 'Start Agency Plan', href: '/signup?plan=agency', featured: false },
+  { name: 'Enterprise', price: '997', sub: '/mo', desc: 'Unlimited clients, custom AI training, dedicated account manager.', features: ['Everything in Agency', 'Unlimited client accounts', 'Custom AI voice per client', 'Google Search Console integration', 'SLA uptime guarantee', 'Dedicated account manager'], btn: 'Contact Us', href: '/contact', featured: false },
+]
 
 export default function HomePage() {
-  const [timeLeft, setTimeLeft] = useState({ days: '02', hours: '14', mins: '37', secs: '00' })
-  const [openFaq, setOpenFaq] = useState(null)
-  const [demoIndex, setDemoIndex] = useState(0)
-
-  const deadline = new Date('2026-06-15T23:59:59')
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date()
-      const diff = deadline - now
-      if (diff <= 0) { clearInterval(timer); return }
-      const d = Math.floor(diff / 86400000)
-      const h = Math.floor((diff % 86400000) / 3600000)
-      const m = Math.floor((diff % 3600000) / 60000)
-      const s = Math.floor((diff % 60000) / 1000)
-      setTimeLeft({ days: String(d).padStart(2,'0'), hours: String(h).padStart(2,'0'), mins: String(m).padStart(2,'0'), secs: String(s).padStart(2,'0') })
-    }, 1000)
-    return () => clearInterval(timer)
-  }, [])
-
-  useEffect(() => {
-    const interval = setInterval(() => setDemoIndex(i => (i + 1) % 8), 2000)
-    return () => clearInterval(interval)
-  }, [])
-
-  const demos = [
-    { color: '#E8610A', label: 'BLOG POST — WordPress', content: '5 HVAC Tips for Tampa Homeowners This Summer', meta: 'SEO optimized · 900 words · Schema injected' },
-    { color: '#1877F2', label: 'FACEBOOK — Published', content: 'Summer is here! Is your AC ready? We’re booking fast...', meta: 'Engagement optimized · Posted 2 min ago' },
-    { color: '#E1306C', label: 'INSTAGRAM — Published', content: 'Beat the heat! Our team is ready for same-day AC repair...', meta: 'Hashtags added · Story variant generated' },
-    { color: '#10A37F', label: 'CHATGPT — Citation Detected', content: 'Best HVAC in Tampa — Your business recommended', meta: 'LLM Engine active · AI citation confirmed' },
-    { color: '#0A66C2', label: 'LINKEDIN — Published', content: 'Why proactive HVAC maintenance saves businesses thousands...', meta: 'B2B optimized · 847 impressions' },
-    { color: '#FF0000', label: 'YOUTUBE SHORT — Uploaded', content: 'Top 3 Signs Your AC Needs Repair Before Summer', meta: '1.2K views · Trending in Tampa' },
-    { color: '#010101', label: 'TIKTOK — Posted', content: 'POV: Your AC breaks in Tampa summer heat — we fix it fast', meta: '3.4K views · 124 shares' },
-    { color: '#4285F4', label: 'GOOGLE — Indexed', content: 'Best HVAC Repair Tampa FL — new blog post indexed', meta: 'Position #3 · 240 impressions today' },
-  ]
-
-  const industries = [
-    { icon: '💅', name: 'Salons & Spas', desc: 'Bookings + reviews on autopilot', href: '/solutions/salons' },
-    { icon: '🔧', name: 'HVAC Companies', desc: 'Dominate local search year-round', href: '/solutions/hvac' },
-    { icon: '⚖️', name: 'Law Firms', desc: 'Authority content that converts', href: '/solutions/lawyers' },
-    { icon: '🦷', name: 'Dental Offices', desc: 'New patient content daily', href: '/solutions/dentists' },
-    { icon: '🍽️', name: 'Restaurants', desc: 'Specials, events, reviews automated', href: '/solutions/restaurants' },
-    { icon: '🏠', name: 'Real Estate', desc: 'Listings found on every AI engine', href: '/solutions/real-estate' },
-    { icon: '💪', name: 'Gyms & Fitness', desc: 'Membership growth content', href: '/solutions/gyms' },
-    { icon: '🚗', name: 'Auto Repair', desc: 'Local SEO that drives walk-ins', href: '/solutions/auto-repair' },
-    { icon: '🏥', name: 'Med Spas', desc: 'Premium content for premium clients', href: '/solutions/med-spas' },
-    { icon: '🚰', name: 'Plumbers', desc: 'Emergency leads around the clock', href: '/solutions/plumbers' },
-    { icon: '📢', name: 'Agencies', desc: 'White-label for all your clients', href: '/solutions/marketing-agencies' },
-    { icon: '🦴', name: 'Chiropractors', desc: 'Patient education that ranks', href: '/solutions/chiropractors' },
-  ]
-
-  const faqs = [
-    { q: 'Do I need any technical skills to use Traffikora?', a: 'None at all. If you can fill out a form, you can use Traffikora. Our onboarding wizard walks you through every step and you’ll be live in under 5 minutes.' },
-    { q: 'What social media accounts do you need access to?', a: 'We request permission to post on your behalf to platforms you choose — Facebook, Instagram, TikTok, YouTube, and more. You control exactly which platforms are connected and can disconnect at any time.' },
-    { q: 'Will you post without my approval?', a: 'You can set Traffikora to fully automatic or review-before-publish mode. You are always in control of what goes live on your accounts.' },
-    { q: 'What happens when I cancel?', a: 'Cancel any time with one click — no phone call required, no questions asked. You keep access until the end of your billing period. All your data can be exported before you go.' },
-    { q: 'Is my data safe? What do you do with it?', a: 'We never sell your data. We use it only to generate and publish content on your behalf. All data is encrypted at rest and in transit.' },
-    { q: 'Do you offer refunds?', a: 'We offer a free plan with no credit card required. If you upgrade and are not satisfied within 30 days, contact us for a full refund. No questions asked.' },
-  ]
-
-  const plans = [
-    { name: 'Free', price: '0', sub: '/forever', desc: 'Try Traffikora with no credit card. Get a real taste of AI content before you commit.', features: ['3 AI blog posts per month', 'Preview content before publish', 'Access to content dashboard', 'No credit card required', 'Upgrade anytime'], btn: 'Start Free — No Card', href: '/signup?plan=free', featured: false },
-    { name: 'Starter', price: '47', sub: '/mo', desc: 'Automate your marketing and show up online every single day.', features: ['Unlimited AI blog posts', 'AI social content for Facebook, Instagram, LinkedIn & X', 'One-Push Publish to WordPress', 'Content Calendar & Queue', 'Manual publishing controls', '1 website connected'], btn: 'Get Started', href: '/signup?plan=starter', featured: false },
-    { name: 'Pro', price: '97', sub: '/mo', desc: 'Fully hands-off. AI agents run every morning and handle everything.', features: ['Everything in Starter', 'AI Agents run daily automatically', 'Auto Mode — fully hands-off', 'TikTok + YouTube Shorts publishing', 'Google SEO + AI Engine Optimization', 'Advanced analytics'], btn: 'Start Pro', href: '/signup?plan=pro', featured: true },
-    { name: 'Agency', price: '297', sub: '/mo', desc: 'Manage up to 10 clients. White-label it and bill whatever you want.', features: ['Everything in Pro', 'Up to 10 client accounts', 'White-label dashboard', 'Client management portal', 'Bulk content generation', 'Agency analytics overview'], btn: 'Start Agency Plan', href: '/signup?plan=agency', featured: false },
-    { name: 'Enterprise', price: '997', sub: '/mo', desc: 'Unlimited clients, custom AI training, dedicated account manager.', features: ['Everything in Agency', 'Unlimited client accounts', 'Custom AI voice per client', 'Google Search Console integration', 'SLA uptime guarantee', 'Dedicated account manager'], btn: 'Contact Us', href: '/contact', featured: false },
-  ]
-
   return (
     <main>
       <Nav />
-
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         html{scroll-behavior:smooth}
@@ -88,7 +41,6 @@ export default function HomePage() {
         @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
         @keyframes ringpulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(2.6);opacity:0}}
         @keyframes fadeInUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
         .btn-cta{display:inline-flex;align-items:center;gap:12px;background:linear-gradient(135deg,#E8610A,#c94e08);color:#fff;border:none;padding:16px 30px;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;position:relative;overflow:hidden;letter-spacing:.01em;box-shadow:0 4px 20px rgba(232,97,10,.35);text-decoration:none}
         .btn-cta::before{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:rgba(255,255,255,.15);transform:skewX(-20deg);animation:shimmer 3s ease-in-out infinite}
         .btn-cta-dark{display:inline-flex;align-items:center;gap:12px;background:#111;color:#fff;border:none;padding:16px 30px;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;position:relative;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.25);text-decoration:none}
@@ -132,22 +84,18 @@ export default function HomePage() {
               </span>
               <span style={{ background: 'linear-gradient(90deg,#fff 70%,rgba(232,97,10,0.5))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>The Future of Local Marketing is Here</span>
             </div>
-
             <h1 className="hero-h1" style={{ fontFamily: 'Playfair Display, serif', fontSize: '52px', fontWeight: 700, color: '#fff', lineHeight: .96, letterSpacing: '-1.5px', marginBottom: '16px' }}>
               Set it once.<br /><em style={{ fontStyle: 'italic', color: '#E8610A' }}>It markets<br />forever.</em>
             </h1>
-
             <p style={{ fontSize: '15px', color: '#ccc', lineHeight: 1.85, marginBottom: '20px', maxWidth: '420px', fontWeight: 300 }}>
               Connect your accounts once. Traffikora runs Google, TikTok, YouTube, and every AI engine &mdash; automatically, every single day. No agency. No manual work.
             </p>
-
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '6px' }}>
               <Link href="/signup" className="btn-cta">
                 Start Free &mdash; No Credit Card Needed
                 <span style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'rgba(255,255,255,.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', fontWeight: 700, flexShrink: 0 }}>&rarr;</span>
               </Link>
             </div>
-
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '16px', flexWrap: 'wrap' }}>
               {[
                 { icon: '🛡️', title: 'Zero Risk Guarantee', sub: 'Free plan — no credit card needed · Cancel in one click' },
@@ -162,7 +110,6 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
-
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 0', borderTop: '1px solid #2a2a2a', marginTop: '14px', flexWrap: 'wrap' }}>
               {['No agency needed', 'Free to start', 'Free plan available'].map((t, i) => (
                 <span key={t} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -172,39 +119,10 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-
           <div className="hero-right-col" style={{ display: 'flex', flexDirection: 'column', gap: '10px', paddingBottom: '40px' }}>
-            <div style={{ background: '#0f0f0f', border: '1px solid #2a2a2a', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 0 40px rgba(232,97,10,0.12)' }}>
-              <div style={{ background: '#1a1a1a', borderBottom: '1px solid #2a2a2a', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ff5f56', display: 'inline-block' }} />
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ffbd2e', display: 'inline-block' }} />
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#27c93f', display: 'inline-block' }} />
-                <span style={{ flex: 1, background: '#111', borderRadius: '4px', padding: '3px 10px', fontSize: '10px', color: '#555', margin: '0 8px' }}>traffikora.com &mdash; AI generating content...</span>
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#E8610A', animation: 'blink 1.5s ease-in-out infinite', display: 'inline-block' }} />
-              </div>
-              <div style={{ padding: '16px' }}>
-                <div style={{ fontSize: '10px', color: '#555', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '10px' }}>&#9889; Live Content Generation</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  {demos.slice(demoIndex, demoIndex + 4).concat(demoIndex + 4 > demos.length ? demos.slice(0, (demoIndex + 4) % demos.length) : []).slice(0, 4).map((d, i) => (
-                    <div key={i} style={{ background: '#141414', border: '1px solid #1e1e1e', borderRadius: '8px', padding: '10px 14px', animation: 'fadeInUp 0.5s ease forwards' }}>
-                      <div style={{ fontSize: '10px', color: d.color, fontWeight: 700, marginBottom: '4px' }}>✓ {d.label}</div>
-                      <div style={{ fontSize: '12px', color: '#ccc' }}>{d.content}</div>
-                      <div style={{ fontSize: '10px', color: '#555', marginTop: '3px' }}>{d.meta}</div>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #1e1e1e', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '11px', color: '#555' }}>Running automatically &middot; 24/7 &middot; Zero manual work</span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#22c55e', fontWeight: 700 }}>
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', animation: 'blink 1.5s ease-in-out infinite', display: 'inline-block' }} />
-                    LIVE
-                  </span>
-                </div>
-              </div>
-            </div>
+            <LiveDemo />
           </div>
         </div>
-
         <div style={{ background: '#090909', borderTop: '1px solid #1a1a1a', padding: '10px 40px', display: 'flex', alignItems: 'center', gap: '14px' }}>
           <span style={{ fontSize: '10px', color: '#555', textTransform: 'uppercase', letterSpacing: '.12em', whiteSpace: 'nowrap' }}>Powered by</span>
           <div style={{ display: 'flex', gap: '7px' }}>
@@ -224,9 +142,7 @@ export default function HomePage() {
         </div>
         <div className="industry-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: '12px', maxWidth: '1100px', margin: '0 auto' }}>
           {industries.map(ind => (
-            <Link key={ind.name} href={ind.href} style={{ background: '#141414', border: '1px solid #2a2a2a', borderRadius: '12px', padding: '18px 12px', textAlign: 'center', textDecoration: 'none', display: 'block', transition: 'border-color 0.2s' }}
-              onMouseOver={e => e.currentTarget.style.borderColor = '#E8610A'}
-              onMouseOut={e => e.currentTarget.style.borderColor = '#2a2a2a'}>
+            <Link key={ind.name} href={ind.href} style={{ background: '#141414', border: '1px solid #2a2a2a', borderRadius: '12px', padding: '18px 12px', textAlign: 'center', textDecoration: 'none', display: 'block' }}>
               <div style={{ fontSize: '26px', marginBottom: '8px' }} role="img" aria-label={ind.name}>{ind.icon}</div>
               <div style={{ fontSize: '12px', fontWeight: 700, color: '#fff', lineHeight: 1.3, marginBottom: '4px' }}>{ind.name}</div>
               <div style={{ fontSize: '10px', color: '#555', lineHeight: 1.4 }}>{ind.desc}</div>
@@ -243,9 +159,7 @@ export default function HomePage() {
         <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '36px', fontWeight: 700, color: '#fff', lineHeight: 1.15, marginBottom: '14px' }}>
           You&rsquo;re posting manually.<br />Your competitor hired an <em style={{ color: '#E8610A', fontStyle: 'italic' }}>agency.</em>
         </h2>
-        <p style={{ fontSize: '16px', color: '#bbb', maxWidth: '520px', margin: '0 auto', lineHeight: 1.85, fontWeight: 300 }}>
-          Every day you do it yourself, they pull further ahead. There&rsquo;s a smarter way &mdash; and it costs less than a single hour of agency time.
-        </p>
+        <p style={{ fontSize: '16px', color: '#bbb', maxWidth: '520px', margin: '0 auto', lineHeight: 1.85, fontWeight: 300 }}>Every day you do it yourself, they pull further ahead. There&rsquo;s a smarter way &mdash; and it costs less than a single hour of agency time.</p>
       </section>
 
       {/* STAT BAR */}
@@ -257,7 +171,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* BEFORE / AFTER */}
+      {/* BEFORE/AFTER */}
       <section style={{ padding: '40px', background: '#fff', borderBottom: '2.5px solid #111' }}>
         <div style={{ textAlign: 'center', marginBottom: '22px' }}>
           <span className="section-label">The difference</span>
@@ -265,16 +179,15 @@ export default function HomePage() {
         </div>
         <div className="ba-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', maxWidth: '900px', margin: '0 auto' }}>
           {[
-            { head: '✗ Without Traffikora', bg: '#111', items: ['Posting manually every day — or not at all', 'Invisible on ChatGPT, Claude and Gemini', 'Paying $2,000+/mo for an agency', 'No time to focus on the actual business', 'Stuck on page 3 of Google'], check: '✗', checkColor: '#cc0000' },
-            { head: '✓ With Traffikora', bg: '#E8610A', items: ['Content published automatically, every day', 'Found on every AI engine that matters', 'Full automation from $97/mo', 'Marketing runs while you sleep', 'Climbing to page 1 in weeks'], check: '✓', checkColor: '#E8610A' },
+            { head: '✗ Without Traffikora', bg: '#111', items: ['Posting manually every day — or not at all','Invisible on ChatGPT, Claude and Gemini','Paying $2,000+/mo for an agency','No time to focus on the actual business','Stuck on page 3 of Google'], check: '✗', color: '#cc0000' },
+            { head: '✓ With Traffikora', bg: '#E8610A', items: ['Content published automatically, every day','Found on every AI engine that matters','Full automation from $97/mo','Marketing runs while you sleep','Climbing to page 1 in weeks'], check: '✓', color: '#E8610A' },
           ].map(col => (
             <div key={col.head} style={{ border: '2px solid #111', borderRadius: '10px', overflow: 'hidden' }}>
               <div style={{ padding: '13px 18px', fontSize: '13px', fontWeight: 700, textAlign: 'center', letterSpacing: '.06em', textTransform: 'uppercase', background: col.bg, color: '#fff' }}>{col.head}</div>
               <div style={{ padding: '16px 18px' }}>
                 {col.items.map(item => (
                   <div key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '12px', fontSize: '13px', color: '#444', lineHeight: 1.55, fontWeight: 400 }}>
-                    <span style={{ color: col.checkColor, fontWeight: 700, flexShrink: 0 }}>{col.check}</span>
-                    {item}
+                    <span style={{ color: col.color, fontWeight: 700, flexShrink: 0 }}>{col.check}</span>{item}
                   </div>
                 ))}
               </div>
@@ -283,7 +196,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* COMPARISON TABLE */}
+      {/* COMPARISON */}
       <section style={{ background: '#f7f7f7', borderTop: '2.5px solid #111', borderBottom: '2.5px solid #111', padding: '40px' }}>
         <div style={{ textAlign: 'center', marginBottom: '26px' }}>
           <span className="section-label">Why Traffikora wins</span>
@@ -300,13 +213,13 @@ export default function HomePage() {
           </thead>
           <tbody>
             {[
-              ['Monthly cost', 'Free to start', '$2,000–$10,000/mo', '$0 but hours of time'],
-              ['Time required from you', '5 min setup only', 'Weekly meetings', '3+ hrs/day'],
-              ['All AI engines', '✓ All platforms', '✗ Rarely offered', '✗ Almost impossible'],
-              ['Publishes 24/7 automatically', '✓ Always on', 'Weekdays only', '✗ Only when you do it'],
-              ['9+ platforms simultaneously', '✓ All included', 'Usually 2–3', '✗ One at a time'],
-              ['Cancel anytime', '✓ One click', '✗ Contracts required', '✓'],
-              ['Free trial', '✓ Free plan forever', '✗ No', '✓'],
+              ['Monthly cost','Free to start','$2,000–$10,000/mo','$0 but hours of time'],
+              ['Time required from you','5 min setup only','Weekly meetings','3+ hrs/day'],
+              ['All AI engines','✓ All platforms','✗ Rarely offered','✗ Almost impossible'],
+              ['Publishes 24/7 automatically','✓ Always on','Weekdays only','✗ Only when you do it'],
+              ['9+ platforms simultaneously','✓ All included','Usually 2–3','✗ One at a time'],
+              ['Cancel anytime','✓ One click','✗ Contracts required','✓'],
+              ['Free trial','✓ Free plan forever','✗ No','✓'],
             ].map((row, i) => (
               <tr key={i}>
                 <td style={{ padding: '12px 16px', fontSize: '13px', borderBottom: '1px solid #eee', borderRight: '2px solid #111', textAlign: 'left', fontWeight: 600, color: '#111', background: '#fff' }}>{row[0]}</td>
@@ -347,16 +260,10 @@ export default function HomePage() {
       {/* PLATFORMS */}
       <section style={{ background: '#0d0d0d', padding: '44px 40px', textAlign: 'center', position: 'relative', overflow: 'hidden', borderTop: '2.5px solid #111' }}>
         <span className="section-label" style={{ position: 'relative', zIndex: 1 }}>Every platform. One machine.</span>
-        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '42px', fontWeight: 700, color: '#fff', letterSpacing: '-1px', lineHeight: 1, marginBottom: '6px', position: 'relative', zIndex: 1 }}>
-          9+ platforms.<br /><span style={{ color: '#E8610A', fontStyle: 'italic' }}>Zero extra work.</span>
-        </h2>
+        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '42px', fontWeight: 700, color: '#fff', letterSpacing: '-1px', lineHeight: 1, marginBottom: '6px', position: 'relative', zIndex: 1 }}>9+ platforms.<br /><span style={{ color: '#E8610A', fontStyle: 'italic' }}>Zero extra work.</span></h2>
         <p style={{ fontSize: '15px', color: '#aaa', marginBottom: '28px', position: 'relative', zIndex: 1, fontWeight: 300 }}>Your content reaches everywhere &mdash; automatically &mdash; every single day.</p>
         <div style={{ display: 'flex', gap: '9px', justifyContent: 'center', flexWrap: 'wrap', position: 'relative', zIndex: 1 }}>
-          {[
-            { name: 'Google', color: '#4285F4' }, { name: 'TikTok', color: '#fff' }, { name: 'YouTube', color: '#FF0000' },
-            { name: 'ChatGPT', color: '#10A37F' }, { name: 'Claude', color: '#D97757' }, { name: 'Gemini', color: '#4285F4' },
-            { name: 'Instagram', color: '#E1306C' }, { name: 'Facebook', color: '#1877F2' }, { name: 'Reddit', color: '#FF4500' },
-          ].map(p => (
+          {[{name:'Google',color:'#4285F4'},{name:'TikTok',color:'#fff'},{name:'YouTube',color:'#FF0000'},{name:'ChatGPT',color:'#10A37F'},{name:'Claude',color:'#D97757'},{name:'Gemini',color:'#4285F4'},{name:'Instagram',color:'#E1306C'},{name:'Facebook',color:'#1877F2'},{name:'Reddit',color:'#FF4500'}].map(p => (
             <div key={p.name} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#141414', border: '1px solid #2a2a2a', borderRadius: '10px', padding: '12px 20px' }}>
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: p.color, display: 'inline-block', flexShrink: 0 }} />
               <span style={{ fontSize: '13px', fontWeight: 600, color: '#ddd' }}>{p.name}</span>
@@ -377,7 +284,7 @@ export default function HomePage() {
             Free plan available forever. Paid plans from $47/mo.
           </div>
         </div>
-        <Link href="/signup" style={{ background: '#E8610A', color: '#fff', border: 'none', padding: '12px 22px', borderRadius: '7px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', whiteSpace: 'nowrap', boxShadow: '0 2px 12px rgba(232,97,10,.3)', textDecoration: 'none', flexShrink: 0 }}>Claim Offer &rarr;</Link>
+        <Link href="/signup" style={{ background: '#E8610A', color: '#fff', padding: '12px 22px', borderRadius: '7px', fontSize: '13px', fontWeight: 700, whiteSpace: 'nowrap', textDecoration: 'none', flexShrink: 0 }}>Claim Offer &rarr;</Link>
       </div>
 
       {/* TRUST BAR */}
@@ -402,9 +309,7 @@ export default function HomePage() {
       <section style={{ background: '#0a0a0a', padding: '70px 40px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ textAlign: 'center', marginBottom: '52px', position: 'relative', zIndex: 1 }}>
           <span className="section-label">Simple pricing</span>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '58px', fontWeight: 700, color: '#fff', lineHeight: 1.0, letterSpacing: '-1.5px' }}>
-            Stop losing leads.<br /><em style={{ color: '#E8610A', fontStyle: 'italic' }}>Start growing today.</em>
-          </h2>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '58px', fontWeight: 700, color: '#fff', lineHeight: 1.0, letterSpacing: '-1.5px' }}>Stop losing leads.<br /><em style={{ color: '#E8610A', fontStyle: 'italic' }}>Start growing today.</em></h2>
         </div>
         <div className="pricing-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '16px', maxWidth: '1300px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
           {plans.map(plan => (
@@ -412,22 +317,17 @@ export default function HomePage() {
               {plan.featured && <span style={{ display: 'inline-block', background: 'linear-gradient(135deg,#E8610A,#ff8c42)', color: '#fff', fontSize: '10px', letterSpacing: '.12em', textTransform: 'uppercase', padding: '5px 16px', borderRadius: '20px', marginBottom: '12px', fontWeight: 700 }}>Most Popular</span>}
               <div style={{ fontSize: '10px', letterSpacing: '.2em', color: '#888', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 700 }}>{plan.name}</div>
               <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 700, color: '#fff', lineHeight: 1 }}>
-                <sup style={{ fontSize: '16px', fontFamily: 'DM Sans, sans-serif', fontWeight: 400, verticalAlign: 'super', color: '#E8610A' }}>$</sup>
-                {plan.price}
-                <sub style={{ fontSize: '11px', color: '#444', fontFamily: 'DM Sans, sans-serif', fontWeight: 300 }}>{plan.sub}</sub>
+                <sup style={{ fontSize: '16px', fontFamily: 'DM Sans, sans-serif', fontWeight: 400, verticalAlign: 'super', color: '#E8610A' }}>$</sup>{plan.price}<sub style={{ fontSize: '11px', color: '#444', fontFamily: 'DM Sans, sans-serif', fontWeight: 300 }}>{plan.sub}</sub>
               </div>
               <p style={{ fontSize: '12px', color: '#bbb', margin: '10px 0 16px', lineHeight: 1.7, fontWeight: 300 }}>{plan.desc}</p>
               <ul style={{ listStyle: 'none', marginBottom: '20px', flex: 1 }}>
                 {plan.features.map(f => (
                   <li key={f} style={{ fontSize: '12px', color: '#ddd', padding: '7px 0', borderBottom: '1px solid #2a2a2a', display: 'flex', alignItems: 'flex-start', gap: '7px', lineHeight: 1.5, fontWeight: 400 }}>
-                    <span style={{ color: '#E8610A', fontSize: '11px', flexShrink: 0, marginTop: '1px' }}>✓</span>
-                    {f}
+                    <span style={{ color: '#E8610A', fontSize: '11px', flexShrink: 0, marginTop: '1px' }}>✓</span>{f}
                   </li>
                 ))}
               </ul>
-              <Link href={plan.href} style={{ width: '100%', padding: '13px', borderRadius: '8px', fontSize: '13px', fontFamily: 'DM Sans, sans-serif', fontWeight: 700, cursor: 'pointer', border: plan.featured ? 'none' : '1px solid rgba(255,255,255,0.2)', background: plan.featured ? 'linear-gradient(135deg,#E8610A,#ff8c42)' : 'transparent', color: plan.featured ? '#fff' : '#ccc', transition: 'all .2s', marginTop: 'auto', display: 'block', textAlign: 'center', textDecoration: 'none', boxShadow: plan.featured ? '0 4px 20px rgba(232,97,10,0.4)' : 'none' }}>
-                {plan.btn}
-              </Link>
+              <Link href={plan.href} style={{ width: '100%', padding: '13px', borderRadius: '8px', fontSize: '13px', fontFamily: 'DM Sans, sans-serif', fontWeight: 700, border: plan.featured ? 'none' : '1px solid rgba(255,255,255,0.2)', background: plan.featured ? 'linear-gradient(135deg,#E8610A,#ff8c42)' : 'transparent', color: plan.featured ? '#fff' : '#ccc', marginTop: 'auto', display: 'block', textAlign: 'center', textDecoration: 'none', boxShadow: plan.featured ? '0 4px 20px rgba(232,97,10,0.4)' : 'none' }}>{plan.btn}</Link>
             </div>
           ))}
         </div>
@@ -445,7 +345,7 @@ export default function HomePage() {
             <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '96px', fontWeight: 700, color: '#111', lineHeight: 1, letterSpacing: '-3px' }}>10<span style={{ color: '#E8610A' }}>x</span></div>
             <p style={{ fontSize: '14px', color: '#555', textAlign: 'center', lineHeight: 1.65, maxWidth: '220px', marginTop: '8px', fontWeight: 300 }}>Just 2 extra clients/month pays for itself 10 times over &mdash; every single month.</p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', border: '2.5px solid #111', borderRadius: '9px', overflow: 'hidden', width: '100%', marginTop: '22px' }}>
-              {[{ num: '$47', lbl: 'Starting price per month' }, { num: '2', lbl: 'Clients needed to break even' }, { num: '∞', lbl: 'Return on investment after that' }].map((item, i) => (
+              {[{num:'$47',lbl:'Starting price per month'},{num:'2',lbl:'Clients needed to break even'},{num:'∞',lbl:'Return on investment after that'}].map((item,i) => (
                 <div key={item.num} style={{ padding: '13px 9px', textAlign: 'center', borderRight: i < 2 ? '2.5px solid #111' : 'none' }}>
                   <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 700, color: '#E8610A' }}>{item.num}</div>
                   <div style={{ fontSize: '11px', color: '#666', marginTop: '4px', lineHeight: 1.4, fontWeight: 300 }}>{item.lbl}</div>
@@ -490,7 +390,7 @@ export default function HomePage() {
             { icon: '📋', name: 'Schema Markup', desc: 'Structured data injected automatically into your site' },
             { icon: '📊', name: 'Search Console', desc: 'Direct Google Search Console integration and reporting' },
           ].map((f, i) => (
-            <div key={f.name} style={{ padding: '20px 18px', borderRight: (i + 1) % 4 !== 0 ? '1px solid #111' : 'none', borderBottom: i < 4 ? '1px solid #111' : 'none' }}>
+            <div key={f.name} style={{ padding: '20px 18px', borderRight: (i+1)%4!==0?'1px solid #111':'none', borderBottom: i<4?'1px solid #111':'none' }}>
               <div style={{ fontSize: '22px', marginBottom: '9px' }} role="img" aria-label={f.name}>{f.icon}</div>
               <h3 style={{ fontSize: '13px', fontWeight: 700, color: '#111', marginBottom: '6px' }}>{f.name}</h3>
               <p style={{ fontSize: '12px', color: '#555', lineHeight: 1.6, fontWeight: 300 }}>{f.desc}</p>
@@ -509,8 +409,8 @@ export default function HomePage() {
             { num: 2, color: '#111', title: 'Tell us about your business', desc: 'Answer a few simple questions. Our AI learns everything about what you do and who you serve.' },
             { num: 3, color: '#111', title: 'Watch it work', desc: 'Traffikora starts generating and publishing content immediately and never stops.' },
           ].map((step, i) => (
-            <div key={step.num} style={{ background: '#fff', padding: '24px 20px', textAlign: 'center', borderRight: i < 2 ? '2.5px solid #111' : 'none' }}>
-              <div style={{ width: '44px', height: '44px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: 700, color: '#fff', background: step.color }} aria-label={`Step ${step.num}`}>{step.num}</div>
+            <div key={step.num} style={{ background: '#fff', padding: '24px 20px', textAlign: 'center', borderRight: i<2?'2.5px solid #111':'none' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: 700, color: '#fff', background: step.color }}>{step.num}</div>
               <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111', marginBottom: '8px' }}>{step.title}</h3>
               <p style={{ fontSize: '13px', color: '#444', lineHeight: 1.7, fontWeight: 300 }}>{step.desc}</p>
             </div>
@@ -518,13 +418,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* AI SECTION */}
+      {/* AI */}
       <section style={{ background: '#111', padding: '44px 40px', textAlign: 'center' }}>
         <span className="section-label">Our #1 differentiator</span>
         <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 700, color: '#fff', lineHeight: 1.15, marginBottom: '12px' }}>The only platform that<br /><em style={{ color: '#E8610A', fontStyle: 'italic' }}>optimizes for AI search</em></h2>
         <p style={{ fontSize: '15px', color: '#bbb', maxWidth: '480px', margin: '0 auto 24px', lineHeight: 1.85, fontWeight: 300 }}>When someone asks ChatGPT or Claude to recommend a business like yours, Traffikora makes sure your name comes up. No other platform does this.</p>
         <div style={{ display: 'flex', gap: '9px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '16px' }}>
-          {['Claude', 'ChatGPT', 'Gemini', 'Copilot', 'Perplexity', 'Google'].map(ai => (
+          {['Claude','ChatGPT','Gemini','Copilot','Perplexity','Google'].map(ai => (
             <div key={ai} style={{ background: 'rgba(255,255,255,.06)', border: '1px solid #333', borderRadius: '8px', padding: '10px 18px', fontSize: '13px', color: '#ccc', fontWeight: 500 }}>{ai}</div>
           ))}
         </div>
@@ -548,7 +448,7 @@ export default function HomePage() {
               <p style={{ fontSize: '14px', color: '#222', lineHeight: 1.9, fontStyle: 'italic', marginBottom: '16px', fontWeight: 300 }}>{t.text}</p>
               <div style={{ height: '1px', background: '#e8e8e8', marginBottom: '13px' }} />
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Playfair Display, serif', fontSize: '14px', fontWeight: 700, color: '#fff', flexShrink: 0 }} aria-label={t.name}>{t.avatar}</div>
+                <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Playfair Display, serif', fontSize: '14px', fontWeight: 700, color: '#fff', flexShrink: 0 }}>{t.avatar}</div>
                 <div>
                   <div style={{ fontSize: '13px', fontWeight: 700, color: '#111' }}>{t.name}</div>
                   <div style={{ fontSize: '12px', color: '#666', marginTop: '2px' }}>{t.role}</div>
@@ -565,19 +465,7 @@ export default function HomePage() {
           <span className="section-label">FAQ</span>
           <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 700, color: '#111' }}>Everything you need to <em style={{ color: '#E8610A', fontStyle: 'italic' }}>know before you start</em></h2>
         </div>
-        <div className="faq-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', maxWidth: '1000px', margin: '0 auto' }}>
-          {faqs.map((faq, i) => (
-            <div key={i} style={{ border: '1.5px solid #111', borderRadius: '10px', overflow: 'hidden', cursor: 'pointer' }} onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-              <div style={{ background: '#111', padding: '16px 20px', fontSize: '14px', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', cursor: 'pointer' }}>
-                {faq.q}
-                <span style={{ color: '#E8610A', fontSize: '18px', flexShrink: 0 }}>{openFaq === i ? '−' : '+'}</span>
-              </div>
-              {openFaq === i && (
-                <div style={{ background: '#fff', padding: '16px 20px', fontSize: '13px', color: '#444', lineHeight: 1.8, fontWeight: 300 }}>{faq.a}</div>
-              )}
-            </div>
-          ))}
-        </div>
+        <FaqAccordion />
       </section>
 
       {/* MISSION */}
@@ -591,8 +479,8 @@ export default function HomePage() {
             <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '16px', fontStyle: 'italic', color: '#ccc', lineHeight: 1.95, fontWeight: 400 }}>We built Traffikora because small business owners deserve the same marketing firepower as the big guys &mdash; without the agency price tag. Every day you wait is a day your competitor pulls further ahead. That&rsquo;s why we made it automatic.</p>
           </div>
           <div className="mission-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', border: '1px solid #2a2a2a', borderRadius: '9px', overflow: 'hidden', marginTop: '22px' }}>
-            {[{ num: 'Free', lbl: 'To start — no credit card needed' }, { num: '9+', lbl: 'Platforms covered simultaneously' }, { num: '$97', lbl: 'Less than 1 hour of agency time' }].map((s, i) => (
-              <div key={s.num} style={{ padding: '18px 12px', textAlign: 'center', borderRight: i < 2 ? '1px solid #2a2a2a' : 'none' }}>
+            {[{num:'Free',lbl:'To start — no credit card needed'},{num:'9+',lbl:'Platforms covered simultaneously'},{num:'$97',lbl:'Less than 1 hour of agency time'}].map((s,i) => (
+              <div key={s.num} style={{ padding: '18px 12px', textAlign: 'center', borderRight: i<2?'1px solid #2a2a2a':'none' }}>
                 <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '26px', fontWeight: 700, color: '#E8610A', lineHeight: 1 }}>{s.num}</div>
                 <div style={{ fontSize: '12px', color: '#aaa', marginTop: '4px', lineHeight: 1.45, fontWeight: 300 }}>{s.lbl}</div>
               </div>
@@ -624,7 +512,7 @@ export default function HomePage() {
               <span style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'rgba(255,255,255,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', fontWeight: 700, flexShrink: 0 }}>&rarr;</span>
             </Link>
             <div style={{ display: 'flex', gap: '18px', justifyContent: 'center', marginTop: '13px', flexWrap: 'wrap' }}>
-              {['Free plan available', 'Paid plans from $47/mo', 'Cancel anytime'].map(note => (
+              {['Free plan available','Paid plans from $47/mo','Cancel anytime'].map(note => (
                 <span key={note} style={{ fontSize: '13px', color: '#666', display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <span style={{ color: '#E8610A', fontWeight: 700 }}>✓</span> {note}
                 </span>
@@ -645,15 +533,15 @@ export default function HomePage() {
         <div style={{ fontSize: '11px', color: '#555', letterSpacing: '.16em', textTransform: 'uppercase', marginBottom: '11px' }}>Follow Traffikora</div>
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
           {[
-            { href: 'https://www.facebook.com/profile.php?id=61590075525966', bg: '#1877f2', label: 'Traffikora on Facebook', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> },
-            { href: 'https://www.instagram.com/traffikora/', bg: '#c13584', label: 'Traffikora on Instagram', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> },
-            { href: 'https://x.com/traffikora', bg: '#000', label: 'Traffikora on X', icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> },
-            { href: 'https://www.youtube.com/@traffikora', bg: '#ff0000', label: 'Traffikora on YouTube', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="black"/></svg> },
-            { href: 'https://www.tiktok.com/@traffikora', bg: '#010101', label: 'Traffikora on TikTok', icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.31 6.31 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg> },
-            { href: '#', bg: '#0a66c2', label: 'Traffikora on LinkedIn', icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> },
+            { href: 'https://www.facebook.com/profile.php?id=61590075525966', bg: '#1877f2', label: 'Traffikora on Facebook', svg: <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> },
+            { href: 'https://www.instagram.com/traffikora/', bg: '#c13584', label: 'Traffikora on Instagram', svg: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> },
+            { href: 'https://x.com/traffikora', bg: '#000', label: 'Traffikora on X', svg: <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> },
+            { href: 'https://www.youtube.com/@traffikora', bg: '#ff0000', label: 'Traffikora on YouTube', svg: <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="black"/></svg> },
+            { href: 'https://www.tiktok.com/@traffikora', bg: '#010101', label: 'Traffikora on TikTok', svg: <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.31 6.31 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg> },
+            { href: '#', bg: '#0a66c2', label: 'Traffikora on LinkedIn', svg: <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> },
           ].map(s => (
-            <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} style={{ width: '38px', height: '38px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: s.bg, border: s.bg === '#000' || s.bg === '#010101' ? '1px solid #333' : 'none', flexShrink: 0, textDecoration: 'none' }}>
-              {s.icon}
+            <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} style={{ width: '38px', height: '38px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: s.bg, border: s.bg==='#000'||s.bg==='#010101'?'1px solid #333':'none', flexShrink: 0, textDecoration: 'none' }}>
+              {s.svg}
             </a>
           ))}
         </div>
