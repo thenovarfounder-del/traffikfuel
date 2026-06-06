@@ -65,7 +65,6 @@ export default function PricingPage() {
   }
 
   const orangeBtn = { background: 'linear-gradient(135deg,#E8610A,#ff8c42)', color: '#fff', boxShadow: '0 4px 20px rgba(232,97,10,0.4)', border: 'none' }
-  const ghostBtn = { background: 'transparent', color: '#ccc', border: '1px solid rgba(255,255,255,0.2)' }
 
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a0a', fontFamily: 'DM Sans, sans-serif' }}>
@@ -86,7 +85,7 @@ export default function PricingPage() {
           {plans.map(plan => (
             <div key={plan.name} style={{ background: plan.featured ? 'linear-gradient(160deg,#1c1208 0%,#111 60%)' : '#111', padding: isMobile ? '24px 20px' : '28px 20px', borderRadius: '14px', border: plan.featured ? '1px solid #E8610A' : '1px solid rgba(255,255,255,0.15)', display: 'flex', flexDirection: 'column', boxShadow: plan.featured ? '0 0 50px rgba(232,97,10,0.18)' : 'none' }}>
               {plan.featured && <span style={{ display: 'inline-block', background: 'linear-gradient(135deg,#E8610A,#ff8c42)', color: '#fff', fontSize: '10px', letterSpacing: '.12em', textTransform: 'uppercase', padding: '5px 16px', borderRadius: '20px', marginBottom: '12px', fontWeight: 700, alignSelf: 'flex-start' }}>Most Popular</span>}
-              <div style={{ fontSize: '10px', letterSpacing: '.2em', color: plan.name === 'Free' ? '#ffffff' : '#888', textTransform: 'uppercase', marginBottom: '10px', fontWeight: 700 }}>{plan.name}</div>
+              <div style={{ fontSize: plan.planKey === 'free' ? '14px' : '10px', letterSpacing: '.2em', color: plan.planKey === 'free' ? '#ffffff' : '#888', textTransform: 'uppercase', marginBottom: '10px', fontWeight: 800 }}>{plan.name}</div>
               <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '46px', fontWeight: 700, color: '#fff', lineHeight: 1, marginBottom: '4px' }}>
                 <sup style={{ fontSize: '16px', fontFamily: 'DM Sans, sans-serif', fontWeight: 400, verticalAlign: 'super', color: '#E8610A' }}>$</sup>{plan.price}<sub style={{ fontSize: '11px', color: '#444', fontFamily: 'DM Sans, sans-serif', fontWeight: 300 }}>{plan.sub}</sub>
               </div>
@@ -101,7 +100,7 @@ export default function PricingPage() {
               <button
                 onClick={() => handlePlanClick(plan)}
                 disabled={loadingPlan === plan.planKey}
-                style={{ width: '100%', padding: '13px', borderRadius: '8px', fontSize: '13px', fontFamily: 'DM Sans, sans-serif', fontWeight: 700, cursor: loadingPlan === plan.planKey ? 'not-allowed' : 'pointer', boxSizing: 'border-box', textAlign: 'center', ...(plan.planKey === 'free' ? ghostBtn : orangeBtn), ...(loadingPlan === plan.planKey ? { background: '#444', boxShadow: 'none' } : {}) }}>
+                style={{ width: '100%', padding: '13px', borderRadius: '8px', fontSize: '13px', fontFamily: 'DM Sans, sans-serif', fontWeight: 700, cursor: loadingPlan === plan.planKey ? 'not-allowed' : 'pointer', boxSizing: 'border-box', textAlign: 'center', ...orangeBtn, ...(loadingPlan === plan.planKey ? { background: '#444', boxShadow: 'none' } : {}) }}>
                 {loadingPlan === plan.planKey ? 'Redirecting...' : plan.btn}
               </button>
             </div>
