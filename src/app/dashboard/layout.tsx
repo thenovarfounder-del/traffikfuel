@@ -49,6 +49,8 @@ export default function DashboardLayout({ children }) {
   }
 
   const isActive = (href) => pathname === href
+  const isAgencyOrEnterprise = userPlan === 'agency' || userPlan === 'enterprise'
+  const isEnterprise = userPlan === 'enterprise'
 
   const linkStyle = (href) => ({
     display: 'flex',
@@ -67,7 +69,7 @@ export default function DashboardLayout({ children }) {
     overflow: 'hidden',
   })
 
-  const nav = [
+  const baseNav = [
     { href: '/dashboard', icon: '🏠', label: 'Dashboard' },
     { isSection: true, label: 'CONTENT' },
     { href: '/dashboard/content/blog', icon: '✏️', label: 'Blog Generator' },
@@ -85,10 +87,20 @@ export default function DashboardLayout({ children }) {
     { href: '/dashboard/connect/twitter', icon: '🐦', label: 'X / Twitter' },
     { href: '/dashboard/connect/linkedin', icon: '💼', label: 'LinkedIn' },
     { href: '/dashboard/connect/wordpress', icon: '🌐', label: 'WordPress' },
+  ]
+
+  const agencyNav = isAgencyOrEnterprise ? [
     { isSection: true, label: 'AGENCY' },
-    { href: '/dashboard/agency', icon: '\ud83d\udc65', label: 'Client Management' },
-    { href: '/dashboard/agency/analytics', icon: '\ud83d\udcca', label: 'Agency Analytics' },
-    { href: '/dashboard/agency/settings', icon: '\ud83c\udfa8', label: 'White-Label' },
+    { href: '/dashboard/agency', icon: '👥', label: 'Client Management' },
+    { href: '/dashboard/agency/analytics', icon: '📊', label: 'Agency Analytics' },
+    { href: '/dashboard/agency/settings', icon: '🎨', label: 'White-Label' },
+    ...(isEnterprise ? [
+      { href: '/dashboard/enterprise/voice', icon: '🧠', label: 'AI Voice Training' },
+      { href: '/dashboard/enterprise/support', icon: '👤', label: 'Account Manager' },
+    ] : []),
+  ] : []
+
+  const accountNav = [
     { isSection: true, label: 'ACCOUNT' },
     { href: '/dashboard/billing', icon: '💳', label: 'Billing' },
     { href: '/dashboard/referral', icon: '🎁', label: 'Refer & Earn' },
@@ -96,6 +108,7 @@ export default function DashboardLayout({ children }) {
     { href: '/dashboard/support', icon: '💬', label: 'Support' },
   ]
 
+  const nav = [...baseNav, ...agencyNav, ...accountNav]
   const planMeta = PLAN_META[userPlan] || PLAN_META.free
 
   return (
@@ -127,7 +140,7 @@ export default function DashboardLayout({ children }) {
           </nav>
           <div style={{ padding: '16px', borderTop: '1px solid #1e1e1e' }}>
             <div style={{ fontSize: '11px', color: '#555', marginBottom: '8px', fontFamily: 'DM Sans, sans-serif' }}>{email}</div>
-            {userPlan === 'free' && (
+            {(userPlan === 'free' || userPlan === 'trial') && (
               <Link href="/pricing" style={{ display: 'block', background: 'linear-gradient(135deg,#E8610A,#C84E06)', color: '#fff', padding: '10px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: 700, textAlign: 'center', textDecoration: 'none', fontFamily: 'DM Sans, sans-serif', marginBottom: '10px' }}>
                 ⚡ Upgrade to Starter — $47/mo
               </Link>
@@ -182,7 +195,7 @@ export default function DashboardLayout({ children }) {
                     </Link>
                   )}
                 </div>
-                {userPlan === 'free' && (
+                {(userPlan === 'free' || userPlan === 'trial') && (
                   <Link href="/pricing" style={{ display: 'block', background: 'linear-gradient(135deg,#E8610A,#C84E06)', color: '#fff', padding: '8px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, textAlign: 'center', textDecoration: 'none', fontFamily: 'DM Sans, sans-serif', marginBottom: '8px', boxShadow: '0 2px 10px rgba(232,97,10,0.3)' }}>
                     ⚡ Upgrade to Starter — $47/mo
                   </Link>
