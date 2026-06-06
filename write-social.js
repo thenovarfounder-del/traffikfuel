@@ -1,70 +1,139 @@
 const fs = require('fs');
 
-// Fix LiveDemo — add 'use client' and suppress hydration
-const liveDemo = `// @ts-nocheck
-'use client'
-import { useState, useEffect } from 'react'
+const content = `// @ts-nocheck
+import { NextResponse } from 'next/server'
 
-const demos = [
-  { color: '#E8610A', label: 'BLOG POST \u2014 WordPress', content: '5 HVAC Tips for Tampa Homeowners This Summer', meta: 'SEO optimized \u00b7 900 words \u00b7 Schema injected' },
-  { color: '#1877F2', label: 'FACEBOOK \u2014 Published', content: 'Summer is here! Is your AC ready? We\u2019re booking fast...', meta: 'Engagement optimized \u00b7 Posted 2 min ago' },
-  { color: '#E1306C', label: 'INSTAGRAM \u2014 Published', content: 'Beat the heat! Our team is ready for same-day AC repair...', meta: 'Hashtags added \u00b7 Story variant generated' },
-  { color: '#10A37F', label: 'CHATGPT \u2014 Citation Detected', content: 'Best HVAC in Tampa \u2014 Your business recommended', meta: 'LLM Engine active \u00b7 AI citation confirmed' },
-  { color: '#0A66C2', label: 'LINKEDIN \u2014 Published', content: 'Why proactive HVAC maintenance saves businesses thousands...', meta: 'B2B optimized \u00b7 847 impressions' },
-  { color: '#FF0000', label: 'YOUTUBE SHORT \u2014 Uploaded', content: 'Top 3 Signs Your AC Needs Repair Before Summer', meta: '1.2K views \u00b7 Trending in Tampa' },
-  { color: '#010101', label: 'TIKTOK \u2014 Posted', content: 'POV: Your AC breaks in Tampa summer heat \u2014 we fix it fast', meta: '3.4K views \u00b7 124 shares' },
-  { color: '#4285F4', label: 'GOOGLE \u2014 Indexed', content: 'Best HVAC Repair Tampa FL \u2014 new blog post indexed', meta: 'Position #3 \u00b7 240 impressions today' },
-]
+export async function POST(req) {
+  try {
+    const { url } = await req.json()
+    if (!url) return NextResponse.json({ error: 'URL required' }, { status: 400 })
 
-export default function LiveDemo() {
-  const [demoIndex, setDemoIndex] = useState(0)
-  const [mounted, setMounted] = useState(false)
+    const apiKey = process.env.GOOGLE_PAGESPEED_API_KEY
+    const encoded = encodeURIComponent(url)
 
-  useEffect(() => {
-    setMounted(true)
-    const interval = setInterval(() => setDemoIndex(i => (i + 1) % 8), 2000)
-    return () => clearInterval(interval)
-  }, [])
+    const [mobileRes, desktopRes] = await Promise.all([
+      fetch(\`https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=\${encoded}&strategy=mobile&category=performance&category=accessibility&category=seo&category=best-practices&key=\${apiKey}\`),
+      fetch(\`https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=\${encoded}&strategy=desktop&category=performance&key=\${apiKey}\`)
+    ])
 
-  const visible = mounted
-    ? demos.slice(demoIndex, demoIndex + 4).concat(
-        demoIndex + 4 > demos.length ? demos.slice(0, (demoIndex + 4) % demos.length) : []
-      ).slice(0, 4)
-    : demos.slice(0, 4)
+    const mobile = await mobileRes.json()
+    const desktop = await desktopRes.json()
 
-  return (
-    <div style={{ background: '#0f0f0f', border: '1px solid #2a2a2a', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 0 40px rgba(232,97,10,0.12)' }}>
-      <div style={{ background: '#1a1a1a', borderBottom: '1px solid #2a2a2a', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ff5f56', display: 'inline-block' }} />
-        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ffbd2e', display: 'inline-block' }} />
-        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#27c93f', display: 'inline-block' }} />
-        <span style={{ flex: 1, background: '#111', borderRadius: '4px', padding: '3px 10px', fontSize: '10px', color: '#555', margin: '0 8px' }}>traffikora.com \u2014 AI generating content...</span>
-        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#E8610A', display: 'inline-block' }} />
-      </div>
-      <div style={{ padding: '16px' }}>
-        <div style={{ fontSize: '10px', color: '#555', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '10px' }}>\u26a1 Live Content Generation</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {visible.map((d, i) => (
-            <div key={i} style={{ background: '#141414', border: '1px solid #1e1e1e', borderRadius: '8px', padding: '10px 14px' }}>
-              <div style={{ fontSize: '10px', color: d.color, fontWeight: 700, marginBottom: '4px' }}>\u2713 {d.label}</div>
-              <div style={{ fontSize: '12px', color: '#ccc' }}>{d.content}</div>
-              <div style={{ fontSize: '10px', color: '#555', marginTop: '3px' }}>{d.meta}</div>
-            </div>
-          ))}
-        </div>
-        <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #1e1e1e', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '11px', color: '#555' }}>Running automatically \u00b7 24/7 \u00b7 Zero manual work</span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#22c55e', fontWeight: 700 }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
-            LIVE
-          </span>
-        </div>
-      </div>
-    </div>
-  )
+    const cats = mobile?.lighthouseResult?.categories || {}
+    const audits = mobile?.lighthouseResult?.audits || {}
+
+    const performance = Math.round((cats?.performance?.score ?? 0) * 100)
+    const accessibility = Math.round((cats?.accessibility?.score ?? 0) * 100)
+    const seo = Math.round((cats?.seo?.score ?? 0) * 100)
+    const bestPractices = Math.round((cats?.['best-practices']?.score ?? 0) * 100)
+    const desktopPerf = Math.round((desktop?.lighthouseResult?.categories?.performance?.score ?? 0) * 100)
+
+    const isHttps = url.startsWith('https')
+
+    // Viewport — pass if score is 1 OR null (null means not applicable/passed)
+    const viewportScore = audits?.['viewport']?.score
+    const mobile_ok = viewportScore === 1 || viewportScore === null || viewportScore === undefined
+
+    // Meta title
+    const titleScore = audits?.['document-title']?.score
+    const metaTitle = titleScore === 1 || titleScore === null || titleScore === undefined
+
+    // Meta description
+    const descScore = audits?.['meta-description']?.score
+    const metaDesc = descScore === 1 || descScore === null || descScore === undefined
+
+    // Schema
+    const schemaScore = audits?.['structured-data']?.score
+    const hasSchema = schemaScore === 1 || schemaScore === null || schemaScore === undefined
+
+    // H1
+    const headingScore = audits?.['heading-order']?.score
+    const h1 = headingScore === 1 || headingScore === null || headingScore === undefined
+
+    // Image alts
+    const imageScore = audits?.['image-alt']?.score
+    const imageAlts = imageScore === 1 || imageScore === null || imageScore === undefined
+
+    // Links
+    const linksScore = audits?.['crawlable-anchors']?.score
+    const links = linksScore === 1 || linksScore === null || linksScore === undefined
+
+    // Sitemap
+    let sitemapExists = false
+    try {
+      const origin = new URL(url).origin
+      const r = await fetch(\`\${origin}/sitemap.xml\`, { method: 'HEAD', signal: AbortSignal.timeout(5000) })
+      sitemapExists = r.ok
+    } catch {}
+
+    const checks = {
+      pagespeed: {
+        pass: performance >= 70,
+        score: performance,
+        message: performance >= 70
+          ? \`Page speed score is \${performance}/100 \u2014 good performance\`
+          : \`Page speed score is \${performance}/100 \u2014 slow load times hurt rankings. Desktop: \${desktopPerf}/100\`,
+        impact: 'high'
+      },
+      ssl: {
+        pass: isHttps,
+        message: isHttps ? 'SSL certificate valid and active \u2014 site is secure' : 'No SSL certificate \u2014 site is not secure',
+        impact: 'high'
+      },
+      mobile: {
+        pass: mobile_ok,
+        message: mobile_ok ? 'Site is mobile responsive \u2014 viewport configured correctly' : 'Viewport not configured \u2014 site may not be mobile friendly',
+        impact: 'medium'
+      },
+      meta_title: {
+        pass: metaTitle,
+        message: metaTitle ? 'Meta title present and optimized' : 'Meta title missing or poorly optimized',
+        impact: 'high'
+      },
+      meta_desc: {
+        pass: metaDesc,
+        message: metaDesc ? 'Meta description present and optimized' : 'Meta description missing \u2014 Google will auto-generate one',
+        impact: 'high'
+      },
+      sitemap: {
+        pass: sitemapExists,
+        message: sitemapExists ? 'Sitemap.xml found \u2014 Google can crawl efficiently' : 'No sitemap.xml detected \u2014 Google cannot crawl efficiently',
+        impact: 'medium'
+      },
+      schema: {
+        pass: hasSchema,
+        message: hasSchema ? 'Schema markup detected' : 'No schema markup found \u2014 missing rich snippet opportunities',
+        impact: 'medium'
+      },
+      h1: {
+        pass: h1,
+        message: h1 ? 'Heading structure is properly organized' : 'Heading order issues detected \u2014 affects SEO and accessibility',
+        impact: 'medium'
+      },
+      images: {
+        pass: imageAlts,
+        message: imageAlts ? 'All images have alt tags' : 'Images missing alt tags \u2014 accessibility and SEO risk',
+        impact: 'low'
+      },
+      links: {
+        pass: links,
+        message: links ? 'Internal link structure looks healthy' : 'Some links are not crawlable \u2014 Google may miss pages',
+        impact: 'low'
+      },
+    }
+
+    const passed = Object.values(checks).filter(c => c.pass).length
+    const total = Object.keys(checks).length
+    const score = Math.round((passed / total) * 100)
+
+    return NextResponse.json({ score, checks, passed, total, performance, accessibility, seo, bestPractices, desktopPerf })
+
+  } catch (err) {
+    console.error('SEO analyze error:', err)
+    return NextResponse.json({ error: err.message }, { status: 500 })
+  }
 }
 `;
 
-fs.writeFileSync('C:\\\\Users\\\\randy\\\\traffikfuel\\\\src\\\\components\\\\LiveDemo.tsx', liveDemo, 'utf8');
-console.log('SUCCESS: LiveDemo.tsx fixed');
-console.log('SUCCESS: FaqAccordion.tsx already correct');
+fs.writeFileSync('C:\\\\Users\\\\randy\\\\traffikfuel\\\\src\\\\app\\\\api\\\\seo-analyze\\\\route.ts', content, 'utf8');
+console.log('SUCCESS: seo-analyze route fixed — viewport audit correctly handled');

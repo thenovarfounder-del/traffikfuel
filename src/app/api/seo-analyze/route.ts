@@ -9,8 +9,6 @@ export async function POST(req) {
     const apiKey = process.env.GOOGLE_PAGESPEED_API_KEY
     const encoded = encodeURIComponent(url)
 
-    const categories = 'performance,accessibility,seo,best-practices'
-
     const [mobileRes, desktopRes] = await Promise.all([
       fetch(`https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encoded}&strategy=mobile&category=performance&category=accessibility&category=seo&category=best-practices&key=${apiKey}`),
       fetch(`https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encoded}&strategy=desktop&category=performance&key=${apiKey}`)
@@ -18,9 +16,6 @@ export async function POST(req) {
 
     const mobile = await mobileRes.json()
     const desktop = await desktopRes.json()
-
-    console.log('Mobile categories:', JSON.stringify(mobile?.lighthouseResult?.categories))
-    console.log('Mobile audits keys:', Object.keys(mobile?.lighthouseResult?.audits || {}).slice(0, 20))
 
     const cats = mobile?.lighthouseResult?.categories || {}
     const audits = mobile?.lighthouseResult?.audits || {}
@@ -33,40 +28,40 @@ export async function POST(req) {
 
     const isHttps = url.startsWith('https')
 
-    // Viewport check
-    const viewportAudit = audits?.['viewport']
-    const mobile_ok = viewportAudit?.score === 1 || viewportAudit?.score === null
+    // Viewport — pass if score is 1 OR null (null means not applicable/passed)
+    const viewportScore = audits?.['viewport']?.score
+    const mobile_ok = viewportScore === 1 || viewportScore === null || viewportScore === undefined
 
     // Meta title
-    const titleAudit = audits?.['document-title']
-    const metaTitle = titleAudit?.score === 1 || titleAudit?.score === null
+    const titleScore = audits?.['document-title']?.score
+    const metaTitle = titleScore === 1 || titleScore === null || titleScore === undefined
 
     // Meta description
-    const descAudit = audits?.['meta-description']
-    const metaDesc = descAudit?.score === 1 || descAudit?.score === null
+    const descScore = audits?.['meta-description']?.score
+    const metaDesc = descScore === 1 || descScore === null || descScore === undefined
 
-    // Schema — multiple possible audit IDs
-    const schemaAudit = audits?.['structured-data'] || audits?.['schema-org'] || audits?.['structured-data-automatic']
-    const hasSchema = !schemaAudit || schemaAudit?.score === 1 || schemaAudit?.score === null
+    // Schema
+    const schemaScore = audits?.['structured-data']?.score
+    const hasSchema = schemaScore === 1 || schemaScore === null || schemaScore === undefined
 
-    // H1 / heading order
-    const headingAudit = audits?.['heading-order']
-    const h1 = headingAudit?.score === 1 || headingAudit?.score === null
+    // H1
+    const headingScore = audits?.['heading-order']?.score
+    const h1 = headingScore === 1 || headingScore === null || headingScore === undefined
 
     // Image alts
-    const imageAudit = audits?.['image-alt']
-    const imageAlts = imageAudit?.score === 1 || imageAudit?.score === null
+    const imageScore = audits?.['image-alt']?.score
+    const imageAlts = imageScore === 1 || imageScore === null || imageScore === undefined
 
-    // Crawlable links
-    const linksAudit = audits?.['crawlable-anchors']
-    const links = !linksAudit || linksAudit?.score === 1 || linksAudit?.score === null
+    // Links
+    const linksScore = audits?.['crawlable-anchors']?.score
+    const links = linksScore === 1 || linksScore === null || linksScore === undefined
 
-    // Sitemap — fetch directly
+    // Sitemap
     let sitemapExists = false
     try {
-      const sitemapUrl = new URL(url)
-      const sitemapRes = await fetch(`${sitemapUrl.origin}/sitemap.xml`, { method: 'HEAD', signal: AbortSignal.timeout(5000) })
-      sitemapExists = sitemapRes.ok
+      const origin = new URL(url).origin
+      const r = await fetch(`${origin}/sitemap.xml`, { method: 'HEAD', signal: AbortSignal.timeout(5000) })
+      sitemapExists = r.ok
     } catch {}
 
     const checks = {
@@ -85,7 +80,7 @@ export async function POST(req) {
       },
       mobile: {
         pass: mobile_ok,
-        message: mobile_ok ? 'Site is mobile responsive' : 'Viewport not configured — site may not be mobile friendly',
+        message: mobile_ok ? 'Site is mobile responsive — viewport configured correctly' : 'Viewport not configured — site may not be mobile friendly',
         impact: 'medium'
       },
       meta_title: {
