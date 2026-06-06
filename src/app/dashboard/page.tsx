@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@supabase/supabase-js'
+import WelcomeModal from '@/components/WelcomeModal'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -89,6 +90,8 @@ export default function Dashboard() {
         .dash-card { transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
         .dash-card:hover { transform: translateY(-2px); }
       `}</style>
+
+      <WelcomeModal userStatus={userStatus} userName={firstName} />
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 32px', animation: 'slideIn 0.4s ease' }}>
 
