@@ -19,7 +19,7 @@ export default function Nav() {
         .mobile-menu a { display: block; color: #111; text-decoration: none; font-size: 22px; font-weight: 600; padding: 18px 0; border-bottom: 1px solid #f0f0f0; font-family: 'DM Sans', sans-serif; }
         .mobile-menu a.orange { color: #E8610A; }
         .mobile-menu a.cta-mobile { background: linear-gradient(135deg,#E8610A,#c94e08); color: #fff !important; padding: 16px 22px; font-size: 18px; border-radius: 8px; text-align: center; margin-top: 24px; border-bottom: none; }
-        .mobile-menu a.login-mobile { color: #111 !important; padding: 16px 22px; font-size: 18px; border-radius: 8px; text-align: center; margin-top: 12px; border: 1.5px solid #111 !important; border-bottom: 1.5px solid #111 !important; }
+        .mobile-menu a.login-mobile { background: linear-gradient(135deg,#E8610A,#c94e08); color: #fff !important; padding: 16px 22px; font-size: 18px; border-radius: 8px; text-align: center; margin-top: 12px; border-bottom: none; }
         @media (max-width: 900px) {
           .nav-links { display: none; }
           .nav-hamburger { display: block; }
@@ -47,7 +47,7 @@ export default function Nav() {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '8px' }}>
-          <Link href="/login" className="nav-login-btn" style={{ background: '#fff', color: '#111', padding: '9px 16px', textDecoration: 'none', fontSize: '13px', fontWeight: 600, borderRadius: '6px', border: '1.5px solid #222' }}>Login</Link>
+          <Link href="/login" className="nav-login-btn" style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', padding: '9px 16px', textDecoration: 'none', fontSize: '13px', fontWeight: 700, borderRadius: '6px', border: 'none' }}>Login</Link>
           <Link href="/signup" className="nav-cta-btn" style={{ background: 'linear-gradient(135deg,#E8610A,#c94e08)', color: '#fff', padding: '9px 16px', textDecoration: 'none', fontSize: '13px', fontWeight: 700, borderRadius: '8px', border: '2.5px solid #111' }}>Start Free Today</Link>
           <button className="nav-hamburger" aria-label="Toggle menu" onClick={() => { const menu = document.getElementById('mobile-nav-menu'); if (menu) menu.classList.toggle('is-open'); }}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round">
@@ -67,11 +67,11 @@ export default function Nav() {
         <a href="/how-it-works">How It Works</a>
         <a href="/why-traffikora">Why Traffikora</a>
         <a href="/faq">FAQ</a>
-        <a href="/blog" class="orange">Blog</a>
+        <a href="/blog" className="orange">Blog</a>
         <a href="/contact">Contact</a>
         <a href="/about">About Us</a>
-        <a href="/login" class="login-mobile">Login</a>
-        <a href="/signup" class="cta-mobile">Start Free Today</a>
+        <a href="/login" className="login-mobile">Login</a>
+        <a href="/signup" className="cta-mobile">Start Free Today</a>
       </div>
     </>
   )

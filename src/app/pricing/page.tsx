@@ -15,7 +15,7 @@ const plans = [
   { name: 'Starter', price: '47', sub: '/mo', desc: 'Automate your marketing and show up online every single day.', features: ['Unlimited AI blog posts', 'AI social content for Facebook, Instagram, LinkedIn & X', 'One-Push Publish to WordPress', 'Content Calendar & Queue', 'Manual publishing controls', '1 website connected'], btn: 'Get Started', planKey: 'starter', featured: false },
   { name: 'Pro', price: '97', sub: '/mo', desc: 'Fully hands-off. AI agents run every morning and handle everything.', features: ['Everything in Starter', 'AI Agents run daily automatically', 'Auto Mode — fully hands-off', 'TikTok + YouTube Shorts publishing', 'Google SEO + AI Engine Optimization', 'Advanced analytics'], btn: 'Start Pro', planKey: 'pro', featured: true },
   { name: 'Agency', price: '297', sub: '/mo', desc: 'Manage up to 10 clients. White-label it and bill whatever you want.', features: ['Everything in Pro', 'Up to 10 client accounts', 'White-label dashboard', 'Client management portal', 'Bulk content generation', 'Agency analytics overview'], btn: 'Start Agency Plan', planKey: 'agency', featured: false },
-  { name: 'Enterprise', price: '997', sub: '/mo', desc: 'Unlimited clients, custom AI training, dedicated account manager.', features: ['Everything in Agency', 'Unlimited client accounts', 'Custom AI voice per client', 'Google Search Console integration', 'SLA uptime guarantee', 'Dedicated account manager'], btn: 'Contact Us', planKey: 'enterprise', featured: false },
+  { name: 'Enterprise', price: '997', sub: '/mo', desc: 'Unlimited clients, custom AI training, dedicated account manager.', features: ['Everything in Agency', 'Unlimited client accounts', 'Custom AI voice per client', 'Google Search Console integration', 'SLA uptime guarantee', 'Dedicated account manager'], btn: 'Start Enterprise Plan', planKey: 'enterprise', featured: false },
 ]
 
 export default function PricingPage() {
@@ -37,39 +37,20 @@ export default function PricingPage() {
   }, [])
 
   async function handlePlanClick(plan) {
-    // Free plan
     if (plan.planKey === 'free') {
-      if (user) {
-        window.location.href = '/dashboard'
-      } else {
-        window.location.href = '/signup?plan=free'
-      }
+      window.location.href = user ? '/dashboard' : '/signup?plan=free'
       return
     }
-
-    // Enterprise — always contact
-    if (plan.planKey === 'enterprise') {
-      window.location.href = '/contact'
-      return
-    }
-
-    // Paid plans
     if (!user) {
       window.location.href = '/signup?plan=' + plan.planKey
       return
     }
-
-    // Logged in — hit Stripe checkout
     setLoadingPlan(plan.planKey)
     try {
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          plan: plan.planKey,
-          email: user.email,
-          userId: user.id
-        })
+        body: JSON.stringify({ plan: plan.planKey, email: user.email, userId: user.id })
       })
       const data = await res.json()
       if (data.url) {
@@ -77,17 +58,19 @@ export default function PricingPage() {
       } else {
         alert('Something went wrong. Please try again.')
       }
-    } catch (err) {
+    } catch {
       alert('Something went wrong. Please try again.')
     }
     setLoadingPlan(null)
   }
 
+  const orangeBtn = { background: 'linear-gradient(135deg,#E8610A,#ff8c42)', color: '#fff', boxShadow: '0 4px 20px rgba(232,97,10,0.4)', border: 'none' }
+  const ghostBtn = { background: 'transparent', color: '#ccc', border: '1px solid rgba(255,255,255,0.2)' }
+
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a0a', fontFamily: 'DM Sans, sans-serif' }}>
       <Nav />
 
-      {/* HERO */}
       <section style={{ padding: isMobile ? '48px 24px 32px' : '80px 40px 48px', textAlign: 'center' }}>
         <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '.18em', textTransform: 'uppercase', color: '#E8610A', display: 'block', marginBottom: '12px' }}>Simple pricing</span>
         <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? '36px' : '58px', fontWeight: 700, color: '#fff', lineHeight: 1.05, letterSpacing: '-1px', marginBottom: '16px' }}>
@@ -98,7 +81,6 @@ export default function PricingPage() {
         </p>
       </section>
 
-      {/* PLANS */}
       <section style={{ padding: isMobile ? '0 16px 48px' : '0 40px 80px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(5,1fr)', gap: isMobile ? '12px' : '16px', maxWidth: '1300px', margin: '0 auto' }}>
           {plans.map(plan => (
@@ -119,15 +101,14 @@ export default function PricingPage() {
               <button
                 onClick={() => handlePlanClick(plan)}
                 disabled={loadingPlan === plan.planKey}
-                style={{ width: '100%', padding: '13px', borderRadius: '8px', fontSize: '13px', fontFamily: 'DM Sans, sans-serif', fontWeight: 700, border: plan.featured ? 'none' : '1px solid rgba(255,255,255,0.2)', background: loadingPlan === plan.planKey ? '#444' : plan.featured ? 'linear-gradient(135deg,#E8610A,#ff8c42)' : 'transparent', color: plan.featured ? '#fff' : '#ccc', display: 'block', textAlign: 'center', textDecoration: 'none', boxShadow: plan.featured ? '0 4px 20px rgba(232,97,10,0.4)' : 'none', boxSizing: 'border-box', cursor: loadingPlan === plan.planKey ? 'not-allowed' : 'pointer' }}>
-                {loadingPlan === plan.planKey ? 'Redirecting to checkout...' : plan.btn}
+                style={{ width: '100%', padding: '13px', borderRadius: '8px', fontSize: '13px', fontFamily: 'DM Sans, sans-serif', fontWeight: 700, cursor: loadingPlan === plan.planKey ? 'not-allowed' : 'pointer', boxSizing: 'border-box', textAlign: 'center', ...(plan.planKey === 'free' ? ghostBtn : orangeBtn), ...(loadingPlan === plan.planKey ? { background: '#444', boxShadow: 'none' } : {}) }}>
+                {loadingPlan === plan.planKey ? 'Redirecting...' : plan.btn}
               </button>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ROI CALCULATOR */}
       <section style={{ background: '#111', borderTop: '2px solid #1a1a1a', borderBottom: '2px solid #1a1a1a', padding: isMobile ? '40px 24px' : '60px 40px' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
           <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '.18em', textTransform: 'uppercase', color: '#E8610A', display: 'block', marginBottom: '10px' }}>The math is simple</span>
@@ -136,7 +117,7 @@ export default function PricingPage() {
           </h2>
           <p style={{ fontSize: '15px', color: '#888', lineHeight: 1.85, marginBottom: '32px', fontWeight: 300 }}>Most businesses spend $2,000–$5,000/mo on agencies. Traffikora starts at $97/mo and never stops working.</p>
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: '16px' }}>
-            {[{num:'$97',lbl:'Pro plan per month'},{num:'2',lbl:'Extra clients to break even'},{num:'∞',lbl:'Return on investment after that'}].map((item) => (
+            {[{num:'$97',lbl:'Pro plan per month'},{num:'2',lbl:'Extra clients to break even'},{num:'∞',lbl:'Return on investment after that'}].map(item => (
               <div key={item.num} style={{ background: '#0a0a0a', border: '1px solid #2a2a2a', borderRadius: '12px', padding: '24px 20px', textAlign: 'center' }}>
                 <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '42px', fontWeight: 700, color: '#E8610A', lineHeight: 1, marginBottom: '8px' }}>{item.num}</div>
                 <div style={{ fontSize: '13px', color: '#888', lineHeight: 1.5, fontWeight: 300 }}>{item.lbl}</div>
@@ -146,7 +127,6 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* TRUST BAR */}
       <section style={{ padding: isMobile ? '40px 24px 48px' : '40px 40px 80px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4,1fr)', gap: '12px', maxWidth: '1000px', margin: '0 auto' }}>
           {[
