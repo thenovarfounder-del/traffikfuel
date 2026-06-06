@@ -13,7 +13,7 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
 
-const PLAN_ORDER = ['free', 'past_due', 'starter', 'pro', 'agency', 'enterprise']
+const PLAN_ORDER = ['free', 'trial', 'past_due', 'starter', 'pro', 'agency', 'enterprise']
 function planRank(plan) { return PLAN_ORDER.indexOf(plan ?? 'free') }
 function canAccess(userPlan, requiredPlan) { return planRank(userPlan) >= planRank(requiredPlan) }
 
@@ -85,7 +85,7 @@ export default function Dashboard() {
       const { data: userData } = await supabase.from('users').select('status').eq('id', user.id).single()
       const status = userData?.status || 'free'
       setUserStatus(status)
-      if (status === 'free') {
+      if (status === 'free' || status === 'trial') {
         const now = new Date()
         const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
         const { count } = await supabase.from('blog_generations').select('*', { count: 'exact', head: true }).eq('user_id', user.id).gte('created_at', firstOfMonth)
@@ -102,7 +102,7 @@ export default function Dashboard() {
   if (userStatus === null) return <div style={{ minHeight: '100vh', backgroundColor: '#080808' }} />
 
   const firstName = user?.email?.split('@')[0] || 'there'
-  const isFree = userStatus === 'free'
+  const isFree = userStatus === 'free' || userStatus === 'trial'
   const allBlogsUsed = isFree && blogsUsed >= 3
   const blogsLeft = Math.max(0, 3 - blogsUsed)
 
@@ -188,7 +188,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
-                <a href="/pricing" style={{ background: 'linear-gradient(135deg,#E8610A,#C84E06)', color: '#fff', padding: '10px 22px', borderRadius: '8px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(232,97,10,0.3)' }}>
+                <a href="/pricing" style={{ background: 'linear-gradient(135deg,#E8610A,#C84E06)', color: '#fff', padding: '10px 22px', borderRadius: '8px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(232,97,10,0.3)', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
                   Upgrade to Starter — $47/mo →
                 </a>
               </div>
