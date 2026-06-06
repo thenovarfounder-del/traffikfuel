@@ -126,7 +126,7 @@ export default function HomePage() {
         <div style={{ background: '#090909', borderTop: '1px solid #1a1a1a', padding: '10px 40px', display: 'flex', alignItems: 'center', gap: '14px' }}>
           <span style={{ fontSize: '10px', color: '#555', textTransform: 'uppercase', letterSpacing: '.12em', whiteSpace: 'nowrap' }}>Powered by</span>
           <div style={{ display: 'flex', gap: '7px' }}>
-            {['Google', 'Stripe', 'Twilio', 'Supabase', 'Anthropic'].map(p => (
+            {['Google', 'Stripe', 'Supabase', 'Anthropic'].map(p => (
               <span key={p} style={{ fontSize: '10px', color: '#ccc', padding: '4px 10px', border: '1px solid #555', borderRadius: '3px' }}>{p}</span>
             ))}
           </div>
