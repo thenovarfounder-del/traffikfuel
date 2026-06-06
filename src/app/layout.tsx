@@ -4,16 +4,14 @@ import { Playfair_Display, DM_Sans } from 'next/font/google'
 import CookieBanner from '@/components/CookieBanner'
 import ScrollToTop from '@/components/ScrollToTop'
 import ChatBubble from '@/components/ChatBubble'
-
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400','700','900'], display: 'swap', variable: '--font-playfair' })
 const dmSans = DM_Sans({ subsets: ['latin'], weight: ['300','400','500','600','700'], display: 'swap', variable: '--font-dm-sans' })
-
 export const metadata = {
-  title: 'Traffikora — AI Marketing Automation for Local Businesses',
-  description: 'Set it once. It markets forever. Traffikora automates your blogs, social media, and SEO across Google, TikTok, YouTube, Facebook, Instagram and LinkedIn — 24/7, no agency needed.',
+  title: 'Traffikora – AI Marketing Automation for Local Businesses',
+  description: 'Set it once. It markets forever. Traffikora automates your blogs, social media, and SEO across Google, TikTok, YouTube, Facebook, Instagram and LinkedIn – 24/7, no agency needed.',
   metadataBase: new URL('https://www.traffikora.com'),
   openGraph: {
-    title: 'Traffikora — AI Marketing Automation for Local Businesses',
+    title: 'Traffikora – AI Marketing Automation for Local Businesses',
     description: 'Set it once. It markets forever.',
     url: 'https://www.traffikora.com',
     siteName: 'Traffikora',
@@ -22,11 +20,10 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Traffikora — AI Marketing Automation for Local Businesses',
+    title: 'Traffikora – AI Marketing Automation for Local Businesses',
     description: 'Set it once. It markets forever.',
   },
 }
-
 const schemaOrg = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
@@ -43,7 +40,6 @@ const schemaOrg = {
     logo: { '@type': 'ImageObject', url: 'https://www.traffikora.com/favicon.svg' },
   },
 }
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${playfair.variable} ${dmSans.variable}`} suppressHydrationWarning>
@@ -55,8 +51,7 @@ export default function RootLayout({ children }) {
         <link rel="canonical" href="https://www.traffikora.com" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="apple-touch-icon" href="/favicon.svg" />
-        
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }} />
       </head>
       <body suppressHydrationWarning>
