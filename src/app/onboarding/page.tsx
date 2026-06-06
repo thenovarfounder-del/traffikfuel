@@ -66,7 +66,7 @@ export default function Onboarding() {
       phone: profile?.phone || '',
       website: profile?.website || '',
       platforms,
-      auto_mode: false,
+      auto_mode: true,
     }, { onConflict: 'user_id' })
 
     setStep(3)
