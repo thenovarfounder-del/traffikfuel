@@ -21,6 +21,7 @@ const plans = [
 export default function PricingPage() {
   const [isMobile, setIsMobile] = useState(false)
   const [user, setUser] = useState(null)
+  const [sessionLoaded, setSessionLoaded] = useState(false)
   const [loadingPlan, setLoadingPlan] = useState(null)
 
   useEffect(() => {
@@ -31,12 +32,14 @@ export default function PricingPage() {
   }, [])
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      if (data?.user) setUser(data.user)
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) setUser(session.user)
+      setSessionLoaded(true)
     })
   }, [])
 
   async function handlePlanClick(plan) {
+    if (!sessionLoaded) return
     if (plan.planKey === 'free') {
       window.location.href = user ? '/dashboard' : '/signup?plan=free'
       return
@@ -99,8 +102,8 @@ export default function PricingPage() {
               </ul>
               <button
                 onClick={() => handlePlanClick(plan)}
-                disabled={loadingPlan === plan.planKey}
-                style={{ width: '100%', padding: '13px', borderRadius: '8px', fontSize: '13px', fontFamily: 'DM Sans, sans-serif', fontWeight: 700, cursor: loadingPlan === plan.planKey ? 'not-allowed' : 'pointer', boxSizing: 'border-box', textAlign: 'center', ...orangeBtn, ...(loadingPlan === plan.planKey ? { background: '#444', boxShadow: 'none' } : {}) }}>
+                disabled={loadingPlan === plan.planKey || !sessionLoaded}
+                style={{ width: '100%', padding: '13px', borderRadius: '8px', fontSize: '13px', fontFamily: 'DM Sans, sans-serif', fontWeight: 700, cursor: (loadingPlan === plan.planKey || !sessionLoaded) ? 'not-allowed' : 'pointer', boxSizing: 'border-box', textAlign: 'center', ...orangeBtn, ...(loadingPlan === plan.planKey ? { background: '#444', boxShadow: 'none' } : {}) }}>
                 {loadingPlan === plan.planKey ? 'Redirecting...' : plan.btn}
               </button>
             </div>
