@@ -1,19 +1,27 @@
 // @ts-nocheck
 'use client'
 import { useState, useEffect } from 'react'
+import { createClient } from '@supabase/supabase-js'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+)
+
 const plans = [
-  { name: 'Free', price: '0', sub: '/forever', desc: 'Try Traffikora with no credit card. Get a real taste of AI content before you commit.', features: ['3 AI blog posts per month', 'Preview content before publish', 'Access to content dashboard', 'No credit card required', 'Upgrade anytime'], btn: 'Start Free — No Card', href: '/signup?plan=free', featured: false },
-  { name: 'Starter', price: '47', sub: '/mo', desc: 'Automate your marketing and show up online every single day.', features: ['Unlimited AI blog posts', 'AI social content for Facebook, Instagram, LinkedIn & X', 'One-Push Publish to WordPress', 'Content Calendar & Queue', 'Manual publishing controls', '1 website connected'], btn: 'Get Started', href: '/signup?plan=starter', featured: false },
-  { name: 'Pro', price: '97', sub: '/mo', desc: 'Fully hands-off. AI agents run every morning and handle everything.', features: ['Everything in Starter', 'AI Agents run daily automatically', 'Auto Mode — fully hands-off', 'TikTok + YouTube Shorts publishing', 'Google SEO + AI Engine Optimization', 'Advanced analytics'], btn: 'Start Pro', href: '/signup?plan=pro', featured: true },
-  { name: 'Agency', price: '297', sub: '/mo', desc: 'Manage up to 10 clients. White-label it and bill whatever you want.', features: ['Everything in Pro', 'Up to 10 client accounts', 'White-label dashboard', 'Client management portal', 'Bulk content generation', 'Agency analytics overview'], btn: 'Start Agency Plan', href: '/signup?plan=agency', featured: false },
-  { name: 'Enterprise', price: '997', sub: '/mo', desc: 'Unlimited clients, custom AI training, dedicated account manager.', features: ['Everything in Agency', 'Unlimited client accounts', 'Custom AI voice per client', 'Google Search Console integration', 'SLA uptime guarantee', 'Dedicated account manager'], btn: 'Contact Us', href: '/contact', featured: false },
+  { name: 'Free', price: '0', sub: '/forever', desc: 'Try Traffikora with no credit card. Get a real taste of AI content before you commit.', features: ['3 AI blog posts per month', 'Preview content before publish', 'Access to content dashboard', 'No credit card required', 'Upgrade anytime'], btn: 'Start Free — No Card', planKey: 'free', featured: false },
+  { name: 'Starter', price: '47', sub: '/mo', desc: 'Automate your marketing and show up online every single day.', features: ['Unlimited AI blog posts', 'AI social content for Facebook, Instagram, LinkedIn & X', 'One-Push Publish to WordPress', 'Content Calendar & Queue', 'Manual publishing controls', '1 website connected'], btn: 'Get Started', planKey: 'starter', featured: false },
+  { name: 'Pro', price: '97', sub: '/mo', desc: 'Fully hands-off. AI agents run every morning and handle everything.', features: ['Everything in Starter', 'AI Agents run daily automatically', 'Auto Mode — fully hands-off', 'TikTok + YouTube Shorts publishing', 'Google SEO + AI Engine Optimization', 'Advanced analytics'], btn: 'Start Pro', planKey: 'pro', featured: true },
+  { name: 'Agency', price: '297', sub: '/mo', desc: 'Manage up to 10 clients. White-label it and bill whatever you want.', features: ['Everything in Pro', 'Up to 10 client accounts', 'White-label dashboard', 'Client management portal', 'Bulk content generation', 'Agency analytics overview'], btn: 'Start Agency Plan', planKey: 'agency', featured: false },
+  { name: 'Enterprise', price: '997', sub: '/mo', desc: 'Unlimited clients, custom AI training, dedicated account manager.', features: ['Everything in Agency', 'Unlimited client accounts', 'Custom AI voice per client', 'Google Search Console integration', 'SLA uptime guarantee', 'Dedicated account manager'], btn: 'Contact Us', planKey: 'enterprise', featured: false },
 ]
 
 export default function PricingPage() {
   const [isMobile, setIsMobile] = useState(false)
+  const [user, setUser] = useState(null)
+  const [loadingPlan, setLoadingPlan] = useState(null)
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 900)
@@ -21,6 +29,59 @@ export default function PricingPage() {
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
   }, [])
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      if (data?.user) setUser(data.user)
+    })
+  }, [])
+
+  async function handlePlanClick(plan) {
+    // Free plan
+    if (plan.planKey === 'free') {
+      if (user) {
+        window.location.href = '/dashboard'
+      } else {
+        window.location.href = '/signup?plan=free'
+      }
+      return
+    }
+
+    // Enterprise — always contact
+    if (plan.planKey === 'enterprise') {
+      window.location.href = '/contact'
+      return
+    }
+
+    // Paid plans
+    if (!user) {
+      window.location.href = '/signup?plan=' + plan.planKey
+      return
+    }
+
+    // Logged in — hit Stripe checkout
+    setLoadingPlan(plan.planKey)
+    try {
+      const res = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          plan: plan.planKey,
+          email: user.email,
+          userId: user.id
+        })
+      })
+      const data = await res.json()
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        alert('Something went wrong. Please try again.')
+      }
+    } catch (err) {
+      alert('Something went wrong. Please try again.')
+    }
+    setLoadingPlan(null)
+  }
 
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a0a', fontFamily: 'DM Sans, sans-serif' }}>
@@ -55,7 +116,12 @@ export default function PricingPage() {
                   </li>
                 ))}
               </ul>
-              <a href={plan.href} style={{ width: '100%', padding: '13px', borderRadius: '8px', fontSize: '13px', fontFamily: 'DM Sans, sans-serif', fontWeight: 700, border: plan.featured ? 'none' : '1px solid rgba(255,255,255,0.2)', background: plan.featured ? 'linear-gradient(135deg,#E8610A,#ff8c42)' : 'transparent', color: plan.featured ? '#fff' : '#ccc', display: 'block', textAlign: 'center', textDecoration: 'none', boxShadow: plan.featured ? '0 4px 20px rgba(232,97,10,0.4)' : 'none', boxSizing: 'border-box' }}>{plan.btn}</a>
+              <button
+                onClick={() => handlePlanClick(plan)}
+                disabled={loadingPlan === plan.planKey}
+                style={{ width: '100%', padding: '13px', borderRadius: '8px', fontSize: '13px', fontFamily: 'DM Sans, sans-serif', fontWeight: 700, border: plan.featured ? 'none' : '1px solid rgba(255,255,255,0.2)', background: loadingPlan === plan.planKey ? '#444' : plan.featured ? 'linear-gradient(135deg,#E8610A,#ff8c42)' : 'transparent', color: plan.featured ? '#fff' : '#ccc', display: 'block', textAlign: 'center', textDecoration: 'none', boxShadow: plan.featured ? '0 4px 20px rgba(232,97,10,0.4)' : 'none', boxSizing: 'border-box', cursor: loadingPlan === plan.planKey ? 'not-allowed' : 'pointer' }}>
+                {loadingPlan === plan.planKey ? 'Redirecting to checkout...' : plan.btn}
+              </button>
             </div>
           ))}
         </div>
@@ -70,7 +136,7 @@ export default function PricingPage() {
           </h2>
           <p style={{ fontSize: '15px', color: '#888', lineHeight: 1.85, marginBottom: '32px', fontWeight: 300 }}>Most businesses spend $2,000–$5,000/mo on agencies. Traffikora starts at $97/mo and never stops working.</p>
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: '16px' }}>
-            {[{num:'$97',lbl:'Pro plan per month'},{num:'2',lbl:'Extra clients to break even'},{num:'∞',lbl:'Return on investment after that'}].map((item,i) => (
+            {[{num:'$97',lbl:'Pro plan per month'},{num:'2',lbl:'Extra clients to break even'},{num:'∞',lbl:'Return on investment after that'}].map((item) => (
               <div key={item.num} style={{ background: '#0a0a0a', border: '1px solid #2a2a2a', borderRadius: '12px', padding: '24px 20px', textAlign: 'center' }}>
                 <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '42px', fontWeight: 700, color: '#E8610A', lineHeight: 1, marginBottom: '8px' }}>{item.num}</div>
                 <div style={{ fontSize: '13px', color: '#888', lineHeight: 1.5, fontWeight: 300 }}>{item.lbl}</div>
@@ -81,7 +147,7 @@ export default function PricingPage() {
       </section>
 
       {/* TRUST BAR */}
-      <section style={{ padding: isMobile ? '0 24px 48px' : '0 40px 80px', paddingTop: '40px' }}>
+      <section style={{ padding: isMobile ? '40px 24px 48px' : '40px 40px 80px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4,1fr)', gap: '12px', maxWidth: '1000px', margin: '0 auto' }}>
           {[
             { icon: '🎁', title: 'Free Plan Available', desc: 'No credit card — ever' },
