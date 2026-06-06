@@ -11,7 +11,7 @@ const supabase = createClient(
 )
 
 const plans = [
-  { name: 'Free', price: '0', sub: '/forever', desc: 'Try Traffikora with no credit card. Get a real taste of AI content before you commit.', features: ['3 AI blog posts per month', 'Preview content before publish', 'Access to content dashboard', 'No credit card required', 'Upgrade anytime'], btn: 'Start Free — No Card', planKey: 'free', featured: false },
+  { name: 'Free', price: '0', sub: '/forever', desc: 'Try Traffikora with no credit card. Get a real taste of AI content before you commit.', features: ['3 AI blog posts per month', 'Preview content before publish', 'Access to content dashboard', 'No credit card required', 'Upgrade anytime'], btn: 'Start Free — No Credit Card', planKey: 'free', featured: false },
   { name: 'Starter', price: '47', sub: '/mo', desc: 'Automate your marketing and show up online every single day.', features: ['Unlimited AI blog posts', 'AI social content for Facebook, Instagram, LinkedIn & X', 'One-Push Publish to WordPress', 'Content Calendar & Queue', 'Manual publishing controls', '1 website connected'], btn: 'Get Started', planKey: 'starter', featured: false },
   { name: 'Pro', price: '97', sub: '/mo', desc: 'Fully hands-off. AI agents run every morning and handle everything.', features: ['Everything in Starter', 'AI Agents run daily automatically', 'Auto Mode — fully hands-off', 'TikTok + YouTube Shorts publishing', 'Google SEO + AI Engine Optimization', 'Advanced analytics'], btn: 'Start Pro', planKey: 'pro', featured: true },
   { name: 'Agency', price: '297', sub: '/mo', desc: 'Manage up to 10 clients. White-label it and bill whatever you want.', features: ['Everything in Pro', 'Up to 10 client accounts', 'White-label dashboard', 'Client management portal', 'Bulk content generation', 'Agency analytics overview'], btn: 'Start Agency Plan', planKey: 'agency', featured: false },
@@ -86,7 +86,7 @@ export default function PricingPage() {
           {plans.map(plan => (
             <div key={plan.name} style={{ background: plan.featured ? 'linear-gradient(160deg,#1c1208 0%,#111 60%)' : '#111', padding: isMobile ? '24px 20px' : '28px 20px', borderRadius: '14px', border: plan.featured ? '1px solid #E8610A' : '1px solid rgba(255,255,255,0.15)', display: 'flex', flexDirection: 'column', boxShadow: plan.featured ? '0 0 50px rgba(232,97,10,0.18)' : 'none' }}>
               {plan.featured && <span style={{ display: 'inline-block', background: 'linear-gradient(135deg,#E8610A,#ff8c42)', color: '#fff', fontSize: '10px', letterSpacing: '.12em', textTransform: 'uppercase', padding: '5px 16px', borderRadius: '20px', marginBottom: '12px', fontWeight: 700, alignSelf: 'flex-start' }}>Most Popular</span>}
-              <div style={{ fontSize: '10px', letterSpacing: '.2em', color: '#888', textTransform: 'uppercase', marginBottom: '10px', fontWeight: 700 }}>{plan.name}</div>
+              <div style={{ fontSize: '10px', letterSpacing: '.2em', color: plan.name === 'Free' ? '#ffffff' : '#888', textTransform: 'uppercase', marginBottom: '10px', fontWeight: 700 }}>{plan.name}</div>
               <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '46px', fontWeight: 700, color: '#fff', lineHeight: 1, marginBottom: '4px' }}>
                 <sup style={{ fontSize: '16px', fontFamily: 'DM Sans, sans-serif', fontWeight: 400, verticalAlign: 'super', color: '#E8610A' }}>$</sup>{plan.price}<sub style={{ fontSize: '11px', color: '#444', fontFamily: 'DM Sans, sans-serif', fontWeight: 300 }}>{plan.sub}</sub>
               </div>
