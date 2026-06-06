@@ -11,6 +11,21 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
 
+function getPasswordStrength(pw) {
+  if (!pw) return { score: 0, label: '', color: '' }
+  let score = 0
+  if (pw.length >= 8) score++
+  if (pw.length >= 12) score++
+  if (/[A-Z]/.test(pw)) score++
+  if (/[0-9]/.test(pw)) score++
+  if (/[^A-Za-z0-9]/.test(pw)) score++
+  if (score <= 1) return { score: 1, label: 'Weak', color: '#ef4444' }
+  if (score === 2) return { score: 2, label: 'Fair', color: '#f97316' }
+  if (score === 3) return { score: 3, label: 'Good', color: '#eab308' }
+  if (score === 4) return { score: 4, label: 'Strong', color: '#22c55e' }
+  return { score: 5, label: 'Very Strong', color: '#16a34a' }
+}
+
 export default function SignupPage() {
   const router = useRouter()
   const [isMobile, setIsMobile] = useState(false)
@@ -44,6 +59,8 @@ export default function SignupPage() {
     }
     setLoading(false)
   }
+
+  const strength = getPasswordStrength(password)
 
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a0a', fontFamily: 'DM Sans, sans-serif' }}>
@@ -92,13 +109,32 @@ export default function SignupPage() {
               <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#888', marginBottom: '6px', letterSpacing: '.06em', textTransform: 'uppercase' }}>Full Name</label>
               <input value={name} onChange={e => setName(e.target.value)} placeholder="Your name" style={{ width: '100%', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: '8px', color: '#fff', padding: '13px 16px', fontSize: '14px', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
             </div>
+
             <div style={{ marginBottom: '16px' }}>
               <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#888', marginBottom: '6px', letterSpacing: '.06em', textTransform: 'uppercase' }}>Email Address</label>
               <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" style={{ width: '100%', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: '8px', color: '#fff', padding: '13px 16px', fontSize: '14px', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
             </div>
+
             <div style={{ marginBottom: '24px' }}>
               <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#888', marginBottom: '6px', letterSpacing: '.06em', textTransform: 'uppercase' }}>Password</label>
               <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Min 8 characters" style={{ width: '100%', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: '8px', color: '#fff', padding: '13px 16px', fontSize: '14px', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+
+              {/* PASSWORD STRENGTH METER */}
+              {password.length > 0 && (
+                <div style={{ marginTop: '10px' }}>
+                  <div style={{ display: 'flex', gap: '4px', marginBottom: '6px' }}>
+                    {[1,2,3,4,5].map(i => (
+                      <div key={i} style={{ flex: 1, height: '4px', borderRadius: '2px', background: i <= strength.score ? strength.color : '#2a2a2a', transition: 'background 0.3s' }} />
+                    ))}
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: '11px', color: strength.color, fontWeight: 700 }}>{strength.label}</span>
+                    <span style={{ fontSize: '11px', color: '#555' }}>
+                      {strength.score < 3 ? 'Add numbers, symbols or uppercase' : strength.score < 5 ? 'Almost there — add more variety' : 'Great password!'}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
 
             <button onClick={handleSignup} disabled={loading || !email || !password || !name} style={{ width: '100%', background: loading ? '#444' : 'linear-gradient(135deg,#E8610A,#C84E06)', border: 'none', borderRadius: '8px', color: '#fff', padding: '15px', fontSize: '15px', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', boxShadow: '0 4px 20px rgba(232,97,10,0.35)', marginBottom: '16px' }}>
