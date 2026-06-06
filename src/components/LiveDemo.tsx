@@ -15,13 +15,20 @@ const demos = [
 
 export default function LiveDemo() {
   const [demoIndex, setDemoIndex] = useState(0)
+  const [mounted, setMounted] = useState(false)
+
   useEffect(() => {
+    setMounted(true)
     const interval = setInterval(() => setDemoIndex(i => (i + 1) % 8), 2000)
     return () => clearInterval(interval)
   }, [])
-  const visible = demos.slice(demoIndex, demoIndex + 4).concat(
-    demoIndex + 4 > demos.length ? demos.slice(0, (demoIndex + 4) % demos.length) : []
-  ).slice(0, 4)
+
+  const visible = mounted
+    ? demos.slice(demoIndex, demoIndex + 4).concat(
+        demoIndex + 4 > demos.length ? demos.slice(0, (demoIndex + 4) % demos.length) : []
+      ).slice(0, 4)
+    : demos.slice(0, 4)
+
   return (
     <div style={{ background: '#0f0f0f', border: '1px solid #2a2a2a', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 0 40px rgba(232,97,10,0.12)' }}>
       <div style={{ background: '#1a1a1a', borderBottom: '1px solid #2a2a2a', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -29,7 +36,7 @@ export default function LiveDemo() {
         <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ffbd2e', display: 'inline-block' }} />
         <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#27c93f', display: 'inline-block' }} />
         <span style={{ flex: 1, background: '#111', borderRadius: '4px', padding: '3px 10px', fontSize: '10px', color: '#555', margin: '0 8px' }}>traffikora.com — AI generating content...</span>
-        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#E8610A', display: 'inline-block', animation: 'blink 1.5s ease-in-out infinite' }} />
+        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#E8610A', display: 'inline-block' }} />
       </div>
       <div style={{ padding: '16px' }}>
         <div style={{ fontSize: '10px', color: '#555', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '10px' }}>⚡ Live Content Generation</div>
@@ -45,7 +52,7 @@ export default function LiveDemo() {
         <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #1e1e1e', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span style={{ fontSize: '11px', color: '#555' }}>Running automatically · 24/7 · Zero manual work</span>
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#22c55e', fontWeight: 700 }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', display: 'inline-block', animation: 'blink 1.5s ease-in-out infinite' }} />
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
             LIVE
           </span>
         </div>
