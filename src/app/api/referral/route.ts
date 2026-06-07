@@ -2,6 +2,19 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
+// Simple in-memory rate limiter
+const rateLimitMap = new Map()
+function rateLimit(ip, maxRequests = 20, windowMs = 60000) {
+  const now = Date.now()
+  const windowStart = now - windowMs
+  const requests = rateLimitMap.get(ip) || []
+  const recentRequests = requests.filter(t => t > windowStart)
+  if (recentRequests.length >= maxRequests) return false
+  recentRequests.push(now)
+  rateLimitMap.set(ip, recentRequests)
+  return true
+}
+
 function generateCode(name) {
   const clean = (name || 'USER').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 5) || 'USER'
   const num = Math.floor(100 + Math.random() * 900)
@@ -9,6 +22,11 @@ function generateCode(name) {
 }
 
 export async function POST(request) {
+  const ip = request.headers.get('x-forwarded-for') || 'unknown'
+  if (!rateLimit(ip)) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+  }
+
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -17,18 +35,16 @@ export async function POST(request) {
   const { userId, name, action } = body
   const actionData = body.data
 
-  // Track a click
   if (action === 'click') {
-    const { code, ip, userAgent } = actionData
+    const { code, ip: clickIp, userAgent } = actionData
     const { data: refCode } = await supabase.from('referral_codes').select('*').eq('code', code).single()
     if (refCode) {
-      await supabase.from('referral_clicks').insert({ code, referrer_id: refCode.user_id, ip_address: ip, user_agent: userAgent })
+      await supabase.from('referral_clicks').insert({ code, referrer_id: refCode.user_id, ip_address: clickIp, user_agent: userAgent })
       await supabase.from('referral_codes').update({ total_clicks: (refCode.total_clicks || 0) + 1 }).eq('code', code)
     }
     return NextResponse.json({ success: true })
   }
 
-  // Track a signup
   if (action === 'signup') {
     const { code, referredUserId } = actionData
     const { data: refCode } = await supabase.from('referral_codes').select('*').eq('code', code).single()
@@ -39,7 +55,6 @@ export async function POST(request) {
     return NextResponse.json({ success: true })
   }
 
-  // Create or get referral code
   const { data: existing } = await supabase.from('referral_codes').select('*').eq('user_id', userId).single()
   if (existing) return NextResponse.json({ code: existing })
 

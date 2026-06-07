@@ -3,8 +3,19 @@ import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
+const rateLimitMap = new Map()
+function rateLimit(ip, max = 5, windowMs = 60000) {
+  const now = Date.now()
+  const reqs = (rateLimitMap.get(ip) || []).filter(t => t > now - windowMs)
+  if (reqs.length >= max) return false
+  reqs.push(now)
+  rateLimitMap.set(ip, reqs)
+  return true
+}
 
 export async function POST(request) {
+  const ip = request.headers.get('x-forwarded-for') || 'unknown'
+  if (!rateLimit(ip)) return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
   const { name, email, subject, message } = await request.json()
   if (!name || !email || !message) {
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
