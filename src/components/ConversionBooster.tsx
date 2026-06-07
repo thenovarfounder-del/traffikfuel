@@ -10,8 +10,14 @@ export default function ConversionBooster() {
   const [scrollBannerDismissed, setScrollBannerDismissed] = useState(false)
   const [exitPopupShown, setExitPopupShown] = useState(false)
   const [countdown, setCountdown] = useState({ hours: 23, minutes: 47, seconds: 33 })
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
+    // Mobile detection
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+
     // Random visitor count between 18-47
     setVisitorCount(Math.floor(18 + Math.random() * 29))
 
@@ -65,6 +71,7 @@ export default function ConversionBooster() {
       document.removeEventListener('mouseleave', handleMouseLeave)
       clearTimeout(evaTimer)
       clearInterval(countdownInterval)
+      window.removeEventListener('resize', checkMobile)
     }
   }, [scrollBannerDismissed, exitPopupShown])
 
@@ -79,7 +86,7 @@ export default function ConversionBooster() {
       </div>
 
       {/* SCROLL TRIGGER BANNER — sticky bottom */}
-      {showScrollBanner && !scrollBannerDismissed && (
+      {showScrollBanner && !scrollBannerDismissed && !isMobile && (
         <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 9995, background: 'linear-gradient(135deg,#E8610A,#C84E06)', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', boxShadow: '0 -4px 24px rgba(232,97,10,0.5)', fontFamily: 'DM Sans, sans-serif' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '20px' }}>🔥</span>
