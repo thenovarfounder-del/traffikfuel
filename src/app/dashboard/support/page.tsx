@@ -1,31 +1,28 @@
 // @ts-nocheck
 'use client'
-import { useState, useRef } from 'react'
+import { useRef, useState } from 'react'
 
 export default function SupportPage() {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [subject, setSubject] = useState('')
-  const [message, setMessage] = useState('')
+  const nameRef = useRef(null)
+  const emailRef = useRef(null)
+  const subjectRef = useRef(null)
+  const messageRef = useRef(null)
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const nameRef = useRef(null)
-  const emailRef = useRef(null)
-  const messageRef = useRef(null)
-
   async function handleSubmit() {
-    const finalName = nameRef.current?.value || name
-    const finalEmail = emailRef.current?.value || email
-    const finalMessage = messageRef.current?.value || message
-    if (!finalName || !finalEmail || !finalMessage) { setError('Please fill in all required fields.'); return }
+    const name = nameRef.current?.value?.trim()
+    const email = emailRef.current?.value?.trim()
+    const subject = subjectRef.current?.value?.trim()
+    const message = messageRef.current?.value?.trim()
+    if (!name || !email || !message) { setError('Please fill in all required fields.'); return }
     setLoading(true); setError('')
     try {
       const res = await fetch('/api/support', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: finalName, email: finalEmail, subject, message: finalMessage })
+        body: JSON.stringify({ name, email, subject, message })
       })
       const data = await res.json()
       if (data.success) { setSent(true) }
@@ -50,7 +47,6 @@ export default function SupportPage() {
       </div>
 
       <div style={{ maxWidth:"900px", margin:"0 auto", padding:"0 40px 60px", display:"grid", gridTemplateColumns:"1fr 1fr", gap:"24px" }}>
-
         <div style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"14px", padding:"28px" }}>
           <h2 style={{ fontFamily:"Playfair Display, serif", fontSize:"20px", fontWeight:700, color:"#fff", marginBottom:"20px" }}>Send a Message</h2>
           {sent ? (
@@ -64,23 +60,23 @@ export default function SupportPage() {
               <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"14px" }}>
                 <div>
                   <label style={labelStyle}>Your Name *</label>
-                  <input ref={nameRef} value={name} onChange={e => setName(e.target.value)} onInput={e => setName(e.target.value)} placeholder="Randy" style={inputStyle}
+                  <input ref={nameRef} defaultValue="" placeholder="Randy" style={inputStyle}
                     onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
                 </div>
                 <div>
                   <label style={labelStyle}>Email *</label>
-                  <input ref={emailRef} value={email} onChange={e => setEmail(e.target.value)} onInput={e => setEmail(e.target.value)} placeholder="you@example.com" style={inputStyle}
+                  <input ref={emailRef} defaultValue="" type="email" placeholder="you@example.com" style={inputStyle}
                     onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
                 </div>
               </div>
               <div>
                 <label style={labelStyle}>Subject</label>
-                <input value={subject} onChange={e => setSubject(e.target.value)} onInput={e => setSubject(e.target.value)} placeholder="What do you need help with?" style={inputStyle}
+                <input ref={subjectRef} defaultValue="" placeholder="What do you need help with?" style={inputStyle}
                   onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
               </div>
               <div>
                 <label style={labelStyle}>Message *</label>
-                <textarea ref={messageRef} value={message} onChange={e => setMessage(e.target.value)} onInput={e => setMessage(e.target.value)} rows={5} placeholder="Describe your issue or question..."
+                <textarea ref={messageRef} rows={5} placeholder="Describe your issue or question..."
                   style={{ ...inputStyle, resize:"vertical" }}
                   onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
               </div>
