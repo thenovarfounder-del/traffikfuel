@@ -191,7 +191,7 @@ export default function Onboarding() {
       const { data: bp } = await supabase.from('business_profiles').select('*').eq('user_id', user.id).single()
       const businessName = bp?.business_name || 'My Business'
       const industry = bp?.industry || 'Business'
-      const city = bp?.phone || ''
+      const city = bp?.city || ''
       setCurrentMsg('Building your first blog post...')
       setProgress(20)
       addLog('Generating your first blog post...', 'working')
