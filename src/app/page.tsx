@@ -5,6 +5,7 @@ import Nav from '@/components/Nav'
 import Link from 'next/link'
 import FaqAccordion from '@/components/FaqAccordion'
 import LiveDemo from '@/components/LiveDemo'
+import ConversionBooster from '@/components/ConversionBooster'
 
 const industries = [
   { icon: '💅', name: 'Salons & Spas', desc: 'Bookings + reviews on autopilot', href: '/solutions/salons' },
@@ -33,6 +34,7 @@ export default function HomePage() {
   return (
     <main>
       <Nav />
+      <ConversionBooster />
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         html{scroll-behavior:smooth}
@@ -88,12 +90,15 @@ export default function HomePage() {
               Set it once.<br /><em style={{ fontStyle: 'italic', color: '#E8610A' }}>It markets<br />forever.</em>
             </h1>
             <p style={{ fontSize: '15px', color: '#ccc', lineHeight: 1.85, marginBottom: '20px', maxWidth: '420px', fontWeight: 300 }}>
-              Connect your accounts once. Traffikora runs Google, TikTok, YouTube, and every AI engine &mdash; automatically, every single day. No agency. No manual work.
+              Every day you don’t automate, your competitors get further ahead. Traffikora runs Google, TikTok, YouTube, and every AI engine for you — 24/7, no agency, no manual work. Set it once.
             </p>
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '6px' }}>
               <Link href="/signup" className="btn-cta">
                 Start Free &mdash; No Credit Card Needed
                 <span style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'rgba(255,255,255,.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', fontWeight: 700, flexShrink: 0 }}>&rarr;</span>
+              </Link>
+              <Link href="/how-it-works" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'transparent', color: '#fff', border: '1.5px solid rgba(255,255,255,0.25)', padding: '16px 24px', borderRadius: '8px', fontSize: '14px', fontWeight: 600, textDecoration: 'none' }}>
+                See How It Works →
               </Link>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '16px', flexWrap: 'wrap' }}>
@@ -310,6 +315,9 @@ export default function HomePage() {
         <div style={{ textAlign: 'center', marginBottom: '52px', position: 'relative', zIndex: 1 }}>
           <span className="section-label">Simple pricing</span>
           <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '58px', fontWeight: 700, color: '#fff', lineHeight: 1.0, letterSpacing: '-1.5px' }}>Stop losing leads.<br /><em style={{ color: '#E8610A', fontStyle: 'italic' }}>Start growing today.</em></h2>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', background: 'rgba(232,97,10,0.08)', border: '1px solid rgba(232,97,10,0.25)', borderRadius: '12px', padding: '12px 24px', marginTop: '20px' }}>
+            <span style={{ fontSize: '12px', color: '#E8610A', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em' }}>🔥 Free plan spots filling up fast</span>
+          </div>
         </div>
         <div className="pricing-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '16px', maxWidth: '1300px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
           {plans.map(plan => (
