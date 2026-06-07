@@ -181,7 +181,7 @@ export default function HomePage() {
         <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '80px', background: 'linear-gradient(270deg,#0a0a0a,transparent)', zIndex: 1 }} />
         <div className="ticker-inner">
           {['Tampa, FL','Atlanta, GA','Dallas, TX','Miami, FL','Chicago, IL','Houston, TX','Los Angeles, CA','New York, NY','Phoenix, AZ','Denver, CO','Seattle, WA','Boston, MA','Nashville, TN','Orlando, FL','Austin, TX','Tampa, FL','Atlanta, GA','Dallas, TX','Miami, FL','Chicago, IL','Houston, TX','Los Angeles, CA','New York, NY','Phoenix, AZ','Denver, CO','Seattle, WA','Boston, MA','Nashville, TN','Orlando, FL','Austin, TX'].map((city, i) => (
-            <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '0 24px', fontSize: '11px', color: '#555', fontWeight: 500, whiteSpace: 'nowrap', fontFamily: 'DM Sans, sans-serif' }}>
+            <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '0 24px', fontSize: '12px', color: '#ffffff', fontWeight: 600, whiteSpace: 'nowrap', fontFamily: 'DM Sans, sans-serif' }}>
               <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#E8610A', display: 'inline-block', flexShrink: 0 }} />
               {city}
             </span>
