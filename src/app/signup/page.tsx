@@ -26,6 +26,15 @@ function getPasswordStrength(pw) {
   return { score: 5, label: 'Very Strong', color: '#16a34a' }
 }
 
+const BULLETS = [
+  { icon: '🧠', title: 'AI Agents Run 24/7', desc: 'Four AI agents work every single day — writing blogs, posting to social, optimizing your SEO.' },
+  { icon: '📈', title: '9+ Platforms. Zero Extra Work.', desc: 'Google, TikTok, YouTube, Facebook, Instagram, LinkedIn, Reddit and more — all automated.' },
+  { icon: '🎯', title: 'AI Engine Optimization', desc: 'The only platform that makes you visible on ChatGPT, Claude, Gemini, Perplexity and Copilot.' },
+  { icon: '⚡', title: 'Live in 5 Minutes', desc: 'No tech skills. No agency. No manual work. Set it once and it markets forever.' },
+  { icon: '💰', title: 'Replaces a $2,000/mo Agency', desc: 'Full marketing automation starting at $47/mo. Two extra clients pays for a full year.' },
+  { icon: '🛡️', title: 'Free Plan — No Credit Card', desc: 'Start free. Get 3 AI blog posts per month. Upgrade anytime with one click.' },
+]
+
 export default function SignupPage() {
   const router = useRouter()
   const [isMobile, setIsMobile] = useState(false)
@@ -64,87 +73,143 @@ export default function SignupPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a0a', fontFamily: 'DM Sans, sans-serif' }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700;800&display=swap');
+        @keyframes shimmer { 0%{left:-60%} 60%,100%{left:130%} }
+        @keyframes ringpulse { 0%{transform:scale(1);opacity:.8} 100%{transform:scale(2.4);opacity:0} }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+        .bullet-row { transition: all 0.2s; }
+        .bullet-row:hover { transform: translateX(4px); }
+      `}</style>
       <Nav />
-      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', minHeight: 'calc(100vh - 70px)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.1fr 0.9fr', minHeight: 'calc(100vh - 64px)' }}>
 
-        {/* LEFT PANEL — hidden on mobile */}
+        {/* LEFT PANEL */}
         {!isMobile && (
-          <div style={{ background: '#111', borderRight: '2px solid #1a1a1a', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '60px 48px' }}>
-            <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '38px', fontWeight: 700, color: '#fff', lineHeight: 1.1, marginBottom: '16px' }}>
-              Set it once.<br /><em style={{ color: '#E8610A', fontStyle: 'italic' }}>It markets forever.</em>
+          <div style={{ background: '#111', borderRight: '2px solid #1a1a1a', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '60px 56px', position: 'relative', overflow: 'hidden' }}>
+
+            {/* Background glow */}
+            <div style={{ position: 'absolute', top: '-80px', right: '-80px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(232,97,10,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', bottom: '-60px', left: '-60px', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(232,97,10,0.05) 0%, transparent 70%)', pointerEvents: 'none' }} />
+
+            {/* Live badge */}
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'rgba(232,97,10,0.08)', border: '1px solid rgba(232,97,10,0.25)', borderRadius: '40px', padding: '8px 18px', marginBottom: '28px', alignSelf: 'flex-start' }}>
+              <span style={{ position: 'relative', width: '10px', height: '10px', flexShrink: 0 }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#E8610A', position: 'absolute', top: '1px', left: '1px', display: 'block' }} />
+                <span style={{ width: '10px', height: '10px', borderRadius: '50%', border: '1.5px solid #E8610A', position: 'absolute', top: 0, left: 0, animation: 'ringpulse 2s ease-out infinite', opacity: 0, display: 'block' }} />
+              </span>
+              <span style={{ fontSize: '12px', fontWeight: 700, color: '#E8610A', letterSpacing: '.06em' }}>AI running for businesses right now</span>
             </div>
-            <p style={{ fontSize: '15px', color: '#888', lineHeight: 1.85, marginBottom: '32px', fontWeight: 300 }}>
-              Join businesses automating their marketing with Traffikora right now.
+
+            {/* Headline */}
+            <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '46px', fontWeight: 900, color: '#fff', lineHeight: 0.95, letterSpacing: '-1.5px', marginBottom: '16px' }}>
+              Set it once.<br />
+              <em style={{ color: '#E8610A', fontStyle: 'italic' }}>It markets<br />forever.</em>
+            </h1>
+            <p style={{ fontSize: '15px', color: '#666', lineHeight: 1.8, marginBottom: '36px', fontWeight: 300, maxWidth: '380px' }}>
+              Join businesses that replaced their marketing agency with Traffikora &mdash; for a fraction of the cost.
             </p>
-            {[
-              { icon: '⚡', title: 'Live in 5 Minutes', sub: 'No tech skills required' },
-              { icon: '🤖', title: 'AI Agents Run Daily', sub: 'Fully hands-off marketing' },
-              { icon: '📈', title: '9+ Platforms Covered', sub: 'Google, TikTok, YouTube and more' },
-              { icon: '🛡️', title: 'Free Plan Available', sub: 'No credit card ever needed' },
-            ].map(f => (
-              <div key={f.title} style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '18px' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(232,97,10,0.1)', border: '1px solid rgba(232,97,10,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', flexShrink: 0 }}>{f.icon}</div>
-                <div>
-                  <div style={{ fontSize: '14px', fontWeight: 700, color: '#fff' }}>{f.title}</div>
-                  <div style={{ fontSize: '12px', color: '#666', marginTop: '2px' }}>{f.sub}</div>
+
+            {/* Bullet points */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
+              {BULLETS.map((b, i) => (
+                <div key={b.title} className="bullet-row" style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', padding: '16px 0', borderBottom: i < BULLETS.length - 1 ? '1px solid #1a1a1a' : 'none' }}>
+                  <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(232,97,10,0.08)', border: '1px solid rgba(232,97,10,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>{b.icon}</div>
+                  <div>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#fff', marginBottom: '3px' }}>{b.title}</div>
+                    <div style={{ fontSize: '12px', color: '#555', lineHeight: 1.6, fontWeight: 300 }}>{b.desc}</div>
+                  </div>
                 </div>
+              ))}
+            </div>
+
+            {/* Social proof */}
+            <div style={{ marginTop: '28px', paddingTop: '24px', borderTop: '1px solid #1a1a1a', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ display: 'flex' }}>
+                {['#E8610A', '#C84E06', '#a03a04', '#7a2c03'].map((c, i) => (
+                  <div key={i} style={{ width: '32px', height: '32px', borderRadius: '50%', background: c, border: '2px solid #111', marginLeft: i > 0 ? '-8px' : '0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700, color: '#fff' }}>
+                    {['J','S','M','A'][i]}
+                  </div>
+                ))}
               </div>
-            ))}
+              <div>
+                <div style={{ fontSize: '13px', fontWeight: 700, color: '#fff' }}>Businesses already automated</div>
+                <div style={{ fontSize: '11px', color: '#555', fontWeight: 300 }}>Free plan available &mdash; no credit card needed</div>
+              </div>
+            </div>
+
           </div>
         )}
 
         {/* RIGHT PANEL — form */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: isMobile ? '40px 24px' : '60px 48px' }}>
-          <div style={{ width: '100%', maxWidth: '420px' }}>
-            <div style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? '28px' : '32px', fontWeight: 700, color: '#fff', marginBottom: '8px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: isMobile ? '40px 24px' : '60px 48px', background: '#0a0a0a' }}>
+          <div style={{ width: '100%', maxWidth: '400px', animation: 'fadeUp 0.5s ease' }}>
+
+            <div style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? '28px' : '30px', fontWeight: 700, color: '#fff', marginBottom: '6px' }}>
               Start for free
             </div>
-            <p style={{ fontSize: '14px', color: '#666', marginBottom: '32px', fontWeight: 300 }}>No credit card needed. Up and running in 5 minutes.</p>
+            <p style={{ fontSize: '14px', color: '#555', marginBottom: '28px', fontWeight: 300 }}>No credit card needed. Up and running in 5 minutes.</p>
 
             {error && (
               <div style={{ background: 'rgba(220,38,38,0.1)', border: '1px solid rgba(220,38,38,0.4)', borderRadius: '8px', padding: '12px 16px', marginBottom: '20px', fontSize: '13px', color: '#f87171' }}>{error}</div>
             )}
 
-            <div style={{ marginBottom: '16px' }}>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#888', marginBottom: '6px', letterSpacing: '.06em', textTransform: 'uppercase' }}>Full Name</label>
-              <input value={name} onChange={e => setName(e.target.value)} placeholder="Your name" style={{ width: '100%', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: '8px', color: '#fff', padding: '13px 16px', fontSize: '14px', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+            <div style={{ marginBottom: '14px' }}>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#555', marginBottom: '6px', letterSpacing: '.08em', textTransform: 'uppercase' }}>Full Name</label>
+              <input value={name} onChange={e => setName(e.target.value)} placeholder="Your name"
+                style={{ width: '100%', background: '#111', border: '1px solid #222', borderRadius: '8px', color: '#fff', padding: '13px 16px', fontSize: '14px', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+                onFocus={e => e.target.style.borderColor = '#E8610A'}
+                onBlur={e => e.target.style.borderColor = '#222'} />
             </div>
 
-            <div style={{ marginBottom: '16px' }}>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#888', marginBottom: '6px', letterSpacing: '.06em', textTransform: 'uppercase' }}>Email Address</label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" style={{ width: '100%', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: '8px', color: '#fff', padding: '13px 16px', fontSize: '14px', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+            <div style={{ marginBottom: '14px' }}>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#555', marginBottom: '6px', letterSpacing: '.08em', textTransform: 'uppercase' }}>Email Address</label>
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com"
+                style={{ width: '100%', background: '#111', border: '1px solid #222', borderRadius: '8px', color: '#fff', padding: '13px 16px', fontSize: '14px', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+                onFocus={e => e.target.style.borderColor = '#E8610A'}
+                onBlur={e => e.target.style.borderColor = '#222'} />
             </div>
 
             <div style={{ marginBottom: '24px' }}>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#888', marginBottom: '6px', letterSpacing: '.06em', textTransform: 'uppercase' }}>Password</label>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Min 8 characters" style={{ width: '100%', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: '8px', color: '#fff', padding: '13px 16px', fontSize: '14px', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#555', marginBottom: '6px', letterSpacing: '.08em', textTransform: 'uppercase' }}>Password</label>
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Min 8 characters"
+                style={{ width: '100%', background: '#111', border: '1px solid #222', borderRadius: '8px', color: '#fff', padding: '13px 16px', fontSize: '14px', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+                onFocus={e => e.target.style.borderColor = '#E8610A'}
+                onBlur={e => e.target.style.borderColor = '#222'} />
 
               {password.length > 0 && (
                 <div style={{ marginTop: '10px' }}>
                   <div style={{ display: 'flex', gap: '4px', marginBottom: '6px' }}>
                     {[1,2,3,4,5].map(i => (
-                      <div key={i} style={{ flex: 1, height: '4px', borderRadius: '2px', background: i <= strength.score ? strength.color : '#2a2a2a', transition: 'background 0.3s' }} />
+                      <div key={i} style={{ flex: 1, height: '3px', borderRadius: '2px', background: i <= strength.score ? strength.color : '#222', transition: 'background 0.3s' }} />
                     ))}
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <span style={{ fontSize: '11px', color: strength.color, fontWeight: 700 }}>{strength.label}</span>
-                    <span style={{ fontSize: '11px', color: '#555' }}>
-                      {strength.score < 3 ? 'Add numbers, symbols or uppercase' : strength.score < 5 ? 'Almost there — add more variety' : 'Great password!'}
+                    <span style={{ fontSize: '11px', color: '#444' }}>
+                      {strength.score < 3 ? 'Add numbers or symbols' : strength.score < 5 ? 'Almost there!' : 'Great password!'}
                     </span>
                   </div>
                 </div>
               )}
             </div>
 
-            <button onClick={handleSignup} disabled={loading || !email || !password || !name} style={{ width: '100%', background: loading ? '#444' : 'linear-gradient(135deg,#E8610A,#C84E06)', border: 'none', borderRadius: '8px', color: '#fff', padding: '15px', fontSize: '15px', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', boxShadow: '0 4px 20px rgba(232,97,10,0.35)', marginBottom: '16px' }}>
+            <button onClick={handleSignup} disabled={loading || !email || !password || !name}
+              style={{ width: '100%', background: loading ? '#333' : 'linear-gradient(135deg,#E8610A,#C84E06)', border: 'none', borderRadius: '8px', color: '#fff', padding: '15px', fontSize: '15px', fontWeight: 800, cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', boxShadow: loading ? 'none' : '0 4px 24px rgba(232,97,10,0.4)', marginBottom: '16px', letterSpacing: '.02em', position: 'relative', overflow: 'hidden' }}>
               {loading ? 'Creating your account...' : 'Create Free Account →'}
             </button>
 
-            <p style={{ fontSize: '13px', color: '#555', textAlign: 'center', lineHeight: 1.6 }}>
-              Already have an account? <a href="/login" style={{ color: '#E8610A', textDecoration: 'none', fontWeight: 600 }}>Sign in</a>
+            <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', marginBottom: '20px', flexWrap: 'wrap' }}>
+              {['🛡️ No credit card', '⚡ Live in 5 min', '🔒 Cancel anytime'].map(note => (
+                <span key={note} style={{ fontSize: '12px', color: '#444', fontWeight: 500 }}>{note}</span>
+              ))}
+            </div>
+
+            <p style={{ fontSize: '13px', color: '#444', textAlign: 'center', lineHeight: 1.6 }}>
+              Already have an account? <a href="/login" style={{ color: '#E8610A', textDecoration: 'none', fontWeight: 700 }}>Sign in</a>
             </p>
-            <p style={{ fontSize: '11px', color: '#444', textAlign: 'center', marginTop: '16px', lineHeight: 1.6 }}>
-              By signing up you agree to our Terms of Service and Privacy Policy.
+            <p style={{ fontSize: '11px', color: '#333', textAlign: 'center', marginTop: '12px', lineHeight: 1.6 }}>
+              By signing up you agree to our <a href="/terms" style={{ color: '#555', textDecoration: 'none' }}>Terms</a> and <a href="/privacy" style={{ color: '#555', textDecoration: 'none' }}>Privacy Policy</a>.
             </p>
           </div>
         </div>
