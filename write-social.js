@@ -1,65 +1,122 @@
 const fs = require('fs');
 
-const supportRoute = `// @ts-nocheck
-import { NextResponse } from 'next/server'
-import { Resend } from 'resend'
+const content = `// @ts-nocheck
+'use client'
+import { useState } from 'react'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+export default function SupportPage() {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [subject, setSubject] = useState('')
+  const [message, setMessage] = useState('')
+  const [sent, setSent] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-export async function POST(request) {
-  const { name, email, subject, message } = await request.json()
-  if (!name || !email || !message) {
-    return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
+  async function handleSubmit() {
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      setError('Please fill in all required fields.')
+      return
+    }
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/support', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, subject, message })
+      })
+      const data = await res.json()
+      if (data.success) { setSent(true) }
+      else { setError('Failed to send. Please email support@traffikora.com directly.') }
+    } catch (e) {
+      setError('Failed to send. Please email support@traffikora.com directly.')
+    }
+    setLoading(false)
   }
-  try {
-    // Notify Randy at Yahoo
-    await resend.emails.send({
-      from: 'Traffikora Support <eva@traffikora.com>',
-      to: 'traffikoratest@yahoo.com',
-      subject: \`\ud83c\udf9f\ufe0f Support Request: \${subject || 'No Subject'} \u2014 from \${name}\`,
-      html: \`<div style="font-family:Arial,sans-serif;padding:32px;max-width:600px;">
-        <h2 style="color:#E8610A;">New Support Request</h2>
-        <p><strong>Name:</strong> \${name}</p>
-        <p><strong>Email:</strong> \${email}</p>
-        <p><strong>Subject:</strong> \${subject || 'Not provided'}</p>
-        <p><strong>Message:</strong></p>
-        <div style="background:#f9f9f9;border-left:4px solid #E8610A;padding:16px;border-radius:4px;margin-top:8px;">
-          <p style="margin:0;color:#333;line-height:1.7;">\${message}</p>
-        </div>
-        <p style="margin-top:24px;font-size:13px;color:#888;">Reply directly to this email to respond to \${name} at \${email}</p>
-        <a href="mailto:\${email}" style="background:#E8610A;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block;margin-top:8px;">Reply to \${name} \u2192</a>
-      </div>\`
-    })
 
-    // Confirm to user
-    await resend.emails.send({
-      from: 'Eva at Traffikora <eva@traffikora.com>',
-      to: email,
-      replyTo: 'support@traffikora.com',
-      subject: \`We got your message, \${name.split(' ')[0]}! \u2014 Traffikora Support\`,
-      html: \`<div style="font-family:Arial,sans-serif;padding:32px;max-width:600px;background:#f9f9f9;">
-        <div style="background:#111;padding:28px;border-radius:12px;text-align:center;margin-bottom:24px;">
-          <p style="font-family:Georgia,serif;font-size:26px;font-weight:700;color:#fff;margin:0;">Traffik<span style="color:#E8610A;">ora</span></p>
-        </div>
-        <h2 style="color:#111;">Hi \${name.split(' ')[0]}, we got your message!</h2>
-        <p style="color:#555;line-height:1.7;">Our team will review your request and get back to you within 24 hours at <strong>\${email}</strong>.</p>
-        <div style="background:#fff;border:1px solid #eee;border-left:4px solid #E8610A;border-radius:6px;padding:16px;margin:20px 0;">
-          <p style="margin:0 0 6px;font-size:12px;color:#888;text-transform:uppercase;letter-spacing:1px;">Your message</p>
-          <p style="margin:0;color:#333;font-size:14px;line-height:1.7;">\${message}</p>
-        </div>
-        <p style="color:#555;font-size:14px;line-height:1.7;">In the meantime, you can find answers to common questions in our <a href="https://www.traffikora.com/faq" style="color:#E8610A;">FAQ</a> or chat with EVA on the dashboard.</p>
-        <p style="color:#888;font-size:12px;margin-top:24px;">Traffikora \u2014 support@traffikora.com</p>
-      </div>\`
-    })
+  const inputStyle = { width:'100%', background:'#0a0a0a', border:'1px solid #2a2a2a', borderRadius:'8px', padding:'12px 16px', fontSize:'14px', color:'#fff', outline:'none', fontFamily:'DM Sans, sans-serif', boxSizing:'border-box' }
+  const labelStyle = { display:'block', fontSize:'12px', fontWeight:700, color:'#aaa', marginBottom:'8px', textTransform:'uppercase', letterSpacing:'0.08em' }
 
-    return NextResponse.json({ success: true })
-  } catch (e) {
-    console.error('Support email error:', e)
-    return NextResponse.json({ error: e.message }, { status: 500 })
-  }
+  return (
+    <div style={{ minHeight:'100vh', background:'#0a0a0a', color:'#fff', fontFamily:'DM Sans, sans-serif' }}>
+      <div style={{ background:'linear-gradient(135deg,#111 0%,#1a0e00 100%)', borderBottom:'1px solid #1e1e1e', padding:'32px 40px', marginBottom:'32px' }}>
+        <div style={{ maxWidth:'900px', margin:'0 auto', display:'flex', alignItems:'center', gap:'14px' }}>
+          <div style={{ width:'44px', height:'44px', background:'linear-gradient(135deg,#E8610A,#ff8c42)', borderRadius:'10px', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'22px' }}>\ud83d\udcac</div>
+          <div>
+            <h1 style={{ fontFamily:'Playfair Display, serif', fontSize:'26px', fontWeight:900, color:'#fff', margin:0 }}>Support</h1>
+            <p style={{ color:'#666', fontSize:'13px', margin:0 }}>We\u2019re here to help. Send us a message and we\u2019ll get back to you within 24 hours.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ maxWidth:'900px', margin:'0 auto', padding:'0 40px 60px', display:'grid', gridTemplateColumns:'1fr 1fr', gap:'24px' }}>
+        <div style={{ background:'#111', border:'1px solid #1e1e1e', borderRadius:'14px', padding:'28px' }}>
+          <h2 style={{ fontFamily:'Playfair Display, serif', fontSize:'20px', fontWeight:700, color:'#fff', marginBottom:'20px' }}>Send a Message</h2>
+          {sent ? (
+            <div style={{ textAlign:'center', padding:'40px 0' }}>
+              <div style={{ fontSize:'56px', marginBottom:'16px' }}>\u2705</div>
+              <p style={{ fontFamily:'Playfair Display, serif', fontSize:'22px', color:'#fff', marginBottom:'8px' }}>Message sent!</p>
+              <p style={{ color:'#888', fontSize:'14px' }}>We\u2019ll get back to you within 24 hours.</p>
+            </div>
+          ) : (
+            <div style={{ display:'flex', flexDirection:'column', gap:'14px' }}>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'14px' }}>
+                <div>
+                  <label style={labelStyle}>Your Name *</label>
+                  <input value={name} onChange={e => setName(e.target.value)} placeholder="Your name" style={inputStyle}
+                    onFocus={e => e.target.style.borderColor='#E8610A'} onBlur={e => e.target.style.borderColor='#2a2a2a'} />
+                </div>
+                <div>
+                  <label style={labelStyle}>Email *</label>
+                  <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" style={inputStyle}
+                    onFocus={e => e.target.style.borderColor='#E8610A'} onBlur={e => e.target.style.borderColor='#2a2a2a'} />
+                </div>
+              </div>
+              <div>
+                <label style={labelStyle}>Subject</label>
+                <input value={subject} onChange={e => setSubject(e.target.value)} placeholder="What do you need help with?" style={inputStyle}
+                  onFocus={e => e.target.style.borderColor='#E8610A'} onBlur={e => e.target.style.borderColor='#2a2a2a'} />
+              </div>
+              <div>
+                <label style={labelStyle}>Message *</label>
+                <textarea value={message} onChange={e => setMessage(e.target.value)} rows={5} placeholder="Describe your issue or question..."
+                  style={{ ...inputStyle, resize:'vertical' }}
+                  onFocus={e => e.target.style.borderColor='#E8610A'} onBlur={e => e.target.style.borderColor='#2a2a2a'} />
+              </div>
+              {error && (
+                <div style={{ background:'rgba(239,68,68,0.08)', border:'1px solid rgba(239,68,68,0.2)', borderRadius:'8px', padding:'10px 14px', fontSize:'13px', color:'#f87171' }}>{error}</div>
+              )}
+              <button onClick={handleSubmit} disabled={loading}
+                style={{ background:loading?'#2a2a2a':'linear-gradient(135deg,#E8610A,#C84E06)', color:loading?'#666':'#fff', border:'none', borderRadius:'8px', padding:'13px', fontSize:'14px', fontWeight:700, cursor:loading?'not-allowed':'pointer', fontFamily:'DM Sans, sans-serif', boxShadow:loading?'none':'0 4px 20px rgba(232,97,10,0.35)' }}>
+                {loading ? 'Sending...' : 'Send Message \u2192'}
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div style={{ display:'flex', flexDirection:'column', gap:'14px' }}>
+          {[
+            { icon:'\ud83d\udce7', title:'Email Support', desc:'support@traffikora.com', sub:'Response within 24 hours' },
+            { icon:'\ud83d\udcac', title:'Live Chat', desc:'Chat with EVA', sub:'Click the chat bubble bottom right' },
+            { icon:'\ud83d\udccb', title:'Common Issues', desc:'Billing, connections, content', sub:'Most answers are in our FAQ' },
+            { icon:'\ud83d\udee0\ufe0f', title:'Account Issues', desc:'Login, password, plan changes', sub:'We\u2019ll fix it fast \u2014 usually same day' },
+          ].map((item, i) => (
+            <div key={i} style={{ background:'#111', border:'1px solid #1e1e1e', borderRadius:'12px', padding:'18px 20px', display:'flex', alignItems:'center', gap:'14px' }}>
+              <div style={{ fontSize:'26px', flexShrink:0 }}>{item.icon}</div>
+              <div>
+                <div style={{ fontWeight:700, color:'#fff', fontSize:'14px', marginBottom:'2px' }}>{item.title}</div>
+                <div style={{ color:'#E8610A', fontSize:'13px', marginBottom:'2px' }}>{item.desc}</div>
+                <div style={{ color:'#555', fontSize:'12px' }}>{item.sub}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
 }
 `;
 
-fs.mkdirSync('C:\\Users\\randy\\traffikfuel\\src\\app\\api\\support', { recursive: true });
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\api\\support\\route.ts', supportRoute, 'utf8');
-console.log('SUCCESS: api/support/route.ts \u2014 support emails wired to traffikoratest@yahoo.com');
+fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\support\\page.tsx', content, 'utf8');
+console.log('SUCCESS: Support page fixed \u2014 useState instead of useRef');
