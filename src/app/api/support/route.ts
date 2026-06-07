@@ -5,17 +5,16 @@ import { Resend } from 'resend'
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(request) {
-  const { name, email, subject, message } = await request.json()
-
-  if (!name || !email || !message) {
-    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
-  }
-
   try {
-    // Notify Randy
+    const { name, email, subject, message } = await request.json()
+
+    if (!name || !email || !message) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+    }
+
     await resend.emails.send({
       from: 'Traffikora Support <eva@traffikora.com>',
-      to: 'support@traffikora.com',
+      to: 'traffikoratest@yahoo.com',
       subject: `Support Ticket: ${subject || 'No subject'} — from ${name}`,
       html: `<div style="font-family:Arial,sans-serif;padding:32px;max-width:600px;">
         <h2 style="color:#E8610A;">New Support Ticket</h2>
@@ -27,7 +26,6 @@ export async function POST(request) {
       </div>`
     })
 
-    // Confirm to user
     await resend.emails.send({
       from: 'Eva at Traffikora <eva@traffikora.com>',
       to: email,
@@ -45,7 +43,7 @@ export async function POST(request) {
 
     return NextResponse.json({ success: true })
   } catch (err) {
-    console.error('Support email error:', err)
-    return NextResponse.json({ error: 'Failed to send' }, { status: 500 })
+    console.error('Support email error:', err.message)
+    return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }
