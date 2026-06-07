@@ -44,6 +44,7 @@ export default function Nav() {
           <Link href="/faq" style={{ color: '#111', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>FAQ</Link>
           <Link href="/blog" style={{ color: '#E8610A', textDecoration: 'none', fontSize: '14px', fontWeight: 600 }}>Blog</Link>
           <Link href="/contact" style={{ color: '#111', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>Contact</Link>
+          <Link href="/affiliates" style={{ color: '#E8610A', textDecoration: 'none', fontSize: '14px', fontWeight: 700, background: 'rgba(232,97,10,0.08)', border: '1px solid rgba(232,97,10,0.3)', padding: '5px 12px', borderRadius: '20px' }}>Affiliates</Link>
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '8px' }}>
@@ -69,6 +70,7 @@ export default function Nav() {
         <a href="/faq">FAQ</a>
         <a href="/blog" className="orange">Blog</a>
         <a href="/contact">Contact</a>
+        <a href="/affiliates" className="orange">Affiliates — Earn 30%</a>
         <a href="/about">About Us</a>
         <a href="/login" className="login-mobile">Login</a>
         <a href="/signup" className="cta-mobile">Start Free Today</a>
