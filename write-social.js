@@ -1,179 +1,66 @@
 const fs = require('fs');
-const path = require('path');
+const path = 'src/app/api/cron/daily/route.ts';
 
-// Create the retention email API route
-const retentionDir = 'src/app/api/email/retention';
-fs.mkdirSync(retentionDir, { recursive: true });
-
-const retentionRoute = `// @ts-nocheck
+const newContent = `// @ts-nocheck
 import { NextResponse } from 'next/server'
-import { Resend } from 'resend'
-
-const resend = new Resend(process.env.RESEND_API_KEY)
-
-function day2Html(firstName) {
-  return \`<!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background:#f4f4f4;font-family:'Helvetica Neue',Arial,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:40px 20px;">
-  <tr><td align="center">
-    <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e0e0e0;">
-      <tr>
-        <td style="background:#111111;padding:40px;text-align:center;">
-          <p style="margin:0;font-family:Georgia,serif;font-size:32px;font-weight:700;color:#ffffff;">Traffik<span style="color:#E8610A;">ora</span></p>
-          <p style="margin:10px 0 0;font-size:13px;color:#888888;letter-spacing:2px;text-transform:uppercase;">AI Marketing Automation</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding:48px 40px 32px;text-align:center;">
-          <p style="margin:0 0 16px;font-size:13px;font-weight:700;color:#E8610A;letter-spacing:2px;text-transform:uppercase;">Day 2 Update</p>
-          <h1 style="margin:0 0 16px;font-family:Georgia,serif;font-size:34px;font-weight:700;color:#111111;line-height:1.2;">Your AI ran for the<br/><em style="color:#E8610A;">first time, \${firstName}.</em></h1>
-          <p style="margin:0 auto;font-size:16px;color:#555555;line-height:1.8;max-width:460px;">While you were busy, Traffikora was working. Your AI agents have already started building content for your business.</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding:0 40px 40px;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background:#111111;border-radius:10px;padding:28px 32px;">
-            <tr><td>
-              <p style="margin:0 0 20px;font-size:16px;font-weight:700;color:#ffffff;font-family:Georgia,serif;">Here\u2019s what your AI did:</p>
-              <p style="margin:0 0 8px;font-size:14px;color:#cccccc;"><span style="color:#E8610A;font-weight:700;">&check;</span>&nbsp;&nbsp;Generated your first AI blog post</p>
-              <p style="margin:0 0 8px;font-size:14px;color:#cccccc;"><span style="color:#E8610A;font-weight:700;">&check;</span>&nbsp;&nbsp;Created social posts for your platforms</p>
-              <p style="margin:0 0 8px;font-size:14px;color:#cccccc;"><span style="color:#E8610A;font-weight:700;">&check;</span>&nbsp;&nbsp;Queued content to your calendar</p>
-              <p style="margin:0;font-size:14px;color:#cccccc;"><span style="color:#E8610A;font-weight:700;">&check;</span>&nbsp;&nbsp;All 4 AI agents are running 24/7</p>
-            </td></tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding:0 40px 40px;text-align:center;">
-          <a href="https://www.traffikora.com/dashboard" style="display:inline-block;background:linear-gradient(135deg,#E8610A,#C84E06);color:#ffffff;padding:16px 40px;border-radius:8px;font-size:16px;font-weight:700;text-decoration:none;">See What Was Created &rarr;</a>
-          <p style="margin:16px 0 0;font-size:13px;color:#999999;">Your content is waiting in your dashboard.</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding:0 40px 40px;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background:#fff9f5;border:2px solid #E8610A;border-radius:8px;padding:24px 28px;">
-            <tr><td>
-              <p style="margin:0 0 8px;font-size:15px;font-weight:700;color:#111111;font-family:Georgia,serif;">Ready to go fully automatic?</p>
-              <p style="margin:0 0 16px;font-size:13px;color:#555555;line-height:1.7;">Upgrade to Starter at $47/mo and your AI publishes content every single day &mdash; no manual work required.</p>
-              <a href="https://www.traffikora.com/pricing" style="display:inline-block;background:#E8610A;color:#ffffff;padding:11px 24px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">See All Plans &rarr;</a>
-            </td></tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td style="background:#f9f9f9;padding:24px 40px;border-top:1px solid #eeeeee;">
-          <p style="margin:0 0 4px;font-size:12px;color:#999999;text-align:center;">Traffikora &mdash; Set it once. It markets forever.</p>
-          <p style="margin:0;font-size:12px;color:#bbbbbb;text-align:center;">
-            <a href="https://www.traffikora.com/dashboard/settings" style="color:#bbbbbb;">Unsubscribe</a> &nbsp;&middot;&nbsp; support@traffikora.com &nbsp;&middot;&nbsp; <a href="https://www.traffikora.com/privacy" style="color:#bbbbbb;">Privacy Policy</a>
-          </p>
-        </td>
-      </tr>
-    </table>
-  </td></tr>
-</table>
-</body>
-</html>\`
-}
-
-function day5Html(firstName) {
-  return \`<!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background:#f4f4f4;font-family:'Helvetica Neue',Arial,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:40px 20px;">
-  <tr><td align="center">
-    <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e0e0e0;">
-      <tr>
-        <td style="background:#111111;padding:40px;text-align:center;">
-          <p style="margin:0;font-family:Georgia,serif;font-size:32px;font-weight:700;color:#ffffff;">Traffik<span style="color:#E8610A;">ora</span></p>
-          <p style="margin:10px 0 0;font-size:13px;color:#888888;letter-spacing:2px;text-transform:uppercase;">AI Marketing Automation</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding:48px 40px 32px;text-align:center;">
-          <p style="margin:0 0 16px;font-size:13px;font-weight:700;color:#E8610A;letter-spacing:2px;text-transform:uppercase;">Day 5 Check-In</p>
-          <h1 style="margin:0 0 16px;font-family:Georgia,serif;font-size:34px;font-weight:700;color:#111111;line-height:1.2;">5 days in &mdash; here\u2019s how to<br/><em style="color:#E8610A;">get more from Traffikora.</em></h1>
-          <p style="margin:0 auto;font-size:16px;color:#555555;line-height:1.8;max-width:460px;">You\u2019ve been with us for 5 days. Your AI has been running. Here\u2019s what to do next to get maximum results.</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding:0 40px 40px;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background:#f9f9f9;border-radius:10px;border:1px solid #eeeeee;overflow:hidden;">
-            <tr><td style="padding:28px 32px;border-bottom:1px solid #eeeeee;">
-              <p style="margin:0 0 6px;font-size:11px;font-weight:700;color:#E8610A;letter-spacing:2px;text-transform:uppercase;">Tip 1</p>
-              <p style="margin:0 0 6px;font-size:17px;font-weight:700;color:#111111;font-family:Georgia,serif;">Check Your Content Calendar</p>
-              <p style="margin:0;font-size:14px;color:#555555;line-height:1.7;">Your AI has been creating content daily. Review what\u2019s been queued and approve posts for publishing.</p>
-            </td></tr>
-            <tr><td style="padding:28px 32px;border-bottom:1px solid #eeeeee;">
-              <p style="margin:0 0 6px;font-size:11px;font-weight:700;color:#E8610A;letter-spacing:2px;text-transform:uppercase;">Tip 2</p>
-              <p style="margin:0 0 6px;font-size:17px;font-weight:700;color:#111111;font-family:Georgia,serif;">Update Your Business Brain</p>
-              <p style="margin:0;font-size:14px;color:#555555;line-height:1.7;">The more your AI knows about your business, the better the content. Add your services, specialties, and target customers.</p>
-            </td></tr>
-            <tr><td style="padding:28px 32px;">
-              <p style="margin:0 0 6px;font-size:11px;font-weight:700;color:#E8610A;letter-spacing:2px;text-transform:uppercase;">Tip 3</p>
-              <p style="margin:0 0 6px;font-size:17px;font-weight:700;color:#111111;font-family:Georgia,serif;">Share Your Referral Link</p>
-              <p style="margin:0;font-size:14px;color:#555555;line-height:1.7;">Earn 20% recurring commission every month for every person you refer. Find your link in the dashboard.</p>
-            </td></tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding:0 40px 40px;text-align:center;">
-          <a href="https://www.traffikora.com/dashboard" style="display:inline-block;background:linear-gradient(135deg,#E8610A,#C84E06);color:#ffffff;padding:16px 40px;border-radius:8px;font-size:16px;font-weight:700;text-decoration:none;">Go to My Dashboard &rarr;</a>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding:0 40px 40px;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background:#fff9f5;border:2px solid #E8610A;border-radius:8px;padding:24px 28px;">
-            <tr><td>
-              <p style="margin:0 0 8px;font-size:15px;font-weight:700;color:#111111;font-family:Georgia,serif;">Unlock full automation today</p>
-              <p style="margin:0 0 16px;font-size:13px;color:#555555;line-height:1.7;">Upgrade to Starter at $47/mo &mdash; unlimited content, social posts, and your AI runs every day on autopilot.</p>
-              <a href="https://www.traffikora.com/pricing" style="display:inline-block;background:#E8610A;color:#ffffff;padding:11px 24px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">See All Plans &rarr;</a>
-            </td></tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td style="background:#f9f9f9;padding:24px 40px;border-top:1px solid #eeeeee;">
-          <p style="margin:0 0 4px;font-size:12px;color:#999999;text-align:center;">Traffikora &mdash; Set it once. It markets forever.</p>
-          <p style="margin:0;font-size:12px;color:#bbbbbb;text-align:center;">
-            <a href="https://www.traffikora.com/dashboard/settings" style="color:#bbbbbb;">Unsubscribe</a> &nbsp;&middot;&nbsp; support@traffikora.com &nbsp;&middot;&nbsp; <a href="https://www.traffikora.com/privacy" style="color:#bbbbbb;">Privacy Policy</a>
-          </p>
-        </td>
-      </tr>
-    </table>
-  </td></tr>
-</table>
-</body>
-</html>\`
-}
-
-export async function POST(req) {
+import { createClient } from '@supabase/supabase-js'
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+)
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.traffikora.com'
+export async function GET(req) {
   try {
-    const { email, firstName, day } = await req.json()
-    if (!email || !day) return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
+    const authHeader = req.headers.get('authorization')
+    if (authHeader !== \`Bearer \${process.env.CRON_SECRET}\`) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+    // Get all users with auto_mode enabled
+    const { data: profiles } = await supabase
+      .from('business_profiles')
+      .select('user_id')
+      .eq('auto_mode', true)
+    if (!profiles || profiles.length === 0) {
+      return NextResponse.json({ message: 'No users with auto mode enabled' })
+    }
+    const results = []
+    for (const profile of profiles) {
+      const res = await fetch(\`\${BASE_URL}/api/agents/run\`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: profile.user_id })
+      })
+      const data = await res.json()
+      results.push({ user_id: profile.user_id, ...data })
+    }
 
-    const name = firstName || 'there'
-    const subject = day === 2
-      ? \`Your AI just ran for the first time \u2014 here\u2019s what it created\`
-      : \`You\u2019re 5 days in \u2014 here\u2019s how to get more from Traffikora\`
-    const html = day === 2 ? day2Html(name) : day5Html(name)
+    // RETENTION EMAILS — Day 2 and Day 5
+    const now = new Date()
+    const { data: allUsers } = await supabase
+      .from('users')
+      .select('id, email, full_name, created_at')
+    if (allUsers) {
+      for (const user of allUsers) {
+        if (!user.email || !user.created_at) continue
+        const created = new Date(user.created_at)
+        const diffDays = Math.floor((now - created) / (1000 * 60 * 60 * 24))
+        const firstName = user.full_name ? user.full_name.split(' ')[0] : 'there'
+        if (diffDays === 2 || diffDays === 5) {
+          await fetch(\`\${BASE_URL}/api/email/retention\`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: user.email, firstName, day: diffDays })
+          })
+        }
+      }
+    }
 
-    await resend.emails.send({
-      from: 'Eva at Traffikora <eva@traffikora.com>',
-      to: email,
-      subject,
-      html
-    })
-
-    return NextResponse.json({ success: true })
-  } catch (e) {
-    return NextResponse.json({ error: e.message }, { status: 500 })
+    return NextResponse.json({ success: true, ran_for: profiles.length, results })
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
 `;
 
-fs.writeFileSync(path.join(retentionDir, 'route.ts'), retentionRoute);
-console.log('SUCCESS - retention email route created');
+fs.writeFileSync(path, newContent);
+console.log('SUCCESS - retention emails wired into daily cron');
