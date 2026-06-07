@@ -59,6 +59,7 @@ function renderMarkdown(text) {
 
 export default function ChatBubble() {
   const [open, setOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const [messages, setMessages] = useState([
     { role: 'assistant', content: "Hi! I\u2019m Eva, your Traffikora AI guide \u26a1 I\u2019ll help you find the perfect plan and get your marketing running on autopilot. First\u2014what type of business do you run?", showButtons: true }
   ])
@@ -68,6 +69,13 @@ export default function ChatBubble() {
   const visitorNameRef = useRef(null)
   const businessTypeRef = useRef(null)
   const leadCapturedRef = useRef(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     if (loading) bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -152,7 +160,7 @@ export default function ChatBubble() {
   return (
     <>
       {open && (
-        <div style={{ position:'fixed', bottom:'88px', right:'24px', width:'360px', height:'500px', background:'#0f0f0f', border:'1px solid #2a2a2a', borderRadius:'20px', display:'flex', flexDirection:'column', zIndex:9999, boxShadow:'0 12px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(232,97,10,0.15)' }}>
+        <div style={{ position:'fixed', bottom: isMobile ? '144px' : '88px', right: isMobile ? '8px' : '24px', width: isMobile ? 'calc(100vw - 16px)' : '360px', height:'500px', background:'#0f0f0f', border:'1px solid #2a2a2a', borderRadius:'20px', display:'flex', flexDirection:'column', zIndex:9999, boxShadow:'0 12px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(232,97,10,0.15)' }}>
           <div style={{ padding:'16px 18px', borderBottom:'1px solid #1e1e1e', display:'flex', alignItems:'center', justifyContent:'space-between', background:'linear-gradient(135deg,#1a0800,#0a0400)', borderRadius:'20px 20px 0 0' }}>
             <div style={{ display:'flex', alignItems:'center', gap:'12px' }}>
               <div style={{ position:'relative', flexShrink:0 }}>
@@ -221,7 +229,7 @@ export default function ChatBubble() {
       )}
 
       <button onClick={() => setOpen(!open)}
-        style={{ position:'fixed', bottom:'24px', right:'24px', width:'52px', height:'52px', borderRadius:'50%', background:'#050200', border:'2px solid #E8610A', cursor:'pointer', zIndex:9999, boxShadow:'0 4px 24px rgba(232,97,10,0.6), 0 0 40px rgba(232,97,10,0.2)', display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden', padding:0 }}>
+        style={{ position:'fixed', bottom: isMobile ? '80px' : '24px', right:'24px', width:'52px', height:'52px', borderRadius:'50%', background:'#050200', border:'2px solid #E8610A', cursor:'pointer', zIndex:9999, boxShadow:'0 4px 24px rgba(232,97,10,0.6), 0 0 40px rgba(232,97,10,0.2)', display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden', padding:0 }}>
         {open ? <span style={{ color:'#E8610A', fontSize:'26px', lineHeight:1 }}>&times;</span> : <EvaIcon size="62" />}
       </button>
 
