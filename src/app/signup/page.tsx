@@ -119,7 +119,6 @@ export default function SignupPage() {
               <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#888', marginBottom: '6px', letterSpacing: '.06em', textTransform: 'uppercase' }}>Password</label>
               <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Min 8 characters" style={{ width: '100%', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: '8px', color: '#fff', padding: '13px 16px', fontSize: '14px', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }} />
 
-              {/* PASSWORD STRENGTH METER */}
               {password.length > 0 && (
                 <div style={{ marginTop: '10px' }}>
                   <div style={{ display: 'flex', gap: '4px', marginBottom: '6px' }}>

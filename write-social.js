@@ -1,168 +1,51 @@
 const fs = require('fs');
 
-// ─── WELCOME EMAIL API ROUTE ───────────────────────────────────────
-const welcomeRoute = `// @ts-nocheck
+// ─── FIX 1: auth/confirm — fire welcome email AFTER verification ───
+const confirmRoute = `// @ts-nocheck
+import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
-import { Resend } from 'resend'
+import type { NextRequest } from 'next/server'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url)
+  const token_hash = searchParams.get('token_hash')
+  const type = searchParams.get('type') as any
+  const next = searchParams.get('next') || '/onboarding'
 
-export async function POST(req) {
-  try {
-    const { email, name } = await req.json()
-    if (!email) return NextResponse.json({ error: 'Email required' }, { status: 400 })
+  if (token_hash && type) {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
 
-    const firstName = name ? name.split(' ')[0] : 'there'
+    const { data, error } = await supabase.auth.verifyOtp({ type, token_hash })
 
-    const html = \`<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welcome to Traffikora</title>
-</head>
-<body style="margin:0;padding:0;background:#f4f4f4;font-family:'Helvetica Neue',Arial,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:40px 20px;">
-  <tr><td align="center">
-    <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e0e0e0;">
+    if (!error) {
+      // Fire welcome email after successful verification
+      try {
+        const user = data?.user
+        if (user?.email) {
+          const name = user.user_metadata?.full_name || ''
+          await fetch(\`\${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.traffikora.com'}/api/email/welcome\`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: user.email, name })
+          })
+        }
+      } catch (e) {
+        // Non-blocking — don't fail verification if email fails
+        console.error('Welcome email failed:', e)
+      }
 
-      <!-- Header -->
-      <tr>
-        <td style="background:#111111;padding:40px;text-align:center;">
-          <p style="margin:0;font-family:Georgia,serif;font-size:32px;font-weight:700;color:#ffffff;">
-            Traffik<span style="color:#E8610A;">ora</span>
-          </p>
-          <p style="margin:10px 0 0;font-size:13px;color:#888888;letter-spacing:2px;text-transform:uppercase;">AI Marketing Automation</p>
-        </td>
-      </tr>
-
-      <!-- Hero -->
-      <tr>
-        <td style="padding:48px 40px 32px;text-align:center;">
-          <p style="margin:0 0 16px;font-size:13px;font-weight:700;color:#E8610A;letter-spacing:2px;text-transform:uppercase;">Welcome Aboard</p>
-          <h1 style="margin:0 0 16px;font-family:Georgia,serif;font-size:36px;font-weight:700;color:#111111;line-height:1.2;">
-            You\\'re in, \${firstName}.<br /><em style="color:#E8610A;">Let\\'s get you set up.</em>
-          </h1>
-          <p style="margin:0;font-size:16px;color:#555555;line-height:1.8;max-width:460px;margin:0 auto;">
-            Your Traffikora account is ready. In the next 5 minutes, you can have AI working on your marketing 24/7 &mdash; automatically.
-          </p>
-        </td>
-      </tr>
-
-      <!-- 3 Steps -->
-      <tr>
-        <td style="padding:0 40px 40px;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background:#f9f9f9;border-radius:10px;border:1px solid #eeeeee;overflow:hidden;">
-            <tr>
-              <td style="padding:28px 32px;border-bottom:1px solid #eeeeee;">
-                <p style="margin:0 0 6px;font-size:11px;font-weight:700;color:#E8610A;letter-spacing:2px;text-transform:uppercase;">Step 1</p>
-                <p style="margin:0 0 6px;font-size:17px;font-weight:700;color:#111111;font-family:Georgia,serif;">Complete Your Onboarding</p>
-                <p style="margin:0;font-size:14px;color:#555555;line-height:1.7;">Tell Traffikora about your business &mdash; your name, industry, city, and platforms. Takes less than 5 minutes.</p>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:28px 32px;border-bottom:1px solid #eeeeee;">
-                <p style="margin:0 0 6px;font-size:11px;font-weight:700;color:#E8610A;letter-spacing:2px;text-transform:uppercase;">Step 2</p>
-                <p style="margin:0 0 6px;font-size:17px;font-weight:700;color:#111111;font-family:Georgia,serif;">Build Your Business Brain</p>
-                <p style="margin:0;font-size:14px;color:#555555;line-height:1.7;">Paste your website URL and our AI will learn everything about your business &mdash; your services, tone, and customers.</p>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:28px 32px;">
-                <p style="margin:0 0 6px;font-size:11px;font-weight:700;color:#E8610A;letter-spacing:2px;text-transform:uppercase;">Step 3</p>
-                <p style="margin:0 0 6px;font-size:17px;font-weight:700;color:#111111;font-family:Georgia,serif;">Generate Your First Blog Post</p>
-                <p style="margin:0;font-size:14px;color:#555555;line-height:1.7;">Use your 3 free monthly blog posts to see exactly what Traffikora can do. Real SEO content in seconds.</p>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-
-      <!-- CTA -->
-      <tr>
-        <td style="padding:0 40px 40px;text-align:center;">
-          <a href="https://www.traffikora.com/dashboard" style="display:inline-block;background:linear-gradient(135deg,#E8610A,#C84E06);color:#ffffff;padding:16px 40px;border-radius:8px;font-size:16px;font-weight:700;text-decoration:none;letter-spacing:0.02em;">Go to Your Dashboard &rarr;</a>
-          <p style="margin:16px 0 0;font-size:13px;color:#999999;">Questions? Reply to this email or chat with EVA on the site.</p>
-        </td>
-      </tr>
-
-      <!-- What you get -->
-      <tr>
-        <td style="padding:0 40px 40px;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background:#111111;border-radius:10px;padding:28px 32px;">
-            <tr>
-              <td>
-                <p style="margin:0 0 20px;font-size:16px;font-weight:700;color:#ffffff;font-family:Georgia,serif;">Your free plan includes:</p>
-                <table width="100%" cellpadding="0" cellspacing="0">
-                  \${[
-                    '3 AI blog posts per month',
-                    'Access to your content dashboard',
-                    'Business Brain AI profile builder',
-                    'EVA &mdash; your AI marketing guide',
-                    'Upgrade anytime &mdash; no credit card needed',
-                  ].map(f => \`
-                  <tr>
-                    <td style="padding:8px 0;border-bottom:1px solid #1e1e1e;">
-                      <p style="margin:0;font-size:14px;color:#cccccc;line-height:1.6;">
-                        <span style="color:#E8610A;font-weight:700;">&check;</span>&nbsp;&nbsp;\${f}
-                      </p>
-                    </td>
-                  </tr>\`).join('')}
-                </table>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-
-      <!-- Upgrade nudge -->
-      <tr>
-        <td style="padding:0 40px 40px;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background:#fff9f5;border:2px solid #E8610A;border-radius:8px;padding:24px 28px;">
-            <tr>
-              <td>
-                <p style="margin:0 0 8px;font-size:15px;font-weight:700;color:#111111;font-family:Georgia,serif;">Want full automation from day one?</p>
-                <p style="margin:0 0 16px;font-size:13px;color:#555555;line-height:1.7;">Upgrade to Starter at $47/mo for unlimited blog posts, social media content, and the Content Calendar. No credit card needed to start.</p>
-                <a href="https://www.traffikora.com/pricing" style="display:inline-block;background:#E8610A;color:#ffffff;padding:11px 24px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">See All Plans &rarr;</a>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-
-      <!-- Footer -->
-      <tr>
-        <td style="background:#f9f9f9;padding:24px 40px;border-top:1px solid #eeeeee;">
-          <p style="margin:0 0 4px;font-size:12px;color:#999999;text-align:center;">
-            Traffikora &mdash; Set it once. It markets forever.
-          </p>
-          <p style="margin:0;font-size:12px;color:#bbbbbb;text-align:center;">
-            <a href="https://www.traffikora.com/dashboard/settings" style="color:#bbbbbb;">Unsubscribe</a> &nbsp;&middot;&nbsp; support@traffikora.com &nbsp;&middot;&nbsp; <a href="https://www.traffikora.com/privacy" style="color:#bbbbbb;">Privacy Policy</a>
-          </p>
-        </td>
-      </tr>
-
-    </table>
-  </td></tr>
-</table>
-</body>
-</html>\`
-
-    await resend.emails.send({
-      from: 'Eva at Traffikora <eva@traffikora.com>',
-      to: email,
-      subject: \`Welcome to Traffikora, \${firstName} \u2014 you\\'re all set \u26a1\`,
-      html
-    })
-
-    return NextResponse.json({ success: true })
-  } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 })
+      return NextResponse.redirect(new URL(next, request.url))
+    }
   }
+
+  return NextResponse.redirect(new URL('/login', request.url))
 }
 `;
 
-// ─── UPDATE SIGNUP PAGE — fire welcome email after signup ──────────
+// ─── FIX 2: signup page — remove welcome email call from here ──────
 const signup = `// @ts-nocheck
 'use client'
 import { useState, useEffect } from 'react'
@@ -218,14 +101,6 @@ export default function SignupPage() {
         options: { data: { full_name: name } }
       })
       if (signUpError) throw signUpError
-
-      // Fire welcome email — non-blocking
-      fetch('/api/email/welcome', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, name })
-      }).catch(() => {})
-
       router.push('/check-email')
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.')
@@ -328,9 +203,8 @@ export default function SignupPage() {
 }
 `;
 
-fs.mkdirSync('C:\\Users\\randy\\traffikfuel\\src\\app\\api\\email', { recursive: true });
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\api\\email\\welcome\\route.ts', welcomeRoute, 'utf8');
-console.log('SUCCESS: api/email/welcome/route.ts written');
+fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\auth\\confirm\\route.ts', confirmRoute, 'utf8');
+console.log('SUCCESS: auth/confirm/route.ts — welcome email fires after verification');
 
 fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\signup\\page.tsx', signup, 'utf8');
-console.log('SUCCESS: signup/page.tsx updated — fires welcome email on signup');
+console.log('SUCCESS: signup/page.tsx — welcome email removed from signup');
