@@ -1,27 +1,39 @@
 // @ts-nocheck
 import { NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const rateLimitMap = new Map()
-function rateLimit(ip, max = 5, windowMs = 60000) {
-  const now = Date.now()
-  const reqs = (rateLimitMap.get(ip) || []).filter(t => t > now - windowMs)
-  if (reqs.length >= max) return false
-  reqs.push(now)
-  rateLimitMap.set(ip, reqs)
+
+async function checkRateLimit(ip, endpoint, maxRequests = 6, windowMinutes = 60) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  )
+  const windowStart = new Date(Date.now() - windowMinutes * 60 * 1000).toISOString()
+  const { count } = await supabase
+    .from('rate_limits')
+    .select('*', { count: 'exact', head: true })
+    .eq('ip', ip)
+    .eq('endpoint', endpoint)
+    .gte('created_at', windowStart)
+  if ((count || 0) >= maxRequests) return false
+  await supabase.from('rate_limits').insert({ ip, endpoint })
   return true
 }
 
 export async function POST(request) {
-  const ip = request.headers.get('x-forwarded-for') || 'unknown'
-  if (!rateLimit(ip)) return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown'
+  const allowed = await checkRateLimit(ip, 'support', 6, 60)
+  if (!allowed) {
+    return NextResponse.json({ error: 'Too many requests. Please wait before sending another message.' }, { status: 429 })
+  }
+
   const { name, email, subject, message } = await request.json()
   if (!name || !email || !message) {
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
   }
   try {
-    // Notify Randy at Yahoo
     await resend.emails.send({
       from: 'Traffikora Support <eva@traffikora.com>',
       to: 'thenovar.founder@gmail.com',
@@ -39,8 +51,6 @@ export async function POST(request) {
         <a href="mailto:${email}" style="background:#E8610A;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block;margin-top:8px;">Reply to ${name} →</a>
       </div>`
     })
-
-    // Confirm to user
     await resend.emails.send({
       from: 'Eva at Traffikora <eva@traffikora.com>',
       to: email,
@@ -51,16 +61,15 @@ export async function POST(request) {
           <p style="font-family:Georgia,serif;font-size:26px;font-weight:700;color:#fff;margin:0;">Traffik<span style="color:#E8610A;">ora</span></p>
         </div>
         <h2 style="color:#111;">Hi ${name.split(' ')[0]}, we got your message!</h2>
-        <p style="color:#555;line-height:1.7;">Our team will review your request and get back to you within 24 hours at <strong>${email}</strong>.</p>
+        <p style="color:#555;line-height:1.7;">Our team will get back to you within 24 hours at <strong>${email}</strong>.</p>
         <div style="background:#fff;border:1px solid #eee;border-left:4px solid #E8610A;border-radius:6px;padding:16px;margin:20px 0;">
           <p style="margin:0 0 6px;font-size:12px;color:#888;text-transform:uppercase;letter-spacing:1px;">Your message</p>
           <p style="margin:0;color:#333;font-size:14px;line-height:1.7;">${message}</p>
         </div>
-        <p style="color:#555;font-size:14px;line-height:1.7;">In the meantime, you can find answers to common questions in our <a href="https://www.traffikora.com/faq" style="color:#E8610A;">FAQ</a> or chat with EVA on the dashboard.</p>
+        <p style="color:#555;font-size:14px;line-height:1.7;">Find answers in our <a href="https://www.traffikora.com/faq" style="color:#E8610A;">FAQ</a> or chat with EVA on the dashboard.</p>
         <p style="color:#888;font-size:12px;margin-top:24px;">Traffikora — support@traffikora.com</p>
       </div>`
     })
-
     return NextResponse.json({ success: true })
   } catch (e) {
     console.error('Support email error:', e)

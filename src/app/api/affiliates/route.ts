@@ -4,33 +4,43 @@ import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const rateLimitMap = new Map()
-function rateLimit(ip, max = 5, windowMs = 60000) {
-  const now = Date.now()
-  const reqs = (rateLimitMap.get(ip) || []).filter(t => t > now - windowMs)
-  if (reqs.length >= max) return false
-  reqs.push(now)
-  rateLimitMap.set(ip, reqs)
-  return true
-}
 
-export async function POST(request) {
+async function checkRateLimit(ip, endpoint, maxRequests = 6, windowMinutes = 60) {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.SUPABASE_SERVICE_ROLE_KEY
   )
-  const ip = request.headers.get('x-forwarded-for') || 'unknown'
-  if (!rateLimit(ip)) return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+  const windowStart = new Date(Date.now() - windowMinutes * 60 * 1000).toISOString()
+  const { count } = await supabase
+    .from('rate_limits')
+    .select('*', { count: 'exact', head: true })
+    .eq('ip', ip)
+    .eq('endpoint', endpoint)
+    .gte('created_at', windowStart)
+  if ((count || 0) >= maxRequests) return false
+  await supabase.from('rate_limits').insert({ ip, endpoint })
+  return true
+}
+
+export async function POST(request) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown'
+  const allowed = await checkRateLimit(ip, 'affiliates', 6, 60)
+  if (!allowed) {
+    return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+  }
+
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  )
   const body = await request.json()
   const { name, email, website, social_links, audience_size, how_promote } = body
 
   const { error } = await supabase.from('affiliate_applications').insert({
     name, email, website, social_links, audience_size, how_promote, status: 'pending'
   })
-
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  // Notify Randy
   await resend.emails.send({
     from: 'Traffikora <eva@traffikora.com>',
     to: 'thenovar.founder@gmail.com',
@@ -44,11 +54,10 @@ export async function POST(request) {
       <p><strong>Audience Size:</strong> ${audience_size}</p>
       <p><strong>How they plan to promote:</strong></p>
       <p>${how_promote}</p>
-      <a href="https://supabase.com/dashboard/project/ehjhsbrcbtqcvmgzjzkm/editor" style="background:#E8610A;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block;margin-top:16px;">Review in Supabase</a>
+      <a href="https://www.traffikora.com/admin/x7k9-affiliates" style="background:#E8610A;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block;margin-top:16px;">Review in Admin Panel →</a>
     </div>`
   })
 
-  // Confirm to applicant
   await resend.emails.send({
     from: 'Eva at Traffikora <eva@traffikora.com>',
     to: email,
@@ -58,7 +67,7 @@ export async function POST(request) {
         <p style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#fff;margin:0;">Traffik<span style="color:#E8610A;">ora</span></p>
       </div>
       <h2 style="color:#111;">Hi ${name}, we got your application!</h2>
-      <p style="color:#555;line-height:1.7;">Thank you for applying to the Traffikora Affiliate Program. We review all applications within 48 hours and will reach out to your email with next steps.</p>
+      <p style="color:#555;line-height:1.7;">Thank you for applying to the Traffikora Affiliate Program. We review all applications within 48 hours and will reach out with next steps.</p>
       <p style="color:#555;line-height:1.7;">In the meantime, feel free to start sharing your referral link — you can earn commissions even before becoming an official affiliate partner.</p>
       <p style="color:#888;font-size:13px;margin-top:32px;">Questions? Reply to this email or chat with Eva at traffikora.com</p>
     </div>`
