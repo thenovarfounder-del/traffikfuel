@@ -11,22 +11,33 @@ export default function SupportPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  function validateEmail(e) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)
+  }
+
   async function handleSubmit() {
-    if (!name.trim() || !email.trim() || !message.trim()) {
-      setError('Please fill in all required fields.')
-      return
-    }
-    setLoading(true)
     setError('')
+    if (!name.trim()) { setError('Please enter your name.'); return }
+    if (!email.trim()) { setError('Please enter your email address.'); return }
+    if (!validateEmail(email.trim())) { setError('Please enter a valid email address.'); return }
+    if (!message.trim()) { setError('Please enter your message.'); return }
+    if (message.trim().length < 10) { setError('Message must be at least 10 characters.'); return }
+
+    setLoading(true)
     try {
       const res = await fetch('/api/support', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, subject, message })
+        body: JSON.stringify({ name: name.trim(), email: email.trim(), subject: subject.trim(), message: message.trim() })
       })
       const data = await res.json()
-      if (data.success) { setSent(true) }
-      else { setError('Failed to send. Please email support@traffikora.com directly.') }
+      if (res.status === 429) {
+        setError('Too many requests. Please wait before sending another message.')
+      } else if (data.success) {
+        setSent(true)
+      } else {
+        setError('Failed to send. Please email support@traffikora.com directly.')
+      }
     } catch (e) {
       setError('Failed to send. Please email support@traffikora.com directly.')
     }
@@ -62,33 +73,68 @@ export default function SupportPage() {
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'14px' }}>
                 <div>
                   <label style={labelStyle}>Your Name *</label>
-                  <input value={name} onChange={e => setName(e.target.value)} placeholder="Your name" style={inputStyle}
-                    onFocus={e => e.target.style.borderColor='#E8610A'} onBlur={e => e.target.style.borderColor='#2a2a2a'} />
+                  <input
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    placeholder="Your name"
+                    style={{ ...inputStyle, borderColor: error && !name.trim() ? '#ef4444' : '#2a2a2a' }}
+                    onFocus={e => e.target.style.borderColor='#E8610A'}
+                    onBlur={e => e.target.style.borderColor = error && !name.trim() ? '#ef4444' : '#2a2a2a'}
+                  />
                 </div>
                 <div>
                   <label style={labelStyle}>Email *</label>
-                  <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" style={inputStyle}
-                    onFocus={e => e.target.style.borderColor='#E8610A'} onBlur={e => e.target.style.borderColor='#2a2a2a'} />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    style={{ ...inputStyle, borderColor: error && !email.trim() ? '#ef4444' : '#2a2a2a' }}
+                    onFocus={e => e.target.style.borderColor='#E8610A'}
+                    onBlur={e => e.target.style.borderColor = error && !email.trim() ? '#ef4444' : '#2a2a2a'}
+                  />
                 </div>
               </div>
               <div>
                 <label style={labelStyle}>Subject</label>
-                <input value={subject} onChange={e => setSubject(e.target.value)} placeholder="What do you need help with?" style={inputStyle}
-                  onFocus={e => e.target.style.borderColor='#E8610A'} onBlur={e => e.target.style.borderColor='#2a2a2a'} />
+                <input
+                  value={subject}
+                  onChange={e => setSubject(e.target.value)}
+                  placeholder="What do you need help with?"
+                  style={inputStyle}
+                  onFocus={e => e.target.style.borderColor='#E8610A'}
+                  onBlur={e => e.target.style.borderColor='#2a2a2a'}
+                />
               </div>
               <div>
-                <label style={labelStyle}>Message *</label>
-                <textarea value={message} onChange={e => setMessage(e.target.value)} rows={5} placeholder="Describe your issue or question..."
-                  style={{ ...inputStyle, resize:'vertical' }}
-                  onFocus={e => e.target.style.borderColor='#E8610A'} onBlur={e => e.target.style.borderColor='#2a2a2a'} />
+                <label style={labelStyle}>Message * <span style={{ color:'#555', fontSize:'11px', fontWeight:400, textTransform:'none' }}>(min 10 characters)</span></label>
+                <textarea
+                  value={message}
+                  onChange={e => setMessage(e.target.value)}
+                  rows={5}
+                  placeholder="Describe your issue or question..."
+                  style={{ ...inputStyle, resize:'vertical', borderColor: error && !message.trim() ? '#ef4444' : '#2a2a2a' }}
+                  onFocus={e => e.target.style.borderColor='#E8610A'}
+                  onBlur={e => e.target.style.borderColor = error && !message.trim() ? '#ef4444' : '#2a2a2a'}
+                />
+                <div style={{ fontSize:'11px', color: message.trim().length > 0 && message.trim().length < 10 ? '#ef4444' : '#555', marginTop:'4px', textAlign:'right' }}>
+                  {message.trim().length}/10 minimum
+                </div>
               </div>
               {error && (
-                <div style={{ background:'rgba(239,68,68,0.08)', border:'1px solid rgba(239,68,68,0.2)', borderRadius:'8px', padding:'10px 14px', fontSize:'13px', color:'#f87171' }}>{error}</div>
+                <div style={{ background:'rgba(239,68,68,0.08)', border:'1px solid rgba(239,68,68,0.3)', borderRadius:'8px', padding:'12px 14px', fontSize:'13px', color:'#f87171', display:'flex', alignItems:'center', gap:'8px' }}>
+                  <span style={{ fontSize:'16px' }}>⚠️</span> {error}
+                </div>
               )}
-              <button onClick={handleSubmit} disabled={loading}
+              <button
+                onClick={handleSubmit}
+                disabled={loading}
                 style={{ background:loading?'#2a2a2a':'linear-gradient(135deg,#E8610A,#C84E06)', color:loading?'#666':'#fff', border:'none', borderRadius:'8px', padding:'13px', fontSize:'14px', fontWeight:700, cursor:loading?'not-allowed':'pointer', fontFamily:'DM Sans, sans-serif', boxShadow:loading?'none':'0 4px 20px rgba(232,97,10,0.35)' }}>
                 {loading ? 'Sending...' : 'Send Message →'}
               </button>
+              <p style={{ fontSize:'11px', color:'#444', textAlign:'center', margin:0 }}>
+                Max 6 messages per hour per IP address.
+              </p>
             </div>
           )}
         </div>
