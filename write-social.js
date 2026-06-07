@@ -13,21 +13,6 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
 
-function getPasswordStrength(pw) {
-  if (!pw) return { score: 0, label: '', color: '' }
-  let score = 0
-  if (pw.length >= 8) score++
-  if (pw.length >= 12) score++
-  if (/[A-Z]/.test(pw)) score++
-  if (/[0-9]/.test(pw)) score++
-  if (/[^A-Za-z0-9]/.test(pw)) score++
-  if (score <= 1) return { score: 1, label: 'Weak', color: '#ef4444' }
-  if (score === 2) return { score: 2, label: 'Fair', color: '#f97316' }
-  if (score === 3) return { score: 3, label: 'Good', color: '#eab308' }
-  if (score === 4) return { score: 4, label: 'Strong', color: '#22c55e' }
-  return { score: 5, label: 'Very Strong', color: '#16a34a' }
-}
-
 const BULLETS = [
   { icon: '\ud83e\udde0', title: 'AI Agents Run 24/7', desc: 'Four AI agents work every day \u2014 writing blogs, posting to social, optimizing your SEO.' },
   { icon: '\ud83d\udcc8', title: '9+ Platforms. Zero Extra Work.', desc: 'Google, TikTok, YouTube, Facebook, Instagram, LinkedIn, Reddit \u2014 all automated.' },
@@ -37,14 +22,13 @@ const BULLETS = [
   { icon: '\ud83d\udee1\ufe0f', title: 'Free Plan \u2014 No Credit Card', desc: '3 free AI blog posts per month. Upgrade anytime with one click.' },
 ]
 
-export default function SignupPage() {
+export default function Login() {
   const router = useRouter()
-  const [isMobile, setIsMobile] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 900)
@@ -53,25 +37,26 @@ export default function SignupPage() {
     return () => window.removeEventListener('resize', check)
   }, [])
 
-  async function handleSignup(e) {
-    e.preventDefault()
+  async function handleLogin() {
     setLoading(true)
     setError('')
     try {
-      const { error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { data: { full_name: name } }
-      })
-      if (signUpError) throw signUpError
-      router.push('/check-email')
+      const { data, error: loginError } = await supabase.auth.signInWithPassword({ email, password })
+      if (loginError) throw loginError
+      const user = data.user
+      if (user) {
+        const { data: profile } = await supabase.from('users').select('onboarding_complete').eq('id', user.id).single()
+        if (!profile || profile.onboarding_complete === false) {
+          router.push('/onboarding')
+        } else {
+          router.push('/dashboard')
+        }
+      }
     } catch (err) {
-      setError(err.message || 'Something went wrong. Please try again.')
+      setError(err.message)
     }
     setLoading(false)
   }
-
-  const strength = getPasswordStrength(password)
 
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a0a', fontFamily: 'DM Sans, sans-serif' }}>
@@ -88,7 +73,6 @@ export default function SignupPage() {
         {!isMobile && (
           <div style={{ background: '#111', borderRight: '2px solid #1a1a1a', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '40px 48px', position: 'relative', overflow: 'hidden' }}>
 
-            {/* Background glow */}
             <div style={{ position: 'absolute', top: '-80px', right: '-80px', width: '350px', height: '350px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(232,97,10,0.07) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
             {/* Live badge */}
@@ -97,16 +81,16 @@ export default function SignupPage() {
                 <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#E8610A', position: 'absolute', top: '1px', left: '1px', display: 'block' }} />
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', border: '1.5px solid #E8610A', position: 'absolute', top: 0, left: 0, animation: 'ringpulse 2s ease-out infinite', opacity: 0, display: 'block' }} />
               </span>
-              <span style={{ fontSize: '11px', fontWeight: 700, color: '#E8610A', letterSpacing: '.06em' }}>AI running for businesses right now</span>
+              <span style={{ fontSize: '11px', fontWeight: 700, color: '#E8610A', letterSpacing: '.06em' }}>Your AI kept working while you were away</span>
             </div>
 
             {/* Headline */}
             <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '38px', fontWeight: 900, color: '#fff', lineHeight: 1.0, letterSpacing: '-1px', marginBottom: '12px' }}>
-              Set it once.<br />
-              <em style={{ color: '#E8610A', fontStyle: 'italic' }}>It markets forever.</em>
+              Welcome back.<br />
+              <em style={{ color: '#E8610A', fontStyle: 'italic' }}>Your marketing<br />never stopped.</em>
             </h1>
             <p style={{ fontSize: '14px', color: '#aaa', lineHeight: 1.7, marginBottom: '24px', fontWeight: 300, maxWidth: '380px' }}>
-              Join businesses that replaced their marketing agency with Traffikora &mdash; for a fraction of the cost.
+              While you were away your AI agents kept publishing content, growing your presence and ranking your business.
             </p>
 
             {/* Bullets */}
@@ -133,7 +117,7 @@ export default function SignupPage() {
               </div>
               <div>
                 <div style={{ fontSize: '12px', fontWeight: 700, color: '#fff' }}>Businesses already automated</div>
-                <div style={{ fontSize: '11px', color: '#555', fontWeight: 300 }}>Free plan &mdash; no credit card needed</div>
+                <div style={{ fontSize: '11px', color: '#555', fontWeight: 300 }}>Free plan \u2014 no credit card needed</div>
               </div>
             </div>
 
@@ -144,65 +128,40 @@ export default function SignupPage() {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: isMobile ? '40px 24px' : '48px 44px', background: '#0a0a0a' }}>
           <div style={{ width: '100%', maxWidth: '380px' }}>
 
+            <div style={{ fontSize: '11px', fontWeight: 700, color: '#E8610A', textTransform: 'uppercase', letterSpacing: '.12em', marginBottom: '8px' }}>Welcome Back</div>
             <div style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? '26px' : '28px', fontWeight: 700, color: '#fff', marginBottom: '4px' }}>
-              Start for free
+              Log in to Traffikora
             </div>
-            <p style={{ fontSize: '13px', color: '#555', marginBottom: '24px', fontWeight: 300 }}>No credit card needed. Up and running in 5 minutes.</p>
+            <p style={{ fontSize: '13px', color: '#555', marginBottom: '28px', fontWeight: 300 }}>Pick up right where you left off.</p>
 
             {error && (
               <div style={{ background: 'rgba(220,38,38,0.1)', border: '1px solid rgba(220,38,38,0.4)', borderRadius: '8px', padding: '10px 14px', marginBottom: '16px', fontSize: '13px', color: '#f87171' }}>{error}</div>
             )}
 
-            <div style={{ marginBottom: '12px' }}>
-              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#555', marginBottom: '5px', letterSpacing: '.08em', textTransform: 'uppercase' }}>Full Name</label>
-              <input value={name} onChange={e => setName(e.target.value)} placeholder="Your name"
-                style={{ width: '100%', background: '#111', border: '1px solid #222', borderRadius: '8px', color: '#fff', padding: '12px 14px', fontSize: '14px', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }}
-                onFocus={e => e.target.style.borderColor='#E8610A'} onBlur={e => e.target.style.borderColor='#222'} />
-            </div>
-
-            <div style={{ marginBottom: '12px' }}>
+            <div style={{ marginBottom: '14px' }}>
               <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#555', marginBottom: '5px', letterSpacing: '.08em', textTransform: 'uppercase' }}>Email Address</label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com"
+              <input type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleLogin()}
                 style={{ width: '100%', background: '#111', border: '1px solid #222', borderRadius: '8px', color: '#fff', padding: '12px 14px', fontSize: '14px', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }}
                 onFocus={e => e.target.style.borderColor='#E8610A'} onBlur={e => e.target.style.borderColor='#222'} />
             </div>
 
-            <div style={{ marginBottom: '20px' }}>
+            <div style={{ marginBottom: '24px' }}>
               <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#555', marginBottom: '5px', letterSpacing: '.08em', textTransform: 'uppercase' }}>Password</label>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Min 8 characters"
+              <input type="password" placeholder="Your password" value={password} onChange={e => setPassword(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleLogin()}
                 style={{ width: '100%', background: '#111', border: '1px solid #222', borderRadius: '8px', color: '#fff', padding: '12px 14px', fontSize: '14px', outline: 'none', fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' }}
                 onFocus={e => e.target.style.borderColor='#E8610A'} onBlur={e => e.target.style.borderColor='#222'} />
-              {password.length > 0 && (
-                <div style={{ marginTop: '8px' }}>
-                  <div style={{ display: 'flex', gap: '4px', marginBottom: '5px' }}>
-                    {[1,2,3,4,5].map(i => (
-                      <div key={i} style={{ flex: 1, height: '3px', borderRadius: '2px', background: i <= strength.score ? strength.color : '#222', transition: 'background 0.3s' }} />
-                    ))}
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '11px', color: strength.color, fontWeight: 700 }}>{strength.label}</span>
-                    <span style={{ fontSize: '11px', color: '#444' }}>{strength.score < 3 ? 'Add numbers or symbols' : strength.score < 5 ? 'Almost there!' : 'Great password!'}</span>
-                  </div>
-                </div>
-              )}
             </div>
 
-            <button onClick={handleSignup} disabled={loading || !email || !password || !name}
-              style={{ width: '100%', background: loading ? '#333' : 'linear-gradient(135deg,#E8610A,#C84E06)', border: 'none', borderRadius: '8px', color: '#fff', padding: '14px', fontSize: '15px', fontWeight: 800, cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', boxShadow: loading ? 'none' : '0 4px 24px rgba(232,97,10,0.4)', marginBottom: '14px' }}>
-              {loading ? 'Creating your account...' : 'Create Free Account \u2192'}
+            <button onClick={handleLogin} disabled={loading}
+              style={{ width: '100%', background: loading ? '#333' : 'linear-gradient(135deg,#E8610A,#C84E06)', border: 'none', borderRadius: '8px', color: '#fff', padding: '14px', fontSize: '15px', fontWeight: 800, cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'DM Sans, sans-serif', boxShadow: loading ? 'none' : '0 4px 24px rgba(232,97,10,0.4)', marginBottom: '16px' }}>
+              {loading ? 'Logging in...' : 'Log In \u2192'}
             </button>
 
-            <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', marginBottom: '16px', flexWrap: 'wrap' }}>
-              {['\ud83d\udee1\ufe0f No credit card', '\u26a1 Live in 5 min', '\ud83d\udd12 Cancel anytime'].map(note => (
-                <span key={note} style={{ fontSize: '11px', color: '#444', fontWeight: 500 }}>{note}</span>
-              ))}
-            </div>
-
-            <p style={{ fontSize: '12px', color: '#444', textAlign: 'center', lineHeight: 1.6 }}>
-              Already have an account? <a href="/login" style={{ color: '#E8610A', textDecoration: 'none', fontWeight: 700 }}>Sign in</a>
+            <p style={{ fontSize: '13px', color: '#444', textAlign: 'center', marginBottom: '10px' }}>
+              Don\u2019t have an account? <a href="/signup" style={{ color: '#E8610A', textDecoration: 'none', fontWeight: 700 }}>Start free trial</a>
             </p>
-            <p style={{ fontSize: '11px', color: '#333', textAlign: 'center', marginTop: '10px', lineHeight: 1.6 }}>
-              By signing up you agree to our <a href="/terms" style={{ color: '#555', textDecoration: 'none' }}>Terms</a> and <a href="/privacy" style={{ color: '#555', textDecoration: 'none' }}>Privacy Policy</a>.
+            <p style={{ fontSize: '12px', color: '#333', textAlign: 'center' }}>
+              <a href="/reset-password" style={{ color: '#444', textDecoration: 'none' }}>Forgot your password?</a>
             </p>
           </div>
         </div>
@@ -213,5 +172,5 @@ export default function SignupPage() {
 }
 `;
 
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\signup\\page.tsx', content, 'utf8');
-console.log('SUCCESS: signup/page.tsx — tighter spacing, bright white text, fits without scrolling');
+fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\login\\page.tsx', content, 'utf8');
+console.log('SUCCESS: login/page.tsx — matches signup page style');
