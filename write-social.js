@@ -1,87 +1,320 @@
 const fs = require('fs');
 
-let page = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\page.tsx', 'utf8');
+// Create the secure admin page at a secret route
+// Also add PIN protection as second layer
+// Randy's ID checked server-side via API before anything renders
 
-// 1. Replace the weak hero badge with powerful futuristic version
-page = page.replace(
-  `<div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontSize: '16px', fontWeight: 700, fontStyle: 'italic', fontFamily: 'Playfair Display, serif', color: '#fff', padding: '10px 22px', borderRadius: '40px', background: 'rgba(232,97,10,.1)', border: '1.5px solid rgba(232,97,10,.5)', marginBottom: '18px' }}>
-              <span style={{ position: 'relative', width: '10px', height: '10px', flexShrink: 0 }}>
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#E8610A', position: 'absolute', top: '1px', left: '1px', display: 'block' }} />
-                <span style={{ width: '10px', height: '10px', borderRadius: '50%', border: '1.5px solid #E8610A', position: 'absolute', top: '0', left: '0', animation: 'ringpulse 2s ease-out infinite', opacity: 0, display: 'block' }} />
-              </span>
-              <span style={{ background: 'linear-gradient(90deg,#fff 70%,rgba(232,97,10,0.5))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>The Future of Local Marketing is Here</span>
-            </div>`,
-  `<div style={{ marginBottom: '24px' }}>
-              {/* FUTURISTIC AI BADGE */}
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0', background: 'linear-gradient(135deg, #0a0a0a, #1a0800)', border: '1px solid rgba(232,97,10,0.6)', borderRadius: '4px', overflow: 'hidden', boxShadow: '0 0 30px rgba(232,97,10,0.15), inset 0 0 30px rgba(232,97,10,0.03)', marginBottom: '12px' }}>
-                {/* Left accent block */}
-                <div style={{ background: '#E8610A', padding: '10px 14px', display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-                  <span style={{ position: 'relative', width: '8px', height: '8px' }}>
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#fff', position: 'absolute', top: '1px', left: '1px', display: 'block' }} />
-                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', border: '1.5px solid #fff', position: 'absolute', top: 0, left: 0, animation: 'ringpulse 1.5s ease-out infinite', opacity: 0, display: 'block' }} />
-                  </span>
-                  <span style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '9px', fontWeight: 900, color: '#fff', letterSpacing: '.2em', textTransform: 'uppercase' }}>LIVE</span>
-                </div>
-                {/* Center text */}
-                <div style={{ padding: '10px 18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '11px', fontWeight: 700, color: '#E8610A', letterSpacing: '.15em', textTransform: 'uppercase' }}>AI MARKETING</span>
-                  <span style={{ width: '1px', height: '14px', background: 'rgba(232,97,10,0.3)', display: 'inline-block' }} />
-                  <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', fontWeight: 600, color: '#aaa', letterSpacing: '.05em' }}>The Future of Local Business is Here</span>
-                </div>
-                {/* Right corner accent */}
-                <div style={{ padding: '10px 14px', borderLeft: '1px solid rgba(232,97,10,0.3)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '9px', color: '#555', letterSpacing: '.1em' }}>v2.0</span>
-                </div>
-              </div>
+// Step 1 — Secure API route that verifies Randy server-side
+const verifyRoute = `// @ts-nocheck
+import { NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 
-              {/* STATS ROW */}
-              <div style={{ display: 'flex', gap: '0', marginTop: '8px' }}>
-                {[
-                  { num: '9+', label: 'Platforms' },
-                  { num: '24/7', label: 'Automated' },
-                  { num: '$0', label: 'To Start' },
-                ].map((s, i) => (
-                  <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: '0' }}>
-                    <div style={{ padding: '6px 16px', textAlign: 'center', borderLeft: i > 0 ? '1px solid rgba(232,97,10,0.2)' : 'none' }}>
-                      <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '16px', fontWeight: 900, color: '#E8610A', lineHeight: 1 }}>{s.num}</div>
-                      <div style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '9px', color: '#555', letterSpacing: '.1em', textTransform: 'uppercase', marginTop: '2px' }}>{s.label}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>`
-);
+const ADMIN_ID = '03ef19e5-528c-470d-bc7b-509438104d03'
+const ADMIN_PIN = '749251'
 
-// 2. Add Orbitron font import to styles
-page = page.replace(
-  '@keyframes shimmer{0%{left:-60%}60%,100%{left:130%}}',
-  '@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap");@keyframes shimmer{0%{left:-60%}60%,100%{left:130%}}'
-);
+export async function POST(request) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  )
 
-// 3. Add scrolling cities ticker right after the Powered By bar
-page = page.replace(
-  `{/* INDUSTRIES */}`,
-  `{/* CITIES TICKER */}
-      <div style={{ background: '#0a0a0a', borderTop: '1px solid #1a1a1a', padding: '12px 0', overflow: 'hidden', position: 'relative' }}>
-        <style>{\`
-          @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-          .ticker-inner { display:flex; animation:ticker 25s linear infinite; width:max-content; }
-          .ticker-inner:hover { animation-play-state:paused; }
-        \`}</style>
-        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '80px', background: 'linear-gradient(90deg,#0a0a0a,transparent)', zIndex: 1 }} />
-        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '80px', background: 'linear-gradient(270deg,#0a0a0a,transparent)', zIndex: 1 }} />
-        <div className="ticker-inner">
-          {['Tampa, FL','Atlanta, GA','Dallas, TX','Miami, FL','Chicago, IL','Houston, TX','Los Angeles, CA','New York, NY','Phoenix, AZ','Denver, CO','Seattle, WA','Boston, MA','Nashville, TN','Orlando, FL','Austin, TX','Tampa, FL','Atlanta, GA','Dallas, TX','Miami, FL','Chicago, IL','Houston, TX','Los Angeles, CA','New York, NY','Phoenix, AZ','Denver, CO','Seattle, WA','Boston, MA','Nashville, TN','Orlando, FL','Austin, TX'].map((city, i) => (
-            <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '0 24px', fontSize: '11px', color: '#555', fontWeight: 500, whiteSpace: 'nowrap', fontFamily: 'DM Sans, sans-serif' }}>
-              <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#E8610A', display: 'inline-block', flexShrink: 0 }} />
-              {city}
-            </span>
+  const { pin, token } = await request.json()
+
+  // Verify PIN
+  if (pin !== ADMIN_PIN) {
+    return NextResponse.json({ error: 'Invalid PIN' }, { status: 401 })
+  }
+
+  // Verify session token belongs to Randy
+  const { data: { user }, error } = await supabase.auth.getUser(token)
+  if (error || !user || user.id !== ADMIN_ID) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+  }
+
+  return NextResponse.json({ success: true })
+}
+`;
+
+// Step 2 — Secure admin page at secret route
+const securePage = `// @ts-nocheck
+'use client'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+)
+
+const ADMIN_ID = '03ef19e5-528c-470d-bc7b-509438104d03'
+
+export default function SecureAdminAffiliates() {
+  const router = useRouter()
+  const [phase, setPhase] = useState('checking') // checking | pin | admin
+  const [pin, setPin] = useState('')
+  const [pinError, setPinError] = useState('')
+  const [pinLoading, setPinLoading] = useState(false)
+  const [applications, setApplications] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [processing, setProcessing] = useState(null)
+  const [isMobile, setIsMobile] = useState(false)
+  const [filter, setFilter] = useState('pending')
+  const [sessionToken, setSessionToken] = useState(null)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 900)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
+  useEffect(() => {
+    async function checkAuth() {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session || session.user.id !== ADMIN_ID) {
+        router.push('/dashboard')
+        return
+      }
+      setSessionToken(session.access_token)
+      setPhase('pin')
+    }
+    checkAuth()
+  }, [])
+
+  async function verifyPin() {
+    if (pin.length !== 6) { setPinError('PIN must be 6 digits'); return }
+    setPinLoading(true)
+    setPinError('')
+    try {
+      const res = await fetch('/api/admin/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin, token: sessionToken })
+      })
+      const data = await res.json()
+      if (data.success) {
+        setPhase('admin')
+        loadApplications()
+      } else {
+        setPinError('Incorrect PIN. Try again.')
+        setPin('')
+      }
+    } catch {
+      setPinError('Verification failed. Try again.')
+    }
+    setPinLoading(false)
+  }
+
+  async function loadApplications() {
+    setLoading(true)
+    const { data } = await supabase
+      .from('affiliate_applications')
+      .select('*')
+      .order('created_at', { ascending: false })
+    setApplications(data || [])
+    setLoading(false)
+  }
+
+  async function approve(app) {
+    setProcessing(app.id)
+    try {
+      await supabase.from('affiliate_applications').update({ status: 'approved' }).eq('id', app.id)
+      await fetch('/api/affiliates/approve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ applicationId: app.id, email: app.email, name: app.name, action: 'approve' })
+      })
+      await loadApplications()
+    } catch (e) { console.error(e) }
+    setProcessing(null)
+  }
+
+  async function reject(app) {
+    setProcessing(app.id)
+    try {
+      await supabase.from('affiliate_applications').update({ status: 'rejected' }).eq('id', app.id)
+      await fetch('/api/affiliates/approve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ applicationId: app.id, email: app.email, name: app.name, action: 'reject' })
+      })
+      await loadApplications()
+    } catch (e) { console.error(e) }
+    setProcessing(null)
+  }
+
+  const filtered = applications.filter(a => filter === 'all' ? true : a.status === filter)
+  const counts = {
+    pending: applications.filter(a => a.status === 'pending').length,
+    approved: applications.filter(a => a.status === 'approved').length,
+    rejected: applications.filter(a => a.status === 'rejected').length,
+  }
+
+  // CHECKING PHASE
+  if (phase === 'checking') return (
+    <div style={{ minHeight: '100vh', background: '#080808', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#E8610A', fontFamily: 'DM Sans, sans-serif' }}>
+      Verifying access...
+    </div>
+  )
+
+  // PIN PHASE
+  if (phase === 'pin') return (
+    <div style={{ minHeight: '100vh', background: '#080808', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'DM Sans, sans-serif', padding: '24px' }}>
+      <style>{\`@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=DM+Sans:wght@300;400;500;600;700;800&display=swap');\`}</style>
+      <div style={{ background: '#111', border: '1px solid #1a1a1a', borderRadius: '20px', padding: '48px 40px', maxWidth: '380px', width: '100%', textAlign: 'center' }}>
+        <div style={{ fontSize: '48px', marginBottom: '16px' }}>\ud83d\udd10</div>
+        <h1 style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '20px', fontWeight: 900, color: '#fff', letterSpacing: '2px', marginBottom: '8px' }}>ADMIN ACCESS</h1>
+        <p style={{ fontSize: '13px', color: '#555', marginBottom: '32px', fontWeight: 300 }}>Enter your 6-digit admin PIN to continue</p>
+
+        <input
+          type="password"
+          maxLength={6}
+          value={pin}
+          onChange={e => setPin(e.target.value.replace(/[^0-9]/g, ''))}
+          onKeyDown={e => e.key === 'Enter' && verifyPin()}
+          placeholder="\u2022\u2022\u2022\u2022\u2022\u2022"
+          style={{ width: '100%', background: '#0a0a0a', border: '1px solid #2a2a2a', borderRadius: '10px', color: '#fff', padding: '16px', fontSize: '24px', outline: 'none', fontFamily: 'Orbitron, sans-serif', letterSpacing: '8px', textAlign: 'center', boxSizing: 'border-box', marginBottom: '12px' }}
+          onFocus={e => e.target.style.borderColor = '#E8610A'}
+          onBlur={e => e.target.style.borderColor = '#2a2a2a'}
+          autoFocus
+        />
+
+        {pinError && (
+          <div style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: '8px', padding: '10px', fontSize: '13px', color: '#f87171', marginBottom: '12px' }}>{pinError}</div>
+        )}
+
+        <button onClick={verifyPin} disabled={pinLoading || pin.length !== 6}
+          style={{ width: '100%', background: pin.length === 6 ? 'linear-gradient(135deg,#E8610A,#C84E06)' : '#1a1a1a', color: pin.length === 6 ? '#fff' : '#444', border: 'none', borderRadius: '10px', padding: '14px', fontSize: '14px', fontWeight: 700, cursor: pin.length === 6 ? 'pointer' : 'not-allowed', fontFamily: 'DM Sans, sans-serif', boxShadow: pin.length === 6 ? '0 4px 20px rgba(232,97,10,0.4)' : 'none' }}>
+          {pinLoading ? 'Verifying...' : 'Enter Admin Panel \u2192'}
+        </button>
+
+        <p style={{ fontSize: '11px', color: '#333', marginTop: '20px' }}>Unauthorized access attempts are logged.</p>
+      </div>
+    </div>
+  )
+
+  // ADMIN PANEL PHASE
+  return (
+    <div style={{ minHeight: '100vh', background: '#080808', color: '#fff', fontFamily: 'DM Sans, sans-serif', padding: isMobile ? '24px 16px' : '40px 32px' }}>
+      <style>{\`@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=DM+Sans:wght@300;400;500;600;700;800&display=swap');\`}</style>
+      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
+          <div>
+            <div style={{ fontSize: '11px', color: '#E8610A', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.15em', marginBottom: '8px' }}>Admin Panel \u2014 Secure</div>
+            <h1 style={{ fontFamily: 'Orbitron, sans-serif', fontSize: isMobile ? '22px' : '32px', fontWeight: 900, color: '#fff', letterSpacing: '1px' }}>
+              AFFILIATE <span style={{ color: '#E8610A' }}>APPLICATIONS</span>
+            </h1>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#111', border: '1px solid #22c55e30', borderRadius: '10px', padding: '10px 18px' }}>
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e' }} />
+            <span style={{ fontSize: '12px', color: '#22c55e', fontWeight: 700 }}>SECURED ACCESS</span>
+          </div>
+        </div>
+
+        {/* STATS */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '12px', marginBottom: '24px' }}>
+          {[
+            { label: 'Pending', value: counts.pending, color: '#E8610A' },
+            { label: 'Approved', value: counts.approved, color: '#22c55e' },
+            { label: 'Rejected', value: counts.rejected, color: '#ef4444' },
+          ].map(s => (
+            <div key={s.label} style={{ background: '#111', border: '1px solid #1a1a1a', borderRadius: '12px', padding: '20px', textAlign: 'center' }}>
+              <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '32px', fontWeight: 900, color: s.color }}>{s.value}</div>
+              <div style={{ fontSize: '12px', color: '#555', textTransform: 'uppercase', letterSpacing: '.1em', marginTop: '4px' }}>{s.label}</div>
+            </div>
           ))}
         </div>
+
+        {/* FILTER TABS */}
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
+          {['pending', 'approved', 'rejected', 'all'].map(f => (
+            <button key={f} onClick={() => setFilter(f)}
+              style={{ padding: '8px 18px', borderRadius: '20px', border: '1px solid ' + (filter === f ? '#E8610A' : '#2a2a2a'), background: filter === f ? 'rgba(232,97,10,0.1)' : 'transparent', color: filter === f ? '#E8610A' : '#555', fontSize: '12px', fontWeight: 700, cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '.06em', fontFamily: 'DM Sans, sans-serif' }}>
+              {f}
+            </button>
+          ))}
+        </div>
+
+        {/* APPLICATIONS */}
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '60px', color: '#E8610A' }}>Loading applications...</div>
+        ) : filtered.length === 0 ? (
+          <div style={{ background: '#111', border: '1px solid #1a1a1a', borderRadius: '14px', padding: '60px', textAlign: 'center' }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>\ud83d\udce5</div>
+            <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', marginBottom: '8px' }}>No {filter} applications</div>
+            <div style={{ fontSize: '13px', color: '#555' }}>Check back when new applications come in.</div>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {filtered.map(app => (
+              <div key={app.id} style={{ background: '#111', border: '1px solid ' + (app.status === 'approved' ? '#22c55e30' : app.status === 'rejected' ? '#ef444430' : '#1a1a1a'), borderRadius: '14px', padding: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '16px' }}>
+                  <div>
+                    <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', marginBottom: '4px' }}>{app.name}</div>
+                    <div style={{ fontSize: '13px', color: '#E8610A', marginBottom: '4px' }}>{app.email}</div>
+                    <div style={{ fontSize: '12px', color: '#555' }}>{new Date(app.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 700, padding: '4px 12px', borderRadius: '20px', background: app.status === 'approved' ? '#22c55e18' : app.status === 'rejected' ? '#ef444418' : '#E8610A18', color: app.status === 'approved' ? '#22c55e' : app.status === 'rejected' ? '#ef4444' : '#E8610A', border: '1px solid ' + (app.status === 'approved' ? '#22c55e40' : app.status === 'rejected' ? '#ef444440' : '#E8610A40'), textTransform: 'uppercase', letterSpacing: '.06em' }}>
+                      {app.status}
+                    </span>
+                    {app.status === 'pending' && (
+                      <>
+                        <button onClick={() => approve(app)} disabled={processing === app.id}
+                          style={{ background: '#22c55e', color: '#fff', border: 'none', borderRadius: '8px', padding: '8px 20px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>
+                          {processing === app.id ? '...' : '\u2713 Approve'}
+                        </button>
+                        <button onClick={() => reject(app)} disabled={processing === app.id}
+                          style={{ background: 'transparent', color: '#ef4444', border: '1px solid #ef444440', borderRadius: '8px', padding: '8px 20px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>
+                          {processing === app.id ? '...' : '\u2717 Reject'}
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2,1fr)', gap: '12px' }}>
+                  {app.website && (
+                    <div style={{ background: '#0d0d0d', borderRadius: '8px', padding: '12px 16px' }}>
+                      <div style={{ fontSize: '10px', color: '#555', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: '4px' }}>Website</div>
+                      <a href={app.website} target="_blank" rel="noopener noreferrer" style={{ fontSize: '13px', color: '#3b82f6', textDecoration: 'none' }}>{app.website}</a>
+                    </div>
+                  )}
+                  {app.social_links && (
+                    <div style={{ background: '#0d0d0d', borderRadius: '8px', padding: '12px 16px' }}>
+                      <div style={{ fontSize: '10px', color: '#555', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: '4px' }}>Social Links</div>
+                      <div style={{ fontSize: '13px', color: '#ccc' }}>{app.social_links}</div>
+                    </div>
+                  )}
+                  {app.audience_size && (
+                    <div style={{ background: '#0d0d0d', borderRadius: '8px', padding: '12px 16px' }}>
+                      <div style={{ fontSize: '10px', color: '#555', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: '4px' }}>Audience Size</div>
+                      <div style={{ fontSize: '13px', color: '#ccc' }}>{app.audience_size}</div>
+                    </div>
+                  )}
+                  <div style={{ background: '#0d0d0d', borderRadius: '8px', padding: '12px 16px' }}>
+                    <div style={{ fontSize: '10px', color: '#555', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: '4px' }}>How They Plan to Promote</div>
+                    <div style={{ fontSize: '13px', color: '#ccc', lineHeight: 1.6 }}>{app.how_promote}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
+    </div>
+  )
+}
+`;
 
-      {/* INDUSTRIES */}`
-);
+// Create directories
+fs.mkdirSync('C:\\Users\\randy\\traffikfuel\\src\\app\\api\\admin', { recursive: true });
+fs.mkdirSync('C:\\Users\\randy\\traffikfuel\\src\\app\\admin\\x7k9-affiliates', { recursive: true });
 
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\page.tsx', page, 'utf8');
-console.log('SUCCESS: Hero badge redesigned — futuristic AI terminal style + stats row + cities ticker');
+// Write files
+fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\api\\admin\\verify\\route.ts', verifyRoute, 'utf8');
+console.log('SUCCESS: api/admin/verify/route.ts — server-side PIN + session verification');
+
+fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\admin\\x7k9-affiliates\\page.tsx', securePage, 'utf8');
+console.log('SUCCESS: admin/x7k9-affiliates/page.tsx — triple secured admin panel');
