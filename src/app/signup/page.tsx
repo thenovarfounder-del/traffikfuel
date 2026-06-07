@@ -43,6 +43,8 @@ export default function SignupPage() {
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [refCode, setRefCode] = useState(null)
+  const [refBanner, setRefBanner] = useState(false)
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 900)
@@ -51,17 +53,65 @@ export default function SignupPage() {
     return () => window.removeEventListener('resize', check)
   }, [])
 
+  useEffect(() => {
+    // Check for referral code in URL or cookie
+    const params = new URLSearchParams(window.location.search)
+    const ref = params.get('ref')
+    if (ref) {
+      setRefCode(ref)
+      setRefBanner(true)
+      // Store in localStorage for 90 days
+      const expiry = Date.now() + (90 * 24 * 60 * 60 * 1000)
+      localStorage.setItem('traffikora_ref', JSON.stringify({ code: ref, expiry }))
+      // Track the click
+      fetch('/api/referral', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'click',
+          data: { code: ref, ip: '', userAgent: navigator.userAgent }
+        })
+      }).catch(() => {})
+    } else {
+      // Check localStorage for existing ref
+      try {
+        const stored = localStorage.getItem('traffikora_ref')
+        if (stored) {
+          const parsed = JSON.parse(stored)
+          if (parsed.expiry > Date.now()) {
+            setRefCode(parsed.code)
+          } else {
+            localStorage.removeItem('traffikora_ref')
+          }
+        }
+      } catch {}
+    }
+  }, [])
+
   async function handleSignup(e) {
     e.preventDefault()
     setLoading(true)
     setError('')
     try {
-      const { error: signUpError } = await supabase.auth.signUp({
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: { data: { full_name: name } }
       })
       if (signUpError) throw signUpError
+
+      // Track referral signup
+      if (refCode && signUpData?.user?.id) {
+        fetch('/api/referral', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'signup',
+            data: { code: refCode, referredUserId: signUpData.user.id }
+          })
+        }).catch(() => {})
+      }
+
       router.push('/check-email')
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.')
@@ -80,16 +130,23 @@ export default function SignupPage() {
         .bullet-row { transition: transform 0.2s; }
       `}</style>
       <Nav />
+
+      {/* REFERRAL BANNER */}
+      {refBanner && refCode && (
+        <div style={{ background: 'linear-gradient(135deg,#0d0600,#1a0800)', borderBottom: '1px solid rgba(232,97,10,0.3)', padding: '12px 24px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '16px' }}>🎁</span>
+          <span style={{ fontSize: '13px', color: '#fff', fontWeight: 500 }}>
+            You were referred by a Traffikora user — <strong style={{ color: '#E8610A' }}>sign up to get started free!</strong>
+          </span>
+        </div>
+      )}
+
       <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.15fr 0.85fr', minHeight: 'calc(100vh - 64px)' }}>
 
         {/* LEFT PANEL */}
         {!isMobile && (
           <div style={{ background: '#111', borderRight: '2px solid #1a1a1a', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '40px 48px', position: 'relative', overflow: 'hidden' }}>
-
-            {/* Background glow */}
             <div style={{ position: 'absolute', top: '-80px', right: '-80px', width: '350px', height: '350px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(232,97,10,0.07) 0%, transparent 70%)', pointerEvents: 'none' }} />
-
-            {/* Live badge */}
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(232,97,10,0.08)', border: '1px solid rgba(232,97,10,0.25)', borderRadius: '40px', padding: '6px 14px', marginBottom: '20px', alignSelf: 'flex-start' }}>
               <span style={{ position: 'relative', width: '8px', height: '8px', flexShrink: 0 }}>
                 <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#E8610A', position: 'absolute', top: '1px', left: '1px', display: 'block' }} />
@@ -97,8 +154,6 @@ export default function SignupPage() {
               </span>
               <span style={{ fontSize: '11px', fontWeight: 700, color: '#E8610A', letterSpacing: '.06em' }}>AI running for businesses right now</span>
             </div>
-
-            {/* Headline */}
             <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '38px', fontWeight: 900, color: '#fff', lineHeight: 1.0, letterSpacing: '-1px', marginBottom: '12px' }}>
               Set it once.<br />
               <em style={{ color: '#E8610A', fontStyle: 'italic' }}>It markets forever.</em>
@@ -106,8 +161,6 @@ export default function SignupPage() {
             <p style={{ fontSize: '14px', color: '#aaa', lineHeight: 1.7, marginBottom: '24px', fontWeight: 300, maxWidth: '380px' }}>
               Join businesses that replaced their marketing agency with Traffikora &mdash; for a fraction of the cost.
             </p>
-
-            {/* Bullets */}
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {BULLETS.map((b, i) => (
                 <div key={b.title} className="bullet-row" style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', padding: '12px 0', borderBottom: i < BULLETS.length - 1 ? '1px solid #1a1a1a' : 'none' }}>
@@ -119,8 +172,6 @@ export default function SignupPage() {
                 </div>
               ))}
             </div>
-
-            {/* Social proof */}
             <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid #1a1a1a', display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div style={{ display: 'flex' }}>
                 {['#E8610A','#C84E06','#a03a04','#7a2c03'].map((c,i) => (
@@ -131,17 +182,15 @@ export default function SignupPage() {
               </div>
               <div>
                 <div style={{ fontSize: '12px', fontWeight: 700, color: '#fff' }}>Businesses already automated</div>
-                <div style={{ fontSize: '11px', color: '#555', fontWeight: 300 }}>Free plan &mdash; no credit card needed</div>
+                <div style={{ fontSize: '11px', color: '#555', fontWeight: 300 }}>Free plan — no credit card needed</div>
               </div>
             </div>
-
           </div>
         )}
 
         {/* RIGHT PANEL */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: isMobile ? '40px 24px' : '48px 44px', background: '#0a0a0a' }}>
           <div style={{ width: '100%', maxWidth: '380px' }}>
-
             <div style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? '26px' : '28px', fontWeight: 700, color: '#fff', marginBottom: '4px' }}>
               Start for free
             </div>
