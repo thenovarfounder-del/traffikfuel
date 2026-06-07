@@ -22,7 +22,7 @@ export async function POST(request) {
   // Notify Randy
   await resend.emails.send({
     from: 'Traffikora <eva@traffikora.com>',
-    to: 'traffikoratest@yahoo.com',
+    to: 'thenovar.founder@gmail.com',
     subject: `New Affiliate Application — ${name}`,
     html: `<div style="font-family:Arial,sans-serif;padding:32px;max-width:600px;">
       <h2 style="color:#E8610A;">New Affiliate Application</h2>

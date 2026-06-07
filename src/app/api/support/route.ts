@@ -13,7 +13,7 @@ export async function POST(request) {
     // Notify Randy at Yahoo
     await resend.emails.send({
       from: 'Traffikora Support <eva@traffikora.com>',
-      to: 'traffikoratest@yahoo.com',
+      to: 'thenovar.founder@gmail.com',
       subject: `🎟️ Support Request: ${subject || 'No Subject'} — from ${name}`,
       html: `<div style="font-family:Arial,sans-serif;padding:32px;max-width:600px;">
         <h2 style="color:#E8610A;">New Support Request</h2>
