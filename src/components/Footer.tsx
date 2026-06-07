@@ -53,6 +53,7 @@ export default function Footer() {
             <div style={{ marginBottom: '10px' }}><Link href="/faq" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>FAQ</Link></div>
             <div style={{ marginBottom: '10px' }}><Link href="/about" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>About Us</Link></div>
             <div style={{ marginBottom: '10px' }}><Link href="/contact" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Contact Us</Link></div>
+            <div style={{ marginBottom: '10px' }}><Link href="/affiliates" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#E8610A', textDecoration: 'none', fontWeight: 700 }}>Affiliates — Earn 30%</Link></div>
             <div style={{ marginBottom: '10px' }}><Link href="/privacy" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Privacy Policy</Link></div>
             <div style={{ marginBottom: '10px' }}><Link href="/terms" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Terms of Service</Link></div>
             <div style={{ marginBottom: '10px' }}><Link href="/data-use" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: '#ccc', textDecoration: 'none' }}>Data Use</Link></div>
