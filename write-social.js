@@ -1,59 +1,123 @@
 const fs = require('fs')
 const path = require('path')
 
-const filePath = path.join('C:\\Users\\randy\\traffikfuel\\src\\app\\api\\support\\route.ts')
+const filePath = path.join('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\support\\page.tsx')
 const content = `// @ts-nocheck
-import { NextResponse } from 'next/server'
-import { Resend } from 'resend'
+'use client'
+import { useState, useRef } from 'react'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+export default function SupportPage() {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [subject, setSubject] = useState('')
+  const [message, setMessage] = useState('')
+  const [sent, setSent] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-export async function POST(request) {
-  const { name, email, subject, message } = await request.json()
+  const nameRef = useRef(null)
+  const emailRef = useRef(null)
+  const messageRef = useRef(null)
 
-  if (!name || !email || !message) {
-    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+  async function handleSubmit() {
+    const finalName = nameRef.current?.value || name
+    const finalEmail = emailRef.current?.value || email
+    const finalMessage = messageRef.current?.value || message
+    if (!finalName || !finalEmail || !finalMessage) { setError('Please fill in all required fields.'); return }
+    setLoading(true); setError('')
+    try {
+      const res = await fetch('/api/support', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: finalName, email: finalEmail, subject, message: finalMessage })
+      })
+      const data = await res.json()
+      if (data.success) { setSent(true) }
+      else { setError('Failed to send. Please email support@traffikora.com directly.') }
+    } catch (e) { setError('Failed to send. Please email support@traffikora.com directly.') }
+    setLoading(false)
   }
 
-  try {
-    // Notify Randy
-    await resend.emails.send({
-      from: 'Traffikora Support <eva@traffikora.com>',
-      to: 'support@traffikora.com',
-      subject: \`Support Ticket: \${subject || 'No subject'} \u2014 from \${name}\`,
-      html: \`<div style="font-family:Arial,sans-serif;padding:32px;max-width:600px;">
-        <h2 style="color:#E8610A;">New Support Ticket</h2>
-        <p><strong>Name:</strong> \${name}</p>
-        <p><strong>Email:</strong> \${email}</p>
-        <p><strong>Subject:</strong> \${subject || 'Not provided'}</p>
-        <p><strong>Message:</strong></p>
-        <p style="background:#f4f4f4;padding:16px;border-radius:8px;line-height:1.7;">\${message}</p>
-      </div>\`
-    })
+  const inputStyle = { width:"100%", background:"#0a0a0a", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"12px 16px", fontSize:"14px", color:"#fff", outline:"none", fontFamily:"DM Sans, sans-serif", boxSizing:"border-box" }
+  const labelStyle = { display:"block", fontSize:"12px", fontWeight:700, color:"#aaa", marginBottom:"8px", textTransform:"uppercase", letterSpacing:"0.08em" }
 
-    // Confirm to user
-    await resend.emails.send({
-      from: 'Eva at Traffikora <eva@traffikora.com>',
-      to: email,
-      subject: \`We received your message, \${name.split(' ')[0]}!\`,
-      html: \`<div style="font-family:Arial,sans-serif;padding:32px;max-width:600px;background:#f9f9f9;">
-        <div style="background:#111;padding:32px;border-radius:12px;text-align:center;margin-bottom:24px;">
-          <p style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#fff;margin:0;">Traffik<span style="color:#E8610A;">ora</span></p>
+  return (
+    <div style={{ minHeight:"100vh", background:"#0a0a0a", color:"#fff", fontFamily:"DM Sans, sans-serif" }}>
+      <div style={{ background:"linear-gradient(135deg,#111 0%,#1a0e00 100%)", borderBottom:"1px solid #1e1e1e", padding:"32px 40px", marginBottom:"32px" }}>
+        <div style={{ maxWidth:"900px", margin:"0 auto", display:"flex", alignItems:"center", gap:"14px" }}>
+          <div style={{ width:"44px", height:"44px", background:"linear-gradient(135deg,#E8610A,#ff8c42)", borderRadius:"10px", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"22px" }}>\u{1F4AC}</div>
+          <div>
+            <h1 style={{ fontFamily:"Playfair Display, serif", fontSize:"26px", fontWeight:900, color:"#fff", margin:0 }}>Support</h1>
+            <p style={{ color:"#666", fontSize:"13px", margin:0 }}>We\u2019re here to help. Send us a message and we\u2019ll get back to you within 24 hours.</p>
+          </div>
         </div>
-        <h2 style="color:#111;">We got your message!</h2>
-        <p style="color:#555;line-height:1.7;">Hi \${name.split(' ')[0]}, thanks for reaching out. Our team will get back to you within 24 hours.</p>
-        <p style="color:#555;line-height:1.7;"><strong>Your message:</strong><br/>\${message}</p>
-        <p style="color:#888;font-size:13px;margin-top:32px;">Questions? Reply to this email or visit traffikora.com</p>
-      </div>\`
-    })
+      </div>
 
-    return NextResponse.json({ success: true })
-  } catch (err) {
-    console.error('Support email error:', err)
-    return NextResponse.json({ error: 'Failed to send' }, { status: 500 })
-  }
+      <div style={{ maxWidth:"900px", margin:"0 auto", padding:"0 40px 60px", display:"grid", gridTemplateColumns:"1fr 1fr", gap:"24px" }}>
+
+        <div style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"14px", padding:"28px" }}>
+          <h2 style={{ fontFamily:"Playfair Display, serif", fontSize:"20px", fontWeight:700, color:"#fff", marginBottom:"20px" }}>Send a Message</h2>
+          {sent ? (
+            <div style={{ textAlign:"center", padding:"40px 0" }}>
+              <div style={{ fontSize:56, marginBottom:16 }}>\u2705</div>
+              <p style={{ fontFamily:"Playfair Display, serif", fontSize:22, color:"#fff", marginBottom:8 }}>Message sent!</p>
+              <p style={{ color:"#888", fontSize:14 }}>We\u2019ll get back to you within 24 hours.</p>
+            </div>
+          ) : (
+            <div style={{ display:"flex", flexDirection:"column", gap:"14px" }}>
+              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"14px" }}>
+                <div>
+                  <label style={labelStyle}>Your Name *</label>
+                  <input ref={nameRef} value={name} onChange={e => setName(e.target.value)} onInput={e => setName(e.target.value)} placeholder="Randy" style={inputStyle}
+                    onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
+                </div>
+                <div>
+                  <label style={labelStyle}>Email *</label>
+                  <input ref={emailRef} value={email} onChange={e => setEmail(e.target.value)} onInput={e => setEmail(e.target.value)} placeholder="you@example.com" style={inputStyle}
+                    onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
+                </div>
+              </div>
+              <div>
+                <label style={labelStyle}>Subject</label>
+                <input value={subject} onChange={e => setSubject(e.target.value)} onInput={e => setSubject(e.target.value)} placeholder="What do you need help with?" style={inputStyle}
+                  onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
+              </div>
+              <div>
+                <label style={labelStyle}>Message *</label>
+                <textarea ref={messageRef} value={message} onChange={e => setMessage(e.target.value)} onInput={e => setMessage(e.target.value)} rows={5} placeholder="Describe your issue or question..."
+                  style={{ ...inputStyle, resize:"vertical" }}
+                  onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
+              </div>
+              {error && <div style={{ background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.2)", borderRadius:"8px", padding:"10px 14px", fontSize:"13px", color:"#f87171" }}>{error}</div>}
+              <button onClick={handleSubmit} disabled={loading}
+                style={{ background:loading?"#2a2a2a":"linear-gradient(135deg,#E8610A,#C84E06)", color:loading?"#666":"#fff", border:"none", borderRadius:"8px", padding:"13px", fontSize:"14px", fontWeight:700, cursor:loading?"not-allowed":"pointer", fontFamily:"DM Sans, sans-serif", boxShadow:loading?"none":"0 4px 20px rgba(232,97,10,0.35)" }}>
+                {loading ? "Sending..." : "Send Message \u2192"}
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div style={{ display:"flex", flexDirection:"column", gap:"14px" }}>
+          {[
+            { icon:"\u{1F4E7}", title:"Email Support", desc:"support@traffikora.com", sub:"Response within 24 hours" },
+            { icon:"\u{1F4AC}", title:"Live Chat", desc:"Chat with CYRA", sub:"Click the chat bubble bottom right" },
+            { icon:"\u{1F4CB}", title:"Common Issues", desc:"Billing, connections, content", sub:"Most answers are in our FAQ" },
+            { icon:"\u{1F6E0}", title:"Account Issues", desc:"Login, password, plan changes", sub:"We\u2019ll fix it fast \u2014 usually same day" },
+          ].map((item, i) => (
+            <div key={i} style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"12px", padding:"18px 20px", display:"flex", alignItems:"center", gap:"14px" }}>
+              <div style={{ fontSize:26, flexShrink:0 }}>{item.icon}</div>
+              <div>
+                <div style={{ fontWeight:700, color:"#fff", fontSize:14, marginBottom:2 }}>{item.title}</div>
+                <div style={{ color:"#E8610A", fontSize:13, marginBottom:2 }}>{item.desc}</div>
+                <div style={{ color:"#555", fontSize:12 }}>{item.sub}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
 }`
 
-fs.mkdirSync(path.dirname(filePath), { recursive: true })
 fs.writeFileSync(filePath, content, 'utf8')
 console.log('Written:', filePath)

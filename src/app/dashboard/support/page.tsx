@@ -1,6 +1,6 @@
 // @ts-nocheck
 'use client'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 export default function SupportPage() {
   const [name, setName] = useState('')
@@ -11,14 +11,21 @@ export default function SupportPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  const nameRef = useRef(null)
+  const emailRef = useRef(null)
+  const messageRef = useRef(null)
+
   async function handleSubmit() {
-    if (!name || !email || !message) { setError('Please fill in all required fields.'); return }
+    const finalName = nameRef.current?.value || name
+    const finalEmail = emailRef.current?.value || email
+    const finalMessage = messageRef.current?.value || message
+    if (!finalName || !finalEmail || !finalMessage) { setError('Please fill in all required fields.'); return }
     setLoading(true); setError('')
     try {
       const res = await fetch('/api/support', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, subject, message })
+        body: JSON.stringify({ name: finalName, email: finalEmail, subject, message: finalMessage })
       })
       const data = await res.json()
       if (data.success) { setSent(true) }
@@ -44,7 +51,6 @@ export default function SupportPage() {
 
       <div style={{ maxWidth:"900px", margin:"0 auto", padding:"0 40px 60px", display:"grid", gridTemplateColumns:"1fr 1fr", gap:"24px" }}>
 
-        {/* Form */}
         <div style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"14px", padding:"28px" }}>
           <h2 style={{ fontFamily:"Playfair Display, serif", fontSize:"20px", fontWeight:700, color:"#fff", marginBottom:"20px" }}>Send a Message</h2>
           {sent ? (
@@ -58,23 +64,23 @@ export default function SupportPage() {
               <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"14px" }}>
                 <div>
                   <label style={labelStyle}>Your Name *</label>
-                  <input value={name} onChange={e => setName(e.target.value)} placeholder="Randy" style={inputStyle}
+                  <input ref={nameRef} value={name} onChange={e => setName(e.target.value)} onInput={e => setName(e.target.value)} placeholder="Randy" style={inputStyle}
                     onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
                 </div>
                 <div>
                   <label style={labelStyle}>Email *</label>
-                  <input value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" style={inputStyle}
+                  <input ref={emailRef} value={email} onChange={e => setEmail(e.target.value)} onInput={e => setEmail(e.target.value)} placeholder="you@example.com" style={inputStyle}
                     onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
                 </div>
               </div>
               <div>
                 <label style={labelStyle}>Subject</label>
-                <input value={subject} onChange={e => setSubject(e.target.value)} placeholder="What do you need help with?" style={inputStyle}
+                <input value={subject} onChange={e => setSubject(e.target.value)} onInput={e => setSubject(e.target.value)} placeholder="What do you need help with?" style={inputStyle}
                   onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
               </div>
               <div>
                 <label style={labelStyle}>Message *</label>
-                <textarea value={message} onChange={e => setMessage(e.target.value)} rows={5} placeholder="Describe your issue or question..."
+                <textarea ref={messageRef} value={message} onChange={e => setMessage(e.target.value)} onInput={e => setMessage(e.target.value)} rows={5} placeholder="Describe your issue or question..."
                   style={{ ...inputStyle, resize:"vertical" }}
                   onFocus={e => e.target.style.borderColor="#E8610A"} onBlur={e => e.target.style.borderColor="#2a2a2a"} />
               </div>
@@ -87,13 +93,12 @@ export default function SupportPage() {
           )}
         </div>
 
-        {/* Help Cards */}
         <div style={{ display:"flex", flexDirection:"column", gap:"14px" }}>
           {[
             { icon:"📧", title:"Email Support", desc:"support@traffikora.com", sub:"Response within 24 hours" },
             { icon:"💬", title:"Live Chat", desc:"Chat with CYRA", sub:"Click the chat bubble bottom right" },
             { icon:"📋", title:"Common Issues", desc:"Billing, connections, content", sub:"Most answers are in our FAQ" },
-            { icon:"🛠️", title:"Account Issues", desc:"Login, password, plan changes", sub:"We’ll fix it fast — usually same day" },
+            { icon:"🛠", title:"Account Issues", desc:"Login, password, plan changes", sub:"We’ll fix it fast — usually same day" },
           ].map((item, i) => (
             <div key={i} style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"12px", padding:"18px 20px", display:"flex", alignItems:"center", gap:"14px" }}>
               <div style={{ fontSize:26, flexShrink:0 }}>{item.icon}</div>
