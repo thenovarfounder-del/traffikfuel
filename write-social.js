@@ -2,29 +2,17 @@ const fs = require('fs');
 const path = 'src/components/ConversionBooster.tsx';
 let content = fs.readFileSync(path, 'utf8');
 
-// Add isMobile state
+// Hide visitor count on mobile
 content = content.replace(
-  "const [countdown, setCountdown] = useState({ hours: 23, minutes: 47, seconds: 33 })",
-  "const [countdown, setCountdown] = useState({ hours: 23, minutes: 47, seconds: 33 })\n  const [isMobile, setIsMobile] = useState(false)"
+  "{ position: 'fixed', bottom: '90px', left: '16px', zIndex: 9990,",
+  "{ position: 'fixed', bottom: '90px', left: '16px', zIndex: 9990, display: isMobile ? 'none' : 'flex',"
 );
 
-// Add mobile detection in useEffect
+// Remove the existing display:flex from the same style
 content = content.replace(
-  "// Random visitor count between 18-47",
-  "// Mobile detection\n    const checkMobile = () => setIsMobile(window.innerWidth < 768)\n    checkMobile()\n    window.addEventListener('resize', checkMobile)\n\n    // Random visitor count between 18-47"
-);
-
-// Add cleanup for resize listener
-content = content.replace(
-  "clearInterval(countdownInterval)",
-  "clearInterval(countdownInterval)\n      window.removeEventListener('resize', checkMobile)"
-);
-
-// Hide scroll banner on mobile
-content = content.replace(
-  "{showScrollBanner && !scrollBannerDismissed && (",
-  "{showScrollBanner && !scrollBannerDismissed && !isMobile && ("
+  "display: isMobile ? 'none' : 'flex', display: 'flex', alignItems:",
+  "display: isMobile ? 'none' : 'flex', alignItems:"
 );
 
 fs.writeFileSync(path, content);
-console.log('SUCCESS - scroll banner hidden on mobile');
+console.log('SUCCESS - visitor count hidden on mobile');

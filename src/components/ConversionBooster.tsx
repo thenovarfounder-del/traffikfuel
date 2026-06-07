@@ -80,7 +80,7 @@ export default function ConversionBooster() {
   return (
     <>
       {/* LIVE VISITOR COUNT — fixed bottom left */}
-      <div style={{ position: 'fixed', bottom: '90px', left: '16px', zIndex: 9990, display: 'flex', alignItems: 'center', gap: '8px', background: '#111', border: '1px solid #2a2a2a', borderRadius: '20px', padding: '8px 14px', boxShadow: '0 4px 20px rgba(0,0,0,0.4)', fontFamily: 'DM Sans, sans-serif' }}>
+      <div style={{ position: 'fixed', bottom: '90px', left: '16px', zIndex: 9990, display: isMobile ? 'none' : 'flex', alignItems: 'center', gap: '8px', background: '#111', border: '1px solid #2a2a2a', borderRadius: '20px', padding: '8px 14px', boxShadow: '0 4px 20px rgba(0,0,0,0.4)', fontFamily: 'DM Sans, sans-serif' }}>
         <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444', display: 'inline-block', flexShrink: 0, boxShadow: '0 0 6px #ef4444' }} />
         <span style={{ fontSize: '12px', color: '#fff', fontWeight: 600 }}>{visitorCount} people viewing right now</span>
       </div>
