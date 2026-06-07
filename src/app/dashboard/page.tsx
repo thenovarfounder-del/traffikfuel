@@ -109,7 +109,7 @@ export default function Dashboard() {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#080808', color: '#fff', fontFamily: "'DM Sans', system-ui, sans-serif" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=DM+Sans:wght@300;400;500;600;700;800&display=swap');
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
         @keyframes slideIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
         .dash-card { transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
@@ -124,8 +124,8 @@ export default function Dashboard() {
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <div style={{ fontSize: '11px', color: '#E8610A', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '10px' }}>Traffikora Dashboard</div>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '28px' : '38px', fontWeight: 700, margin: '0 0 8px 0', letterSpacing: '-1px', lineHeight: 1.1 }}>
-              {getGreeting()}, <em style={{ color: '#E8610A', fontStyle: 'italic' }}>{firstName}.</em>
+            <h1 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: isMobile ? '26px' : '36px', fontWeight: 800, margin: '0 0 8px 0', letterSpacing: '-1.5px', lineHeight: 1.05, textTransform: 'none' }}>
+              {getGreeting()}, <span style={{ color: '#E8610A' }}>{firstName}.</span>
             </h1>
             <p style={{ color: '#555', margin: 0, fontSize: '14px', fontWeight: 300 }}>Your AI marketing engine is running. Here’s your command center.</p>
           </div>
