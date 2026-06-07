@@ -58,6 +58,8 @@ export default function Onboarding() {
   const [logs, setLogs] = useState([])
   const [generatedTitle, setGeneratedTitle] = useState('')
   const [error, setError] = useState('')
+  const [businessName, setBusinessName] = useState('')
+  const [city, setCity] = useState('')
 
   useEffect(() => {
     async function load() {
@@ -70,6 +72,8 @@ export default function Onboarding() {
       if (bp) {
         setBusinessId(bp.id)
         setWebsiteUrl(bp.website || '')
+        setBusinessName(bp.business_name && bp.business_name !== 'My Business' ? bp.business_name : '')
+        setCity(bp.city || '')
         if (bp.platforms?.length > 0) setPlatforms(bp.platforms)
       }
     }
@@ -111,7 +115,8 @@ export default function Onboarding() {
     const { data: bp } = await supabase.from('business_profiles').upsert({
       user_id: user.id,
       website: websiteUrl,
-      business_name: 'My Business',
+      business_name: businessName || 'My Business',
+      city: city || '',
       industry: 'Business',
       platforms: [],
       auto_mode: true,
@@ -179,7 +184,8 @@ export default function Onboarding() {
     await supabase.from('business_profiles').upsert({
       user_id: user.id,
       website: websiteUrl || '',
-      business_name: 'My Business',
+      business_name: businessName || 'My Business',
+      city: city || '',
       industry: 'Business',
       platforms,
       auto_mode: true,
@@ -312,6 +318,20 @@ export default function Onboarding() {
 
               {!analyzeDone && (
                 <div style={{ marginBottom: '20px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#555', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Business Name</label>
+                      <input type="text" className="ob-input" value={businessName} onChange={e => setBusinessName(e.target.value)}
+                        placeholder="Joe’s Plumbing"
+                        style={{ width: '100%', background: '#0a0a0a', border: '1px solid #2a2a2a', borderRadius: '10px', padding: '14px 16px', fontSize: '15px', color: '#fff', fontFamily: "'DM Sans', sans-serif", transition: 'border-color 0.2s', boxSizing: 'border-box' }} />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#555', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>City & State</label>
+                      <input type="text" className="ob-input" value={city} onChange={e => setCity(e.target.value)}
+                        placeholder="Tampa, FL"
+                        style={{ width: '100%', background: '#0a0a0a', border: '1px solid #2a2a2a', borderRadius: '10px', padding: '14px 16px', fontSize: '15px', color: '#fff', fontFamily: "'DM Sans', sans-serif", transition: 'border-color 0.2s', boxSizing: 'border-box' }} />
+                    </div>
+                  </div>
                   <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#555', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Your Website URL</label>
                   <input type="text" className="ob-input" value={websiteUrl} onChange={e => setWebsiteUrl(e.target.value)}
                     placeholder="https://yourbusiness.com"
