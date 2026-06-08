@@ -76,13 +76,11 @@ export default function ChatBubble() {
     checkMobile()
     window.addEventListener('resize', checkMobile)
 
-    // Watch for mobile menu open/close
+    // Watch body for nav-open class
     const observer = new MutationObserver(() => {
-      const menu = document.getElementById('mobile-nav-menu')
-      if (menu) setMenuOpen(menu.classList.contains('is-open'))
+      setMenuOpen(document.body.classList.contains('nav-open'))
     })
-    const menu = document.getElementById('mobile-nav-menu')
-    if (menu) observer.observe(menu, { attributes: true, attributeFilter: ['class'] })
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] })
 
     return () => {
       window.removeEventListener('resize', checkMobile)
