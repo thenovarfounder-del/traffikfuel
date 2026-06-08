@@ -139,7 +139,7 @@ export default function DashboardLayout({ children }) {
             })}
           </nav>
           <div style={{ padding: '16px', borderTop: '1px solid #1e1e1e' }}>
-            <div style={{ fontSize: '11px', color: '#555', marginBottom: '8px', fontFamily: 'DM Sans, sans-serif' }}>{email}</div>
+            <div style={{ fontSize: '11px', color: '#ccc', marginBottom: '8px', fontFamily: 'DM Sans, sans-serif' }}>{email}</div>
             {(userPlan === 'free' || userPlan === 'trial') && (
               <Link href="/pricing" style={{ display: 'block', background: 'linear-gradient(135deg,#E8610A,#C84E06)', color: '#fff', padding: '10px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: 700, textAlign: 'center', textDecoration: 'none', fontFamily: 'DM Sans, sans-serif', marginBottom: '10px' }}>
                 ⚡ Upgrade to Starter — $47/mo
@@ -183,7 +183,7 @@ export default function DashboardLayout({ children }) {
           <div style={{ padding: '16px', borderTop: '1px solid #1e1e1e', flexShrink: 0 }}>
             {!collapsed && (
               <>
-                <div style={{ fontSize: '11px', color: '#555', marginBottom: '8px', fontFamily: 'DM Sans, sans-serif', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{email}</div>
+                <div style={{ fontSize: '11px', color: '#ccc', marginBottom: '8px', fontFamily: 'DM Sans, sans-serif', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{email}</div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
                   <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: planMeta.color + '22', border: '1px solid ' + planMeta.color + '55', borderRadius: '20px', padding: '3px 10px' }}>
                     <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: planMeta.color }} />

@@ -1,11 +1,18 @@
 const fs = require('fs');
 
-let page = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\page.tsx', 'utf8');
+let content = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\layout.tsx', 'utf8');
 
-page = page.replace(
-  `{ href: '#', bg: '#0a66c2', label: 'Traffikora on LinkedIn'`,
-  `{ href: 'https://www.linkedin.com/company/traffikora', bg: '#0a66c2', label: 'Traffikora on LinkedIn'`
+// Fix desktop sidebar email color
+content = content.replace(
+  `<div style={{ fontSize: '11px', color: '#555', marginBottom: '8px', fontFamily: 'DM Sans, sans-serif', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{email}</div>`,
+  `<div style={{ fontSize: '11px', color: '#ccc', marginBottom: '8px', fontFamily: 'DM Sans, sans-serif', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{email}</div>`
 );
 
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\page.tsx', page, 'utf8');
-console.log('SUCCESS: LinkedIn URL updated on homepage');
+// Fix mobile sidebar email color
+content = content.replace(
+  `<div style={{ fontSize: '11px', color: '#555', marginBottom: '8px', fontFamily: 'DM Sans, sans-serif' }}>{email}</div>`,
+  `<div style={{ fontSize: '11px', color: '#ccc', marginBottom: '8px', fontFamily: 'DM Sans, sans-serif' }}>{email}</div>`
+);
+
+fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\layout.tsx', content, 'utf8');
+console.log('SUCCESS: Dashboard sidebar email color brightened to #ccc');
