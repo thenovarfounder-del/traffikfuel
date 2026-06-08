@@ -1,14 +1,76 @@
 const fs = require('fs');
 
-let content = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\components\\ChatBubble.tsx', 'utf8');
+let content = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\components\\ConversionBooster.tsx', 'utf8');
 
-// Hide the T button when mobile menu is open
+// Add menuOpen state that watches for nav-open class
 content = content.replace(
-  `<button onClick={() => setOpen(!open)}
-        style={{ position:'fixed', bottom: isMobile ? '80px' : '24px', right:'24px', width:'52px', height:'52px', borderRadius:'50%', background:'#050200', border:'2px solid #E8610A', cursor:'pointer', zIndex:9999, boxShadow:'0 4px 24px rgba(232,97,10,0.6), 0 0 40px rgba(232,97,10,0.2)', display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden', padding:0 }}>`,
-  `<button onClick={() => setOpen(!open)}
-        style={{ position:'fixed', bottom: isMobile ? '80px' : '24px', right:'24px', width:'52px', height:'52px', borderRadius:'50%', background:'#050200', border:'2px solid #E8610A', cursor:'pointer', zIndex:9999, boxShadow:'0 4px 24px rgba(232,97,10,0.6), 0 0 40px rgba(232,97,10,0.2)', display: menuOpen ? 'none' : 'flex', alignItems:'center', justifyContent:'center', overflow:'hidden', padding:0 }}>`
+  `const [scrollBannerDismissed, setScrollBannerDismissed] = useState(false)
+  const [exitPopupShown, setExitPopupShown] = useState(false)
+  const [countdown, setCountdown] = useState({ hours: 23, minutes: 47, seconds: 33 })`,
+  `const [scrollBannerDismissed, setScrollBannerDismissed] = useState(false)
+  const [exitPopupShown, setExitPopupShown] = useState(false)
+  const [countdown, setCountdown] = useState({ hours: 23, minutes: 47, seconds: 33 })
+  const [menuOpen, setMenuOpen] = useState(false)`
 );
 
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\components\\ChatBubble.tsx', content, 'utf8');
-console.log('SUCCESS: ChatBubble.tsx — T button hidden when mobile menu is open');
+// Watch for nav-open class on body
+content = content.replace(
+  `    // Countdown timer`,
+  `    // Watch for mobile menu open
+    const observer = new MutationObserver(() => {
+      setMenuOpen(document.body.classList.contains('nav-open'))
+    })
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] })
+
+    // Countdown timer`
+);
+
+// Add observer cleanup
+content = content.replace(
+  `    return () => {
+      clearInterval(visitorInterval)
+      window.removeEventListener('scroll', handleScroll)
+      document.removeEventListener('mouseleave', handleMouseLeave)
+      clearTimeout(evaTimer)
+      clearInterval(countdownInterval)
+    }`,
+  `    return () => {
+      clearInterval(visitorInterval)
+      window.removeEventListener('scroll', handleScroll)
+      document.removeEventListener('mouseleave', handleMouseLeave)
+      clearTimeout(evaTimer)
+      clearInterval(countdownInterval)
+      observer.disconnect()
+    }`
+);
+
+// Hide visitor count when menu open
+content = content.replace(
+  `<div style={{ position: 'fixed', bottom: '90px', left: '16px', zIndex: 9990,`,
+  `<div style={{ position: 'fixed', bottom: '90px', left: '16px', zIndex: 9990, display: menuOpen ? 'none' : 'flex',`
+);
+
+// Fix visitor count — remove display flex from style since we added it above
+content = content.replace(
+  `display: menuOpen ? 'none' : 'flex', display: 'flex', alignItems: 'center'`,
+  `display: menuOpen ? 'none' : 'flex', alignItems: 'center'`
+);
+
+// Hide scroll banner when menu open
+content = content.replace(
+  `{showScrollBanner && !scrollBannerDismissed && (
+        <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 9995,`,
+  `{showScrollBanner && !scrollBannerDismissed && !menuOpen && (
+        <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 9995,`
+);
+
+// Hide exit popup when menu open
+content = content.replace(
+  `{showExitPopup && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 10000,`,
+  `{showExitPopup && !menuOpen && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 10000,`
+);
+
+fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\components\\ConversionBooster.tsx', content, 'utf8');
+console.log('SUCCESS: ConversionBooster — all fixed elements hidden when mobile menu is open');

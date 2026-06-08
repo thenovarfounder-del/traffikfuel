@@ -10,6 +10,7 @@ export default function ConversionBooster() {
   const [scrollBannerDismissed, setScrollBannerDismissed] = useState(false)
   const [exitPopupShown, setExitPopupShown] = useState(false)
   const [countdown, setCountdown] = useState({ hours: 23, minutes: 47, seconds: 33 })
+  const [menuOpen, setMenuOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -53,6 +54,12 @@ export default function ConversionBooster() {
       if (bubble) bubble.click()
     }, 30000)
 
+    // Watch for mobile menu open
+    const observer = new MutationObserver(() => {
+      setMenuOpen(document.body.classList.contains('nav-open'))
+    })
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] })
+
     // Countdown timer
     const countdownInterval = setInterval(() => {
       setCountdown(prev => {
@@ -80,7 +87,7 @@ export default function ConversionBooster() {
   return (
     <>
       {/* LIVE VISITOR COUNT — fixed bottom left */}
-      <div style={{ position: 'fixed', bottom: '90px', left: '16px', zIndex: 9990, display: isMobile ? 'none' : 'flex', alignItems: 'center', gap: '8px', background: '#111', border: '1px solid #2a2a2a', borderRadius: '20px', padding: '8px 14px', boxShadow: '0 4px 20px rgba(0,0,0,0.4)', fontFamily: 'DM Sans, sans-serif' }}>
+      <div style={{ position: 'fixed', bottom: '90px', left: '16px', zIndex: 9990, display: menuOpen ? 'none' : 'flex', display: isMobile ? 'none' : 'flex', alignItems: 'center', gap: '8px', background: '#111', border: '1px solid #2a2a2a', borderRadius: '20px', padding: '8px 14px', boxShadow: '0 4px 20px rgba(0,0,0,0.4)', fontFamily: 'DM Sans, sans-serif' }}>
         <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444', display: 'inline-block', flexShrink: 0, boxShadow: '0 0 6px #ef4444' }} />
         <span style={{ fontSize: '12px', color: '#fff', fontWeight: 600 }}>{visitorCount} people viewing right now</span>
       </div>
@@ -105,7 +112,7 @@ export default function ConversionBooster() {
       )}
 
       {/* EXIT INTENT POPUP */}
-      {showExitPopup && (
+      {showExitPopup && !menuOpen && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 10000, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', fontFamily: 'DM Sans, sans-serif' }}>
           <div style={{ background: '#111', border: '1px solid #E8610A40', borderRadius: '20px', padding: '48px 40px', maxWidth: '480px', width: '100%', textAlign: 'center', position: 'relative', boxShadow: '0 0 60px rgba(232,97,10,0.2)' }}>
             <button onClick={() => setShowExitPopup(false)} style={{ position: 'absolute', top: '16px', right: '20px', background: 'none', border: 'none', color: '#555', fontSize: '24px', cursor: 'pointer', lineHeight: 1 }}>×</button>
