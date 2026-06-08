@@ -1,27 +1,14 @@
 const fs = require('fs');
 
-let content = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\components\\Nav.tsx', 'utf8');
+let content = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\components\\ChatBubble.tsx', 'utf8');
 
-// Fix the hamburger toggle to hide/show EVA bubble
+// Hide the T button when mobile menu is open
 content = content.replace(
-  `onClick={() => { const menu = document.getElementById('mobile-nav-menu'); if (menu) { menu.classList.toggle('is-open'); document.body.classList.toggle('nav-open'); } }}`,
-  `onClick={() => {
-    const menu = document.getElementById('mobile-nav-menu');
-    if (menu) {
-      const isOpening = !menu.classList.contains('is-open');
-      menu.classList.toggle('is-open');
-      document.body.classList.toggle('nav-open');
-      // Hide EVA bubble when menu opens, show when closes
-      const allFixed = document.querySelectorAll('div[style*="position: fixed"]');
-      allFixed.forEach(el => {
-        const style = el.getAttribute('style') || '';
-        if (style.includes('bottom') && style.includes('right') && !style.includes('top: 0')) {
-          el.style.display = isOpening ? 'none' : '';
-        }
-      });
-    }
-  }}`
+  `<button onClick={() => setOpen(!open)}
+        style={{ position:'fixed', bottom: isMobile ? '80px' : '24px', right:'24px', width:'52px', height:'52px', borderRadius:'50%', background:'#050200', border:'2px solid #E8610A', cursor:'pointer', zIndex:9999, boxShadow:'0 4px 24px rgba(232,97,10,0.6), 0 0 40px rgba(232,97,10,0.2)', display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden', padding:0 }}>`,
+  `<button onClick={() => setOpen(!open)}
+        style={{ position:'fixed', bottom: isMobile ? '80px' : '24px', right:'24px', width:'52px', height:'52px', borderRadius:'50%', background:'#050200', border:'2px solid #E8610A', cursor:'pointer', zIndex:9999, boxShadow:'0 4px 24px rgba(232,97,10,0.6), 0 0 40px rgba(232,97,10,0.2)', display: menuOpen ? 'none' : 'flex', alignItems:'center', justifyContent:'center', overflow:'hidden', padding:0 }}>`
 );
 
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\components\\Nav.tsx', content, 'utf8');
-console.log('SUCCESS: Nav.tsx — EVA bubble hidden via JS when mobile menu opens');
+fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\components\\ChatBubble.tsx', content, 'utf8');
+console.log('SUCCESS: ChatBubble.tsx — T button hidden when mobile menu is open');
