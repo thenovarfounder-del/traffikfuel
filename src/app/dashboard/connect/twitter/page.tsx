@@ -40,7 +40,7 @@ export default function ConnectTwitter() {
 
   function connectTwitter() {
     if (!user) return
-    const clientId = 'dWs2bTJBNzdBekNTalRZRURnTmU6MTpjaQ'
+    const clientId = process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID || 'n0xPJir2TtJ5vCiiy6MEcouMS'
     const redirectUri = encodeURIComponent('https://www.traffikora.com/api/auth/twitter/callback')
     const scope = encodeURIComponent('tweet.read tweet.write users.read offline.access')
     const state = user.id
