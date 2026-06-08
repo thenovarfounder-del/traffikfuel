@@ -6,6 +6,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
 import { PLAN_META } from '@/lib/plans'
+import Breadcrumb from '@/components/Breadcrumb'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -216,6 +217,7 @@ export default function DashboardLayout({ children }) {
 
       {/* MAIN CONTENT */}
       <main style={{ flex: 1, overflowY: 'auto', minHeight: '100vh', marginTop: isMobile ? '56px' : 0 }}>
+        <Breadcrumb />
         {children}
       </main>
 
