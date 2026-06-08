@@ -24,7 +24,7 @@ export default function DashboardSettings() {
       if (data) {
         setBusinessName(data.business_name || '')
         setIndustry(data.industry || '')
-        setCity(data.phone || '')
+        setCity(data.city || data.phone || '')
         setWebsite(data.website || '')
         setAutoMode(data.auto_mode || false)
         setPlatforms(data.platforms || [])
@@ -39,7 +39,7 @@ export default function DashboardSettings() {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { setError('Not logged in.'); setLoading(false); return }
-      const { error: upsertError } = await supabase.from('business_profiles').upsert({ user_id: user.id, business_name: businessName, industry, website, phone: city, auto_mode: autoMode, platforms }, { onConflict: 'user_id' })
+      const { error: upsertError } = await supabase.from('business_profiles').upsert({ user_id: user.id, business_name: businessName, industry, website, city: city, phone: city, auto_mode: autoMode, platforms }, { onConflict: 'user_id' })
       if (upsertError) { setError('Save failed: ' + upsertError.message); setLoading(false); return }
       setSuccess('Settings saved!')
       setTimeout(() => setSuccess(''), 3000)

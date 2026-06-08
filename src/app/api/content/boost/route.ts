@@ -10,7 +10,7 @@ export async function POST(request) {
   try {
     const { data: bp } = await supabase.from('business_profiles').select('business_name, industry, phone, website').eq('id', businessId).single()
     const businessName = bp?.business_name || 'this business'
-    const city = bp?.phone || 'your local area'
+    const city = bp?.city || bp?.phone || 'your local area'
     const industry = bp?.industry || 'business'
     const website = bp?.website || ''
     const fixes = []
