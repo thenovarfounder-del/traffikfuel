@@ -19,6 +19,7 @@ export default function BlogPage() {
   const [userStatus, setUserStatus] = useState('free')
   const [blogsUsed, setBlogsUsed] = useState(0)
   const [boostMessage, setBoostMessage] = useState('')
+  const [boosted, setBoosted] = useState(false)
 
   useEffect(() => {
     const load = async () => {
@@ -47,7 +48,7 @@ export default function BlogPage() {
   const generate = async () => {
     if (!topic.trim()) return
     if (freeExceeded) { setMessage('You’ve used all 3 free blogs this month. Upgrade to Starter for unlimited blogs.'); return }
-    setGenerating(true); setMessage(''); setPost(null); setWpMessage(''); setBoostMessage('')
+    setGenerating(true); setMessage(''); setPost(null); setWpMessage(''); setBoostMessage(''); setBoosted(false)
     try {
       const res = await fetch('/api/content/blog', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId, businessId, topic }) })
       const data = await res.json()
@@ -68,6 +69,7 @@ export default function BlogPage() {
         setPost(prev => ({ ...prev, content: data.content, title: data.title || prev.title }))
         const newScore = calculateContentScore(data.content, data.title || post.title, 'blog')
         setBoostMessage('⬆️ Score boosted to ' + newScore + '! Content enhanced for SEO.')
+        setBoosted(true)
       }
     } catch (e) { setBoostMessage('Something went wrong. Try again.') }
     setBoosting(false)
@@ -162,14 +164,14 @@ export default function BlogPage() {
                 <ContentScoreBadge score={currentScore} size='md' />
               </div>
               <div style={{ display:'flex', gap:'10px', flexWrap:'wrap' }}>
-                {isPaid && currentScore < 90 && (
-                  <button onClick={boostScore} style={{ background:'linear-gradient(135deg,#22c55e,#16a34a)', color:'#fff', padding:'9px 18px', borderRadius:'7px', fontSize:'13px', fontWeight:700, border:'none', cursor:'pointer', fontFamily:'DM Sans, sans-serif', boxShadow:'0 4px 16px rgba(34,197,94,0.4)' }}>
-                    ⚡ Boost Score
+                {isPaid && currentScore < 90 && !boosted && (
+                  <button onClick={boostScore} style={{ background:'linear-gradient(135deg,#dc2626,#b91c1c)', color:'#fff', padding:'9px 18px', borderRadius:'7px', fontSize:'13px', fontWeight:700, border:'none', cursor:'pointer', fontFamily:'DM Sans, sans-serif', boxShadow:'0 4px 16px rgba(220,38,38,0.5)', display:'flex', alignItems:'center', gap:'6px' }}>
+                    🔥 Boost Score
                   </button>
                 )}
-                {!isPaid && currentScore < 90 && (
-                  <a href='/pricing' style={{ background:'#1a1a1a', color:'#22c55e', border:'1px solid rgba(34,197,94,0.3)', padding:'9px 18px', borderRadius:'7px', fontSize:'13px', fontWeight:700, textDecoration:'none', fontFamily:'DM Sans, sans-serif' }}>
-                    🔒 Boost Score — Upgrade
+                {!isPaid && currentScore < 90 && !boosted && (
+                  <a href='/pricing' style={{ background:'#1a1a1a', color:'#ef4444', border:'1px solid rgba(239,68,68,0.3)', padding:'9px 18px', borderRadius:'7px', fontSize:'13px', fontWeight:700, textDecoration:'none', fontFamily:'DM Sans, sans-serif' }}>
+                    🔥 Boost Score — Upgrade
                   </a>
                 )}
                 {isPaid && (
