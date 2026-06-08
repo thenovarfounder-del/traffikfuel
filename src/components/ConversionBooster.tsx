@@ -87,14 +87,14 @@ export default function ConversionBooster() {
   return (
     <>
       {/* LIVE VISITOR COUNT — fixed bottom left */}
-      <div style={{ position: 'fixed', bottom: '90px', left: '16px', zIndex: 9990, display: menuOpen ? 'none' : 'flex', display: isMobile ? 'none' : 'flex', alignItems: 'center', gap: '8px', background: '#111', border: '1px solid #2a2a2a', borderRadius: '20px', padding: '8px 14px', boxShadow: '0 4px 20px rgba(0,0,0,0.4)', fontFamily: 'DM Sans, sans-serif' }}>
+      <div style={{ position: 'fixed', bottom: '90px', left: '16px', zIndex: 9990, display: menuOpen || isMobile ? 'none' : 'flex', alignItems: 'center', gap: '8px', background: '#111', border: '1px solid #2a2a2a', borderRadius: '20px', padding: '8px 14px', boxShadow: '0 4px 20px rgba(0,0,0,0.4)', fontFamily: 'DM Sans, sans-serif' }}>
         <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444', display: 'inline-block', flexShrink: 0, boxShadow: '0 0 6px #ef4444' }} />
         <span style={{ fontSize: '12px', color: '#fff', fontWeight: 600 }}>{visitorCount} people viewing right now</span>
       </div>
 
       {/* SCROLL TRIGGER BANNER — sticky bottom */}
-      {showScrollBanner && !scrollBannerDismissed && !isMobile && (
-        <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 9995, background: 'linear-gradient(135deg,#E8610A,#C84E06)', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', boxShadow: '0 -4px 24px rgba(232,97,10,0.5)', fontFamily: 'DM Sans, sans-serif' }}>
+      {showScrollBanner && !scrollBannerDismissed && !menuOpen && (
+        <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 9995, background: 'linear-gradient(135deg,#E8610A,#C84E06)', padding: isMobile ? '10px 16px' : '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', flexWrap: 'wrap', boxShadow: '0 -4px 24px rgba(232,97,10,0.5)', fontFamily: 'DM Sans, sans-serif' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '20px' }}>🔥</span>
             <div>
