@@ -1,116 +1,74 @@
 const fs = require('fs');
+const path = require('path');
 
-let content = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\components\\ContentScore.tsx', 'utf8');
+const boostRoute = [
+'// @ts-nocheck',
+"import { NextResponse } from 'next/server'",
+"import { createClient } from '@supabase/supabase-js'",
+"import Anthropic from '@anthropic-ai/sdk'",
+'',
+'export async function POST(request) {',
+'  const supabase = createClient(',
+'    process.env.NEXT_PUBLIC_SUPABASE_URL,',
+'    process.env.SUPABASE_SERVICE_ROLE_KEY',
+'  )',
+'  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })',
+'  const { title, content, currentScore, userId, businessId, postId } = await request.json()',
+'  try {',
+"    const { data: bp } = await supabase.from('business_profiles').select('business_name, industry, phone, website').eq('id', businessId).single()",
+"    const businessName = bp?.business_name || 'this business'",
+"    const city = bp?.phone || 'local area'",
+"    const industry = bp?.industry || 'business'",
+"    const website = bp?.website || ''",
+'    const prompt = `You are an expert SEO content optimizer. Improve this blog post to score higher on SEO and engagement.',
+'',
+'STRICT RULES - NEVER VIOLATE:',
+'- NEVER add phone numbers of any kind',
+'- NEVER add fake offers, discounts, or dollar values like "$500 value"',
+'- NEVER add made-up statistics or fake reviews',
+'- NEVER add "Call us at" or "Visit us at" with fake contact info',
+'- NEVER add anything that was not in the original content unless it is a general SEO improvement',
+'- ONLY use the website URL if provided: ' + website,
+'- Keep the business name exactly as: ' + businessName,
+'- City/area for local SEO: ' + city,
+'- Industry: ' + industry,
+'',
+'WHAT TO IMPROVE:',
+'- Add relevant numbers and statistics from general knowledge',
+'- Strengthen the title with power words (best, ultimate, proven, top, complete guide)',
+'- Improve paragraph structure and flow',
+'- Add a strong call-to-action at the end that does NOT include fake phone numbers or fake offers',
+'- Add local SEO signals with the city name',
+'- Improve readability and engagement',
+'',
+'Current score: ' + currentScore + '/100. Target: 90+',
+'',
+'TITLE: ' + title,
+'',
+'CONTENT:',
+'' + content,
+'',
+'Return ONLY valid JSON with no markdown backticks: {"title": "...", "content": "..."}` ',
+'    const message = await anthropic.messages.create({',
+"      model: 'claude-opus-4-5-20251101',",
+'      max_tokens: 3000,',
+"      messages: [{ role: 'user', content: prompt }]",
+'    })',
+'    const responseText = message.content[0].text.trim()',
+"    const clean = responseText.replace(/```json|```/g, '').trim()",
+'    const parsed = JSON.parse(clean)',
+'    if (postId) {',
+"      await supabase.from('content_calendar').update({ title: parsed.title, content: parsed.content }).eq('id', postId)",
+'    }',
+'    return NextResponse.json({ title: parsed.title, content: parsed.content })',
+'  } catch (e) {',
+"    console.error('Boost error:', e)",
+'    return NextResponse.json({ error: e.message }, { status: 500 })',
+'  }',
+'}',
+].join('\n');
 
-// Fix the badge to be much more visible
-content = content.replace(
-  `export function ContentScoreBadge({ score, showLabel = true, size = 'md' }) {
-  const { label, color, bg, border } = getScoreLabel(score)
-  const isLg = size === 'lg'
-  return (
-    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: bg, border: '1px solid ' + border, borderRadius: '8px', padding: isLg ? '10px 16px' : '5px 10px' }}>
-      <div style={{ position: 'relative', width: isLg ? '44px' : '32px', height: isLg ? '44px' : '32px', flexShrink: 0 }}>
-        <svg viewBox="0 0 36 36" style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
-          <circle cx="18" cy="18" r="15" fill="none" stroke="#1a1a1a" strokeWidth="3" />
-          <circle cx="18" cy="18" r="15" fill="none" stroke={color} strokeWidth="3"
-            strokeDasharray={2 * Math.PI * 15}
-            strokeDashoffset={2 * Math.PI * 15 * (1 - score / 100)}
-            strokeLinecap="round" />
-        </svg>
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: isLg ? '11px' : '8px', fontWeight: 900, color, fontFamily: 'DM Sans, sans-serif' }}>
-          {score}
-        </div>
-      </div>
-      {showLabel && (
-        <div>
-          <div style={{ fontSize: isLg ? '13px' : '11px', fontWeight: 700, color, fontFamily: 'DM Sans, sans-serif' }}>{label}</div>
-          <div style={{ fontSize: isLg ? '11px' : '9px', color: '#555', fontFamily: 'DM Sans, sans-serif' }}>Content Score</div>
-        </div>
-      )}
-    </div>
-  )
-}`,
-  `export function ContentScoreBadge({ score, showLabel = true, size = 'md' }) {
-  const { label, color, bg, border } = getScoreLabel(score)
-  const isLg = size === 'lg'
-  return (
-    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: bg, border: '2px solid ' + color, borderRadius: '10px', padding: isLg ? '12px 18px' : '8px 14px', boxShadow: '0 2px 12px ' + color + '40' }}>
-      <div style={{ position: 'relative', width: isLg ? '52px' : '44px', height: isLg ? '52px' : '44px', flexShrink: 0 }}>
-        <svg viewBox="0 0 36 36" style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
-          <circle cx="18" cy="18" r="15" fill="none" stroke="#1a1a1a" strokeWidth="3" />
-          <circle cx="18" cy="18" r="15" fill="none" stroke={color} strokeWidth="3"
-            strokeDasharray={2 * Math.PI * 15}
-            strokeDashoffset={2 * Math.PI * 15 * (1 - score / 100)}
-            strokeLinecap="round" />
-        </svg>
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: isLg ? '14px' : '13px', fontWeight: 900, color, fontFamily: 'DM Sans, sans-serif' }}>
-          {score}
-        </div>
-      </div>
-      {showLabel && (
-        <div>
-          <div style={{ fontSize: isLg ? '15px' : '13px', fontWeight: 900, color, fontFamily: 'DM Sans, sans-serif' }}>{label}</div>
-          <div style={{ fontSize: isLg ? '12px' : '11px', color: '#888', fontFamily: 'DM Sans, sans-serif', fontWeight: 600 }}>Content Score</div>
-        </div>
-      )}
-    </div>
-  )
-}`
-);
-
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\components\\ContentScore.tsx', content, 'utf8');
-console.log('SUCCESS: ContentScore badge — bigger, bolder, colored border');
-
-// Fix blog page — red boost button, hide after use
-let blog = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\content\\blog\\page.tsx', 'utf8');
-
-// Add boosted state
-blog = blog.replace(
-  `  const [boostMessage, setBoostMessage] = useState('')`,
-  `  const [boostMessage, setBoostMessage] = useState('')
-  const [boosted, setBoosted] = useState(false)`
-);
-
-// Set boosted to true after successful boost
-blog = blog.replace(
-  `        setBoostMessage('\u2b06\ufe0f Score boosted to ' + newScore + '! Content enhanced for SEO.')`,
-  `        setBoostMessage('\u2b06\ufe0f Score boosted to ' + newScore + '! Content enhanced for SEO.')
-        setBoosted(true)`
-);
-
-// Reset boosted when new post generated
-blog = blog.replace(
-  `    setGenerating(true); setMessage(''); setPost(null); setWpMessage(''); setBoostMessage('')`,
-  `    setGenerating(true); setMessage(''); setPost(null); setWpMessage(''); setBoostMessage(''); setBoosted(false)`
-);
-
-// Change boost button to fire red and hide after boosted
-blog = blog.replace(
-  `                {isPaid && currentScore < 90 && (
-                  <button onClick={boostScore} style={{ background:'linear-gradient(135deg,#22c55e,#16a34a)', color:'#fff', padding:'9px 18px', borderRadius:'7px', fontSize:'13px', fontWeight:700, border:'none', cursor:'pointer', fontFamily:'DM Sans, sans-serif', boxShadow:'0 4px 16px rgba(34,197,94,0.4)' }}>
-                    \u26a1 Boost Score
-                  </button>
-                )}`,
-  `                {isPaid && currentScore < 90 && !boosted && (
-                  <button onClick={boostScore} style={{ background:'linear-gradient(135deg,#dc2626,#b91c1c)', color:'#fff', padding:'9px 18px', borderRadius:'7px', fontSize:'13px', fontWeight:700, border:'none', cursor:'pointer', fontFamily:'DM Sans, sans-serif', boxShadow:'0 4px 16px rgba(220,38,38,0.5)', display:'flex', alignItems:'center', gap:'6px' }}>
-                    \ud83d\udd25 Boost Score
-                  </button>
-                )}`
-);
-
-// Also hide free user boost prompt after boosted
-blog = blog.replace(
-  `                {!isPaid && currentScore < 90 && (
-                  <a href='/pricing' style={{ background:'#1a1a1a', color:'#22c55e', border:'1px solid rgba(34,197,94,0.3)', padding:'9px 18px', borderRadius:'7px', fontSize:'13px', fontWeight:700, textDecoration:'none', fontFamily:'DM Sans, sans-serif' }}>
-                    \ud83d\udd12 Boost Score \u2014 Upgrade
-                  </a>
-                )}`,
-  `                {!isPaid && currentScore < 90 && !boosted && (
-                  <a href='/pricing' style={{ background:'#1a1a1a', color:'#ef4444', border:'1px solid rgba(239,68,68,0.3)', padding:'9px 18px', borderRadius:'7px', fontSize:'13px', fontWeight:700, textDecoration:'none', fontFamily:'DM Sans, sans-serif' }}>
-                    \ud83d\udd25 Boost Score \u2014 Upgrade
-                  </a>
-                )}`
-);
-
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\content\\blog\\page.tsx', blog, 'utf8');
-console.log('SUCCESS: Blog page — fire red boost button, hidden after use, bigger score badge');
+const boostDir = path.join('C:\\Users\\randy\\traffikfuel\\src\\app\\api\\content\\boost');
+fs.mkdirSync(boostDir, { recursive: true });
+fs.writeFileSync(path.join(boostDir, 'route.ts'), boostRoute, 'utf8');
+console.log('SUCCESS: Boost API — fake phone numbers and offers explicitly forbidden');
