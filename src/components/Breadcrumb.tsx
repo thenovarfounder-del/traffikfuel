@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 const LABELS = {
   'dashboard': 'Dashboard',
-  'content': 'Content',
+  'content': 'Dashboard',
   'blog': 'Blog Generator',
   'queue': 'Content Queue',
   'social': 'Social Media',
@@ -41,11 +41,16 @@ export default function Breadcrumb() {
 
   if (isDashboardHome) return null
 
-  const crumbs = segments.map((seg, i) => ({
+  const allCrumbs = segments.map((seg, i) => ({
     label: LABELS[seg] || seg.charAt(0).toUpperCase() + seg.slice(1),
     href: '/' + segments.slice(0, i + 1).join('/'),
     isLast: i === segments.length - 1
   }))
+  // Remove duplicate labels (e.g. Dashboard > Dashboard)
+  const crumbs = allCrumbs.filter((crumb, i) => {
+    if (i === 0) return true
+    return crumb.label !== allCrumbs[i - 1].label
+  })
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 32px', background: '#0d0d0d', borderBottom: '1px solid #1a1a1a', flexWrap: 'wrap', gap: '8px' }}>
