@@ -150,7 +150,7 @@ export default function DashboardLayout({ children }) {
                 ⚡ Upgrade to Pro — $97/mo
               </Link>
             )}
-            <button onClick={handleSignOut} style={{ background: '#1a1a1a', color: '#666', border: '1px solid #2a2a2a', padding: '10px 16px', cursor: 'pointer', fontSize: '12px', fontFamily: 'DM Sans, sans-serif', fontWeight: 600, width: '100%', borderRadius: '4px' }}>
+            <button onClick={handleSignOut} style={{ background: '#1a1a1a', color: '#aaa', border: '1px solid #333', padding: '10px 16px', cursor: 'pointer', fontSize: '12px', fontFamily: 'DM Sans, sans-serif', fontWeight: 600, width: '100%', borderRadius: '4px' }}>
               Sign Out
             </button>
           </div>
@@ -207,7 +207,7 @@ export default function DashboardLayout({ children }) {
                 )}
               </>
             )}
-            <button onClick={handleSignOut} style={{ background: '#1a1a1a', color: '#666', border: '1px solid #2a2a2a', padding: collapsed ? '8px' : '8px 16px', cursor: 'pointer', fontSize: '12px', fontFamily: 'DM Sans, sans-serif', fontWeight: 600, width: '100%', borderRadius: '4px' }}>
+            <button onClick={handleSignOut} style={{ background: '#1a1a1a', color: '#aaa', border: '1px solid #333', padding: collapsed ? '8px' : '8px 16px', cursor: 'pointer', fontSize: '12px', fontFamily: 'DM Sans, sans-serif', fontWeight: 600, width: '100%', borderRadius: '4px' }}>
               {collapsed ? '↩' : 'Sign Out'}
             </button>
           </div>
