@@ -2,6 +2,7 @@
 'use client'
 import { useState, useEffect } from "react"
 import { supabase } from "@/lib/supabase"
+import { calculateContentScore, getScoreLabel, ContentScoreBadge } from "@/components/ContentScore"
 
 export default function BlogPage() {
   const [userId, setUserId] = useState("")
@@ -55,7 +56,10 @@ export default function BlogPage() {
       })
       const data = await res.json()
       if (data.error) { setMessage(data.error) }
-      else { setPost(data); if (!isPaid) setBlogsUsed(prev => prev + 1) }
+      else {
+        setPost(data)
+        if (!isPaid) setBlogsUsed(prev => prev + 1)
+      }
     } catch (e) { setMessage("Something went wrong. Try again.") }
     setGenerating(false)
   }
@@ -180,9 +184,10 @@ export default function BlogPage() {
         {post && (
           <div style={{ background: "#111", border: "1px solid #1e1e1e", borderRadius: "14px", overflow: "hidden", marginBottom: "24px" }}>
             <div style={{ background: "linear-gradient(135deg,#1a0e00,#111)", borderBottom: "1px solid #1e1e1e", padding: "20px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "12px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                 <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#22c55e" }}></div>
                 <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: "13px", color: "#22c55e", fontWeight: 600 }}>Blog post ready</span>
+                {post && <ContentScoreBadge score={calculateContentScore(post.content, post.title, 'blog')} size="md" />}
               </div>
               {isPaid && (
                 <button onClick={publishToWordPress} disabled={publishing}
