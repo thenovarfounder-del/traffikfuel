@@ -60,6 +60,7 @@ function renderMarkdown(text) {
 export default function ChatBubble() {
   const [open, setOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const [messages, setMessages] = useState([
     { role: 'assistant', content: "Hi! I\u2019m Eva, your Traffikora AI guide \u26a1 I\u2019ll help you find the perfect plan and get your marketing running on autopilot. First\u2014what type of business do you run?", showButtons: true }
   ])
@@ -74,7 +75,19 @@ export default function ChatBubble() {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
     checkMobile()
     window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
+
+    // Watch for mobile menu open/close
+    const observer = new MutationObserver(() => {
+      const menu = document.getElementById('mobile-nav-menu')
+      if (menu) setMenuOpen(menu.classList.contains('is-open'))
+    })
+    const menu = document.getElementById('mobile-nav-menu')
+    if (menu) observer.observe(menu, { attributes: true, attributeFilter: ['class'] })
+
+    return () => {
+      window.removeEventListener('resize', checkMobile)
+      observer.disconnect()
+    }
   }, [])
 
   useEffect(() => {
