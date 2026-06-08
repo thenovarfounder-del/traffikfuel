@@ -2,7 +2,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
-import { calculateContentScore, ContentScoreBadge } from '@/components/ContentScore'
+import { calculateContentScore, getScoreFromResult, ContentScoreBadge } from '@/components/ContentScore'
 
 export default function BlogPage() {
   const [userId, setUserId] = useState('')
@@ -20,6 +20,7 @@ export default function BlogPage() {
   const [blogsUsed, setBlogsUsed] = useState(0)
   const [boostMessage, setBoostMessage] = useState('')
   const [boosted, setBoosted] = useState(false)
+  const [scoreResult, setScoreResult] = useState(null)
 
   useEffect(() => {
     const load = async () => {
@@ -43,17 +44,22 @@ export default function BlogPage() {
   const isPaid = userStatus && userStatus !== 'free'
   const freeLimit = 3
   const freeExceeded = !isPaid && blogsUsed >= freeLimit
-  const currentScore = post ? calculateContentScore(post.content, post.title, 'blog') : 0
+  const currentScore = scoreResult ? getScoreFromResult(scoreResult) : 0
+
+  function recalcScore(p) {
+    if (!p) return
+    setScoreResult(calculateContentScore(p.content, p.title, 'blog'))
+  }
 
   const generate = async () => {
     if (!topic.trim()) return
-    if (freeExceeded) { setMessage('You’ve used all 3 free blogs this month. Upgrade to Starter for unlimited blogs.'); return }
-    setGenerating(true); setMessage(''); setPost(null); setWpMessage(''); setBoostMessage(''); setBoosted(false)
+    if (freeExceeded) { setMessage('You’ve used all 3 free blogs this month.'); return }
+    setGenerating(true); setMessage(''); setPost(null); setWpMessage(''); setBoostMessage(''); setBoosted(false); setScoreResult(null)
     try {
       const res = await fetch('/api/content/blog', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId, businessId, topic }) })
       const data = await res.json()
       if (data.error) { setMessage(data.error) }
-      else { setPost(data); if (!isPaid) setBlogsUsed(prev => prev + 1) }
+      else { setPost(data); recalcScore(data); if (!isPaid) setBlogsUsed(prev => prev + 1) }
     } catch (e) { setMessage('Something went wrong. Try again.') }
     setGenerating(false)
   }
@@ -62,13 +68,18 @@ export default function BlogPage() {
     if (!post || !isPaid) return
     setBoosting(true); setBoostMessage('')
     try {
-      const res = await fetch('/api/content/boost', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: post.title, content: post.content, currentScore, userId, businessId, postId: post.id }) })
+      const res = await fetch('/api/content/boost', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: post.title, content: post.content, currentScore, breakdown: scoreResult?.breakdown || {}, userId, businessId, postId: post.id })
+      })
       const data = await res.json()
       if (data.error) { setBoostMessage('Boost failed: ' + data.error) }
       else {
-        setPost(prev => ({ ...prev, content: data.content, title: data.title || prev.title }))
-        const newScore = calculateContentScore(data.content, data.title || post.title, 'blog')
-        setBoostMessage('⬆️ Score boosted to ' + newScore + '! Content enhanced for SEO.')
+        const updated = { ...post, content: data.content, title: data.title || post.title }
+        setPost(updated)
+        recalcScore(updated)
+        setBoostMessage('⬆️ Content enhanced! Check your new score above.')
         setBoosted(true)
       }
     } catch (e) { setBoostMessage('Something went wrong. Try again.') }
@@ -87,8 +98,6 @@ export default function BlogPage() {
     setPublishing(false)
   }
 
-  const handleTopicChange = (e) => { setTopic(e.target.value); setCharCount(e.target.value.length) }
-
   const inp = { width:'100%', background:'#0a0a0a', border:'1px solid #2a2a2a', borderRadius:'10px', padding:'14px 16px', fontSize:'15px', color:'#fff', resize:'vertical', boxSizing:'border-box', fontFamily:'DM Sans, sans-serif', outline:'none', lineHeight:1.6 }
 
   return (
@@ -104,25 +113,23 @@ export default function BlogPage() {
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:12, marginTop:12, flexWrap:'wrap' }}>
             {businessName && <div style={{ display:'inline-flex', alignItems:'center', gap:'6px', background:'rgba(232,97,10,0.1)', border:'1px solid rgba(232,97,10,0.3)', borderRadius:'20px', padding:'4px 14px' }}><div style={{ width:'6px', height:'6px', borderRadius:'50%', background:'#E8610A' }} /><span style={{ fontSize:'12px', color:'#E8610A', fontFamily:'DM Sans, sans-serif', fontWeight:600 }}>{businessName}</span></div>}
-            {!isPaid && <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(232,97,10,0.08)', border:'1px solid rgba(232,97,10,0.2)', borderRadius:'20px', padding:'4px 14px' }}><span style={{ fontSize:'12px', color: freeExceeded ? '#ef4444' : '#E8610A', fontFamily:'DM Sans, sans-serif', fontWeight:600 }}>{blogsUsed}/{freeLimit} free blogs used</span>{freeExceeded && <a href='/pricing' style={{ background:'#E8610A', color:'#fff', padding:'2px 10px', borderRadius:4, fontSize:11, fontWeight:700, textDecoration:'none' }}>Upgrade</a>}</div>}
+            {!isPaid && <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(232,97,10,0.08)', border:'1px solid rgba(232,97,10,0.2)', borderRadius:'20px', padding:'4px 14px' }}><span style={{ fontSize:'12px', color:freeExceeded?'#ef4444':'#E8610A', fontFamily:'DM Sans, sans-serif', fontWeight:600 }}>{blogsUsed}/{freeLimit} free blogs used</span>{freeExceeded && <a href='/pricing' style={{ background:'#E8610A', color:'#fff', padding:'2px 10px', borderRadius:4, fontSize:11, fontWeight:700, textDecoration:'none' }}>Upgrade</a>}</div>}
           </div>
         </div>
       </div>
-
       <div style={{ maxWidth:'860px', margin:'0 auto', padding:'32px 40px' }}>
         <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'12px', marginBottom:'28px' }}>
-          {[{ label:'SEO Optimized', value:'100%', icon:'📈' },{ label:'Avg Word Count', value:'900+', icon:'📝' },{ label:'AI Platforms', value:'6+', icon:'🤖' }].map(stat => (
+          {[{label:'SEO Optimized',value:'100%',icon:'📈'},{label:'Avg Word Count',value:'900+',icon:'📝'},{label:'AI Platforms',value:'6+',icon:'🤖'}].map(stat => (
             <div key={stat.label} style={{ background:'#111', border:'1px solid #1e1e1e', borderRadius:'10px', padding:'16px 20px', display:'flex', alignItems:'center', gap:'12px' }}>
               <span style={{ fontSize:'20px' }}>{stat.icon}</span>
               <div><div style={{ fontFamily:'Playfair Display, serif', fontSize:'20px', fontWeight:700, color:'#E8610A', lineHeight:1 }}>{stat.value}</div><div style={{ fontSize:'11px', color:'#555', fontFamily:'DM Sans, sans-serif', marginTop:'2px' }}>{stat.label}</div></div>
             </div>
           ))}
         </div>
-
         <div style={{ background:'#111', border:'1px solid #1e1e1e', borderRadius:'14px', padding:'28px', marginBottom:'24px' }}>
           <label style={{ display:'block', fontSize:'13px', fontWeight:700, color:'#aaa', marginBottom:'10px', fontFamily:'DM Sans, sans-serif', letterSpacing:'0.08em', textTransform:'uppercase' }}>Blog Topic</label>
           <div style={{ position:'relative' }}>
-            <textarea rows={3} placeholder='e.g. 5 reasons local businesses need AI marketing in 2026...' value={topic} onChange={handleTopicChange} style={inp} onFocus={e => e.target.style.borderColor='#E8610A'} onBlur={e => e.target.style.borderColor='#2a2a2a'} />
+            <textarea rows={3} placeholder='e.g. 5 reasons local businesses need AI marketing in 2026...' value={topic} onChange={e => { setTopic(e.target.value); setCharCount(e.target.value.length) }} style={inp} onFocus={e => e.target.style.borderColor='#E8610A'} onBlur={e => e.target.style.borderColor='#2a2a2a'} />
             <div style={{ position:'absolute', bottom:'10px', right:'14px', fontSize:'11px', color:'#444' }}>{charCount} chars</div>
           </div>
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginTop:'16px', flexWrap:'wrap', gap:'12px' }}>
@@ -131,59 +138,50 @@ export default function BlogPage() {
                 <button key={s} onClick={() => { setTopic(s); setCharCount(s.length) }} style={{ background:'#1a1a1a', border:'1px solid #2a2a2a', borderRadius:'20px', padding:'5px 12px', fontSize:'11px', color:'#888', cursor:'pointer', fontFamily:'DM Sans, sans-serif' }} onMouseEnter={e => { e.target.style.borderColor='#E8610A'; e.target.style.color='#E8610A' }} onMouseLeave={e => { e.target.style.borderColor='#2a2a2a'; e.target.style.color='#888' }}>{s}</button>
               ))}
             </div>
-            <button onClick={generate} disabled={generating || !topic.trim() || freeExceeded} style={{ background:(generating||freeExceeded)?'#2a2a2a':'linear-gradient(135deg,#E8610A,#ff8c42)', color:(generating||freeExceeded)?'#666':'#fff', padding:'12px 28px', borderRadius:'8px', fontSize:'14px', fontWeight:700, border:'none', cursor:(generating||freeExceeded)?'not-allowed':'pointer', fontFamily:'DM Sans, sans-serif', display:'flex', alignItems:'center', gap:'8px', boxShadow:(generating||freeExceeded)?'none':'0 4px 20px rgba(232,97,10,0.35)' }}>
+            <button onClick={generate} disabled={generating||!topic.trim()||freeExceeded} style={{ background:(generating||freeExceeded)?'#2a2a2a':'linear-gradient(135deg,#E8610A,#ff8c42)', color:(generating||freeExceeded)?'#666':'#fff', padding:'12px 28px', borderRadius:'8px', fontSize:'14px', fontWeight:700, border:'none', cursor:(generating||freeExceeded)?'not-allowed':'pointer', fontFamily:'DM Sans, sans-serif', display:'flex', alignItems:'center', gap:'8px', boxShadow:(generating||freeExceeded)?'none':'0 4px 20px rgba(232,97,10,0.35)' }}>
               {freeExceeded ? '🔒 Limit Reached' : generating ? '⏳ Generating...' : '⚡ Generate Blog Post'}
             </button>
           </div>
-          {freeExceeded && <div style={{ marginTop:14, background:'rgba(232,97,10,0.08)', border:'1px solid rgba(232,97,10,0.2)', borderRadius:8, padding:'12px 16px', display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:8 }}><span style={{ fontFamily:'DM Sans, sans-serif', fontSize:13, color:'#E8610A' }}>You’ve used all 3 free blogs this month.</span><a href='/pricing' style={{ background:'linear-gradient(135deg,#E8610A,#C84E06)', color:'#fff', padding:'8px 20px', borderRadius:6, fontSize:13, fontWeight:700, textDecoration:'none' }}>Upgrade to Starter — $47/mo</a></div>}
+          {freeExceeded && <div style={{ marginTop:14, background:'rgba(232,97,10,0.08)', border:'1px solid rgba(232,97,10,0.2)', borderRadius:8, padding:'12px 16px', display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:8 }}><span style={{ color:'#E8610A', fontSize:13, fontFamily:'DM Sans, sans-serif' }}>You’ve used all 3 free blogs this month.</span><a href='/pricing' style={{ background:'linear-gradient(135deg,#E8610A,#C84E06)', color:'#fff', padding:'8px 20px', borderRadius:6, fontSize:13, fontWeight:700, textDecoration:'none' }}>Upgrade — $47/mo</a></div>}
           {message && <div style={{ marginTop:'14px', background:'rgba(239,68,68,0.08)', border:'1px solid rgba(239,68,68,0.2)', borderRadius:'8px', padding:'10px 14px', fontSize:'13px', color:'#f87171', fontFamily:'DM Sans, sans-serif' }}>{message}</div>}
         </div>
-
-        {generating && (
-          <div style={{ background:'#111', border:'1px solid #1e1e1e', borderRadius:'14px', padding:'40px', textAlign:'center', marginBottom:'24px' }}>
-            <div style={{ fontSize:'36px', marginBottom:'16px' }}>✏️</div>
-            <p style={{ fontFamily:'Playfair Display, serif', fontSize:'20px', color:'#fff', marginBottom:'8px' }}>Writing your blog post...</p>
-            <p style={{ fontFamily:'DM Sans, sans-serif', fontSize:'13px', color:'#555' }}>Your Business Brain is crafting SEO-optimized content tailored to your business.</p>
-          </div>
-        )}
-
-        {boosting && (
-          <div style={{ background:'#111', border:'1px solid rgba(34,197,94,0.3)', borderRadius:'14px', padding:'28px', textAlign:'center', marginBottom:'24px' }}>
-            <div style={{ fontSize:'32px', marginBottom:'12px' }}>⚡</div>
-            <p style={{ fontFamily:'Playfair Display, serif', fontSize:'18px', color:'#22c55e', marginBottom:'6px' }}>Boosting your content score...</p>
-            <p style={{ fontFamily:'DM Sans, sans-serif', fontSize:'13px', color:'#555' }}>AI is enhancing SEO, structure, and engagement signals.</p>
-          </div>
-        )}
-
+        {generating && <div style={{ background:'#111', border:'1px solid #1e1e1e', borderRadius:'14px', padding:'40px', textAlign:'center', marginBottom:'24px' }}><div style={{ fontSize:'36px', marginBottom:'16px' }}>✏️</div><p style={{ fontFamily:'Playfair Display, serif', fontSize:'20px', color:'#fff', marginBottom:'8px' }}>Writing your blog post...</p><p style={{ fontFamily:'DM Sans, sans-serif', fontSize:'13px', color:'#555' }}>Your Business Brain is crafting SEO-optimized content for your business.</p></div>}
+        {boosting && <div style={{ background:'#111', border:'1px solid rgba(34,197,94,0.3)', borderRadius:'14px', padding:'28px', textAlign:'center', marginBottom:'24px' }}><div style={{ fontSize:'32px', marginBottom:'12px' }}>⚡</div><p style={{ fontFamily:'Playfair Display, serif', fontSize:'18px', color:'#22c55e', marginBottom:'6px' }}>Boosting your content score...</p><p style={{ fontFamily:'DM Sans, sans-serif', fontSize:'13px', color:'#555' }}>AI is fixing specific weak points — adding structure, stats, local SEO and more.</p></div>}
         {post && !boosting && (
           <div style={{ background:'#111', border:'1px solid #1e1e1e', borderRadius:'14px', overflow:'hidden', marginBottom:'24px' }}>
             <div style={{ background:'linear-gradient(135deg,#1a0e00,#111)', borderBottom:'1px solid #1e1e1e', padding:'20px 28px', display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:'12px' }}>
               <div style={{ display:'flex', alignItems:'center', gap:'12px', flexWrap:'wrap' }}>
                 <div style={{ width:'8px', height:'8px', borderRadius:'50%', background:'#22c55e' }} />
                 <span style={{ fontFamily:'DM Sans, sans-serif', fontSize:'13px', color:'#22c55e', fontWeight:600 }}>Blog post ready</span>
-                <ContentScoreBadge score={currentScore} size='md' />
+                {scoreResult && <ContentScoreBadge score={currentScore} size='md' />}
               </div>
               <div style={{ display:'flex', gap:'10px', flexWrap:'wrap' }}>
-                {isPaid && currentScore < 90 && !boosted && (
-                  <button onClick={boostScore} style={{ background:'linear-gradient(135deg,#dc2626,#b91c1c)', color:'#fff', padding:'9px 18px', borderRadius:'7px', fontSize:'13px', fontWeight:700, border:'none', cursor:'pointer', fontFamily:'DM Sans, sans-serif', boxShadow:'0 4px 16px rgba(220,38,38,0.5)', display:'flex', alignItems:'center', gap:'6px' }}>
-                    🔥 Boost Score
-                  </button>
-                )}
-                {!isPaid && currentScore < 90 && !boosted && (
-                  <a href='/pricing' style={{ background:'#1a1a1a', color:'#ef4444', border:'1px solid rgba(239,68,68,0.3)', padding:'9px 18px', borderRadius:'7px', fontSize:'13px', fontWeight:700, textDecoration:'none', fontFamily:'DM Sans, sans-serif' }}>
-                    🔥 Boost Score — Upgrade
-                  </a>
-                )}
-                {isPaid && (
-                  <button onClick={publishToWordPress} disabled={publishing} style={{ background:publishing?'#1a1a1a':'linear-gradient(135deg,#16a34a,#15803d)', color:publishing?'#555':'#fff', padding:'9px 20px', borderRadius:'7px', fontSize:'13px', fontWeight:700, border:'none', cursor:publishing?'not-allowed':'pointer', fontFamily:'DM Sans, sans-serif' }}>
-                    {publishing ? '⏳ Publishing...' : '🌐 Publish to WordPress'}
-                  </button>
-                )}
+                {isPaid && currentScore < 90 && !boosted && <button onClick={boostScore} style={{ background:'linear-gradient(135deg,#dc2626,#b91c1c)', color:'#fff', padding:'9px 18px', borderRadius:'7px', fontSize:'13px', fontWeight:700, border:'none', cursor:'pointer', fontFamily:'DM Sans, sans-serif', boxShadow:'0 4px 16px rgba(220,38,38,0.5)' }}>🔥 Boost Score</button>}
+                {!isPaid && currentScore < 90 && !boosted && <a href='/pricing' style={{ background:'#1a1a1a', color:'#ef4444', border:'1px solid rgba(239,68,68,0.3)', padding:'9px 18px', borderRadius:'7px', fontSize:'13px', fontWeight:700, textDecoration:'none', fontFamily:'DM Sans, sans-serif' }}>🔥 Boost Score — Upgrade</a>}
+                {boosted && <div style={{ display:'flex', alignItems:'center', gap:'6px', background:'rgba(34,197,94,0.1)', border:'1px solid rgba(34,197,94,0.3)', borderRadius:'7px', padding:'9px 14px', fontSize:'13px', color:'#22c55e', fontWeight:700 }}>✅ Score Boosted</div>}
+                {isPaid && <button onClick={publishToWordPress} disabled={publishing} style={{ background:publishing?'#1a1a1a':'linear-gradient(135deg,#16a34a,#15803d)', color:publishing?'#555':'#fff', padding:'9px 20px', borderRadius:'7px', fontSize:'13px', fontWeight:700, border:'none', cursor:publishing?'not-allowed':'pointer', fontFamily:'DM Sans, sans-serif' }}>{publishing ? '⏳ Publishing...' : '🌐 Publish to WordPress'}</button>}
               </div>
             </div>
-            {boostMessage && (
-              <div style={{ margin:'16px 28px 0', background:boostMessage.includes('boosted')?'rgba(34,197,94,0.08)':'rgba(239,68,68,0.08)', border:'1px solid '+(boostMessage.includes('boosted')?'rgba(34,197,94,0.3)':'rgba(239,68,68,0.3)'), borderRadius:'8px', padding:'10px 14px', fontSize:'13px', color:boostMessage.includes('boosted')?'#4ade80':'#f87171', fontFamily:'DM Sans, sans-serif', fontWeight:600 }}>
-                {boostMessage}
+            {boostMessage && <div style={{ margin:'16px 28px 0', background:'rgba(34,197,94,0.08)', border:'1px solid rgba(34,197,94,0.3)', borderRadius:'8px', padding:'10px 14px', fontSize:'13px', color:'#4ade80', fontFamily:'DM Sans, sans-serif', fontWeight:600 }}>{boostMessage}</div>}
+            {scoreResult && scoreResult.breakdown && (
+              <div style={{ margin:'16px 28px 0', background:'#0d0d0d', border:'1px solid #1a1a1a', borderRadius:'10px', padding:'16px' }}>
+                <div style={{ fontSize:'11px', color:'#555', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', marginBottom:'10px', fontFamily:'DM Sans, sans-serif' }}>Score Breakdown</div>
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(5,1fr)', gap:'8px' }}>
+                  {Object.entries(scoreResult.breakdown).map(function(entry) {
+                    var key = entry[0]; var val = entry[1]
+                    var labels = { wordCount:'Word Count', titleQuality:'Title', headings:'Headings', lists:'Lists', localSeo:'Local SEO', statistics:'Stats', cta:'CTA', paragraphs:'Paragraphs', openingHook:'Hook', keywords:'Keywords' }
+                    var maxVals = { wordCount:20, titleQuality:15, headings:12, lists:8, localSeo:10, statistics:10, cta:8, paragraphs:8, openingHook:5, keywords:4 }
+                    var pct = Math.round((val / (maxVals[key] || 10)) * 100)
+                    var c = pct >= 80 ? '#22c55e' : pct >= 50 ? '#eab308' : '#ef4444'
+                    return (
+                      <div key={key} style={{ textAlign:'center' }}>
+                        <div style={{ fontSize:'14px', fontWeight:900, color:c, fontFamily:'DM Sans, sans-serif' }}>{val}</div>
+                        <div style={{ fontSize:'9px', color:'#444', fontFamily:'DM Sans, sans-serif', marginTop:'2px' }}>{labels[key] || key}</div>
+                        <div style={{ height:'3px', background:'#1a1a1a', borderRadius:'2px', marginTop:'4px' }}><div style={{ height:'100%', width:pct+'%', background:c, borderRadius:'2px' }} /></div>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
             )}
             <div style={{ padding:'24px 28px 0' }}>
@@ -207,17 +205,18 @@ export default function BlogPage() {
             {wpMessage && <div style={{ margin:'0 28px 24px', background:wpMessage.startsWith('Error')?'rgba(239,68,68,0.08)':'rgba(34,197,94,0.08)', border:'1px solid '+(wpMessage.startsWith('Error')?'rgba(239,68,68,0.2)':'rgba(34,197,94,0.2)'), borderRadius:'8px', padding:'12px 16px', fontSize:'13px', color:wpMessage.startsWith('Error')?'#f87171':'#4ade80', fontFamily:'DM Sans, sans-serif' }}>{wpMessage}</div>}
           </div>
         )}
-
         {!post && !generating && (
           <div style={{ background:'#111', border:'1px solid #1e1e1e', borderRadius:'14px', padding:'24px 28px' }}>
             <p style={{ fontFamily:'DM Sans, sans-serif', fontSize:'12px', fontWeight:700, color:'#444', letterSpacing:'0.1em', textTransform:'uppercase', marginBottom:'16px' }}>Pro Tips</p>
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'12px' }}>
-              {[{ icon:'🎯', tip:'Be specific with your topic for better SEO targeting' },{ icon:'📈', tip:'Include your city or region for local SEO boost' },{ icon:'🤖', tip:'Your Brain auto-injects your business context' },{ icon:'🌐', tip:'Publish directly to WordPress with one click' }].map(({ icon, tip }) => (
-                <div key={tip} style={{ display:'flex', gap:'10px', alignItems:'flex-start' }}>
-                  <span style={{ fontSize:'16px', flexShrink:0 }}>{icon}</span>
-                  <p style={{ fontFamily:'DM Sans, sans-serif', fontSize:'13px', color:'#555', margin:0, lineHeight:1.6 }}>{tip}</p>
-                </div>
-              ))}
+              {[{icon:'🎯',tip:'Be specific with your topic for better SEO targeting'},{icon:'📈',tip:'Include your city or region for local SEO boost'},{icon:'🤖',tip:'Your Brain auto-injects your business context'},{icon:'🌐',tip:'Publish directly to WordPress with one click'}].map(function(item) {
+                return (
+                  <div key={item.tip} style={{ display:'flex', gap:'10px', alignItems:'flex-start' }}>
+                    <span style={{ fontSize:'16px', flexShrink:0 }}>{item.icon}</span>
+                    <p style={{ fontFamily:'DM Sans, sans-serif', fontSize:'13px', color:'#555', margin:0, lineHeight:1.6 }}>{item.tip}</p>
+                  </div>
+                )
+              })}
             </div>
           </div>
         )}
