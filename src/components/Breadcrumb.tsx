@@ -20,7 +20,7 @@ const LABELS = {
   'support': 'Support',
   'agency': 'Agency',
   'analytics': 'Analytics',
-  'connect': 'Connections',
+  'connect': 'Dashboard',
   'google': 'Google',
   'facebook': 'Facebook',
   'instagram': 'Instagram',
