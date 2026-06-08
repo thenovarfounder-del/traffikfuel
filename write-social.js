@@ -1,11 +1,16 @@
 const fs = require('fs');
 
-let content = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\api\\content\\boost\\route.ts', 'utf8');
+let content = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\content\\blog\\page.tsx', 'utf8');
 
 content = content.replace(
-  "model: 'claude-opus-4-5-20251101'",
-  "model: 'claude-sonnet-4-20250514'"
+  `var labels = { wordCount:'Word Count', titleQuality:'Title', headings:'Headings', lists:'Lists', localSeo:'Local SEO', statistics:'Stats', cta:'CTA', paragraphs:'Paragraphs', openingHook:'Hook', keywords:'Keywords' }`,
+  `var labels = { wordCount:'Word Count', titleQuality:'Title', headings:'Headings', lists:'Lists', localSeo:'Local SEO', statistics:'Stats', cta:'CTA', paragraphs:'Paragraphs', openingHook:'Hook', keywords:'Keywords' }`
 );
 
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\api\\content\\boost\\route.ts', content, 'utf8');
-console.log('SUCCESS: Boost route model fixed to claude-sonnet-4-20250514');
+content = content.replace(
+  `"                        <div style={{ fontSize:'9px', color:'#444', fontFamily:'DM Sans, sans-serif', marginTop:'2px' }}>{labels[key] || key}</div>",`,
+  `"                        <div style={{ fontSize:'10px', color:'#aaa', fontFamily:'DM Sans, sans-serif', marginTop:'2px', fontWeight:600 }}>{labels[key] || key}</div>",`
+);
+
+fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\content\\blog\\page.tsx', content, 'utf8');
+console.log('SUCCESS: Score breakdown labels brightened to #aaa');
