@@ -20,6 +20,8 @@ export default function Nav() {
         .mobile-menu a.orange { color: #E8610A; }
         .mobile-menu a.cta-mobile { background: linear-gradient(135deg,#E8610A,#c94e08); color: #fff !important; padding: 16px 22px; font-size: 18px; border-radius: 8px; text-align: center; margin-top: 24px; border-bottom: none; }
         .mobile-menu a.login-mobile { background: linear-gradient(135deg,#E8610A,#c94e08); color: #fff !important; padding: 16px 22px; font-size: 18px; border-radius: 8px; text-align: center; margin-top: 12px; border-bottom: none; }
+        body.nav-open [data-eva-bubble], body.nav-open #chat-bubble-container, body.nav-open .chat-bubble-btn, body.nav-open [class*="ChatBubble"], body.nav-open [id*="chat"], body.nav-open [id*="eva"] { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
+        body.nav-open div[style*="position: fixed"][style*="bottom"][style*="right"] { display: none !important; }
         @media (max-width: 900px) {
           .nav-links { display: none; }
           .nav-hamburger { display: block; }

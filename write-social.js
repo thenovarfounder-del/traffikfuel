@@ -1,35 +1,14 @@
 const fs = require('fs');
 
-// Fix Nav - add body class when menu opens
-const navPath = 'src/components/Nav.tsx';
-let nav = fs.readFileSync(navPath, 'utf8');
+let content = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\components\\Nav.tsx', 'utf8');
 
-nav = nav.replace(
-  "onClick={() => { const menu = document.getElementById('mobile-nav-menu'); if (menu) menu.classList.toggle('is-open'); }}",
-  "onClick={() => { const menu = document.getElementById('mobile-nav-menu'); if (menu) { menu.classList.toggle('is-open'); document.body.classList.toggle('nav-open'); } }}"
+// Add CSS to hide EVA bubble when mobile menu is open
+content = content.replace(
+  `.mobile-menu a.login-mobile { background: linear-gradient(135deg,#E8610A,#c94e08); color: #fff !important; padding: 16px 22px; font-size: 18px; border-radius: 8px; text-align: center; margin-top: 12px; border-bottom: none; }`,
+  `.mobile-menu a.login-mobile { background: linear-gradient(135deg,#E8610A,#c94e08); color: #fff !important; padding: 16px 22px; font-size: 18px; border-radius: 8px; text-align: center; margin-top: 12px; border-bottom: none; }
+        body.nav-open [data-eva-bubble], body.nav-open #chat-bubble-container, body.nav-open .chat-bubble-btn, body.nav-open [class*="ChatBubble"], body.nav-open [id*="chat"], body.nav-open [id*="eva"] { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
+        body.nav-open div[style*="position: fixed"][style*="bottom"][style*="right"] { display: none !important; }`
 );
 
-fs.writeFileSync(navPath, nav);
-
-// Fix ChatBubble - watch body class
-const chatPath = 'src/components/ChatBubble.tsx';
-let chat = fs.readFileSync(chatPath, 'utf8');
-
-// Watch body for nav-open class
-chat = chat.replace(
-  `    // Watch for mobile menu open/close
-    const observer = new MutationObserver(() => {
-      const menu = document.getElementById('mobile-nav-menu')
-      if (menu) setMenuOpen(menu.classList.contains('is-open'))
-    })
-    const menu = document.getElementById('mobile-nav-menu')
-    if (menu) observer.observe(menu, { attributes: true, attributeFilter: ['class'] })`,
-  `    // Watch body for nav-open class
-    const observer = new MutationObserver(() => {
-      setMenuOpen(document.body.classList.contains('nav-open'))
-    })
-    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] })`
-);
-
-fs.writeFileSync(chatPath, chat);
-console.log('SUCCESS - nav body class + chat bubble fix applied');
+fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\components\\Nav.tsx', content, 'utf8');
+console.log('SUCCESS: Nav.tsx — EVA bubble hidden when mobile menu is open');
