@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
     const state = searchParams.get('state')
 
     if (!code) {
-      return NextResponse.redirect(new URL('/dashboard/content/searchconsole?error=no_code', req.url))
+      return NextResponse.redirect(new URL('/dashboard/connect/google?error=no_code', req.url))
     }
 
     const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
     const tokenData = await tokenRes.json()
 
     if (!tokenData.access_token) {
-      return NextResponse.redirect(new URL('/dashboard/content/searchconsole?error=token_failed', req.url))
+      return NextResponse.redirect(new URL('/dashboard/connect/google?error=token_failed', req.url))
     }
 
     const supabase = createClient(
@@ -43,8 +43,8 @@ export async function GET(req: NextRequest) {
       })
       .eq('user_id', state)
 
-    return NextResponse.redirect(new URL('/dashboard/content/searchconsole?connected=true', req.url))
+    return NextResponse.redirect(new URL('/dashboard/connect/google?connected=true', req.url))
   } catch (err) {
-    return NextResponse.redirect(new URL('/dashboard/content/searchconsole?error=exception', req.url))
+    return NextResponse.redirect(new URL('/dashboard/connect/google?error=exception', req.url))
   }
 }
