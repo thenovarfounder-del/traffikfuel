@@ -11,7 +11,7 @@ export default function ConnectGoogle() {
   }, [])
 
   const handleConnect = () => {
-    const clientId = '626240603555-8d1t7t137ac0gmtl23rchrdc5miv7sfk.apps.googleusercontent.com'
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '626240603555-54ics7fvsqud63j9nl38mu8lrcqbu3ag.apps.googleusercontent.com'
     const redirectUri = 'https://www.traffikora.com/api/auth/google/callback'
     const scope = [
       'openid',
