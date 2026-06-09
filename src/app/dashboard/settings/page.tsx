@@ -98,7 +98,7 @@ export default function DashboardSettings() {
                 { id:"facebook", label:"Facebook", color:"#1877F2" },
                 { id:"instagram", label:"Instagram", color:"#E1306C" },
                 { id:"tiktok", label:"TikTok", color:"#ff6550" },
-                { id:"twitter", label:"X / Twitter", color:"#888" },
+                
                 { id:"linkedin", label:"LinkedIn", color:"#0A66C2" },
                 { id:"google", label:"Google Business", color:"#4285F4" },
                 { id:"wordpress", label:"WordPress", color:"#21759B" },

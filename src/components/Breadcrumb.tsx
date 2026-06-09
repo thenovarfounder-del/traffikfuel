@@ -25,7 +25,7 @@ const LABELS = {
   'facebook': 'Facebook',
   'instagram': 'Instagram',
   'tiktok': 'TikTok',
-  'twitter': 'X / Twitter',
+  'twitter': 'Connections',
   'linkedin': 'LinkedIn',
   'wordpress': 'WordPress',
   'enterprise': 'Enterprise',

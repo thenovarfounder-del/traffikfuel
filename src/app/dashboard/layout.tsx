@@ -85,7 +85,7 @@ export default function DashboardLayout({ children }) {
     { href: '/dashboard/connect/facebook', icon: '📘', label: 'Facebook' },
     { href: '/dashboard/connect/instagram', icon: '📸', label: 'Instagram' },
     { href: '/dashboard/connect/tiktok', icon: '🎵', label: 'TikTok' },
-    { href: '/dashboard/connect/twitter', icon: '🐦', label: 'X / Twitter' },
+
     { href: '/dashboard/connect/linkedin', icon: '💼', label: 'LinkedIn' },
     { href: '/dashboard/connect/wordpress', icon: '🌐', label: 'WordPress' },
   ]
