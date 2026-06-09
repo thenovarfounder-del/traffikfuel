@@ -1,11 +1,6 @@
 const fs = require('fs');
-const path = require('path');
 
-// Create the connect/google directory
-fs.mkdirSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\connect\\google', { recursive: true });
-
-// Create the connect page
-const connectPage = `// @ts-nocheck
+const content = `// @ts-nocheck
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -18,7 +13,7 @@ export default function ConnectGoogle() {
   }, [])
 
   const handleConnect = () => {
-    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+    const clientId = '626240603555-8d1t7t137ac0gmtl23rchrdc5miv7sfk.apps.googleusercontent.com'
     const redirectUri = 'https://www.traffikora.com/api/auth/google/callback'
     const scope = [
       'openid',
@@ -58,7 +53,7 @@ export default function ConnectGoogle() {
         width: '100%',
         textAlign: 'center',
       }}>
-        <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
+        <div style={{ fontSize: '48px', marginBottom: '16px' }}>&#128269;</div>
         <h1 style={{
           color: '#fff',
           fontSize: isMobile ? '24px' : '28px',
@@ -102,5 +97,5 @@ export default function ConnectGoogle() {
 }
 `;
 
-fs.writeFileSync('C:\\\\Users\\\\randy\\\\traffikfuel\\\\src\\\\app\\\\dashboard\\\\connect\\\\google\\\\page.tsx', connectPage);
-console.log('SUCCESS - connect/google/page.tsx created');
+fs.writeFileSync('C:\\\\Users\\\\randy\\\\traffikfuel\\\\src\\\\app\\\\dashboard\\\\connect\\\\google\\\\page.tsx', content);
+console.log('SUCCESS - connect page updated with hardcoded client ID');

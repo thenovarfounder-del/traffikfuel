@@ -11,7 +11,7 @@ export default function ConnectGoogle() {
   }, [])
 
   const handleConnect = () => {
-    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+    const clientId = '626240603555-8d1t7t137ac0gmtl23rchrdc5miv7sfk.apps.googleusercontent.com'
     const redirectUri = 'https://www.traffikora.com/api/auth/google/callback'
     const scope = [
       'openid',
@@ -51,7 +51,7 @@ export default function ConnectGoogle() {
         width: '100%',
         textAlign: 'center',
       }}>
-        <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
+        <div style={{ fontSize: '48px', marginBottom: '16px' }}>&#128269;</div>
         <h1 style={{
           color: '#fff',
           fontSize: isMobile ? '24px' : '28px',
