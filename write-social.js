@@ -1,114 +1,106 @@
 const fs = require('fs');
+const path = require('path');
 
-const content = `import { MetadataRoute } from 'next'
+// Create the connect/google directory
+fs.mkdirSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\connect\\google', { recursive: true });
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://www.traffikora.com'
+// Create the connect page
+const connectPage = `// @ts-nocheck
+'use client'
 
-  const blogSlugs = [
-    'ai-search-for-local-business',
-    'how-to-get-more-google-reviews',
-    'how-traffikora-is-different',
-    'local-seo-tips-for-small-businesses',
-    'set-it-once-how-traffikora-works',
-    'small-business-marketing-problem',
-    'what-is-aeo',
-    'what-is-ai-engine-optimization',
-    'what-is-local-seo',
-    'what-is-traffikora',
-    'why-ai-engine-optimization',
-    'why-google-business-profile-matters',
-  ]
+import { useEffect, useState } from 'react'
 
-  const compareSlugs = [
-    'traffikora-vs-birdeye',
-    'traffikora-vs-brightlocal',
-    'traffikora-vs-constant-contact',
-    'traffikora-vs-hootsuite',
-    'traffikora-vs-hubspot',
-    'traffikora-vs-later',
-    'traffikora-vs-mailchimp',
-    'traffikora-vs-reputation-com',
-    'traffikora-vs-semrush',
-    'traffikora-vs-sprout-social',
-    'traffikora-vs-vendasta',
-    'traffikora-vs-yext',
-  ]
+export default function ConnectGoogle() {
+  const [isMobile, setIsMobile] = useState(false)
 
-  const solutionSlugs = [
-    'accountants',
-    'auto-repair',
-    'chiropractors',
-    'contractors',
-    'dentists',
-    'gyms',
-    'hvac',
-    'lawyers',
-    'plumbers',
-    'real-estate',
-    'restaurants',
-    'salons',
-    'small-businesses',
-    'therapists',
-    'veterinarians',
-  ]
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768)
+  }, [])
 
-  const vsSlugs = [
-    'buffer',
-    'hootsuite',
-    'hubspot',
-    'later',
-  ]
+  const handleConnect = () => {
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+    const redirectUri = 'https://www.traffikora.com/api/auth/google/callback'
+    const scope = [
+      'openid',
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'https://www.googleapis.com/auth/business.manage',
+    ].join(' ')
 
-  const blogRoutes = blogSlugs.map((slug) => ({
-    url: \`\${baseUrl}/blog/\${slug}\`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.8,
-  }))
+    const params = new URLSearchParams({
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      response_type: 'code',
+      scope,
+      access_type: 'offline',
+      prompt: 'consent',
+    })
 
-  const compareRoutes = compareSlugs.map((slug) => ({
-    url: \`\${baseUrl}/compare/\${slug}\`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.9,
-  }))
+    window.location.href = \`https://accounts.google.com/o/oauth2/v2/auth?\${params.toString()}\`
+  }
 
-  const solutionRoutes = solutionSlugs.map((slug) => ({
-    url: \`\${baseUrl}/solutions/\${slug}\`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.8,
-  }))
-
-  const vsRoutes = vsSlugs.map((slug) => ({
-    url: \`\${baseUrl}/vs/\${slug}\`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.9,
-  }))
-
-  return [
-    { url: baseUrl, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 1 },
-    { url: \`\${baseUrl}/blog\`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.9 },
-    { url: \`\${baseUrl}/pricing\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
-    { url: \`\${baseUrl}/features\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
-    { url: \`\${baseUrl}/how-it-works\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
-    { url: \`\${baseUrl}/why-traffikora\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
-    { url: \`\${baseUrl}/contact\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
-    { url: \`\${baseUrl}/faq\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
-    { url: \`\${baseUrl}/support\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.6 },
-    { url: \`\${baseUrl}/privacy\`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.3 },
-    { url: \`\${baseUrl}/terms\`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.3 },
-    { url: \`\${baseUrl}/security\`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.3 },
-    { url: \`\${baseUrl}/data-use\`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.3 },
-    ...blogRoutes,
-    ...compareRoutes,
-    ...solutionRoutes,
-    ...vsRoutes,
-  ]
+  return (
+    <div style={{
+      minHeight: '100vh',
+      background: '#0a0a0a',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '20px',
+      fontFamily: 'DM Sans, sans-serif',
+    }}>
+      <div style={{
+        background: '#111',
+        border: '1px solid #222',
+        borderRadius: '16px',
+        padding: isMobile ? '32px 24px' : '48px',
+        maxWidth: '480px',
+        width: '100%',
+        textAlign: 'center',
+      }}>
+        <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
+        <h1 style={{
+          color: '#fff',
+          fontSize: isMobile ? '24px' : '28px',
+          fontWeight: '700',
+          marginBottom: '12px',
+          fontFamily: 'Orbitron, sans-serif',
+        }}>
+          Connect Google Business
+        </h1>
+        <p style={{
+          color: '#888',
+          fontSize: '15px',
+          lineHeight: '1.6',
+          marginBottom: '32px',
+        }}>
+          Connect your Google Business Profile so Traffikora can manage your listings, posts, and reviews automatically.
+        </p>
+        <button
+          onClick={handleConnect}
+          style={{
+            background: '#E8610A',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '8px',
+            padding: '14px 32px',
+            fontSize: '16px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            width: '100%',
+            marginBottom: '16px',
+          }}
+        >
+          Connect Google Business Profile
+        </button>
+        <p style={{ color: '#555', fontSize: '13px' }}>
+          You\u2019ll be redirected to Google to authorize access
+        </p>
+      </div>
+    </div>
+  )
 }
 `;
 
-fs.writeFileSync('C:\\\\Users\\\\randy\\\\traffikfuel\\\\src\\\\app\\\\sitemap.ts', content);
-console.log('SUCCESS - sitemap.ts updated with /vs/ pages');
+fs.writeFileSync('C:\\\\Users\\\\randy\\\\traffikfuel\\\\src\\\\app\\\\dashboard\\\\connect\\\\google\\\\page.tsx', connectPage);
+console.log('SUCCESS - connect/google/page.tsx created');
