@@ -1,52 +1,98 @@
 const fs = require('fs');
 
-// Fix 1 — Remove Twitter from sidebar nav
-let layout = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\layout.tsx', 'utf8');
-layout = layout.replace(
-  `    { href: '/dashboard/connect/twitter', icon: '\ud83d\udc26', label: 'X / Twitter' },`,
-  ``
-);
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\layout.tsx', layout, 'utf8');
-console.log('SUCCESS: Twitter removed from sidebar nav');
+const content = `import { MetadataRoute } from 'next'
 
-// Fix 2 — Remove Twitter from business settings platforms
-let settings = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\settings\\page.tsx', 'utf8');
-settings = settings.replace(
-  `{ id:"twitter", label:"X / Twitter", color:"#888" },`,
-  ``
-);
-settings = settings.replace(
-  `{ id:"twitter", label:"X / Twitter", color:"#888"},`,
-  ``
-);
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\settings\\page.tsx', settings, 'utf8');
-console.log('SUCCESS: Twitter removed from settings platforms');
+export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = 'https://www.traffikora.com'
 
-// Fix 3 — Remove Twitter from homepage social bar
-let page = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\page.tsx', 'utf8');
-page = page.replace(
-  `{ href: 'https://x.com/traffikora', bg: '#000', label: 'Traffikora on X', svg: <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> },`,
-  ``
-);
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\page.tsx', page, 'utf8');
-console.log('SUCCESS: Twitter removed from homepage social bar');
+  const blogSlugs = [
+    'ai-search-for-local-business',
+    'how-to-get-more-google-reviews',
+    'how-traffikora-is-different',
+    'local-seo-tips-for-small-businesses',
+    'set-it-once-how-traffikora-works',
+    'small-business-marketing-problem',
+    'what-is-aeo',
+    'what-is-ai-engine-optimization',
+    'what-is-local-seo',
+    'what-is-traffikora',
+    'why-ai-engine-optimization',
+    'why-google-business-profile-matters',
+  ]
 
-// Fix 4 — Remove Twitter from onboarding platforms
-let onboarding = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\onboarding\\page.tsx', 'utf8');
-onboarding = onboarding.replace(
-  `  { id: 'twitter', label: 'X / Twitter', color: '#555', icon: '\u2715' },`,
-  ``
-);
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\onboarding\\page.tsx', onboarding, 'utf8');
-console.log('SUCCESS: Twitter removed from onboarding');
+  const compareSlugs = [
+    'traffikora-vs-birdeye',
+    'traffikora-vs-brightlocal',
+    'traffikora-vs-constant-contact',
+    'traffikora-vs-hootsuite',
+    'traffikora-vs-hubspot',
+    'traffikora-vs-later',
+    'traffikora-vs-mailchimp',
+    'traffikora-vs-reputation-com',
+    'traffikora-vs-semrush',
+    'traffikora-vs-sprout-social',
+    'traffikora-vs-vendasta',
+    'traffikora-vs-yext',
+  ]
 
-// Fix 5 — Remove Twitter from breadcrumb labels
-let breadcrumb = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\components\\Breadcrumb.tsx', 'utf8');
-breadcrumb = breadcrumb.replace(
-  `  'twitter': 'X / Twitter',`,
-  `  'twitter': 'Connections',`
-);
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\components\\Breadcrumb.tsx', breadcrumb, 'utf8');
-console.log('SUCCESS: Twitter breadcrumb updated');
+  const solutionSlugs = [
+    'accountants',
+    'auto-repair',
+    'chiropractors',
+    'contractors',
+    'dentists',
+    'gyms',
+    'hvac',
+    'lawyers',
+    'plumbers',
+    'real-estate',
+    'restaurants',
+    'salons',
+    'small-businesses',
+    'therapists',
+    'veterinarians',
+  ]
 
-console.log('ALL DONE: Twitter hidden across entire platform');
+  const blogRoutes = blogSlugs.map((slug) => ({
+    url: \`\${baseUrl}/blog/\${slug}\`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }))
+
+  const compareRoutes = compareSlugs.map((slug) => ({
+    url: \`\${baseUrl}/compare/\${slug}\`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.9,
+  }))
+
+  const solutionRoutes = solutionSlugs.map((slug) => ({
+    url: \`\${baseUrl}/solutions/\${slug}\`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }))
+
+  return [
+    { url: baseUrl, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 1 },
+    { url: \`\${baseUrl}/blog\`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.9 },
+    { url: \`\${baseUrl}/pricing\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
+    { url: \`\${baseUrl}/features\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+    { url: \`\${baseUrl}/how-it-works\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+    { url: \`\${baseUrl}/contact\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: \`\${baseUrl}/faq\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: \`\${baseUrl}/support\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.6 },
+    { url: \`\${baseUrl}/privacy\`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.3 },
+    { url: \`\${baseUrl}/terms\`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.3 },
+    { url: \`\${baseUrl}/security\`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.3 },
+    { url: \`\${baseUrl}/data-use\`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.3 },
+    ...blogRoutes,
+    ...compareRoutes,
+    ...solutionRoutes,
+  ]
+}
+`;
+
+fs.writeFileSync('C:\\\\Users\\\\randy\\\\traffikfuel\\\\src\\\\app\\\\sitemap.ts', content);
+console.log('SUCCESS - sitemap.ts created with all 51 pages');
