@@ -1,7 +1,8 @@
 // @ts-nocheck
-import { NextRequest, NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
-import Anthropic from "@anthropic-ai/sdk"
+import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+import Anthropic from '@anthropic-ai/sdk'
+
 export async function POST(req: NextRequest) {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -11,27 +12,59 @@ export async function POST(req: NextRequest) {
   try {
     const { userId, businessId, topic } = await req.json()
     const { data: profile } = await supabase
-      .from("business_profiles")
-      .select("business_name, brain")
-      .eq("user_id", userId)
+      .from('business_profiles')
+      .select('business_name, brain, city, phone, industry, website')
+      .eq('user_id', userId)
       .single()
-    const businessName = profile?.business_name || "the business"
+    const businessName = profile?.business_name || 'Traffikora'
     const brain = profile?.brain || {}
-    const industry = brain.industry || brain.businessType || ""
-    const city = brain.city || brain.location || ""
-    const website = brain.website || brain.websiteUrl || ""
-    const services = brain.services ? (Array.isArray(brain.services) ? brain.services.join(", ") : brain.services) : ""
-    const tone = brain.tone || brain.brandVoice || "professional"
-    const targetAudience = brain.targetAudience || brain.audience || "local customers"
-    const brainContext = Object.keys(brain).length > 0
-      ? `Business context from brain: Industry: ${industry}. Location: ${city}. Services: ${services}. Target audience: ${targetAudience}. Brand tone: ${tone}. Website: ${website}.`
-      : ""
-    const prompt = "You are an SEO blog writer. Write a complete blog post for " + businessName + " about: " + topic + ". " + brainContext + " Return your response in this exact JSON format with no extra text before or after: {\"title\": \"your title here\", \"content\": \"your full blog post content here\"}. The content should be 800-1000 words. Mention the business name and location naturally. Include local SEO keywords. Use plain text only, no markdown."
+    const city = profile?.city || brain.location || 'Sebastian, FL'
+    const industry = profile?.industry || brain.industry || 'AI Marketing Automation'
+    const website = profile?.website || brain.website || 'https://www.traffikora.com'
+    const services = brain.services ? (Array.isArray(brain.services) ? brain.services.join(', ') : brain.services) : 'AI marketing automation, content generation, social media posting, local SEO'
+    const targetAudience = brain.targetAudience ? (Array.isArray(brain.targetAudience) ? brain.targetAudience.join(', ') : brain.targetAudience) : 'local businesses'
+    const tone = brain.tone || 'professional, confident, solution-oriented'
+
+    const promptParts = [
+      "You are an expert SEO blog writer for " + businessName + ".",
+      "TOPIC TO WRITE ABOUT: " + topic,
+      "",
+      "STRICT RULES:",
+      "- Write ONLY about the topic above as it relates to " + businessName + " and its services",
+      "- NEVER go off topic. If the topic is about marketing, write about marketing.",
+      "- NEVER write about unrelated topics like passport programs, travel, or anything not related to the business",
+      "- The post MUST be relevant to: " + services,
+      "- Always write as if " + businessName + " is the solution to the problem",
+      "",
+      "BUSINESS CONTEXT:",
+      "Business: " + businessName,
+      "City: " + city,
+      "Industry: " + industry,
+      "Website: " + website,
+      "Services: " + services,
+      "Target audience: " + targetAudience,
+      "Brand tone: " + tone,
+      "",
+      "CONTENT REQUIREMENTS:",
+      "- 1000-1200 words minimum",
+      "- Start with a compelling hook under 20 words",
+      "- Use at least 5 H2 subheadings with ## format",
+      "- Include at least 2 bullet point lists with - format",
+      "- Mention " + city + " at least 3 times for local SEO",
+      "- Include at least 3 specific statistics or percentages",
+      "- End with a strong CTA to visit " + website,
+      "- Mention " + businessName + " naturally throughout",
+      "",
+      "Return ONLY valid JSON with no markdown: {\"title\": \"your SEO title here\", \"content\": \"full blog post content here\"}"
+    ]
+    const prompt = promptParts.join("\n")
+
     const response = await anthropic.messages.create({
       model: "claude-sonnet-4-5",
-      max_tokens: 2500,
+      max_tokens: 3000,
       messages: [{ role: "user", content: prompt }]
     })
+
     const rawText = response.content[0].type === "text" ? response.content[0].text : ""
     let parsed
     try {
@@ -41,8 +74,9 @@ export async function POST(req: NextRequest) {
     } catch (e) {
       return NextResponse.json({ error: "Failed to parse AI response" }, { status: 500 })
     }
+
     const { data: saved, error: saveError } = await supabase
-      .from("blog_posts")
+      .from('blog_posts')
       .insert({
         user_id: userId,
         business_id: businessId,
@@ -52,13 +86,12 @@ export async function POST(req: NextRequest) {
       })
       .select()
       .single()
+
     if (saveError) {
       return NextResponse.json({ error: "Failed to save post" }, { status: 500 })
     }
 
-    // Track blog generation for free tier limit
     await supabase.from("blog_generations").insert({ user_id: userId })
-
     return NextResponse.json(saved)
   } catch (error) {
     console.error("Blog generation error:", error)
