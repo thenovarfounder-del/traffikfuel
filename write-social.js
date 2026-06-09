@@ -53,6 +53,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'veterinarians',
   ]
 
+  const vsSlugs = [
+    'buffer',
+    'hootsuite',
+    'hubspot',
+    'later',
+  ]
+
   const blogRoutes = blogSlugs.map((slug) => ({
     url: \`\${baseUrl}/blog/\${slug}\`,
     lastModified: new Date(),
@@ -74,12 +81,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }))
 
+  const vsRoutes = vsSlugs.map((slug) => ({
+    url: \`\${baseUrl}/vs/\${slug}\`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.9,
+  }))
+
   return [
     { url: baseUrl, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 1 },
     { url: \`\${baseUrl}/blog\`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.9 },
     { url: \`\${baseUrl}/pricing\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
     { url: \`\${baseUrl}/features\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
     { url: \`\${baseUrl}/how-it-works\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+    { url: \`\${baseUrl}/why-traffikora\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
     { url: \`\${baseUrl}/contact\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
     { url: \`\${baseUrl}/faq\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
     { url: \`\${baseUrl}/support\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.6 },
@@ -90,9 +105,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...blogRoutes,
     ...compareRoutes,
     ...solutionRoutes,
+    ...vsRoutes,
   ]
 }
 `;
 
 fs.writeFileSync('C:\\\\Users\\\\randy\\\\traffikfuel\\\\src\\\\app\\\\sitemap.ts', content);
-console.log('SUCCESS - sitemap.ts created with all 51 pages');
+console.log('SUCCESS - sitemap.ts updated with /vs/ pages');
