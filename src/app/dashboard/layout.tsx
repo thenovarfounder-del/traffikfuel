@@ -83,7 +83,7 @@ export default function DashboardLayout({ children }) {
     { isSection: true, label: 'CONNECTIONS' },
     { href: '/dashboard/connect/google', icon: '🔵', label: 'Google' },
     { href: '/dashboard/connect/facebook', icon: '📘', label: 'Facebook' },
-    { href: '/dashboard/connect/instagram', icon: '📸', label: 'Instagram' },
+
     { href: '/dashboard/connect/tiktok', icon: '🎵', label: 'TikTok' },
 
     { href: '/dashboard/connect/linkedin', icon: '💼', label: 'LinkedIn' },

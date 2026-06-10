@@ -1,144 +1,44 @@
 const fs = require('fs');
 
-const connectPage = [
-"// @ts-nocheck",
-"'use client'",
-"import { useState, useEffect } from 'react'",
-"import { createClient } from '@supabase/supabase-js'",
-"",
-"const supabase = createClient(",
-"  process.env.NEXT_PUBLIC_SUPABASE_URL,",
-"  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY",
-")",
-"",
-"export default function ConnectInstagram() {",
-"  const [user, setUser] = useState(null)",
-"  const [connected, setConnected] = useState(false)",
-"  const [profileName, setProfileName] = useState('')",
-"  const [loading, setLoading] = useState(true)",
-"  const [status, setStatus] = useState(null)",
-"  const [isMobile, setIsMobile] = useState(false)",
-"",
-"  useEffect(() => {",
-"    setIsMobile(window.innerWidth < 768)",
-"    const params = new URLSearchParams(window.location.search)",
-"    if (params.get('success') === 'true') setStatus('success')",
-"    if (params.get('error')) setStatus('error')",
-"    async function load() {",
-"      const { data: { user } } = await supabase.auth.getUser()",
-"      if (!user) return",
-"      setUser(user)",
-"      const { data } = await supabase.from('social_connections').select('*').eq('user_id', user.id).eq('platform', 'instagram').single()",
-"      if (data?.connected) { setConnected(true); setProfileName(data.profile_name || 'Instagram Account') }",
-"      setLoading(false)",
-"    }",
-"    load()",
-"  }, [])",
-"",
-"  function connectInstagram() {",
-"    if (!user) return",
-"    const appId = '2222769058500181'",
-"    const redirectUri = encodeURIComponent('https://www.traffikora.com/api/auth/instagram/callback')",
-"    const scope = encodeURIComponent('instagram_business_basic,instagram_manage_comments,instagram_business_manage_messages')",
-"    const url = 'https://api.instagram.com/oauth/authorize?client_id=' + appId + '&redirect_uri=' + redirectUri + '&scope=' + scope + '&response_type=code&state=' + user.id",
-"    window.location.href = url",
-"  }",
-"",
-"  async function disconnect() {",
-"    if (!user) return",
-"    await supabase.from('social_connections').update({ connected: false }).eq('user_id', user.id).eq('platform', 'instagram')",
-"    setConnected(false); setProfileName(''); setStatus(null)",
-"  }",
-"",
-"  if (loading) return <div style={{ minHeight:'100vh', background:'#0a0a0a', display:'flex', alignItems:'center', justifyContent:'center', color:'#E8610A' }}>Loading...</div>",
-"",
-"  return (",
-"    <div style={{ minHeight:'100vh', background:'#0a0a0a', color:'#fff', fontFamily:'DM Sans, sans-serif' }}>",
-"      <div style={{ background:'linear-gradient(135deg,#111 0%,#1a0a14 100%)', borderBottom:'1px solid #1e1e1e', padding:'48px 40px', textAlign:'center' }}>",
-"        <div style={{ width:'80px', height:'80px', margin:'0 auto 20px', borderRadius:'20px', background:'linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'36px', boxShadow:'0 8px 32px rgba(225,48,108,0.4)' }}>\ud83d\udcf8</div>",
-"        <h1 style={{ fontFamily:'Playfair Display, serif', fontSize: isMobile ? '28px' : '38px', fontWeight:900, color:'#fff', margin:'0 0 12px' }}>Connect Instagram</h1>",
-"        <p style={{ color:'#888', fontSize:'16px', maxWidth:'480px', margin:'0 auto 20px', lineHeight:1.6 }}>Let Traffikora publish content to your Instagram Business account automatically every day \u2014 no manual posting required.</p>",
-"        <div style={{ display:'flex', justifyContent:'center', gap:'24px', flexWrap:'wrap' }}>",
-"          {['\ud83d\udcc8 Daily auto-posting', '\ud83c\udfaf SEO-optimized content', '\u23f0 Runs 24/7'].map(f => (",
-"            <span key={f} style={{ fontSize:'13px', color:'#E8610A', fontWeight:600 }}>{f}</span>",
-"          ))}",
-"        </div>",
-"      </div>",
-"",
-"      <div style={{ maxWidth:'600px', margin:'0 auto', padding: isMobile ? '32px 20px 60px' : '40px 40px 60px' }}>",
-"        {status === 'success' && (",
-"          <div style={{ background:'rgba(34,197,94,0.08)', border:'1px solid rgba(34,197,94,0.25)', borderRadius:'12px', padding:'16px 20px', marginBottom:'24px', display:'flex', alignItems:'center', gap:'12px' }}>",
-"            <span style={{ fontSize:'20px' }}>\u2705</span>",
-"            <div>",
-"              <div style={{ fontSize:'14px', fontWeight:700, color:'#22c55e' }}>Instagram connected successfully!</div>",
-"              <div style={{ fontSize:'12px', color:'#555', marginTop:'2px' }}>Traffikora will now publish to your Instagram automatically.</div>",
-"            </div>",
-"          </div>",
-"        )}",
-"        {status === 'error' && (",
-"          <div style={{ background:'rgba(239,68,68,0.08)', border:'1px solid rgba(239,68,68,0.25)', borderRadius:'12px', padding:'16px 20px', marginBottom:'24px' }}>",
-"            <div style={{ fontSize:'14px', fontWeight:700, color:'#ef4444' }}>Connection failed. Please try again.</div>",
-"            <div style={{ fontSize:'12px', color:'#555', marginTop:'4px' }}>Make sure you have an Instagram Business account linked to a Facebook Page.</div>",
-"          </div>",
-"        )}",
-"        <div style={{ background:'#111', border:'1px solid #1e1e1e', borderRadius:'14px', padding:'28px', marginBottom:'20px' }}>",
-"          <div style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'24px' }}>",
-"            <div style={{ width:'10px', height:'10px', borderRadius:'50%', background: connected ? '#22c55e' : '#555', boxShadow: connected ? '0 0 8px #22c55e' : 'none' }} />",
-"            <span style={{ color:'#888', fontSize:'14px' }}>Status: <strong style={{ color:'#fff' }}>{connected ? 'Connected' : 'Not connected'}</strong>{connected && profileName && <span style={{ color:'#E1306C', marginLeft:'8px' }}>(@{profileName})</span>}</span>",
-"          </div>",
-"          {connected ? (",
-"            <div>",
-"              <div style={{ background:'rgba(34,197,94,0.06)', border:'1px solid rgba(34,197,94,0.2)', borderRadius:'10px', padding:'24px', marginBottom:'20px', textAlign:'center' }}>",
-"                <div style={{ fontSize:'40px', marginBottom:'12px' }}>\u2705</div>",
-"                <p style={{ color:'#22c55e', fontWeight:700, fontSize:'16px', marginBottom:'6px' }}>Instagram Connected!</p>",
-"                <p style={{ color:'#555', fontSize:'13px', lineHeight:1.6 }}>Traffikora is publishing content to your Instagram Business account automatically every day.</p>",
-"              </div>",
-"              <button onClick={disconnect} style={{ width:'100%', background:'transparent', color:'#ef4444', border:'1px solid rgba(239,68,68,0.3)', borderRadius:'8px', padding:'12px', fontSize:'13px', fontWeight:700, cursor:'pointer', fontFamily:'DM Sans, sans-serif' }}>Disconnect Instagram</button>",
-"            </div>",
-"          ) : (",
-"            <div>",
-"              <div style={{ background:'linear-gradient(135deg,rgba(240,148,51,0.08),rgba(188,24,136,0.08))', border:'1px solid rgba(225,48,108,0.2)', borderRadius:'10px', padding:'24px', marginBottom:'20px' }}>",
-"                <div style={{ display:'flex', alignItems:'center', gap:'16px', marginBottom:'16px' }}>",
-"                  <div style={{ width:'56px', height:'56px', borderRadius:'14px', background:'linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'24px', flexShrink:0 }}>\ud83d\udcf8</div>",
-"                  <div>",
-"                    <p style={{ color:'#fff', fontWeight:700, fontSize:'15px', margin:'0 0 4px' }}>Instagram Business</p>",
-"                    <p style={{ color:'#888', fontSize:'13px', margin:0 }}>Connect your Instagram Business account to start auto-posting daily content.</p>",
-"                  </div>",
-"                </div>",
-"                <div style={{ background:'rgba(0,0,0,0.3)', borderRadius:'8px', padding:'12px 16px' }}>",
-"                  <p style={{ color:'#666', fontSize:'12px', margin:0, lineHeight:1.6 }}>\u26a0\ufe0f Requires an Instagram Business or Creator account linked to a Facebook Page.</p>",
-"                </div>",
-"              </div>",
-"              <button onClick={connectInstagram} style={{ width:'100%', background:'linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)', color:'#fff', border:'none', borderRadius:'10px', padding:'16px', fontSize:'16px', fontWeight:700, cursor:'pointer', fontFamily:'DM Sans, sans-serif', boxShadow:'0 4px 24px rgba(225,48,108,0.4)' }}>",
-"                \ud83d\udcf8 Connect Instagram Account",
-"              </button>",
-"            </div>",
-"          )}",
-"        </div>",
-"        <div style={{ background:'#111', border:'1px solid #1e1e1e', borderRadius:'14px', padding:'24px' }}>",
-"          <p style={{ fontSize:'12px', fontWeight:700, color:'#E8610A', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:'16px' }}>What Traffikora does with Instagram</p>",
-"          <div style={{ display:'flex', flexDirection:'column', gap:'12px' }}>",
-"            {[",
-"              { icon:'\ud83d\udcdd', title:'Daily Content Posts', desc:'AI-written captions published automatically every day' },",
-"              { icon:'\ud83c\udfaf', title:'Smart Hashtags', desc:'Optimized hashtags to maximize reach and discovery' },",
-"              { icon:'\ud83d\udcc8', title:'Business Growth', desc:'Consistent posting that builds your audience over time' },",
-"              { icon:'\ud83e\udd16', title:'Business Brain Powered', desc:'Every post is tailored to your specific business and industry' },",
-"            ].map(item => (",
-"              <div key={item.title} style={{ display:'flex', gap:'14px', alignItems:'flex-start', borderLeft:'3px solid #E8610A', paddingLeft:'14px' }}>",
-"                <span style={{ fontSize:'18px', flexShrink:0 }}>{item.icon}</span>",
-"                <div>",
-"                  <p style={{ color:'#fff', fontSize:'14px', fontWeight:600, margin:'0 0 2px' }}>{item.title}</p>",
-"                  <p style={{ color:'#666', fontSize:'12px', margin:0 }}>{item.desc}</p>",
-"                </div>",
-"              </div>",
-"            ))}",
-"          </div>",
-"        </div>",
-"      </div>",
-"    </div>",
-"  )",
-"}",
-].join('\n');
+// Remove Instagram from sidebar nav
+let layout = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\layout.tsx', 'utf8');
+layout = layout.replace(
+  `    { href: '/dashboard/connect/instagram', icon: '\ud83d\udcf8', label: 'Instagram' },`,
+  ``
+);
+fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\layout.tsx', layout, 'utf8');
+console.log('SUCCESS: Instagram removed from sidebar');
 
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\connect\\instagram\\page.tsx', connectPage, 'utf8');
-console.log('SUCCESS: Instagram connect page redesigned');
+// Remove Instagram from onboarding
+let onboarding = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\onboarding\\page.tsx', 'utf8');
+onboarding = onboarding.replace(
+  `  { id: 'instagram', label: 'Instagram', color: '#E1306C', icon: '\ud83d\udcf8' },`,
+  ``
+);
+fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\onboarding\\page.tsx', onboarding, 'utf8');
+console.log('SUCCESS: Instagram removed from onboarding');
+
+// Remove Instagram from settings platforms
+let settings = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\settings\\page.tsx', 'utf8');
+settings = settings.replace(
+  `{ id:"instagram", label:"Instagram", color:"#E1306C" },`,
+  ``
+);
+settings = settings.replace(
+  `{ id:"instagram", label:"Instagram", color:"#E1306C"},`,
+  ``
+);
+fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\dashboard\\settings\\page.tsx', settings, 'utf8');
+console.log('SUCCESS: Instagram removed from settings');
+
+// Remove Instagram from homepage if exists
+let homepage = fs.readFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\page.tsx', 'utf8');
+if (homepage.includes('instagram')) {
+  homepage = homepage.replace(/\{[^}]*instagram[^}]*\},?\s*/gi, '');
+  fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\page.tsx', homepage, 'utf8');
+  console.log('SUCCESS: Instagram removed from homepage');
+} else {
+  console.log('SKIPPED: Instagram not found in homepage');
+}
+
+console.log('ALL DONE - Instagram hidden across platform');

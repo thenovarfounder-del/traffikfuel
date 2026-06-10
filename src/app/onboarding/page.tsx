@@ -11,7 +11,7 @@ const supabase = createClient(
 
 const PLATFORMS = [
   { id: 'facebook', label: 'Facebook', color: '#1877F2', icon: '🔵' },
-  { id: 'instagram', label: 'Instagram', color: '#E1306C', icon: '📸' },
+
   { id: 'tiktok', label: 'TikTok', color: '#888', icon: '🎵' },
 
   { id: 'linkedin', label: 'LinkedIn', color: '#0A66C2', icon: '💼' },

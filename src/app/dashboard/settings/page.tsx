@@ -96,7 +96,7 @@ export default function DashboardSettings() {
             <div style={{ display:"flex", flexWrap:"wrap", gap:"10px" }}>
               {[
                 { id:"facebook", label:"Facebook", color:"#1877F2" },
-                { id:"instagram", label:"Instagram", color:"#E1306C" },
+                
                 { id:"tiktok", label:"TikTok", color:"#ff6550" },
                 
                 { id:"linkedin", label:"LinkedIn", color:"#0A66C2" },
