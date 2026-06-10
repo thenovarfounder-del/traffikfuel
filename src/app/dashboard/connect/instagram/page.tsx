@@ -21,7 +21,6 @@ export default function ConnectInstagram() {
     const params = new URLSearchParams(window.location.search)
     if (params.get('success') === 'true') setStatus('success')
     if (params.get('error')) setStatus('error')
-
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
@@ -35,7 +34,7 @@ export default function ConnectInstagram() {
 
   function connectInstagram() {
     if (!user) return
-    const appId = process.env.NEXT_PUBLIC_INSTAGRAM_APP_ID || '2222769058500181'
+    const appId = '2222769058500181'
     const redirectUri = encodeURIComponent('https://www.traffikora.com/api/auth/instagram/callback')
     const scope = encodeURIComponent('instagram_business_basic,instagram_manage_comments,instagram_business_manage_messages')
     const url = 'https://api.instagram.com/oauth/authorize?client_id=' + appId + '&redirect_uri=' + redirectUri + '&scope=' + scope + '&response_type=code&state=' + user.id
@@ -52,64 +51,82 @@ export default function ConnectInstagram() {
 
   return (
     <div style={{ minHeight:'100vh', background:'#0a0a0a', color:'#fff', fontFamily:'DM Sans, sans-serif' }}>
-      <div style={{ background:'linear-gradient(135deg,#111 0%,#1a0a1a 100%)', borderBottom:'1px solid #1e1e1e', padding:'32px 40px', marginBottom:'40px', textAlign:'center' }}>
-        <div style={{ fontSize:'48px', marginBottom:'16px' }}>📸</div>
-        <h1 style={{ fontFamily:'Playfair Display, serif', fontSize: isMobile ? '28px' : '36px', fontWeight:900, color:'#fff', margin:'0 0 12px' }}>Connect Instagram</h1>
-        <p style={{ color:'#888', fontSize:'16px', maxWidth:'500px', margin:'0 auto' }}>Publish content to your Instagram profile automatically</p>
+      <div style={{ background:'linear-gradient(135deg,#111 0%,#1a0a14 100%)', borderBottom:'1px solid #1e1e1e', padding:'48px 40px', textAlign:'center' }}>
+        <div style={{ width:'80px', height:'80px', margin:'0 auto 20px', borderRadius:'20px', background:'linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'36px', boxShadow:'0 8px 32px rgba(225,48,108,0.4)' }}>📸</div>
+        <h1 style={{ fontFamily:'Playfair Display, serif', fontSize: isMobile ? '28px' : '38px', fontWeight:900, color:'#fff', margin:'0 0 12px' }}>Connect Instagram</h1>
+        <p style={{ color:'#888', fontSize:'16px', maxWidth:'480px', margin:'0 auto 20px', lineHeight:1.6 }}>Let Traffikora publish content to your Instagram Business account automatically every day — no manual posting required.</p>
+        <div style={{ display:'flex', justifyContent:'center', gap:'24px', flexWrap:'wrap' }}>
+          {['📈 Daily auto-posting', '🎯 SEO-optimized content', '⏰ Runs 24/7'].map(f => (
+            <span key={f} style={{ fontSize:'13px', color:'#E8610A', fontWeight:600 }}>{f}</span>
+          ))}
+        </div>
       </div>
-      <div style={{ maxWidth:'600px', margin:'0 auto', padding: isMobile ? '0 20px 60px' : '0 40px 60px' }}>
+
+      <div style={{ maxWidth:'600px', margin:'0 auto', padding: isMobile ? '32px 20px 60px' : '40px 40px 60px' }}>
         {status === 'success' && (
-          <div style={{ background:'rgba(34,197,94,0.08)', border:'1px solid rgba(34,197,94,0.25)', borderRadius:'12px', padding:'16px 20px', marginBottom:'20px' }}>
-            <div style={{ fontSize:'14px', fontWeight:700, color:'#22c55e' }}>✅ Instagram connected successfully!</div>
+          <div style={{ background:'rgba(34,197,94,0.08)', border:'1px solid rgba(34,197,94,0.25)', borderRadius:'12px', padding:'16px 20px', marginBottom:'24px', display:'flex', alignItems:'center', gap:'12px' }}>
+            <span style={{ fontSize:'20px' }}>✅</span>
+            <div>
+              <div style={{ fontSize:'14px', fontWeight:700, color:'#22c55e' }}>Instagram connected successfully!</div>
+              <div style={{ fontSize:'12px', color:'#555', marginTop:'2px' }}>Traffikora will now publish to your Instagram automatically.</div>
+            </div>
           </div>
         )}
         {status === 'error' && (
-          <div style={{ background:'rgba(239,68,68,0.08)', border:'1px solid rgba(239,68,68,0.25)', borderRadius:'12px', padding:'16px 20px', marginBottom:'20px' }}>
+          <div style={{ background:'rgba(239,68,68,0.08)', border:'1px solid rgba(239,68,68,0.25)', borderRadius:'12px', padding:'16px 20px', marginBottom:'24px' }}>
             <div style={{ fontSize:'14px', fontWeight:700, color:'#ef4444' }}>Connection failed. Please try again.</div>
+            <div style={{ fontSize:'12px', color:'#555', marginTop:'4px' }}>Make sure you have an Instagram Business account linked to a Facebook Page.</div>
           </div>
         )}
         <div style={{ background:'#111', border:'1px solid #1e1e1e', borderRadius:'14px', padding:'28px', marginBottom:'20px' }}>
           <div style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'24px' }}>
-            <div style={{ width:'10px', height:'10px', borderRadius:'50%', background: connected ? '#22c55e' : '#555' }} />
-            <span style={{ color:'#888', fontSize:'14px' }}>Status: <strong style={{ color:'#fff' }}>{connected ? 'Connected' : 'Not connected'}</strong>
-              {connected && profileName && <span style={{ color:'#E8610A', marginLeft:'8px' }}>(@{profileName})</span>}
-            </span>
+            <div style={{ width:'10px', height:'10px', borderRadius:'50%', background: connected ? '#22c55e' : '#555', boxShadow: connected ? '0 0 8px #22c55e' : 'none' }} />
+            <span style={{ color:'#888', fontSize:'14px' }}>Status: <strong style={{ color:'#fff' }}>{connected ? 'Connected' : 'Not connected'}</strong>{connected && profileName && <span style={{ color:'#E1306C', marginLeft:'8px' }}>(@{profileName})</span>}</span>
           </div>
           {connected ? (
             <div>
-              <div style={{ background:'rgba(34,197,94,0.06)', border:'1px solid rgba(34,197,94,0.2)', borderRadius:'10px', padding:'20px', marginBottom:'20px', textAlign:'center' }}>
-                <div style={{ fontSize:'32px', marginBottom:'8px' }}>✅</div>
-                <p style={{ color:'#22c55e', fontWeight:700, fontSize:'15px', marginBottom:'4px' }}>Instagram Connected</p>
-                <p style={{ color:'#555', fontSize:'13px' }}>Traffikora is publishing to your Instagram automatically.</p>
+              <div style={{ background:'rgba(34,197,94,0.06)', border:'1px solid rgba(34,197,94,0.2)', borderRadius:'10px', padding:'24px', marginBottom:'20px', textAlign:'center' }}>
+                <div style={{ fontSize:'40px', marginBottom:'12px' }}>✅</div>
+                <p style={{ color:'#22c55e', fontWeight:700, fontSize:'16px', marginBottom:'6px' }}>Instagram Connected!</p>
+                <p style={{ color:'#555', fontSize:'13px', lineHeight:1.6 }}>Traffikora is publishing content to your Instagram Business account automatically every day.</p>
               </div>
-              <button onClick={disconnect} style={{ width:'100%', background:'transparent', color:'#ef4444', border:'1px solid #ef444440', borderRadius:'8px', padding:'12px', fontSize:'13px', fontWeight:700, cursor:'pointer', fontFamily:'DM Sans, sans-serif' }}>
-                Disconnect Instagram
-              </button>
+              <button onClick={disconnect} style={{ width:'100%', background:'transparent', color:'#ef4444', border:'1px solid rgba(239,68,68,0.3)', borderRadius:'8px', padding:'12px', fontSize:'13px', fontWeight:700, cursor:'pointer', fontFamily:'DM Sans, sans-serif' }}>Disconnect Instagram</button>
             </div>
           ) : (
             <div>
-              <div style={{ background:'rgba(225,48,108,0.08)', border:'1px solid rgba(225,48,108,0.2)', borderRadius:'10px', padding:'20px', marginBottom:'20px', textAlign:'center' }}>
-                <div style={{ fontSize:'32px', marginBottom:'8px' }}>📸</div>
-                <p style={{ color:'#E1306C', fontWeight:700, fontSize:'15px', marginBottom:'4px' }}>Connect Your Instagram</p>
-                <p style={{ color:'#888', fontSize:'13px' }}>Authorize Traffikora to post on your behalf.</p>
+              <div style={{ background:'linear-gradient(135deg,rgba(240,148,51,0.08),rgba(188,24,136,0.08))', border:'1px solid rgba(225,48,108,0.2)', borderRadius:'10px', padding:'24px', marginBottom:'20px' }}>
+                <div style={{ display:'flex', alignItems:'center', gap:'16px', marginBottom:'16px' }}>
+                  <div style={{ width:'56px', height:'56px', borderRadius:'14px', background:'linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'24px', flexShrink:0 }}>📸</div>
+                  <div>
+                    <p style={{ color:'#fff', fontWeight:700, fontSize:'15px', margin:'0 0 4px' }}>Instagram Business</p>
+                    <p style={{ color:'#888', fontSize:'13px', margin:0 }}>Connect your Instagram Business account to start auto-posting daily content.</p>
+                  </div>
+                </div>
+                <div style={{ background:'rgba(0,0,0,0.3)', borderRadius:'8px', padding:'12px 16px' }}>
+                  <p style={{ color:'#666', fontSize:'12px', margin:0, lineHeight:1.6 }}>⚠️ Requires an Instagram Business or Creator account linked to a Facebook Page.</p>
+                </div>
               </div>
-              <button onClick={connectInstagram} style={{ width:'100%', background:'linear-gradient(135deg,#E1306C,#833AB4)', color:'#fff', border:'none', borderRadius:'8px', padding:'14px', fontSize:'15px', fontWeight:700, cursor:'pointer', fontFamily:'DM Sans, sans-serif', boxShadow:'0 4px 20px rgba(225,48,108,0.4)' }}>
-                Connect Instagram Account
+              <button onClick={connectInstagram} style={{ width:'100%', background:'linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)', color:'#fff', border:'none', borderRadius:'10px', padding:'16px', fontSize:'16px', fontWeight:700, cursor:'pointer', fontFamily:'DM Sans, sans-serif', boxShadow:'0 4px 24px rgba(225,48,108,0.4)' }}>
+                📸 Connect Instagram Account
               </button>
             </div>
           )}
         </div>
         <div style={{ background:'#111', border:'1px solid #1e1e1e', borderRadius:'14px', padding:'24px' }}>
-          <p style={{ fontSize:'12px', fontWeight:700, color:'#E8610A', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:'16px' }}>What Traffikora will access</p>
-          <div style={{ display:'flex', flexDirection:'column', gap:'10px' }}>
+          <p style={{ fontSize:'12px', fontWeight:700, color:'#E8610A', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:'16px' }}>What Traffikora does with Instagram</p>
+          <div style={{ display:'flex', flexDirection:'column', gap:'12px' }}>
             {[
-              { scope:'instagram_business_basic', desc:'Read your Instagram profile and media' },
-              { scope:'instagram_manage_comments', desc:'Manage comments on your posts' },
-              { scope:'instagram_business_manage_messages', desc:'Send and receive direct messages' },
-            ].map(s => (
-              <div key={s.scope} style={{ borderLeft:'3px solid #E8610A', paddingLeft:'14px' }}>
-                <p style={{ color:'#fff', fontSize:'14px', fontWeight:600, margin:'0 0 2px' }}>{s.scope}</p>
-                <p style={{ color:'#666', fontSize:'12px', margin:0 }}>{s.desc}</p>
+              { icon:'📝', title:'Daily Content Posts', desc:'AI-written captions published automatically every day' },
+              { icon:'🎯', title:'Smart Hashtags', desc:'Optimized hashtags to maximize reach and discovery' },
+              { icon:'📈', title:'Business Growth', desc:'Consistent posting that builds your audience over time' },
+              { icon:'🤖', title:'Business Brain Powered', desc:'Every post is tailored to your specific business and industry' },
+            ].map(item => (
+              <div key={item.title} style={{ display:'flex', gap:'14px', alignItems:'flex-start', borderLeft:'3px solid #E8610A', paddingLeft:'14px' }}>
+                <span style={{ fontSize:'18px', flexShrink:0 }}>{item.icon}</span>
+                <div>
+                  <p style={{ color:'#fff', fontSize:'14px', fontWeight:600, margin:'0 0 2px' }}>{item.title}</p>
+                  <p style={{ color:'#666', fontSize:'12px', margin:0 }}>{item.desc}</p>
+                </div>
               </div>
             ))}
           </div>
