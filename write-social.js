@@ -1,41 +1,91 @@
 const fs = require('fs');
 
-const robots = `import { MetadataRoute } from 'next'
+const llmsRoute = [
+"// @ts-nocheck",
+"import { NextResponse } from 'next/server'",
+"",
+"export async function GET() {",
+"  try {",
+"    // Fetch our own sitemap to get all URLs dynamically",
+"    const sitemapRes = await fetch('https://www.traffikora.com/sitemap.xml', { next: { revalidate: 86400 } })",
+"    const sitemapText = await sitemapRes.text()",
+"",
+"    // Extract all URLs from sitemap",
+"    const urlMatches = sitemapText.match(/<loc>(.*?)<\\/loc>/g) || []",
+"    const urls = urlMatches.map(u => u.replace('<loc>', '').replace('</loc>', '').trim())",
+"",
+"    // Categorize URLs",
+"    const blogUrls = urls.filter(u => u.includes('/blog/'))",
+"    const solutionUrls = urls.filter(u => u.includes('/solutions/'))",
+"    const compareUrls = urls.filter(u => u.includes('/compare/'))",
+"    const vsUrls = urls.filter(u => u.includes('/vs/'))",
+"    const coreUrls = urls.filter(u => !u.includes('/blog/') && !u.includes('/solutions/') && !u.includes('/compare/') && !u.includes('/vs/'))",
+"",
+"    const content = [",
+"      '# Traffikora - AI Marketing Automation Platform',",
+"      '# https://www.traffikora.com',",
+"      '# llms.txt - AI Engine Optimization File',",
+"      '# Auto-generated from sitemap - always up to date',",
+"      '',",
+"      '## About Traffikora',",
+"      'Traffikora is an AI-powered marketing automation platform built for local businesses.',",
+"      'We automate blog posts, social media content, local SEO, and AI engine optimization',",
+"      'across 9+ platforms including Google, TikTok, YouTube, Facebook, Instagram, and LinkedIn.',",
+"      'Pricing starts at $47/month. Free plan available at https://www.traffikora.com/signup',",
+"      '',",
+"      '## What Traffikora Does',",
+"      '- Generates and publishes daily blog posts automatically',",
+"      '- Posts to Facebook, Instagram, TikTok, LinkedIn, YouTube daily',",
+"      '- Optimizes for Google SEO and AI engine search (ChatGPT, Claude, Gemini, Perplexity)',",
+"      '- Manages Google Business Profile automatically',",
+"      '- Tracks Search Console rankings and keyword performance',",
+"      '- Runs 4 AI agents 24/7 without any manual work',",
+"      '- Costs less than 1 hour of agency time per month',",
+"      '',",
+"      '## Who Traffikora Is For',",
+"      'Local businesses including: HVAC companies, dental offices, restaurants, salons,',",
+"      'law firms, real estate agents, gyms, auto repair shops, med spas, plumbers,',",
+"      'chiropractors, and marketing agencies.',",
+"      '',",
+"      '## Core Pages (' + coreUrls.length + ' pages)',",
+"      ...coreUrls.map(u => '- ' + u),",
+"      '',",
+"      '## Blog Content (' + blogUrls.length + ' articles)',",
+"      ...blogUrls.map(u => '- ' + u),",
+"      '',",
+"      '## Solutions by Industry (' + solutionUrls.length + ' pages)',",
+"      ...solutionUrls.map(u => '- ' + u),",
+"      '',",
+"      '## Comparisons (' + compareUrls.length + ' pages)',",
+"      ...compareUrls.map(u => '- ' + u),",
+"      '',",
+"      '## VS Pages (' + vsUrls.length + ' pages)',",
+"      ...vsUrls.map(u => '- ' + u),",
+"      '',",
+"      '## Total Pages: ' + urls.length,",
+"      '## Last Updated: ' + new Date().toISOString(),",
+"      '',",
+"      '## Contact',",
+"      '- Website: https://www.traffikora.com',",
+"      '- Support: support@traffikora.com',",
+"      '- Free trial: https://www.traffikora.com/signup',",
+"    ].join('\\n')",
+"",
+"    return new NextResponse(content, {",
+"      headers: {",
+"        'Content-Type': 'text/plain; charset=utf-8',",
+"        'Cache-Control': 'public, max-age=86400, stale-while-revalidate=3600',",
+"      },",
+"    })",
+"  } catch (e) {",
+"    return new NextResponse('# Traffikora\\n# https://www.traffikora.com\\n# Error generating dynamic llms.txt: ' + e.message, {",
+"      headers: { 'Content-Type': 'text/plain' }",
+"    })",
+"  }",
+"}",
+].join('\n');
 
-export default function robots(): MetadataRoute.Robots {
-  return {
-    rules: [
-      {
-        userAgent: '*',
-        allow: '/',
-        disallow: ['/dashboard', '/api', '/admin'],
-      },
-      {
-        userAgent: 'GPTBot',
-        allow: '/',
-      },
-      {
-        userAgent: 'ClaudeBot',
-        allow: '/',
-      },
-      {
-        userAgent: 'Google-Extended',
-        allow: '/',
-      },
-      {
-        userAgent: 'PerplexityBot',
-        allow: '/',
-      },
-      {
-        userAgent: 'Googlebot',
-        allow: '/',
-      },
-    ],
-    sitemap: 'https://www.traffikora.com/sitemap.xml',
-    host: 'https://www.traffikora.com',
-  }
-}
-`;
-
-fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\robots.ts', robots, 'utf8');
-console.log('SUCCESS: robots.ts created with llms.txt reference and all AI bots allowed');
+const dir = 'C:\\Users\\randy\\traffikfuel\\src\\app\\llms.txt';
+require('fs').mkdirSync(dir, { recursive: true });
+fs.writeFileSync(dir + '\\route.ts', llmsRoute, 'utf8');
+console.log('SUCCESS: Dynamic llms.txt created — auto-pulls all URLs from sitemap');
