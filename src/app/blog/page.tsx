@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
+import BlogCard from '@/components/BlogCard'
 
 export const revalidate = 3600
 
@@ -11,20 +12,6 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 )
 
-const categoryColors = {
-  'Platform': '#E8610A',
-  'AI Search': '#111',
-  'AI Marketing': '#E8610A',
-  'Small Business': '#2563eb',
-  'Local SEO': '#16a34a',
-  'Google': '#dc2626',
-  'Reviews': '#7c3aed',
-  'Industry': '#0891b2',
-  'Comparison': '#111',
-  'Pain Point': '#dc2626',
-}
-
-// Hardcoded original posts that have their own static pages
 const staticPosts = [
   { category: 'Platform', title: 'What Is Traffikora? The Marketing Platform That Never Stops Working.', excerpt: 'Most marketing tools make you work. Traffikora works for you — automatically, every single day.', slug: 'what-is-traffikora', read: '5 min read' },
   { category: 'AI Search', title: 'Why We Optimize for AI Engines, Not Just Google.', excerpt: 'Google is still important. But the businesses that win the next decade will be the ones showing up in AI engines.', slug: 'why-ai-engine-optimization', read: '6 min read' },
@@ -47,8 +34,8 @@ export default async function Blog() {
     .order('created_at', { ascending: false })
 
   const allPosts = [
-    ...(dynamicPosts || []).map(p => ({ ...p, read: p.read_time || '7 min read', isDynamic: true })),
-    ...staticPosts.map(p => ({ ...p, isDynamic: false }))
+    ...(dynamicPosts || []).map(p => ({ ...p, read: p.read_time || '7 min read' })),
+    ...staticPosts
   ]
 
   return (
@@ -57,36 +44,24 @@ export default async function Blog() {
       <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='anonymous' />
       <link href='https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap' rel='stylesheet' />
       <Nav />
-
       <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>Traffikora Blog</p>
         <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '54px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>Marketing insights for local businesses that want to grow.</h1>
         <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '580px', margin: '0 auto 24px' }}>Practical guides on AI marketing, local SEO, Google, ChatGPT, Claude, Gemini, social media automation, and more.</p>
         <p style={{ fontSize: '14px', color: '#555' }}>{allPosts.length} articles and growing</p>
       </section>
-
       <section style={{ background: '#fff', padding: '80px 32px' }}>
         <div style={{ maxWidth: '1060px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '32px' }}>
           {allPosts.map((post) => (
-            <Link key={post.slug} href={'/blog/' + post.slug} style={{ textDecoration: 'none', display: 'block', border: '2.5px solid #111', padding: '36px', background: '#fff', transition: 'box-shadow 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.boxShadow = '6px 6px 0px #111'}
-              onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
-            >
-              <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: '#fff', background: categoryColors[post.category] || '#111', padding: '4px 10px', display: 'inline-block', marginBottom: '16px' }}>{post.category}</span>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#111', lineHeight: 1.3, marginBottom: '14px' }}>{post.title}</h2>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '15px', color: '#555', lineHeight: 1.7, marginBottom: '20px' }}>{post.excerpt}</p>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#888' }}>{post.read || post.read_time || '6 min read'} · Traffikora Team</p>
-            </Link>
+            <BlogCard key={post.slug} post={post} />
           ))}
         </div>
       </section>
-
       <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>
         <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Ready to put your marketing on autopilot?</h2>
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '19px', color: '#fff', opacity: 0.9, maxWidth: '540px', margin: '0 auto 40px' }}>Start free today. No credit card required. Cancel anytime.</p>
         <Link href='/signup' style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, border: '2.5px solid #fff', display: 'inline-block' }}>Start Free Today</Link>
       </section>
-
       <Footer />
     </>
   )
