@@ -1,309 +1,216 @@
 const fs = require('fs');
-const path = require('path');
 
-// Dynamic [slug] page - reads from Supabase
-const slugPage = [
-"// @ts-nocheck",
-"import { createClient } from '@supabase/supabase-js'",
-"import { notFound } from 'next/navigation'",
-"import Link from 'next/link'",
-"import Nav from '@/components/Nav'",
-"import Footer from '@/components/Footer'",
-"",
-"export const revalidate = 86400",
-"",
-"const supabase = createClient(",
-"  process.env.NEXT_PUBLIC_SUPABASE_URL,",
-"  process.env.SUPABASE_SERVICE_ROLE_KEY",
-")",
-"",
-"export async function generateMetadata({ params }) {",
-"  const { data } = await supabase.from('blog_posts_public').select('title, excerpt').eq('slug', params.slug).single()",
-"  if (!data) return { title: 'Blog | Traffikora' }",
-"  return {",
-"    title: data.title + ' | Traffikora',",
-"    description: data.excerpt || data.title,",
-"    openGraph: { title: data.title, description: data.excerpt || data.title, url: 'https://www.traffikora.com/blog/' + params.slug },",
-"  }",
-"}",
-"",
-"export default async function BlogPost({ params }) {",
-"  const { data: post } = await supabase.from('blog_posts_public').select('*').eq('slug', params.slug).single()",
-"  if (!post) notFound()",
-"",
-"  const paragraphs = (post.content || '').split('\\n\\n').filter(p => p.trim().length > 0)",
-"",
-"  return (",
-"    <>",
-"      <link rel='preconnect' href='https://fonts.googleapis.com' />",
-"      <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='anonymous' />",
-"      <link href='https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap' rel='stylesheet' />",
-"      <Nav />",
-"      <section style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '90px 32px' }}>",
-"        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: '#E8610A', textTransform: 'uppercase', marginBottom: '16px' }}>{post.category || 'Traffikora Blog'}</p>",
-"        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', fontWeight: 900, lineHeight: 1.1, maxWidth: '820px', margin: '0 auto 24px' }}>{post.title}</h1>",
-"        {post.excerpt && <p style={{ fontSize: '19px', color: '#ccc', maxWidth: '620px', margin: '0 auto 40px' }}>{post.excerpt}</p>}",
-"        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '14px', color: '#888' }}>{post.read_time || '7 min read'} \u00b7 Traffikora Team</p>",
-"      </section>",
-"      <section style={{ background: '#fff', padding: '80px 32px' }}>",
-"        <div style={{ maxWidth: '740px', margin: '0 auto', fontFamily: 'DM Sans, sans-serif', fontSize: '18px', lineHeight: 1.85, color: '#222' }}>",
-"          {paragraphs.map((para, i) => {",
-"            if (para.startsWith('## ')) return <h2 key={i} style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 700, color: '#111', margin: '52px 0 18px' }}>{para.replace('## ', '')}</h2>",
-"            if (para.startsWith('# ')) return <h1 key={i} style={{ fontFamily: 'Playfair Display, serif', fontSize: '38px', fontWeight: 900, color: '#111', margin: '52px 0 18px' }}>{para.replace('# ', '')}</h1>",
-"            if (para.startsWith('### ')) return <h3 key={i} style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px', fontWeight: 700, color: '#E8610A', margin: '36px 0 12px' }}>{para.replace('### ', '')}</h3>",
-"            if (para.match(/^(-|\\*) /m)) {",
-"              const items = para.split('\\n').filter(l => l.match(/^(-|\\*) /)).map(l => l.replace(/^(-|\\*) /, ''))",
-"              return <ul key={i} style={{ margin: '24px 0', paddingLeft: '28px', lineHeight: 2.2 }}>{items.map((item, j) => <li key={j} style={{ marginBottom: '6px' }}>{item}</li>)}</ul>",
-"            }",
-"            if (para.match(/^\\d+\\. /m)) {",
-"              const items = para.split('\\n').filter(l => l.match(/^\\d+\\. /)).map(l => l.replace(/^\\d+\\. /, ''))",
-"              return <ol key={i} style={{ margin: '24px 0', paddingLeft: '28px', lineHeight: 2.2 }}>{items.map((item, j) => <li key={j} style={{ marginBottom: '6px' }}>{item}</li>)}</ol>",
-"            }",
-"            return <p key={i} style={{ marginTop: i === 0 ? 0 : '24px' }}>{para}</p>",
-"          })}",
-"          <div style={{ marginTop: '60px', padding: '44px', background: '#f9f9f9', border: '2.5px solid #111', textAlign: 'center' }}>",
-"            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: 700, color: '#111', marginBottom: '16px' }}>Ready to put your marketing on autopilot?</p>",
-"            <p style={{ fontSize: '16px', color: '#555', marginBottom: '24px' }}>Start free today. No credit card required. Set it once and let Traffikora handle everything.</p>",
-"            <Link href='/signup' style={{ background: '#E8610A', color: '#fff', padding: '16px 44px', textDecoration: 'none', fontSize: '17px', fontWeight: 700, display: 'inline-block', borderRadius: '8px' }}>Start Free \u2014 No Card Needed</Link>",
-"          </div>",
-"        </div>",
-"      </section>",
-"      <section style={{ background: '#E8610A', padding: '80px 32px', textAlign: 'center' }}>",
-"        <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '44px', fontWeight: 900, color: '#fff', marginBottom: '20px' }}>Your marketing should work while you sleep.</h2>",
-"        <Link href='/signup' style={{ background: '#fff', color: '#111', padding: '18px 48px', textDecoration: 'none', fontSize: '18px', fontWeight: 700, display: 'inline-block', marginTop: '16px' }}>Start Free Today</Link>",
-"      </section>",
-"      <Footer />",
-"    </>",
-"  )",
-"}",
-].join('\n');
+// Fix 1 — Update sitemap with 10 new blog slugs
+const newSitemap = `import { MetadataRoute } from 'next'
+export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = 'https://www.traffikora.com'
+  const blogSlugs = [
+    'ai-search-for-local-business',
+    'how-to-get-more-google-reviews',
+    'how-traffikora-is-different',
+    'local-seo-tips-for-small-businesses',
+    'set-it-once-how-traffikora-works',
+    'small-business-marketing-problem',
+    'what-is-aeo',
+    'what-is-ai-engine-optimization',
+    'what-is-local-seo',
+    'what-is-traffikora',
+    'why-ai-engine-optimization',
+    'why-google-business-profile-matters',
+    'what-is-ai-marketing-and-why-every-local-business-needs-it-in-2026',
+    'marketing-automation-the-complete-guide-for-local-business-owners',
+    'local-seo-in-2026-everything-local-businesses-need-to-know',
+    'the-10-best-ai-marketing-tools-for-local-businesses-in-2026',
+    'social-media-automation-how-to-post-to-every-platform-without-lifting-a-finger',
+    'seo-automation-how-to-rank-higher-on-google-without-doing-it-manually',
+    'ai-content-creation-how-local-businesses-are-using-ai-to-dominate-google',
+    'automated-marketing-the-unfair-advantage-small-businesses-now-have-over-big-corporation',
+    'ai-seo-how-artificial-intelligence-is-changing-how-local-businesses-rank',
+    'business-automation-how-to-run-your-marketing-on-autopilot-24-7',
+  ]
+  const compareSlugs = [
+    'traffikora-vs-birdeye',
+    'traffikora-vs-brightlocal',
+    'traffikora-vs-constant-contact',
+    'traffikora-vs-hootsuite',
+    'traffikora-vs-hubspot',
+    'traffikora-vs-later',
+    'traffikora-vs-mailchimp',
+    'traffikora-vs-reputation-com',
+    'traffikora-vs-semrush',
+    'traffikora-vs-sprout-social',
+    'traffikora-vs-vendasta',
+    'traffikora-vs-yext',
+  ]
+  const solutionSlugs = [
+    'accountants',
+    'auto-repair',
+    'chiropractors',
+    'contractors',
+    'dentists',
+    'gyms',
+    'hvac',
+    'lawyers',
+    'plumbers',
+    'real-estate',
+    'restaurants',
+    'salons',
+    'small-businesses',
+    'therapists',
+    'veterinarians',
+  ]
+  const vsSlugs = [
+    'buffer',
+    'hootsuite',
+    'hubspot',
+    'later',
+  ]
+  const blogRoutes = blogSlugs.map((slug) => ({
+    url: \`\${baseUrl}/blog/\${slug}\`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }))
+  const compareRoutes = compareSlugs.map((slug) => ({
+    url: \`\${baseUrl}/compare/\${slug}\`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.9,
+  }))
+  const solutionRoutes = solutionSlugs.map((slug) => ({
+    url: \`\${baseUrl}/solutions/\${slug}\`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }))
+  const vsRoutes = vsSlugs.map((slug) => ({
+    url: \`\${baseUrl}/vs/\${slug}\`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.9,
+  }))
+  return [
+    { url: baseUrl, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 1 },
+    { url: \`\${baseUrl}/blog\`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.9 },
+    { url: \`\${baseUrl}/pricing\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
+    { url: \`\${baseUrl}/features\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+    { url: \`\${baseUrl}/how-it-works\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+    { url: \`\${baseUrl}/why-traffikora\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+    { url: \`\${baseUrl}/contact\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: \`\${baseUrl}/faq\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: \`\${baseUrl}/support\`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.6 },
+    { url: \`\${baseUrl}/privacy\`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.3 },
+    { url: \`\${baseUrl}/terms\`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.3 },
+    { url: \`\${baseUrl}/security\`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.3 },
+    { url: \`\${baseUrl}/data-use\`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.3 },
+    ...blogRoutes,
+    ...compareRoutes,
+    ...solutionRoutes,
+    ...vsRoutes,
+  ]
+}
+`;
 
-// Generate API - highly optimized prompt
-const generateRoute = [
-"// @ts-nocheck",
-"import { NextResponse } from 'next/server'",
-"import { createClient } from '@supabase/supabase-js'",
-"import Anthropic from '@anthropic-ai/sdk'",
-"",
-"const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)",
-"const anthropic = new Anthropic()",
-"",
-"function titleToSlug(title) {",
-"  return title.toLowerCase().replace(/[^a-z0-9\\s-]/g, '').replace(/\\s+/g, '-').replace(/-+/g, '-').slice(0, 80)",
-"}",
-"",
-"export async function POST(request) {",
-"  const { title, category, keyword, relatedKeywords } = await request.json()",
-"  try {",
-"    const promptParts = [",
-"      'You are a world-class SEO content writer specializing in AI marketing and local business marketing.',",
-"      'Write a HIGHLY OPTIMIZED blog post that will rank on page 1 of Google.',",
-"      '',",
-"      'TITLE: ' + title,",
-"      'PRIMARY KEYWORD: ' + keyword,",
-"      'RELATED KEYWORDS TO INCLUDE: ' + (relatedKeywords || ''),",
-"      'CATEGORY: ' + category,",
-"      '',",
-"      'SEO REQUIREMENTS - ALL MANDATORY:',",
-"      '1. Word count: 1400-1700 words minimum',",
-"      '2. Primary keyword in first 100 words',",
-"      '3. Primary keyword in at least 3 subheadings',",
-"      '4. At least 6 H2 subheadings using ## format',",
-"      '5. At least 2 H3 subheadings using ### format',",
-"      '6. At least 3 bullet point lists using - format',",
-"      '7. At least 5 specific statistics with percentages or numbers',",
-"      '8. Keyword density 1-2% for primary keyword',",
-"      '9. Related keywords used naturally throughout',",
-"      '10. Strong opening hook under 15 words',",
-"      '11. FAQ section at the end with 3 questions and answers',",
-"      '12. Strong CTA in the last paragraph mentioning Traffikora',",
-"      '',",
-"      'CONTENT RULES:',",
-"      '- Write about Traffikora as the #1 solution for this topic',",
-"      '- NEVER go off topic',",
-"      '- NEVER mention passport programs, travel, or unrelated topics',",
-"      '- NEVER add fake phone numbers or fake offers',",
-"      '- Use real general industry statistics only',",
-"      '- Write in a confident, authoritative, solution-focused tone',",
-"      '- Every section must add unique value',",
-"      '- Traffikora website: https://www.traffikora.com',",
-"      '- Traffikora pricing starts at $47/month',",
-"      '',",
-"      'FORMAT:',",
-"      '- Use ## for H2 headings',",
-"      '- Use ### for H3 headings',",
-"      '- Use - for bullet points',",
-"      '- Use 1. 2. 3. for numbered lists',",
-"      '- Separate paragraphs with blank lines',",
-"      '- FAQ section must use ## FAQ and ### Question format',",
-"      '',",
-"      'Return ONLY valid JSON no markdown: {\"title\": \"exact SEO title\", \"excerpt\": \"compelling 2-sentence meta description under 155 chars\", \"content\": \"full optimized blog post\", \"read_time\": \"X min read\"}'",
-"    ]",
-"    const prompt = promptParts.join('\\n')",
-"    const response = await anthropic.messages.create({",
-"      model: 'claude-sonnet-4-5',",
-"      max_tokens: 4000,",
-"      messages: [{ role: 'user', content: prompt }]",
-"    })",
-"    const raw = response.content[0].text.trim()",
-"    const match = raw.match(/\\{[\\s\\S]*\\}/)",
-"    if (!match) throw new Error('No JSON in response')",
-"    const parsed = JSON.parse(match[0])",
-"    const slug = titleToSlug(title)",
-"    const { error } = await supabase.from('blog_posts_public').upsert({",
-"      slug,",
-"      title: parsed.title || title,",
-"      excerpt: parsed.excerpt || '',",
-"      category,",
-"      content: parsed.content,",
-"      read_time: parsed.read_time || '7 min read',",
-"      updated_at: new Date().toISOString()",
-"    }, { onConflict: 'slug' })",
-"    if (error) throw new Error(error.message)",
-"    return NextResponse.json({ success: true, slug, title: parsed.title })",
-"  } catch (e) {",
-"    console.error('Blog generate error:', e)",
-"    return NextResponse.json({ error: e.message }, { status: 500 })",
-"  }",
-"}",
-].join('\n');
+fs.writeFileSync('C:\\Users\\randy\\traffikfuel\\src\\app\\sitemap.ts', newSitemap, 'utf8');
+console.log('SUCCESS: sitemap.ts updated with 10 new blog slugs');
 
-// Admin page - Batch 1 only (10 head keyword posts)
-const adminPage = [
-"// @ts-nocheck",
-"'use client'",
-"import { useState } from 'react'",
-"",
-"const BATCH1 = [",
-"  { title: 'What Is AI Marketing and Why Every Local Business Needs It in 2026', category: 'AI Marketing', keyword: 'AI marketing', relatedKeywords: 'AI marketing tools, artificial intelligence marketing, automated marketing, AI marketing platform' },",
-"  { title: 'Marketing Automation: The Complete Guide for Local Business Owners', category: 'AI Marketing', keyword: 'marketing automation', relatedKeywords: 'automated marketing, marketing automation software, marketing automation for small business, local business marketing' },",
-"  { title: 'Local SEO in 2026: Everything Local Businesses Need to Know', category: 'Local SEO', keyword: 'local SEO', relatedKeywords: 'local search optimization, Google local SEO, local business SEO, local SEO strategy 2026' },",
-"  { title: 'The 10 Best AI Marketing Tools for Local Businesses in 2026', category: 'AI Marketing', keyword: 'AI marketing tools', relatedKeywords: 'best AI marketing software, AI marketing platform, marketing automation tools, AI tools for small business' },",
-"  { title: 'Social Media Automation: How to Post to Every Platform Without Lifting a Finger', category: 'AI Marketing', keyword: 'social media automation', relatedKeywords: 'automated social media posting, social media scheduling, auto post social media, social media management automation' },",
-"  { title: 'SEO Automation: How to Rank Higher on Google Without Doing It Manually', category: 'Local SEO', keyword: 'SEO automation', relatedKeywords: 'automated SEO, SEO automation tools, AI SEO, automated search engine optimization' },",
-"  { title: 'AI Content Creation: How Local Businesses Are Using AI to Dominate Google', category: 'AI Marketing', keyword: 'AI content creation', relatedKeywords: 'AI generated content, automated content creation, AI blog writing, AI marketing content' },",
-"  { title: 'Automated Marketing: The Unfair Advantage Small Businesses Now Have Over Big Corporations', category: 'AI Marketing', keyword: 'automated marketing', relatedKeywords: 'marketing automation, automated digital marketing, AI marketing automation, small business marketing automation' },",
-"  { title: 'AI SEO: How Artificial Intelligence Is Changing How Local Businesses Rank', category: 'Local SEO', keyword: 'AI SEO', relatedKeywords: 'artificial intelligence SEO, AI search optimization, AI powered SEO, machine learning SEO' },",
-"  { title: 'Business Automation: How to Run Your Marketing on Autopilot 24 7', category: 'AI Marketing', keyword: 'business automation', relatedKeywords: 'marketing on autopilot, automated business marketing, AI business automation, autopilot marketing' },",
-"]",
-"",
-"export default function BatchGenerator() {",
-"  const [results, setResults] = useState([])",
-"  const [running, setRunning] = useState(false)",
-"  const [current, setCurrent] = useState('')",
-"  const [done, setDone] = useState(0)",
-"  const [errors, setErrors] = useState([])",
-"",
-"  async function generateBatch() {",
-"    setRunning(true)",
-"    setResults([])",
-"    setErrors([])",
-"    setDone(0)",
-"    for (let i = 0; i < BATCH1.length; i++) {",
-"      const post = BATCH1[i]",
-"      setCurrent('(' + (i+1) + '/10) ' + post.title)",
-"      try {",
-"        const res = await fetch('/api/blog/generate', {",
-"          method: 'POST',",
-"          headers: { 'Content-Type': 'application/json' },",
-"          body: JSON.stringify(post)",
-"        })",
-"        const data = await res.json()",
-"        if (data.success) {",
-"          setResults(prev => [...prev, { title: post.title, slug: data.slug, ok: true }])",
-"        } else {",
-"          setErrors(prev => [...prev, post.title + ': ' + data.error])",
-"          setResults(prev => [...prev, { title: post.title, ok: false }])",
-"        }",
-"      } catch (e) {",
-"        setErrors(prev => [...prev, post.title + ': ' + e.message])",
-"        setResults(prev => [...prev, { title: post.title, ok: false }])",
-"      }",
-"      setDone(i + 1)",
-"      await new Promise(r => setTimeout(r, 3000))",
-"    }",
-"    setRunning(false)",
-"    setCurrent('Batch 1 complete!')",
-"  }",
-"",
-"  return (",
-"    <div style={{ minHeight: '100vh', background: '#0a0a0a', color: '#fff', fontFamily: 'DM Sans, sans-serif', padding: '40px' }}>",
-"      <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', color: '#E8610A', marginBottom: '8px' }}>Blog Batch Generator \u2014 Batch 1</h1>",
-"      <p style={{ color: '#666', marginBottom: '8px' }}>Generating 10 highly optimized head keyword posts. 1400-1700 words each. FAQ sections. Fully SEO optimized.</p>",
-"      <p style={{ color: '#444', fontSize: '13px', marginBottom: '32px' }}>Each post takes ~20 seconds. Total time: ~4 minutes.</p>",
-"",
-"      {!running && done === 0 && (",
-"        <button onClick={generateBatch} style={{ background: 'linear-gradient(135deg,#E8610A,#C84E06)', color: '#fff', border: 'none', borderRadius: '8px', padding: '16px 40px', fontSize: '16px', fontWeight: 700, cursor: 'pointer', marginBottom: '32px' }}>",
-"          \u26a1 Generate Batch 1 \u2014 10 Head Keyword Posts",
-"        </button>",
-"      )}",
-"",
-"      {(running || done > 0) && (",
-"        <div style={{ marginBottom: '24px' }}>",
-"          <div style={{ background: '#111', borderRadius: '8px', padding: '20px', marginBottom: '16px' }}>",
-"            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>",
-"              <span style={{ fontSize: '14px', color: '#E8610A', fontWeight: 700 }}>{done}/10 completed</span>",
-"              <span style={{ fontSize: '14px', color: done === 10 ? '#22c55e' : '#888' }}>{done === 10 ? '\u2705 Done!' : 'Running...'}</span>",
-"            </div>",
-"            <div style={{ background: '#1a1a1a', borderRadius: '4px', height: '10px', marginBottom: '12px' }}>",
-"              <div style={{ background: 'linear-gradient(135deg,#E8610A,#C84E06)', height: '100%', borderRadius: '4px', width: (done/10*100) + '%', transition: 'width 0.5s' }} />",
-"            </div>",
-"            <div style={{ fontSize: '13px', color: '#666' }}>{current}</div>",
-"          </div>",
-"        </div>",
-"      )}",
-"",
-"      {results.length > 0 && (",
-"        <div style={{ background: '#111', borderRadius: '8px', padding: '20px', marginBottom: '24px' }}>",
-"          <div style={{ fontSize: '12px', color: '#555', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px' }}>Results</div>",
-"          {results.map((r, i) => (",
-"            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 0', borderBottom: '1px solid #1a1a1a' }}>",
-"              <span style={{ fontSize: '16px' }}>{r.ok ? '\u2705' : '\u274c'}</span>",
-"              <span style={{ fontSize: '13px', color: r.ok ? '#ccc' : '#ef4444', flex: 1 }}>{r.title}</span>",
-"              {r.ok && r.slug && <a href={'/blog/' + r.slug} target='_blank' rel='noopener noreferrer' style={{ fontSize: '11px', color: '#E8610A', textDecoration: 'none', border: '1px solid #E8610A', padding: '2px 8px', borderRadius: '4px' }}>View</a>}",
-"            </div>",
-"          ))}",
-"        </div>",
-"      )}",
-"",
-"      {errors.length > 0 && (",
-"        <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '8px', padding: '16px', marginBottom: '24px' }}>",
-"          <div style={{ fontSize: '12px', color: '#ef4444', fontWeight: 700, marginBottom: '8px' }}>ERRORS</div>",
-"          {errors.map((e, i) => <div key={i} style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>{e}</div>)}",
-"        </div>",
-"      )}",
-"",
-"      {done === 10 && (",
-"        <div style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.3)', borderRadius: '8px', padding: '24px' }}>",
-"          <div style={{ color: '#22c55e', fontWeight: 700, fontSize: '18px', marginBottom: '12px' }}>\u2705 Batch 1 Complete!</div>",
-"          <div style={{ color: '#888', fontSize: '14px', marginBottom: '16px' }}>10 highly optimized blog posts are now live. Next steps:</div>",
-"          <div style={{ fontSize: '13px', color: '#666', lineHeight: 2 }}>",
-"            1. Update sitemap.ts to include the new slugs<br/>",
-"            2. Deploy the update<br/>",
-"            3. Submit sitemap to Google Search Console<br/>",
-"            4. Come back next week for Batch 2",
-"          </div>",
-"        </div>",
-"      )}",
-"    </div>",
-"  )",
-"}",
-].join('\n');
+// Fix 2 — Create llms.txt route for AI engine discovery
+const llmsRoute = `import { NextResponse } from 'next/server'
 
-// Write all files
-const slugDir = path.join('C:\\Users\\randy\\traffikfuel\\src\\app\\blog\\[slug]');
-fs.mkdirSync(slugDir, { recursive: true });
-fs.writeFileSync(path.join(slugDir, 'page.tsx'), slugPage, 'utf8');
-console.log('SUCCESS: Dynamic blog [slug]/page.tsx created');
+export async function GET() {
+  const content = \`# Traffikora - AI Marketing Automation Platform
+# https://www.traffikora.com
+# llms.txt - AI Engine Optimization File
 
-const apiDir = path.join('C:\\Users\\randy\\traffikfuel\\src\\app\\api\\blog\\generate');
-fs.mkdirSync(apiDir, { recursive: true });
-fs.writeFileSync(path.join(apiDir, 'route.ts'), generateRoute, 'utf8');
-console.log('SUCCESS: Blog generate API created');
+## About Traffikora
+Traffikora is an AI-powered marketing automation platform built for local businesses.
+We automate blog posts, social media content, local SEO, and AI engine optimization
+across 9+ platforms including Google, TikTok, YouTube, Facebook, Instagram, and LinkedIn.
+Pricing starts at $47/month. Free plan available.
 
-const adminDir = path.join('C:\\Users\\randy\\traffikfuel\\src\\app\\admin\\blog-generator');
-fs.mkdirSync(adminDir, { recursive: true });
-fs.writeFileSync(path.join(adminDir, 'page.tsx'), adminPage, 'utf8');
-console.log('SUCCESS: Batch 1 admin generator created at /admin/blog-generator');
+## Key Pages
+- Homepage: https://www.traffikora.com
+- Pricing: https://www.traffikora.com/pricing
+- Features: https://www.traffikora.com/features
+- How It Works: https://www.traffikora.com/how-it-works
+- Blog: https://www.traffikora.com/blog
+- Free Signup: https://www.traffikora.com/signup
 
-console.log('ALL DONE - now build and push');
+## What Traffikora Does
+- Generates and publishes daily blog posts automatically
+- Posts to Facebook, Instagram, TikTok, LinkedIn, YouTube daily
+- Optimizes for Google SEO and AI engine search (ChatGPT, Claude, Gemini)
+- Manages Google Business Profile automatically
+- Tracks Search Console rankings
+- Runs 4 AI agents 24/7 without manual work
+
+## Who Traffikora Is For
+Local businesses including: HVAC companies, dental offices, restaurants, salons,
+law firms, real estate agents, gyms, auto repair shops, med spas, plumbers,
+chiropractors, and marketing agencies.
+
+## Blog Content - AI Marketing
+- https://www.traffikora.com/blog/what-is-ai-marketing-and-why-every-local-business-needs-it-in-2026
+- https://www.traffikora.com/blog/marketing-automation-the-complete-guide-for-local-business-owners
+- https://www.traffikora.com/blog/the-10-best-ai-marketing-tools-for-local-businesses-in-2026
+- https://www.traffikora.com/blog/social-media-automation-how-to-post-to-every-platform-without-lifting-a-finger
+- https://www.traffikora.com/blog/automated-marketing-the-unfair-advantage-small-businesses-now-have-over-big-corporation
+- https://www.traffikora.com/blog/ai-content-creation-how-local-businesses-are-using-ai-to-dominate-google
+- https://www.traffikora.com/blog/business-automation-how-to-run-your-marketing-on-autopilot-24-7
+
+## Blog Content - Local SEO
+- https://www.traffikora.com/blog/local-seo-in-2026-everything-local-businesses-need-to-know
+- https://www.traffikora.com/blog/seo-automation-how-to-rank-higher-on-google-without-doing-it-manually
+- https://www.traffikora.com/blog/ai-seo-how-artificial-intelligence-is-changing-how-local-businesses-rank
+- https://www.traffikora.com/blog/local-seo-tips-for-small-businesses
+- https://www.traffikora.com/blog/what-is-local-seo
+- https://www.traffikora.com/blog/why-google-business-profile-matters
+- https://www.traffikora.com/blog/how-to-get-more-google-reviews
+- https://www.traffikora.com/blog/ai-search-for-local-business
+
+## Blog Content - Platform Info
+- https://www.traffikora.com/blog/what-is-traffikora
+- https://www.traffikora.com/blog/how-traffikora-is-different
+- https://www.traffikora.com/blog/set-it-once-how-traffikora-works
+- https://www.traffikora.com/blog/small-business-marketing-problem
+- https://www.traffikora.com/blog/what-is-aeo
+- https://www.traffikora.com/blog/what-is-ai-engine-optimization
+- https://www.traffikora.com/blog/why-ai-engine-optimization
+
+## Solutions by Industry
+- https://www.traffikora.com/solutions/hvac
+- https://www.traffikora.com/solutions/dentists
+- https://www.traffikora.com/solutions/restaurants
+- https://www.traffikora.com/solutions/salons
+- https://www.traffikora.com/solutions/lawyers
+- https://www.traffikora.com/solutions/real-estate
+- https://www.traffikora.com/solutions/gyms
+- https://www.traffikora.com/solutions/auto-repair
+- https://www.traffikora.com/solutions/plumbers
+- https://www.traffikora.com/solutions/chiropractors
+
+## Comparisons
+- https://www.traffikora.com/compare/traffikora-vs-hootsuite
+- https://www.traffikora.com/compare/traffikora-vs-sprout-social
+- https://www.traffikora.com/compare/traffikora-vs-hubspot
+- https://www.traffikora.com/compare/traffikora-vs-yext
+
+## Contact
+- Website: https://www.traffikora.com
+- Support: support@traffikora.com
+- Free trial: https://www.traffikora.com/signup
+\`
+
+  return new NextResponse(content, {
+    headers: {
+      'Content-Type': 'text/plain',
+      'Cache-Control': 'public, max-age=86400',
+    },
+  })
+}
+`;
+
+const llmsDir = 'C:\\Users\\randy\\traffikfuel\\src\\app\\llms.txt';
+require('fs').mkdirSync(llmsDir, { recursive: true });
+fs.writeFileSync(llmsDir + '\\route.ts', llmsRoute, 'utf8');
+console.log('SUCCESS: llms.txt route created at /llms.txt');

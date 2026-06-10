@@ -1,8 +1,6 @@
 import { MetadataRoute } from 'next'
-
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://www.traffikora.com'
-
   const blogSlugs = [
     'ai-search-for-local-business',
     'how-to-get-more-google-reviews',
@@ -16,8 +14,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'what-is-traffikora',
     'why-ai-engine-optimization',
     'why-google-business-profile-matters',
+    'what-is-ai-marketing-and-why-every-local-business-needs-it-in-2026',
+    'marketing-automation-the-complete-guide-for-local-business-owners',
+    'local-seo-in-2026-everything-local-businesses-need-to-know',
+    'the-10-best-ai-marketing-tools-for-local-businesses-in-2026',
+    'social-media-automation-how-to-post-to-every-platform-without-lifting-a-finger',
+    'seo-automation-how-to-rank-higher-on-google-without-doing-it-manually',
+    'ai-content-creation-how-local-businesses-are-using-ai-to-dominate-google',
+    'automated-marketing-the-unfair-advantage-small-businesses-now-have-over-big-corporation',
+    'ai-seo-how-artificial-intelligence-is-changing-how-local-businesses-rank',
+    'business-automation-how-to-run-your-marketing-on-autopilot-24-7',
   ]
-
   const compareSlugs = [
     'traffikora-vs-birdeye',
     'traffikora-vs-brightlocal',
@@ -32,7 +39,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'traffikora-vs-vendasta',
     'traffikora-vs-yext',
   ]
-
   const solutionSlugs = [
     'accountants',
     'auto-repair',
@@ -50,42 +56,36 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'therapists',
     'veterinarians',
   ]
-
   const vsSlugs = [
     'buffer',
     'hootsuite',
     'hubspot',
     'later',
   ]
-
   const blogRoutes = blogSlugs.map((slug) => ({
     url: `${baseUrl}/blog/${slug}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.8,
   }))
-
   const compareRoutes = compareSlugs.map((slug) => ({
     url: `${baseUrl}/compare/${slug}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.9,
   }))
-
   const solutionRoutes = solutionSlugs.map((slug) => ({
     url: `${baseUrl}/solutions/${slug}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.8,
   }))
-
   const vsRoutes = vsSlugs.map((slug) => ({
     url: `${baseUrl}/vs/${slug}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.9,
   }))
-
   return [
     { url: baseUrl, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 1 },
     { url: `${baseUrl}/blog`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.9 },
