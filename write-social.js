@@ -1,38 +1,13 @@
-const fs = require('fs')
-const path = require('path')
+const fs = require('fs');
+const path = require('path');
 
-const BASE = 'C:\\Users\\randy\\Downloads\\floridaimpactshield-turnkey\\floridaimpactshield'
+const BASE = 'C:\\Users\\randy\\Downloads\\floridaimpactshield-turnkey\\floridaimpactshield';
 
-const vercelConfig = `{
-  "rewrites": [
-    { "source": "/miami", "destination": "/pages/impact-windows-miami.html" },
-    { "source": "/broward", "destination": "/pages/impact-windows-broward.html" },
-    { "source": "/palm-beach", "destination": "/pages/impact-windows-palm-beach.html" },
-    { "source": "/naples", "destination": "/pages/impact-windows-naples.html" },
-    { "source": "/tampa", "destination": "/pages/impact-windows-tampa.html" },
-    { "source": "/orlando", "destination": "/pages/impact-windows-orlando.html" },
-    { "source": "/insurance-savings", "destination": "/pages/hurricane-windows-insurance-savings.html" },
-    { "source": "/grants", "destination": "/pages/my-safe-florida-home-grants.html" },
-    { "source": "/cost", "destination": "/pages/impact-windows-cost.html" },
-    { "source": "/financing", "destination": "/pages/financing.html" },
-    { "source": "/about", "destination": "/pages/about.html" },
-    { "source": "/contact", "destination": "/pages/contact.html" },
-    { "source": "/privacy", "destination": "/pages/privacy-policy.html" },
-    { "source": "/terms", "destination": "/pages/terms.html" },
-    { "source": "/blog", "destination": "/blog/index.html" },
-    { "source": "/admin", "destination": "/admin/index.html" }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" }
-      ]
-    }
-  ]
-}`
+let appJs = fs.readFileSync(path.join(BASE, 'assets/js/app.js'), 'utf8');
 
-fs.writeFileSync(path.join(BASE, 'vercel.json'), vercelConfig, 'utf8')
-console.log('OK vercel.json updated')
-console.log('DONE')
+// Only remove phone from text strings - nothing structural
+appJs = appJs.replace(/\(888\) 975-4440/g, 'our team');
+appJs = appJs.replace(/888-975-4440/g, 'our team');
+
+fs.writeFileSync(path.join(BASE, 'assets/js/app.js'), appJs, 'utf8');
+console.log('DONE');
