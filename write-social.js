@@ -3,235 +3,93 @@ const path = require('path');
 
 const BASE = 'C:\\Users\\randy\\Downloads\\floridaimpactshield-turnkey\\floridaimpactshield';
 
-const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact Florida Impact Shield | Free In-Home Quote</title>
-<meta name="description" content="Contact Florida Impact Shield for a free in-home impact window quote. We serve all Florida counties. Responds within 4 hours.">
-<link rel="canonical" href="https://floridaimpactshield.com/pages/contact.html">
-<link rel="stylesheet" href="/assets/css/global.css">
-<style>
-.cf-input{width:100%;background:rgba(0,0,0,0.3);border:1px solid var(--glass-border);border-radius:6px;padding:8px 12px;color:var(--white);font-family:var(--font-body);font-size:13px;outline:none;transition:border-color 0.2s;box-sizing:border-box}
-.cf-input:focus{border-color:var(--sky)}
-.cf-input::placeholder{color:var(--slate)}
-.cf-label{display:block;font-size:10px;font-weight:700;color:var(--slate);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
-.cf-group{margin-bottom:10px}
-.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-</style>
-</head>
-<body>
-<nav class="site-nav" id="siteNav">
-  <a href="/" class="nav-logo"><div class="nav-logo-icon">&#x1F6E1;&#xFE0F;</div>Florida Impact Shield</a>
-  <ul class="nav-links">
-    <li><a href="/">Home</a></li>
-    <li><a href="/pages/impact-windows-miami.html">Miami</a></li>
-    <li><a href="/pages/impact-windows-broward.html">Broward</a></li>
-    <li><a href="/pages/hurricane-windows-insurance-savings.html">Insurance Savings</a></li>
-    <li><a href="/pages/my-safe-florida-home-grants.html">Grants</a></li>
-    <li><a href="/pages/financing.html">Financing</a></li>
-    <li><a href="/blog/index.html">Blog</a></li>
-    <li><a href="/pages/about.html">About Us</a></li>
-    <li><a href="/pages/contact.html">Contact</a></li>
-  </ul>
-  <div class="nav-right">
-    <a href="#" onclick="Modal.open();return false;" class="nav-cta-btn">Free Quote</a>
-  </div>
-</nav>
-<button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Menu"><span></span><span></span><span></span></button>
-<div class="mobile-nav" id="mobileNav">
-  <a href="/">Home</a>
-  <a href="/pages/impact-windows-miami.html">Miami</a>
-  <a href="/pages/impact-windows-broward.html">Broward</a>
-  <a href="/pages/hurricane-windows-insurance-savings.html">Insurance Savings</a>
-  <a href="/pages/my-safe-florida-home-grants.html">Grants</a>
-  <a href="/pages/financing.html">Financing</a>
-  <a href="/blog/index.html">Blog</a>
-  <a href="/pages/about.html">About Us</a>
-  <a href="/pages/contact.html">Contact</a>
-  <a href="/pages/faq.html">FAQ</a>
-  <a href="#" onclick="Modal.open();return false;" class="mobile-quote-btn">Book Free Quote &rarr;</a>
-</div>
+// Create SVG favicon - gold shield with lightning bolt
+const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A07830"/>
+      <stop offset="50%" stop-color="#C9A84C"/>
+      <stop offset="100%" stop-color="#E8C97A"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" fill="#0A0A0A" rx="8"/>
+  <path d="M32 4L8 12V32C8 46 20 58 32 60C44 58 56 46 56 32V12L32 4Z" fill="#111111" stroke="url(#gold)" stroke-width="2"/>
+  <path d="M37 14L22 34H30L26 50L42 30H34L37 14Z" fill="url(#gold)"/>
+</svg>`;
 
-<section style="padding:120px 0 80px">
-<div class="container">
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;max-width:1000px;margin:0 auto">
-    
-    <div>
-      <span class="badge badge-sky" style="margin-bottom:16px">Get In Touch</span>
-      <h1 style="font-size:clamp(28px,3.5vw,44px);margin-bottom:16px;line-height:1.15">We are ready to<br><em style="color:var(--sky-light);font-style:normal">come to you.</em></h1>
-      <p style="font-size:15px;color:var(--slate-light);line-height:1.7;margin-bottom:32px">Free in-home estimates within 48 hours. Our estimators are based throughout Florida.</p>
-      
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div style="background:rgba(14,165,233,0.06);border:1px solid var(--glass-border);border-radius:8px;padding:16px;display:flex;align-items:center;gap:12px">
-          <div style="font-size:22px">&#x2709;&#xFE0F;</div>
-          <div>
-            <div style="font-size:13px;font-weight:600;color:var(--white)">Email Us</div>
-            <a href="mailto:support@floridaimpactshield.com" style="font-size:13px;color:var(--sky-light)">support@floridaimpactshield.com</a>
-          </div>
-        </div>
-        <div style="background:rgba(14,165,233,0.06);border:1px solid var(--glass-border);border-radius:8px;padding:16px;display:flex;align-items:center;gap:12px">
-          <div style="font-size:22px">&#x1F4C5;</div>
-          <div>
-            <div style="font-size:13px;font-weight:600;color:var(--white)">Response Time</div>
-            <div style="font-size:13px;color:var(--slate-light)">Within 4 hours during business hours</div>
-          </div>
-        </div>
-        <div style="background:rgba(14,165,233,0.06);border:1px solid var(--glass-border);border-radius:8px;padding:16px;display:flex;align-items:center;gap:12px">
-          <div style="font-size:22px">&#x1F3F3;&#xFE0F;</div>
-          <div>
-            <div style="font-size:13px;font-weight:600;color:var(--white)">Service Area</div>
-            <div style="font-size:13px;color:var(--slate-light)">All Florida counties</div>
-          </div>
-        </div>
-      </div>
-    </div>
+fs.writeFileSync(path.join(BASE, 'assets/images/favicon.svg'), faviconSvg, 'utf8');
+console.log('SUCCESS: favicon.svg created');
 
-    <div style="background:rgba(14,165,233,0.04);border:1px solid var(--glass-border);border-radius:12px;padding:24px">
-      <h3 style="font-size:16px;margin-bottom:4px;color:var(--white)">Book Your Free Quote</h3>
-      <p style="font-size:12px;color:var(--slate-light);margin-bottom:16px">A licensed estimator visits within 48 hours.</p>
-      
-      <div id="cf-form">
-        <div class="cf-row">
-          <div class="cf-group"><label class="cf-label">First Name *</label><input class="cf-input" id="cf-first" type="text" placeholder="Maria"></div>
-          <div class="cf-group"><label class="cf-label">Last Name</label><input class="cf-input" id="cf-last" type="text" placeholder="Rodriguez"></div>
-        </div>
-        <div class="cf-group"><label class="cf-label">Email *</label><input class="cf-input" id="cf-email" type="email" placeholder="maria@email.com"></div>
-        <div class="cf-group"><label class="cf-label">Phone *</label><input class="cf-input" id="cf-phone" type="tel" placeholder="(305) 555-0100"></div>
-        <div class="cf-row">
-          <div class="cf-group">
-            <label class="cf-label">County</label>
-            <select class="cf-input" id="cf-county">
-              <option>Miami-Dade</option><option>Broward</option><option>Palm Beach</option>
-              <option>Lee / Collier</option><option>Hillsborough</option><option>Pinellas</option>
-              <option>Sarasota</option><option>Orange</option><option>Other</option>
-            </select>
-          </div>
-          <div class="cf-group">
-            <label class="cf-label">Windows</label>
-            <select class="cf-input" id="cf-windows">
-              <option>1-5 openings</option><option>6-15 openings</option>
-              <option>16-25 openings</option><option>26+ openings</option>
-            </select>
-          </div>
-        </div>
-        <div class="cf-group"><label class="cf-label">Message</label><textarea class="cf-input" id="cf-msg" rows="3" placeholder="Questions about grants, pricing, timeline..." style="resize:vertical;min-height:60px"></textarea></div>
-        <label style="display:flex;align-items:flex-start;gap:6px;font-size:11px;color:var(--slate);margin-bottom:12px;cursor:pointer">
-          <input type="checkbox" checked style="margin-top:2px"> I consent to be contacted. <a href="/pages/privacy-policy.html" style="color:var(--sky-light)">Privacy Policy</a>.
-        </label>
-        <button class="btn btn-amber" style="width:100%;justify-content:center;font-size:14px;padding:12px" onclick="submitContactForm()">Schedule Free Quote &rarr;</button>
-      </div>
+// Add favicon to all HTML pages
+const files = [
+  'index.html',
+  'pages/contact.html',
+  'pages/about.html',
+  'pages/faq.html',
+  'pages/impact-windows-miami.html',
+  'pages/impact-windows-broward.html',
+  'pages/impact-windows-palm-beach.html',
+  'pages/impact-windows-naples.html',
+  'pages/impact-windows-tampa.html',
+  'pages/impact-windows-orlando.html',
+  'pages/impact-windows-sarasota.html',
+  'pages/impact-windows-jacksonville.html',
+  'pages/impact-windows-fort-lauderdale.html',
+  'pages/impact-windows-fort-myers.html',
+  'pages/impact-windows-cape-coral.html',
+  'pages/impact-windows-clearwater.html',
+  'pages/impact-windows-st-petersburg.html',
+  'pages/impact-windows-miami-beach.html',
+  'pages/impact-windows-coral-gables.html',
+  'pages/impact-windows-boca-raton.html',
+  'pages/hurricane-windows-insurance-savings.html',
+  'pages/my-safe-florida-home-grants.html',
+  'pages/impact-windows-cost.html',
+  'pages/financing.html',
+  'pages/impact-windows.html',
+  'pages/impact-doors.html',
+  'pages/sliding-glass-doors.html',
+  'pages/hurricane-garage-doors.html',
+  'pages/wind-mitigation-inspection.html',
+  'pages/privacy-policy.html',
+  'pages/terms.html',
+  'pages/impact-windows-lower-insurance-florida.html',
+  'pages/wind-mitigation-discount-florida.html',
+  'pages/impact-windows-reduce-homeowners-insurance.html',
+  'pages/hurricane-windows-insurance-discount-florida.html',
+  'pages/my-safe-florida-home-grant-impact-windows.html',
+  'pages/msfh-approved-contractor-florida.html',
+  'pages/florida-hurricane-hardening-grant.html',
+  'pages/impact-window-grant-florida-2026.html',
+  'pages/how-much-do-impact-windows-cost-florida.html',
+  'pages/hurricane-impact-windows-vs-plywood-florida.html',
+  'pages/hurricane-impact-windows-florida.html',
+  'pages/impact-window-installation-florida.html',
+  'pages/impact-windows-near-me-florida.html',
+  'pages/hurricane-windows-cost-florida.html',
+  'pages/cgi-impact-windows-florida.html',
+  'pages/pgt-impact-windows-florida.html',
+  'blog/index.html',
+  'blog/impact-windows-insurance-discount-florida.html',
+  'blog/my-safe-florida-home-program-guide.html',
+  'blog/hurricane-impact-windows-cost-florida.html',
+  'blog/impact-windows-vs-shutters-florida.html',
+  'blog/citizens-insurance-impact-windows.html',
+  'blog/best-impact-window-brands-florida.html',
+  'blog/hurricane-ian-impact-windows-lesson.html'
+];
 
-      <div id="cf-success" style="display:none;text-align:center;padding:32px 0">
-        <div style="font-size:48px;margin-bottom:12px">&#x2705;</div>
-        <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:8px">Message Received!</h3>
-        <p style="font-size:13px;color:var(--slate-light)">We will respond within 4 hours.</p>
-      </div>
-    </div>
+const faviconTag = '<link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">\n';
 
-  </div>
-</div>
-</section>
-
-<div class="eva-fab"><div class="eva-window" id="evaWindow"><div class="eva-header"><div class="eva-header-left"><div class="eva-avatar-wrap"><img src="/assets/images/eva-avatar.png" style="width:36px;height:36px;border-radius:50%;object-fit:cover;" alt="Eva"><div class="eva-online"></div></div><div><div class="eva-name">Eva &mdash; AI Assistant</div><div class="eva-status"><span class="pulse-dot"></span> Online</div></div></div><div class="eva-header-actions"><a href="#" onclick="Modal.open();return false;" class="eva-hdr-btn">Quote</a><button class="eva-close" onclick="Eva.toggle()">&#x2715;</button></div></div><div class="eva-lead-strip" id="evaLeadStrip"><div><span>Get your savings report</span> &mdash; drop your email:</div><div class="eva-lead-row"><input class="eva-lead-input" id="evaEmailInput" type="email" placeholder="your@email.com"><button class="eva-lead-btn" onclick="Eva.captureEmail()">Send &rarr;</button></div></div><div class="eva-progress" id="evaProgress"><div class="eva-progress-labels">Qualification <span id="evaPct">0%</span></div><div class="eva-progress-track"><div class="eva-progress-fill" id="evaFill" style="width:0%"></div></div></div><div class="eva-messages" id="evaMsgs"></div><div class="eva-qr-wrap" id="evaQR"></div><div class="eva-input-wrap"><textarea class="eva-textarea" id="evaInput" placeholder="Ask about impact windows..." rows="1"></textarea><button class="eva-send" onclick="Eva.sendInput()">&#x27A4;</button></div><div class="eva-powered">Powered by Claude AI</div></div><button class="eva-btn" id="evaBtn" onclick="Eva.toggle()" style="padding:0;overflow:hidden;background:linear-gradient(135deg,#0c2a45,#0ea5e9);box-shadow:0 0 20px rgba(14,165,233,0.7);"><img src="/assets/images/eva-avatar.png" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="Eva"><div class="eva-notify" id="evaNotify">1</div></button></div>
-
-<div class="modal-overlay" id="quoteModal"><div class="modal-box"><button class="modal-close" onclick="Modal.close()">&#x2715;</button><div id="modal-form"><h2 style="font-size:22px;margin-bottom:6px">Book Free Quote</h2><p style="font-size:13px;margin-bottom:22px">Free in-home estimate within 48 hours.</p><div class="form-row"><div class="form-group"><label class="form-label">First Name *</label><input class="form-input" id="mf-first" type="text"></div><div class="form-group"><label class="form-label">Last Name</label><input class="form-input" id="mf-last" type="text"></div></div><div class="form-group"><label class="form-label">Email *</label><input class="form-input" id="mf-email" type="email"></div><div class="form-group"><label class="form-label">Phone *</label><input class="form-input" id="mf-phone" type="tel"></div><div class="form-group"><label class="form-label">County</label><select class="form-select" id="mf-county"><option>Miami-Dade</option><option>Broward</option><option>Palm Beach</option><option>Lee</option><option>Hillsborough</option><option>Other</option></select></div><label style="display:flex;align-items:flex-start;gap:8px;font-size:11px;color:var(--slate-light);margin-bottom:14px;cursor:pointer"><input type="checkbox" checked style="margin-top:1px"> I consent to be contacted. <a href="/pages/privacy-policy.html" style="color:var(--sky-light)">Privacy Policy</a>.</label><button class="btn btn-amber" style="width:100%;justify-content:center" onclick="Modal.submit()">Schedule Free Quote &rarr;</button></div><div id="modal-success" style="display:none;text-align:center;padding:24px 0"><div style="font-size:48px;margin-bottom:12px">&#x2705;</div><h3 style="font-family:var(--font-display);font-size:20px;margin-bottom:8px">You're booked!</h3><p style="font-size:13px">We'll call within 2 hours to confirm.</p></div></div></div>
-
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <a href="/" class="nav-logo" style="display:inline-flex"><div class="nav-logo-icon">&#x1F6E1;&#xFE0F;</div>Florida Impact Shield</a>
-        <p class="footer-brand-desc">Florida's premier hurricane impact window and door installation company. Licensed, insured, and My Safe Florida Home approved. Serving all Florida counties since 2018.</p>
-        <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
-          <span class="badge badge-sky">&#x2B50; 4.9/5.0</span>
-          <span class="badge badge-green">&#x2705; Licensed CBC</span>
-          <span class="badge badge-amber">&#x1F3DB;&#xFE0F; MSFH Approved</span>
-        </div>
-      </div>
-      <div>
-        <div class="footer-col-title">Services</div>
-        <ul class="footer-links">
-          <li><a href="/pages/impact-windows.html">Impact Windows</a></li>
-          <li><a href="/pages/impact-doors.html">Impact Doors</a></li>
-          <li><a href="/pages/sliding-glass-doors.html">Sliding Glass Doors</a></li>
-          <li><a href="/pages/hurricane-garage-doors.html">Garage Doors</a></li>
-          <li><a href="/pages/wind-mitigation-inspection.html">Wind Mitigation</a></li>
-          <li><a href="/pages/financing.html">0% Financing</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="footer-col-title">Locations</div>
-        <ul class="footer-links">
-          <li><a href="/pages/impact-windows-miami.html">Miami-Dade County</a></li>
-          <li><a href="/pages/impact-windows-broward.html">Broward County</a></li>
-          <li><a href="/pages/impact-windows-palm-beach.html">Palm Beach County</a></li>
-          <li><a href="/pages/impact-windows-naples.html">Naples / Lee County</a></li>
-          <li><a href="/pages/impact-windows-tampa.html">Tampa / Hillsborough</a></li>
-          <li><a href="/pages/impact-windows-orlando.html">Orlando Area</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="footer-col-title">Company</div>
-        <ul class="footer-links">
-          <li><a href="/pages/hurricane-windows-insurance-savings.html">Insurance Savings</a></li>
-          <li><a href="/pages/my-safe-florida-home-grants.html">MSFH Grants</a></li>
-          <li><a href="/pages/impact-windows-cost.html">Cost Guide 2026</a></li>
-          <li><a href="/pages/faq.html">FAQ</a></li>
-          <li><a href="/blog/index.html">Blog & News</a></li>
-          <li><a href="/pages/about.html">About Us</a></li>
-          <li><a href="/pages/contact.html">Contact</a></li>
-          <li><a href="/pages/privacy-policy.html">Privacy Policy</a></li>
-          <li><a href="/pages/terms.html">Terms</a></li>
-        </ul>
-      </div>
-    </div>
-    <hr class="divider">
-    <div class="footer-bottom">
-      <span>&copy; 2026 Florida Impact Shield. All rights reserved.</span>
-      <span><a href="/pages/privacy-policy.html" style="color:var(--slate)">Privacy</a> &middot; <a href="/pages/terms.html" style="color:var(--slate)">Terms</a> &middot; <a href="/pages/faq.html" style="color:var(--slate)">FAQ</a> &middot; <a href="/sitemap.xml" style="color:var(--slate)">Sitemap</a></span>
-    </div>
-  </div>
-</footer>
-
-<script src="/assets/js/app.js"></script>
-<script>
-function submitContactForm() {
-  const first = document.getElementById('cf-first').value.trim();
-  const email = document.getElementById('cf-email').value.trim();
-  const phone = document.getElementById('cf-phone').value.trim();
-  if (!first || !email) { alert('Please enter your name and email.'); return; }
-  fetch('/api/leads', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      firstName: first,
-      lastName: document.getElementById('cf-last').value.trim(),
-      email, phone,
-      county: document.getElementById('cf-county').value,
-      windowCount: document.getElementById('cf-windows').value,
-      message: document.getElementById('cf-msg').value.trim(),
-      type: 'contact_form', status: 'new', source: 'Contact Page'
-    })
-  }).then(() => {
-    document.getElementById('cf-form').style.display = 'none';
-    document.getElementById('cf-success').style.display = 'block';
-  }).catch(() => {
-    document.getElementById('cf-form').style.display = 'none';
-    document.getElementById('cf-success').style.display = 'block';
-  });
+let updated = 0;
+for (const file of files) {
+  const filePath = path.join(BASE, file);
+  if (!fs.existsSync(filePath)) { console.log('SKIP:', file); continue; }
+  let html = fs.readFileSync(filePath, 'utf8');
+  if (html.includes('favicon')) { console.log('SKIP (has favicon):', file); continue; }
+  html = html.replace('<meta charset="UTF-8">', '<meta charset="UTF-8">\n' + faviconTag);
+  fs.writeFileSync(filePath, html, 'utf8');
+  console.log('UPDATED:', file);
+  updated++;
 }
-function toggleMobileNav() {
-  const nav = document.getElementById('mobileNav');
-  const ham = document.getElementById('hamburger');
-  if (!nav || !ham) return;
-  nav.classList.toggle('open');
-  ham.classList.toggle('open');
-}
-</script>
-</body>
-</html>`;
-
-fs.writeFileSync(path.join(BASE, 'pages/contact.html'), html, 'utf8');
-console.log('SUCCESS: Contact page rebuilt');
+console.log('DONE - Added favicon to', updated, 'pages');
