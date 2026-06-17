@@ -1,13 +1,23 @@
 const fs = require('fs');
 const path = require('path');
 
-const BASE = 'C:\\Users\\randy\\Downloads\\freesportspicks';
+const BASE = 'C:\\Users\\randy\\citizenshipbyinvestmentpro';
 
-let main = fs.readFileSync(path.join(BASE, 'js/main.js'), 'utf8');
+// Fix Chatbot button position - move up to match WhatsApp
+const chatbotPath = path.join(BASE, 'components/Chatbot.js');
+let chatbot = fs.readFileSync(chatbotPath, 'utf8');
 
-// Fix table name
-main = main.replace(/sports_leads/g, 'sportspicks_leads');
+// Change bottom from 20px to 90px on the floating button
+chatbot = chatbot.replace(
+  "position:'fixed',bottom:'20px',right:'20px'",
+  "position:'fixed',bottom:'90px',right:'20px'"
+);
 
-fs.writeFileSync(path.join(BASE, 'js/main.js'), main, 'utf8');
-console.log('DONE: Table name fixed to sportspicks_leads');
-console.log('Verify:', main.includes('sportspicks_leads') ? 'OK' : 'FAILED');
+// Also fix the chat window position
+chatbot = chatbot.replace(
+  "position:'fixed',bottom:'90px',right:'20px',width:'360px'",
+  "position:'fixed',bottom:'160px',right:'20px',width:'360px'"
+);
+
+fs.writeFileSync(chatbotPath, chatbot, 'utf8');
+console.log('DONE: Chatbot button moved up to 90px to match WhatsApp');
