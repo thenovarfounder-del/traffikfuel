@@ -3,21 +3,15 @@ const path = require('path');
 
 const BASE = 'C:\\Users\\randy\\citizenshipbyinvestmentpro';
 
-// Fix Chatbot button position - move up to match WhatsApp
-const chatbotPath = path.join(BASE, 'components/Chatbot.js');
-let chatbot = fs.readFileSync(chatbotPath, 'utf8');
+const cookiePath = path.join(BASE, 'components/CookieBanner.js');
+let cookie = fs.readFileSync(cookiePath, 'utf8');
 
-// Change bottom from 20px to 90px on the floating button
-chatbot = chatbot.replace(
-  "position:'fixed',bottom:'20px',right:'20px'",
-  "position:'fixed',bottom:'90px',right:'20px'"
+cookie = cookie.replace(
+  "position:'fixed',bottom:0,left:0,right:0,background:'#0F172A',color:'#fff',padding:'16px 24px',zIndex:998",
+  "position:'fixed',bottom:'80px',left:0,right:0,background:'#0F172A',color:'#fff',padding:'12px 24px',zIndex:998"
 );
 
-// Also fix the chat window position
-chatbot = chatbot.replace(
-  "position:'fixed',bottom:'90px',right:'20px',width:'360px'",
-  "position:'fixed',bottom:'160px',right:'20px',width:'360px'"
-);
+fs.writeFileSync(cookiePath, cookie, 'utf8');
 
-fs.writeFileSync(chatbotPath, chatbot, 'utf8');
-console.log('DONE: Chatbot button moved up to 90px to match WhatsApp');
+const check = fs.readFileSync(cookiePath, 'utf8');
+console.log('Cookie bottom:', check.includes("bottom:'80px'") ? '80px OK' : 'FAILED');
