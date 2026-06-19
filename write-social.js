@@ -1,17 +1,10 @@
 const fs = require('fs');
-const path = require('path');
 
-const BASE = 'C:\\Users\\randy\\citizenshipbyinvestmentpro';
+// Fix sitemap-news.xml - replace with valid empty news sitemap
+const newsXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+</urlset>`;
 
-const cookiePath = path.join(BASE, 'components/CookieBanner.js');
-let cookie = fs.readFileSync(cookiePath, 'utf8');
-
-cookie = cookie.replace(
-  "position:'fixed',bottom:0,left:0,right:0,background:'#0F172A',color:'#fff',padding:'16px 24px',zIndex:998",
-  "position:'fixed',bottom:'80px',left:0,right:0,background:'#0F172A',color:'#fff',padding:'12px 24px',zIndex:998"
-);
-
-fs.writeFileSync(cookiePath, cookie, 'utf8');
-
-const check = fs.readFileSync(cookiePath, 'utf8');
-console.log('Cookie bottom:', check.includes("bottom:'80px'") ? '80px OK' : 'FAILED');
+fs.writeFileSync('C:\\Users\\randy\\Downloads\\freesportspicks\\sitemap-news.xml', newsXml);
+console.log('✅ sitemap-news.xml fixed - valid empty news sitemap');
